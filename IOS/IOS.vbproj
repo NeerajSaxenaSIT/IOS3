@@ -1,0 +1,2424 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{03432A5D-9EA4-4578-9C33-50BA16C704DF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>IOS.My.MyApplication</StartupObject>
+    <RootNamespace>IOS</RootNamespace>
+    <AssemblyName>IOS</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\IOS_Logo_3_128.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>A91070C485FCA2FC9EDD92D650842F1B8CB54F35</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>pkcs12.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.AIIntegration.Desktop.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.AIIntegration.Desktop.24.2.6\lib\net472\DevExpress.AIIntegration.Desktop.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.AIIntegration.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.AIIntegration.24.2.6\lib\net472\DevExpress.AIIntegration.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.AIIntegration.WinForms.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.AIIntegration.WinForms.24.2.6\lib\net472\DevExpress.AIIntegration.WinForms.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.BonusSkins.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\DevExpress.BonusSkins.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Charts.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Charts.Core.24.2.6\lib\net462\DevExpress.Charts.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.CodeParser.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.CodeParser.24.2.6\lib\net462\DevExpress.CodeParser.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v24.2.Core">
+      <HintPath>..\References\DevExpress.Dashboard.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v24.2.Win">
+      <HintPath>..\References\DevExpress.Dashboard.v24.2.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.Desktop.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Data.Desktop.24.2.6\lib\net462\DevExpress.Data.Desktop.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Data.24.2.6\lib\net462\DevExpress.Data.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.DataAccess.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.DataAccess.24.2.6\lib\net462\DevExpress.DataAccess.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.DataAccess.v24.2.UI, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.DataAccess.UI.24.2.6\lib\net462\DevExpress.DataAccess.v24.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.DataVisualization.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.DataVisualization.Core.24.2.6\lib\net462\DevExpress.DataVisualization.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Diagram.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Diagram.Core.24.2.6\lib\net462\DevExpress.Diagram.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dialogs.v24.2.Core">
+      <HintPath>..\References\DevExpress.Dialogs.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Docs.v24.2">
+      <HintPath>..\References\DevExpress.Docs.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Drawing.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Drawing.24.2.6\lib\net462\DevExpress.Drawing.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Images.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Images.24.2.6\lib\net462\DevExpress.Images.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Map.v24.2.Core">
+      <HintPath>..\References\DevExpress.Map.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm.v24.2">
+      <HintPath>..\References\DevExpress.Mvvm.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Office.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Office.Core.24.2.6\lib\net462\DevExpress.Office.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Pdf.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Pdf.Core.24.2.6\lib\net462\DevExpress.Pdf.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Pdf.v24.2.Drawing, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Pdf.Drawing.24.2.6\lib\net462\DevExpress.Pdf.v24.2.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.PivotGrid.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.PivotGrid.Core.24.2.6\lib\net462\DevExpress.PivotGrid.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Printing.Core.24.2.6\lib\net462\DevExpress.Printing.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.RichEdit.Core.24.2.6\lib\net462\DevExpress.RichEdit.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v24.2.Export, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.RichEdit.Export.24.2.6\lib\net462\DevExpress.RichEdit.v24.2.Export.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Snap.v24.2.Core">
+      <HintPath>..\References\DevExpress.Snap.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Sparkline.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Sparkline.Core.24.2.6\lib\net462\DevExpress.Sparkline.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Spreadsheet.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Spreadsheet.Core.24.2.6\lib\net462\DevExpress.Spreadsheet.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.TreeMap.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.TreeMap.Core.24.2.6\lib\net462\DevExpress.TreeMap.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Utils.24.2.6\lib\net462\DevExpress.Utils.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v24.2.UI, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Utils.UI.24.2.6\lib\net462\DevExpress.Utils.v24.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v24.2">
+      <HintPath>..\References\DevExpress.Xpf.Core.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Docking.v24.2">
+      <HintPath>..\References\DevExpress.Xpf.Docking.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.DocumentViewer.v24.2.Core">
+      <HintPath>..\References\DevExpress.Xpf.DocumentViewer.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v24.2">
+      <HintPath>..\References\DevExpress.Xpf.Grid.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v24.2.Core">
+      <HintPath>..\References\DevExpress.Xpf.Grid.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Layout.v24.2.Core">
+      <HintPath>..\References\DevExpress.Xpf.Layout.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Ribbon.v24.2">
+      <HintPath>..\References\DevExpress.Xpf.Ribbon.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpo.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Xpo.24.2.6\lib\net462\DevExpress.Xpo.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.24.2.6\lib\net462\DevExpress.XtraBars.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Charts.24.2.6\lib\net462\DevExpress.XtraCharts.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v24.2.Extensions">
+      <HintPath>..\References\DevExpress.XtraCharts.v24.2.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v24.2.UI">
+      <HintPath>..\References\DevExpress.XtraCharts.v24.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v24.2.Wizard">
+      <HintPath>..\References\DevExpress.XtraCharts.v24.2.Wizard.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraDiagram.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Diagram.24.2.6\lib\net462\DevExpress.XtraDiagram.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraDialogs.v24.2">
+      <HintPath>..\References\DevExpress.XtraDialogs.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.24.2.6\lib\net462\DevExpress.XtraEditors.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v24.2.Core">
+      <HintPath>..\References\DevExpress.XtraGauges.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v24.2.Presets">
+      <HintPath>..\References\DevExpress.XtraGauges.v24.2.Presets.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v24.2.Win">
+      <HintPath>..\References\DevExpress.XtraGauges.v24.2.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Grid.24.2.6\lib\net462\DevExpress.XtraGrid.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.24.2.6\lib\net462\DevExpress.XtraLayout.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraMap.v24.2">
+      <HintPath>..\References\DevExpress.XtraMap.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.24.2.6\lib\net462\DevExpress.XtraNavBar.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPivotGrid.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.PivotGrid.24.2.6\lib\net462\DevExpress.XtraPivotGrid.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Printing.24.2.6\lib\net462\DevExpress.XtraPrinting.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v24.2">
+      <HintPath>..\References\DevExpress.XtraReports.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v24.2.Extensions">
+      <HintPath>..\References\DevExpress.XtraReports.v24.2.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v24.2.Service">
+      <HintPath>..\References\DevExpress.XtraReports.v24.2.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraRichEdit.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.RichEdit.24.2.6\lib\net462\DevExpress.XtraRichEdit.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v24.2">
+      <HintPath>..\References\DevExpress.XtraScheduler.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v24.2.Core">
+      <HintPath>..\References\DevExpress.XtraScheduler.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v24.2.Core.Desktop">
+      <HintPath>..\References\DevExpress.XtraScheduler.v24.2.Core.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraSpreadsheet.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Spreadsheet.24.2.6\lib\net462\DevExpress.XtraSpreadsheet.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.TreeList.24.2.6\lib\net462\DevExpress.XtraTreeList.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeMap.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.TreeMap.24.2.6\lib\net462\DevExpress.XtraTreeMap.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeMap.v24.2.UI">
+      <HintPath>..\References\DevExpress.XtraTreeMap.v24.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraVerticalGrid.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.VerticalGrid.24.2.6\lib\net462\DevExpress.XtraVerticalGrid.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraWizard.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.24.2.6\lib\net462\DevExpress.XtraWizard.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.3.3.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.Framework.3.3.0\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="dotnetCharting.WinForms">
+      <HintPath>..\References\dotnetCharting.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.Core, Version=2.1.7.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\GMap.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.Windows, Version=2.1.7.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\GMap.NET.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms, Version=2.1.7.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\GMap.NET.WindowsForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Maps, Version=0.11.1.28730, Culture=neutral, PublicKeyToken=4aa992bb5d22d4ff, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Google.Maps.dll</HintPath>
+    </Reference>
+    <Reference Include="LidorSystems.IntegralUI">
+      <HintPath>..\References\LidorSystems.IntegralUI.dll</HintPath>
+    </Reference>
+    <Reference Include="LidorSystems.IntegralUI.Lists">
+      <HintPath>..\References\LidorSystems.IntegralUI.Lists.DLL</HintPath>
+    </Reference>
+    <Reference Include="LidorSystems.IntegralUI.Lists.TreeListView">
+      <HintPath>..\References\LidorSystems.IntegralUI.Lists.TreeListView.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\References\Log4Net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CoreEngine, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CoreEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CoreEngine.Wrapper, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CoreEngine.Wrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CoreTypes, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CoreTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Design, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Ellis.ExtensibleDataProvider, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Ellis.ExtensibleDataProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.LinearReferencing, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.LinearReferencing.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Ogc, Version=9.3.0.93, Culture=neutral, PublicKeyToken=3c39af2a631aeb4f, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Ogc.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Services, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.TileServer.Client, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.TileServer.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.VectorTile.Server, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.VectorTile.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.VectorTiling, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.VectorTiling.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Web, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.WebControls, Version=9.3.0.93, Culture=neutral, PublicKeyToken=0a9556cc66c0af57, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.WebControls.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wfs.Server, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wfs.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows.Dialogs, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.Dialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows.Framework, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows.Printing, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.Printing.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wms.Client, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wms.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wms.Server, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wms.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wmts.Client, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wmts.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.6.0.0\lib\net462\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.AI.Abstractions, Version=9.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.AI.Abstractions.9.5.0\lib\net462\Microsoft.Extensions.AI.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=8.0.0.1, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.8.0.1\lib\net462\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=9.0.0.3, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.3\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=9.0.0.3, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\lib\net462\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\References\PowerPacks\Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\References\PowerPacks\Microsoft.Office.Interop.PowerPoint.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft SQL Server\120\SDK\Assemblies\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic.PowerPacks">
+      <HintPath>..\References\PowerPacks\Microsoft.VisualBasic.PowerPacks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.3124.44, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.3124.44\lib\net462\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.3124.44, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.3124.44\lib\net462\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.3124.44, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.3124.44\lib\net462\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql, Version=7.0.6.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Npgsql.7.0.6\lib\netstandard2.0\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\References\office.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.17.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=9.0.0.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.9.0.3\lib\net462\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.118.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.118.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.9.0.3\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Pipelines, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.9.0.3\lib\net462\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.2\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.1\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.9.0.3\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.9.0.3\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Channels, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Channels.9.0.3\lib\net462\System.Threading.Channels.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.2\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Triangle">
+      <HintPath>..\References\Triangle.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox.Designer.vb">
+      <DependentUpon>AboutBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AboutBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="Connected Services\XmlServRef\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddCampaign.Designer.vb">
+      <DependentUpon>dlgAddCampaign.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddCampaign.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddCategory.Designer.vb">
+      <DependentUpon>dlgAddCategory.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddCategory.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddChartSet.Designer.vb">
+      <DependentUpon>dlgAddChartSet.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddChartSet.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddKPI2ThresholdSet.Designer.vb">
+      <DependentUpon>dlgAddKPI2ThresholdSet.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddKPI2ThresholdSet.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddKPIAlertMngr.Designer.vb">
+      <DependentUpon>dlgAddKPIAlertMngr.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddKPIAlertMngr.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddKPINBIReport.Designer.vb">
+      <DependentUpon>dlgAddKPINBIReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddKPINBIReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddKPIRule.Designer.vb">
+      <DependentUpon>dlgAddKPIRule.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddKPIRule.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddNBIReport.Designer.vb">
+      <DependentUpon>dlgAddNBIReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddNBIReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddNBIReportAlias.Designer.vb">
+      <DependentUpon>dlgAddNBIReportAlias.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddNBIReportAlias.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddNewReport.Designer.vb">
+      <DependentUpon>dlgAddNewReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddNewReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAddXMLJob.Designer.vb">
+      <DependentUpon>dlgAddXMLJob.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAddXMLJob.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAlertName.Designer.vb">
+      <DependentUpon>dlgAlertName.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAlertName.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAlertNote.Designer.vb">
+      <DependentUpon>dlgAlertNote.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAlertNote.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgAnomalyCalendar.Designer.vb">
+      <DependentUpon>dlgAnomalyCalendar.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgAnomalyCalendar.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCalendar.Designer.vb">
+      <DependentUpon>dlgCalendar.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCalendar.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCampaignClone.Designer.vb">
+      <DependentUpon>dlgCampaignClone.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCampaignClone.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgChartAdjustAxis.Designer.vb">
+      <DependentUpon>dlgChartAdjustAxis.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgChartAdjustAxis.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgChartCategory.Designer.vb">
+      <DependentUpon>dlgChartCategory.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgChartCategory.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCMTemplate.Designer.vb">
+      <DependentUpon>dlgCMTemplate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCMTemplate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCondition.Designer.vb">
+      <DependentUpon>dlgCondition.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCondition.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCongestionJob.Designer.vb">
+      <DependentUpon>dlgCongestionJob.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCongestionJob.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCongestionRule.Designer.vb">
+      <DependentUpon>dlgCongestionRule.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCongestionRule.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCopyFromAlert.Designer.vb">
+      <DependentUpon>dlgCopyFromAlert.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCopyFromAlert.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCreateDashboard.Designer.vb">
+      <DependentUpon>dlgCreateDashboard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCreateDashboard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCreateDeleteNeighbors.Designer.vb">
+      <DependentUpon>dlgCreateDeleteNeighbors.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCreateDeleteNeighbors.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgCsvExportOption.Designer.vb">
+      <DependentUpon>dlgCsvExportOption.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgCsvExportOption.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgEventManualUpdateStatus.Designer.vb">
+      <DependentUpon>dlgEventManualUpdateStatus.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgEventManualUpdateStatus.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgExcludeParam.Designer.vb">
+      <DependentUpon>dlgExcludeParam.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgExcludeParam.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgExportDelimiter.Designer.vb">
+      <DependentUpon>dlgExportDelimiter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgExportDelimiter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgJobsAdd.Designer.vb">
+      <DependentUpon>dlgJobsAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgJobsAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgKPIModify.Designer.vb">
+      <DependentUpon>dlgKPIModify.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgKPIModify.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgKPISetCreate.Designer.vb">
+      <DependentUpon>dlgKPISetCreate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgKPISetCreate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgListName.Designer.vb">
+      <DependentUpon>dlgListName.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgListName.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgListToAdd.Designer.vb">
+      <DependentUpon>dlgListToAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgListToAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgManageMapTheme.Designer.vb">
+      <DependentUpon>dlgManageMapTheme.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgManageMapTheme.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgManualCampaign.Designer.vb">
+      <DependentUpon>dlgManualCampaign.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgManualCampaign.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgMappingSelection.Designer.vb">
+      <DependentUpon>dlgMappingSelection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgMappingSelection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgMapTables.Designer.vb">
+      <DependentUpon>dlgMapTables.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgMapTables.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgMethodAlertMngr.Designer.vb">
+      <DependentUpon>dlgMethodAlertMngr.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgMethodAlertMngr.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgMmlConfiguration.Designer.vb">
+      <DependentUpon>dlgMmlConfiguration.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgMmlConfiguration.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgNBIReportManualSQL.Designer.vb">
+      <DependentUpon>dlgNBIReportManualSQL.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgNBIReportManualSQL.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgNewReport.Designer.vb">
+      <DependentUpon>dlgNewReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgNewReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgObjFilter.Designer.vb">
+      <DependentUpon>dlgObjFilter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgObjFilter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgParameter.Designer.vb">
+      <DependentUpon>dlgParameter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgParameter.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgParamExcCopyTemplate.Designer.vb">
+      <DependentUpon>dlgParamExcCopyTemplate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgParamExcCopyTemplate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgProjectInfoPCHR.Designer.vb">
+      <DependentUpon>dlgProjectInfoPCHR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgProjectInfoPCHR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgProjectManagePCHR.Designer.vb">
+      <DependentUpon>dlgProjectManagePCHR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgProjectManagePCHR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgRefChkAddMO.Designer.vb">
+      <DependentUpon>dlgRefChkAddMO.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgRefChkAddMO.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgRefChkAddParam.Designer.vb">
+      <DependentUpon>dlgRefChkAddParam.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgRefChkAddParam.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgRefChkModifyParam.Designer.vb">
+      <DependentUpon>dlgRefChkModifyParam.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgRefChkModifyParam.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgSBCalculatedSeriesNew.Designer.vb">
+      <DependentUpon>dlgSBCalculatedSeriesNew.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgSBCalculatedSeriesNew.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgSBGroupInsert.Designer.vb">
+      <DependentUpon>dlgSBGroupInsert.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgSBGroupInsert.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgSettingsNetworkFeatures.Designer.vb">
+      <DependentUpon>dlgSettingsNetworkFeatures.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgSettingsNetworkFeatures.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgSONException.Designer.vb">
+      <DependentUpon>dlgSONException.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgSONException.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgStartup.Designer.vb">
+      <DependentUpon>dlgStartup.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgStartup.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgTagInsert.Designer.vb">
+      <DependentUpon>dlgTagInsert.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgTagInsert.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgTags.Designer.vb">
+      <DependentUpon>dlgTags.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgTags.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgTagsExclusionList.Designer.vb">
+      <DependentUpon>dlgTagsExclusionList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgTagsExclusionList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgTechExportOption.Designer.vb">
+      <DependentUpon>dlgTechExportOption.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgTechExportOption.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgTechPeriodCalculation.Designer.vb">
+      <DependentUpon>dlgTechPeriodCalculation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgTechPeriodCalculation.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgTempObjects.Designer.vb">
+      <DependentUpon>dlgTempObjects.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgTempObjects.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgThresholdSetCreate.Designer.vb">
+      <DependentUpon>dlgThresholdSetCreate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgThresholdSetCreate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgThresoldSetDateListDetails.Designer.vb">
+      <DependentUpon>dlgThresoldSetDateListDetails.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgThresoldSetDateListDetails.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgWebView2Alert.Designer.vb">
+      <DependentUpon>dlgWebView2Alert.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgWebView2Alert.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgXmlJobInsert.Designer.vb">
+      <DependentUpon>dlgXmlJobInsert.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgXmlJobInsert.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAlertManager.Designer.vb">
+      <DependentUpon>frmAlertManager.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAlertManager.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAnomaly.Designer.vb">
+      <DependentUpon>frmAnomaly.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAnomaly.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCapacity.Designer.vb">
+      <DependentUpon>frmCapacity.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCapacity.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCategoryManagerDialog.Designer.vb">
+      <DependentUpon>frmCategoryManagerDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCategoryManagerDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChartCustomization.Designer.vb">
+      <DependentUpon>frmChartCustomization.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmChartCustomization.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCMScheduler.Designer.vb">
+      <DependentUpon>frmCMScheduler.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCMScheduler.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCMTemplate.Designer.vb">
+      <DependentUpon>frmCMTemplate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCMTemplate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCMView.Designer.vb">
+      <DependentUpon>frmCMView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCMView.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCompare2G.Designer.vb">
+      <DependentUpon>frmCompare2G.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCompare2G.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCompare3G.Designer.vb">
+      <DependentUpon>frmCompare3G.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCompare3G.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCompare4G.Designer.vb">
+      <DependentUpon>frmCompare4G.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCompare4G.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCopyFromTemplate.Designer.vb">
+      <DependentUpon>frmCopyFromTemplate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCopyFromTemplate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCopyParam2Template.Designer.vb">
+      <DependentUpon>frmCopyParam2Template.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCopyParam2Template.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCreateSiteIntProject.Designer.vb">
+      <DependentUpon>frmCreateSiteIntProject.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCreateSiteIntProject.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDashboard.Designer.vb">
+      <DependentUpon>frmDashboard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDashboard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDashboardDesigner.Designer.vb">
+      <DependentUpon>frmDashboardDesigner.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDashboardDesigner.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDataIntegrity.Designer.vb">
+      <DependentUpon>frmDataIntegrity.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDataIntegrity.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDataMartKpiConfig.Designer.vb">
+      <DependentUpon>frmDataMartKpiConfig.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDataMartKpiConfig.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEvent.Designer.vb">
+      <DependentUpon>frmEvent.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmEvent.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFreqChooser.Designer.vb">
+      <DependentUpon>frmFreqChooser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmFreqChooser.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGenerateTemplate.Designer.vb">
+      <DependentUpon>frmGenerateTemplate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmGenerateTemplate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGenerateXML.Designer.vb">
+      <DependentUpon>frmGenerateXML.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmGenerateXML.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGISSearch.Designer.vb">
+      <DependentUpon>frmGISSearch.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmGISSearch.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmICM.Designer.vb">
+      <DependentUpon>frmICM.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmICM.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmImportDrivetest.Designer.vb">
+      <DependentUpon>frmImportDrivetest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmImportDrivetest.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInternetExplorer.Designer.vb">
+      <DependentUpon>frmInternetExplorer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmInternetExplorer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmKPIManage.Designer.vb">
+      <DependentUpon>frmKPIManage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmKPIManage.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmKPINote.Designer.vb">
+      <DependentUpon>frmKPINote.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmKPINote.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmKPISetCreate.Designer.vb">
+      <DependentUpon>frmKPISetCreate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmKPISetCreate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLaunchTiltManager.Designer.vb">
+      <DependentUpon>frmLaunchTiltManager.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmLaunchTiltManager.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLegend.Designer.vb">
+      <DependentUpon>frmLegend.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmLegend.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmListManager.Designer.vb">
+      <DependentUpon>frmListManager.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmListManager.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMapExternalData.Designer.vb">
+      <DependentUpon>frmMapExternalData.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMapExternalData.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMapWindow.Designer.vb">
+      <DependentUpon>frmMapWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMapWindow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMDI.Designer.vb">
+      <DependentUpon>frmMDI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmMDI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNBIReports.Designer.vb">
+      <DependentUpon>frmNBIReports.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmNBIReports.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNBManagement.Designer.vb">
+      <DependentUpon>frmNBManagement.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmNBManagement.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNotes.Designer.vb">
+      <DependentUpon>frmNotes.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmNotes.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmParameterDescription.Designer.vb">
+      <DependentUpon>frmParameterDescription.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmParameterDescription.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmParameterHistory.Designer.vb">
+      <DependentUpon>frmParameterHistory.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmParameterHistory.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPMView.Designer.vb">
+      <DependentUpon>frmPMView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmPMView.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProxyAuthentication.Designer.vb">
+      <DependentUpon>frmProxyAuthentication.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmProxyAuthentication.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmQuickThemeControl.Designer.vb">
+      <DependentUpon>frmQuickThemeControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmQuickThemeControl.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRefCheck.Designer.vb">
+      <DependentUpon>frmRefCheck.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmRefCheck.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRefChkBulkDelete.Designer.vb">
+      <DependentUpon>frmRefChkBulkDelete.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmRefChkBulkDelete.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRefChkBulkUpdate.Designer.vb">
+      <DependentUpon>frmRefChkBulkUpdate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmRefChkBulkUpdate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRefChkUpdateTemplateObj.Designer.vb">
+      <DependentUpon>frmRefChkUpdateTemplateObj.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmRefChkUpdateTemplateObj.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmReportDesigner.Designer.vb">
+      <DependentUpon>frmReportDesigner.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmReportDesigner.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmReportEdit.Designer.vb">
+      <DependentUpon>frmReportEdit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmReportEdit.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSBKPIManage.Designer.vb">
+      <DependentUpon>frmSBKPIManage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSBKPIManage.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSBMain.Designer.vb">
+      <DependentUpon>frmSBMain.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSBMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSBReportContentFilters.Designer.vb">
+      <DependentUpon>frmSBReportContentFilters.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSBReportContentFilters.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmScheduleManagerDialog.Designer.vb">
+      <DependentUpon>frmScheduleManagerDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmScheduleManagerDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmServiceCheck.Designer.vb">
+      <DependentUpon>frmServiceCheck.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmServiceCheck.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSiteIntegration.Designer.vb">
+      <DependentUpon>frmSiteIntegration.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSiteIntegration.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSON.Designer.vb">
+      <DependentUpon>frmSON.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSON.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSQLQuery.Designer.vb">
+      <DependentUpon>frmSQLQuery.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSQLQuery.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTagManager.Designer.vb">
+      <DependentUpon>frmTagManager.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmTagManager.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTechnology.Designer.vb">
+      <DependentUpon>frmTechnology.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmTechnology.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTerrainProfile.Designer.vb">
+      <DependentUpon>frmTerrainProfile.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmTerrainProfile.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmThresholdSetCreate.Designer.vb">
+      <DependentUpon>frmThresholdSetCreate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmThresholdSetCreate.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTicketDetail.Designer.vb">
+      <DependentUpon>frmTicketDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmTicketDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTileMapping.Designer.vb">
+      <DependentUpon>frmTileMapping.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmTileMapping.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTiltManagement.Designer.vb">
+      <DependentUpon>frmTiltManagement.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmTiltManagement.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTracePCHR.Designer.vb">
+      <DependentUpon>frmTracePCHR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmTracePCHR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVirtualAzimuth.Designer.vb">
+      <DependentUpon>frmVirtualAzimuth.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmVirtualAzimuth.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IOSHelper\clsIOSImageList.vb" />
+    <Compile Include="IOSHelper\clsLoggerManager.vb" />
+    <Compile Include="IOSHelper\clsMemoryManagement.vb" />
+    <Compile Include="IOSHelper\clsPivot.vb" />
+    <Compile Include="IOSHelper\MyCustomWebClient.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IOSHelper\TreeListExtender.vb" />
+    <Compile Include="IOSHelper\clsUserImpersonation.vb" />
+    <Compile Include="IOSHelper\clsWaitScreen.vb" />
+    <Compile Include="IOSHelper\DataTableFunctions.vb" />
+    <Compile Include="IOSHelper\DistanceTool.vb" />
+    <Compile Include="IOSHelper\ExtendPropertyGrid.vb" />
+    <Compile Include="IOSHelper\mdlCommonModule.vb" />
+    <Compile Include="IOSHelper\mdlExtensionMethods.vb" />
+    <Compile Include="IOSHelper\ThreadGetMaps.vb" />
+    <Compile Include="IOSUserControls\ICMGridInfo.vb" />
+    <Compile Include="IOSUserControls\ICMTab.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IOSUserControls\ucChartHistMenuItem.Designer.vb">
+      <DependentUpon>ucChartHistMenuItem.vb</DependentUpon>
+    </Compile>
+    <Compile Include="IOSUserControls\ucChartHistMenuItem.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="IOSUserControls\ucICMKPIList.Designer.vb">
+      <DependentUpon>ucICMKPIList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="IOSUserControls\ucICMKPIList.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="SplashScreen.Designer.vb">
+      <DependentUpon>SplashScreen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SplashScreen.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IOSUserControls\ucChartHistBinsCount.Designer.vb">
+      <DependentUpon>ucChartHistBinsCount.vb</DependentUpon>
+    </Compile>
+    <Compile Include="IOSUserControls\ucChartHistBinsCount.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WaitForm1.Designer.vb">
+      <DependentUpon>WaitForm1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WaitForm1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WaitFormDataMart.Designer.vb">
+      <DependentUpon>WaitFormDataMart.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WaitFormDataMart.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddCampaign.resx">
+      <DependentUpon>dlgAddCampaign.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddCategory.resx">
+      <DependentUpon>dlgAddCategory.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddChartSet.resx">
+      <DependentUpon>dlgAddChartSet.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddKPI2ThresholdSet.resx">
+      <DependentUpon>dlgAddKPI2ThresholdSet.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddKPIAlertMngr.resx">
+      <DependentUpon>dlgAddKPIAlertMngr.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddKPINBIReport.resx">
+      <DependentUpon>dlgAddKPINBIReport.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddKPIRule.resx">
+      <DependentUpon>dlgAddKPIRule.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddNBIReport.resx">
+      <DependentUpon>dlgAddNBIReport.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddNBIReportAlias.resx">
+      <DependentUpon>dlgAddNBIReportAlias.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddNewReport.resx">
+      <DependentUpon>dlgAddNewReport.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAddXMLJob.resx">
+      <DependentUpon>dlgAddXMLJob.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAlertName.resx">
+      <DependentUpon>dlgAlertName.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAlertNote.resx">
+      <DependentUpon>dlgAlertNote.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgAnomalyCalendar.resx">
+      <DependentUpon>dlgAnomalyCalendar.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCalendar.resx">
+      <DependentUpon>dlgCalendar.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCampaignClone.resx">
+      <DependentUpon>dlgCampaignClone.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgChartAdjustAxis.resx">
+      <DependentUpon>dlgChartAdjustAxis.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgChartCategory.resx">
+      <DependentUpon>dlgChartCategory.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCMTemplate.resx">
+      <DependentUpon>dlgCMTemplate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCondition.resx">
+      <DependentUpon>dlgCondition.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCongestionJob.resx">
+      <DependentUpon>dlgCongestionJob.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCongestionRule.resx">
+      <DependentUpon>dlgCongestionRule.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCopyFromAlert.resx">
+      <DependentUpon>dlgCopyFromAlert.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCreateDashboard.resx">
+      <DependentUpon>dlgCreateDashboard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCreateDeleteNeighbors.resx">
+      <DependentUpon>dlgCreateDeleteNeighbors.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgCsvExportOption.resx">
+      <DependentUpon>dlgCsvExportOption.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgEventManualUpdateStatus.resx">
+      <DependentUpon>dlgEventManualUpdateStatus.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgExcludeParam.resx">
+      <DependentUpon>dlgExcludeParam.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgExportDelimiter.resx">
+      <DependentUpon>dlgExportDelimiter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgJobsAdd.resx">
+      <DependentUpon>dlgJobsAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgKPIModify.resx">
+      <DependentUpon>dlgKPIModify.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgKPISetCreate.resx">
+      <DependentUpon>dlgKPISetCreate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgListName.resx">
+      <DependentUpon>dlgListName.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgListToAdd.resx">
+      <DependentUpon>dlgListToAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgManageMapTheme.resx">
+      <DependentUpon>dlgManageMapTheme.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgManualCampaign.resx">
+      <DependentUpon>dlgManualCampaign.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgMappingSelection.resx">
+      <DependentUpon>dlgMappingSelection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgMapTables.resx">
+      <DependentUpon>dlgMapTables.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgMethodAlertMngr.resx">
+      <DependentUpon>dlgMethodAlertMngr.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgMmlConfiguration.resx">
+      <DependentUpon>dlgMmlConfiguration.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgNBIReportManualSQL.resx">
+      <DependentUpon>dlgNBIReportManualSQL.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgNewReport.resx">
+      <DependentUpon>dlgNewReport.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgObjFilter.resx">
+      <DependentUpon>dlgObjFilter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgParameter.resx">
+      <DependentUpon>dlgParameter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgParamExcCopyTemplate.resx">
+      <DependentUpon>dlgParamExcCopyTemplate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgProjectInfoPCHR.resx">
+      <DependentUpon>dlgProjectInfoPCHR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgProjectManagePCHR.resx">
+      <DependentUpon>dlgProjectManagePCHR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgRefChkAddMO.resx">
+      <DependentUpon>dlgRefChkAddMO.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgRefChkAddParam.resx">
+      <DependentUpon>dlgRefChkAddParam.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgRefChkModifyParam.resx">
+      <DependentUpon>dlgRefChkModifyParam.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgSBCalculatedSeriesNew.resx">
+      <DependentUpon>dlgSBCalculatedSeriesNew.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgSBGroupInsert.resx">
+      <DependentUpon>dlgSBGroupInsert.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgSettingsNetworkFeatures.resx">
+      <DependentUpon>dlgSettingsNetworkFeatures.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgSONException.resx">
+      <DependentUpon>dlgSONException.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgStartup.resx">
+      <DependentUpon>dlgStartup.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgTagInsert.resx">
+      <DependentUpon>dlgTagInsert.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgTags.resx">
+      <DependentUpon>dlgTags.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgTagsExclusionList.resx">
+      <DependentUpon>dlgTagsExclusionList.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgTechExportOption.resx">
+      <DependentUpon>dlgTechExportOption.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgTechPeriodCalculation.resx">
+      <DependentUpon>dlgTechPeriodCalculation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgTempObjects.resx">
+      <DependentUpon>dlgTempObjects.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgThresholdSetCreate.resx">
+      <DependentUpon>dlgThresholdSetCreate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgThresoldSetDateListDetails.resx">
+      <DependentUpon>dlgThresoldSetDateListDetails.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgWebView2Alert.resx">
+      <DependentUpon>dlgWebView2Alert.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgXmlJobInsert.resx">
+      <DependentUpon>dlgXmlJobInsert.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAlertManager.resx">
+      <DependentUpon>frmAlertManager.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAnomaly.resx">
+      <DependentUpon>frmAnomaly.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCapacity.resx">
+      <DependentUpon>frmCapacity.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCategoryManagerDialog.resx">
+      <DependentUpon>frmCategoryManagerDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChartCustomization.resx">
+      <DependentUpon>frmChartCustomization.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCMScheduler.resx">
+      <DependentUpon>frmCMScheduler.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCMTemplate.resx">
+      <DependentUpon>frmCMTemplate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCMView.resx">
+      <DependentUpon>frmCMView.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCompare2G.resx">
+      <DependentUpon>frmCompare2G.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCompare3G.resx">
+      <DependentUpon>frmCompare3G.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCompare4G.resx">
+      <DependentUpon>frmCompare4G.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCopyFromTemplate.resx">
+      <DependentUpon>frmCopyFromTemplate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCopyParam2Template.resx">
+      <DependentUpon>frmCopyParam2Template.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCreateSiteIntProject.resx">
+      <DependentUpon>frmCreateSiteIntProject.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDashboard.resx">
+      <DependentUpon>frmDashboard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDashboardDesigner.resx">
+      <DependentUpon>frmDashboardDesigner.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDataIntegrity.resx">
+      <DependentUpon>frmDataIntegrity.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDataMartKpiConfig.resx">
+      <DependentUpon>frmDataMartKpiConfig.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEvent.resx">
+      <DependentUpon>frmEvent.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFreqChooser.resx">
+      <DependentUpon>frmFreqChooser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGenerateTemplate.resx">
+      <DependentUpon>frmGenerateTemplate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGenerateXML.resx">
+      <DependentUpon>frmGenerateXML.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGISSearch.resx">
+      <DependentUpon>frmGISSearch.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmICM.resx">
+      <DependentUpon>frmICM.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmImportDrivetest.resx">
+      <DependentUpon>frmImportDrivetest.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInternetExplorer.resx">
+      <DependentUpon>frmInternetExplorer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmKPIManage.resx">
+      <DependentUpon>frmKPIManage.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmKPINote.resx">
+      <DependentUpon>frmKPINote.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmKPISetCreate.resx">
+      <DependentUpon>frmKPISetCreate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLaunchTiltManager.resx">
+      <DependentUpon>frmLaunchTiltManager.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLegend.resx">
+      <DependentUpon>frmLegend.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmListManager.resx">
+      <DependentUpon>frmListManager.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMapExternalData.resx">
+      <DependentUpon>frmMapExternalData.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMapWindow.resx">
+      <DependentUpon>frmMapWindow.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMDI.resx">
+      <DependentUpon>frmMDI.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNBIReports.resx">
+      <DependentUpon>frmNBIReports.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNBManagement.resx">
+      <DependentUpon>frmNBManagement.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNotes.resx">
+      <DependentUpon>frmNotes.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmParameterDescription.resx">
+      <DependentUpon>frmParameterDescription.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmParameterHistory.resx">
+      <DependentUpon>frmParameterHistory.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPMView.resx">
+      <DependentUpon>frmPMView.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProxyAuthentication.resx">
+      <DependentUpon>frmProxyAuthentication.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmQuickThemeControl.resx">
+      <DependentUpon>frmQuickThemeControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRefCheck.resx">
+      <DependentUpon>frmRefCheck.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRefChkBulkDelete.resx">
+      <DependentUpon>frmRefChkBulkDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRefChkBulkUpdate.resx">
+      <DependentUpon>frmRefChkBulkUpdate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRefChkUpdateTemplateObj.resx">
+      <DependentUpon>frmRefChkUpdateTemplateObj.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmReportDesigner.resx">
+      <DependentUpon>frmReportDesigner.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmReportEdit.resx">
+      <DependentUpon>frmReportEdit.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSBKPIManage.resx">
+      <DependentUpon>frmSBKPIManage.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSBMain.resx">
+      <DependentUpon>frmSBMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSBReportContentFilters.resx">
+      <DependentUpon>frmSBReportContentFilters.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmScheduleManagerDialog.resx">
+      <DependentUpon>frmScheduleManagerDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmServiceCheck.resx">
+      <DependentUpon>frmServiceCheck.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSiteIntegration.resx">
+      <DependentUpon>frmSiteIntegration.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSON.resx">
+      <DependentUpon>frmSON.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSQLQuery.resx">
+      <DependentUpon>frmSQLQuery.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTagManager.resx">
+      <DependentUpon>frmTagManager.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTechnology.resx">
+      <DependentUpon>frmTechnology.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTerrainProfile.resx">
+      <DependentUpon>frmTerrainProfile.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmThresholdSetCreate.resx">
+      <DependentUpon>frmThresholdSetCreate.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTicketDetail.resx">
+      <DependentUpon>frmTicketDetail.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTileMapping.resx">
+      <DependentUpon>frmTileMapping.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTiltManagement.resx">
+      <DependentUpon>frmTiltManagement.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTracePCHR.resx">
+      <DependentUpon>frmTracePCHR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVirtualAzimuth.resx">
+      <DependentUpon>frmVirtualAzimuth.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IOSUserControls\ucChartHistBinsCount.resx">
+      <DependentUpon>ucChartHistBinsCount.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IOSUserControls\ucChartHistMenuItem.resx">
+      <DependentUpon>ucChartHistMenuItem.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IOSUserControls\ucICMKPIList.resx">
+      <DependentUpon>ucICMKPIList.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\licenses.licx" />
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SplashScreen.resx">
+      <DependentUpon>SplashScreen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WaitForm1.resx">
+      <DependentUpon>WaitForm1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WaitFormDataMart.resx">
+      <DependentUpon>WaitFormDataMart.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.AttachXmlFileToImportJobEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.BulkImportJobsEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.CancelImportJobsEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.CreateImportJobEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.DeleteImportJobEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.DeleteSetCMDataTaskResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.DownloadImportJobsEricssonFileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.ExecuteImportJobEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.GetAuthorizeTokenResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.GetDownloadedFileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.GetImportJobsEricssonExportIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.GetImportJobsEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.GetImportJobsEricssonValidationResponseResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.GetImportTaskResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.GetSessionIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.LoginUserEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.LogoutUserEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.ParseAndValidateImportJobEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.QueryCMDataTaskReportPathUrlResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.QueryCMDataTaskResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.QueryImportTaskResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.SetCMDataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.SetCMDataRollBackResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.TaskOfObject.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.TaskOfString.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\IOS.XmlServRef.ViewImportJobOperationsEricssonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\XmlServRef\xmlprovisionservice1.wsdl" />
+    <None Include="IOS_UserManual.pdf" />
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="App_Readme\NET-SFTP-Library-Help.txt" />
+    <Content Include="CIOS_UserManual.chm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
+    <Content Include="Template.potx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="x64\SQLite.Interop.dll" />
+    <Content Include="x86\SQLite.Interop.dll" />
+    <EmbeddedResource Include="Resources\addlayers_sm.png" />
+    <Content Include="Resources\btnRefCheck.png" />
+    <Content Include="Resources\btnRefCheckBlack.png" />
+    <Content Include="Resources\btnTiltManager_large.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_4G5.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_4G6.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_4G7.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_4G8.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_4G9.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_5G1.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_5G2.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_5G3.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_5G4.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_5G5.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_5G6.png" />
+    <Content Include="Resources\btn_Layer_TX1.bmp" />
+    <Content Include="Resources\btn_Layer_TX2.png" />
+    <Content Include="Resources\Capacity_Original.png" />
+    <Content Include="Resources\Exit_old.png" />
+    <Content Include="Resources\GoogleStreetView.bmp" />
+    <Content Include="Resources\gray_Icon_Package_Final_notused.ico" />
+    <Content Include="Resources\Icon_Exclamation.png" />
+    <EmbeddedResource Include="Resources\icon_NRBTS.jpg" />
+    <EmbeddedResource Include="Resources\icon_site_4gband6.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_4gband7.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_4gband8.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_4gband9.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_5gband1.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_5gband2.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_5gband3.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_5gband4.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_5gband5.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_5gband6.bmp" />
+    <EmbeddedResource Include="Resources\Icon_stop.png" />
+    <EmbeddedResource Include="Resources\icon_warning2.jpg" />
+    <EmbeddedResource Include="Resources\icon_warning3.png" />
+    <Content Include="Resources\IOS_Logo_Chart.bmp" />
+    <EmbeddedResource Include="Resources\ServiceCheckIcon_32.png" />
+    <EmbeddedResource Include="Resources\SiteIntegration.png" />
+    <Content Include="Resources\ìos_splashscreen.png" />
+    <Content Include="Resources\ìos_splashscreen_omni.png" />
+    <None Include="Connected Services\XmlServRef\configuration91.svcinfo" />
+    <None Include="Connected Services\XmlServRef\configuration.svcinfo" />
+    <None Include="Connected Services\XmlServRef\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </None>
+    <None Include="Connected Services\XmlServRef\xmlprovisionservice1.disco" />
+    <Content Include="Resources\2G.png" />
+    <Content Include="Resources\3G.png" />
+    <Content Include="Resources\4G.png" />
+    <EmbeddedResource Include="Resources\blue_Icon_Package_Final.ico" />
+    <EmbeddedResource Include="Resources\Anomaly.png" />
+    <Content Include="Resources\Blue_with_letter 48x48.ico" />
+    <EmbeddedResource Include="Resources\btn_Layer_TX1.png" />
+    <None Include="pkcs12.pfx" />
+    <None Include="Resources\cellinfo16_2.png" />
+    <None Include="Resources\Capacity_Icon.png" />
+    <None Include="Resources\btnTiltManager.png" />
+    <None Include="Resources\btnXML.png" />
+    <Content Include="Resources\Chart.png" />
+    <EmbeddedResource Include="Resources\Clear-all_thematic.png" />
+    <Content Include="Resources\Client Configuration.png" />
+    <Content Include="Resources\Close All.png" />
+    <Content Include="Resources\Close.png" />
+    <Content Include="Resources\CM.png" />
+    <EmbeddedResource Include="Resources\Common.png" />
+    <Content Include="Resources\Customer Experience.png" />
+    <Content Include="Resources\Dashboard.png" />
+    <Content Include="Resources\Direvertest.png" />
+    <Content Include="Resources\DUMP.png" />
+    <EmbeddedResource Include="Resources\envelope.png" />
+    <Content Include="Resources\Exit.ico" />
+    <Content Include="Resources\GIS Search.png" />
+    <EmbeddedResource Include="Resources\gray_Icon_Package_Final.ico" />
+    <Content Include="Resources\GoogleStreetView.png" />
+    <Content Include="Resources\green_box.jpg" />
+    <EmbeddedResource Include="Resources\icon_SAPC.jpg" />
+    <EmbeddedResource Include="Resources\icon_site_4gband5.bmp" />
+    <Content Include="Resources\if_alert-triangle-orange_536258.png" />
+    <Content Include="Resources\if_thumb_up_425650.png" />
+    <None Include="Resources\import_16x16.png" />
+    <Content Include="Resources\LogoZTE_Menu.jpg" />
+    <EmbeddedResource Include="Resources\LogoZTE_Menu.png" />
+    <Content Include="Resources\Logo_NSN_Short.png" />
+    <Content Include="Resources\Logo_ZTE.png" />
+    <Content Include="Resources\Logo_ZTE_Short - Copy.png" />
+    <Content Include="Resources\Manual.png" />
+    <Content Include="Resources\Map External Data.png" />
+    <EmbeddedResource Include="Resources\NBManagement.png" />
+    <None Include="Resources\NBIReport.png" />
+    <Content Include="Resources\Open.png" />
+    <Content Include="Resources\orange_box.jpg" />
+    <Content Include="Resources\Parameter History.png" />
+    <Content Include="Resources\PM KPIs.png" />
+    <Content Include="Resources\Query Builder.png" />
+    <Content Include="Resources\red_box.jpg" />
+    <Content Include="Resources\Report.png" />
+    <Content Include="Resources\Save.png" />
+    <Content Include="Resources\Son.png" />
+    <Content Include="Resources\Tags.png" />
+    <EmbeddedResource Include="Resources\TX_Large.png" />
+    <Content Include="Resources\Virtual Azimuth Detection.png" />
+    <Content Include="Resources\Web Client.png" />
+    <Content Include="Resources\yellowfin.jpg" />
+    <EmbeddedResource Include="Resources\cne.png" />
+    <Content Include="Resources\CS_Menu.png" />
+    <Content Include="Resources\Exit.png" />
+    <Content Include="Resources\G.png" />
+    <Content Include="Resources\GISSearch.png" />
+    <Content Include="Resources\GPEH_Menu.png" />
+    <Content Include="Resources\Help.png" />
+    <Content Include="Resources\Import.png" />
+    <Content Include="Resources\Import_DT.png" />
+    <EmbeddedResource Include="Resources\LogoEricsson_Menu.png" />
+    <EmbeddedResource Include="Resources\LogoHuawei_Menu.png" />
+    <EmbeddedResource Include="Resources\LogoNortel_Menu.png" />
+    <EmbeddedResource Include="Resources\LogoNSN_Menu.png" />
+    <EmbeddedResource Include="Resources\LogoVendorNone_Menu.png" />
+    <EmbeddedResource Include="Resources\LogoIpAccess_Menu.jpg" />
+    <EmbeddedResource Include="Resources\Logo_Small_Cell_Short.png" />
+    <EmbeddedResource Include="Resources\Logo_ZTE_Short.png" />
+    <EmbeddedResource Include="Resources\Logo_CNE_Short.png" />
+    <EmbeddedResource Include="Resources\LogoCNE_Menu.png" />
+    <Content Include="Resources\Mapimport.png" />
+    <Content Include="Resources\MapWindows.png" />
+    <Content Include="Resources\Menu.png" />
+    <Content Include="Resources\ParameterHistory.png" />
+    <Content Include="Resources\PCHR.png" />
+    <Content Include="Resources\PCHR_Menu.png" />
+    <Content Include="Resources\PS_Menu.png" />
+    <Content Include="Resources\TemplateManage.png" />
+    <None Include="packages.config" />
+    <None Include="Resources\shutterstock_503885743.eps" />
+    <None Include="Resources\ticket_window.png" />
+    <None Include="Resources\template_mgr_icon.png" />
+    <None Include="Resources\tag_icon.png" />
+    <None Include="Resources\sync_all.png" />
+    <None Include="Resources\son_icon.png" />
+    <None Include="Resources\selection_info_win.png" />
+    <None Include="Resources\reports.png" />
+    <None Include="Resources\query_bulider.png" />
+    <None Include="Resources\portal_help.png" />
+    <None Include="Resources\pchr_icon.png" />
+    <None Include="Resources\partial_sync.png" />
+    <None Include="Resources\parameter_history.png" />
+    <None Include="Resources\map_window.png" />
+    <None Include="Resources\map_layer_window1.png" />
+    <None Include="Resources\map_layer_window.png" />
+    <None Include="Resources\manual_icon.png" />
+    <None Include="Resources\KPIs.png" />
+    <None Include="Resources\ICM.png" />
+    <None Include="Resources\gis_search.png" />
+    <None Include="Resources\console_window.png" />
+    <None Include="Resources\config_sync.png" />
+    <None Include="Resources\cm_icon.png" />
+    <None Include="Resources\chart_mgr.png" />
+    <None Include="Resources\change_feature.png" />
+    <None Include="Resources\azimuth.png" />
+    <None Include="Resources\about.png" />
+    <EmbeddedResource Include="Resources\btn_InfoTool.bmp" />
+    <EmbeddedResource Include="Resources\btn_Layer_2G1.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_2G2.bmp" />
+    <EmbeddedResource Include="Resources\btn_Layer_2G2.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_2G3.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_2GR.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_3G1.bmp" />
+    <EmbeddedResource Include="Resources\btn_Layer_3G1.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_3G2.bmp" />
+    <EmbeddedResource Include="Resources\btn_Layer_3G2.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_3G3.bmp" />
+    <EmbeddedResource Include="Resources\btn_Layer_3G3.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_3G4.bmp" />
+    <EmbeddedResource Include="Resources\btn_Layer_3G4.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_3G5.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_4G1.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_4G2.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_4G3.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_4G4.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_GM.bmp" />
+    <EmbeddedResource Include="Resources\btn_Layer_Indoor4G.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_Nano3G.bmp" />
+    <EmbeddedResource Include="Resources\btn_Layer_Nano3G.png" />
+    <EmbeddedResource Include="Resources\btn_Layer_NanoBTS.bmp" />
+    <EmbeddedResource Include="Resources\btn_Layer_NanoBTS.png" />
+    <EmbeddedResource Include="Resources\btn_QuickLayer.png" />
+    <EmbeddedResource Include="Resources\btn_Status.bmp" />
+    <EmbeddedResource Include="Resources\Button-to-show-hide-grid.png" />
+    <EmbeddedResource Include="Resources\Cellfootprint.png" />
+    <EmbeddedResource Include="Resources\cellinfo.BMP" />
+    <EmbeddedResource Include="Resources\Cells_Neno3G.png" />
+    <EmbeddedResource Include="Resources\clear_Themetic.bmp" />
+    <EmbeddedResource Include="Resources\Distance.png" />
+    <EmbeddedResource Include="Resources\globe24.png" />
+    <EmbeddedResource Include="Resources\GMap_Site.jpg" />
+    <EmbeddedResource Include="Resources\Grid.png" />
+    <EmbeddedResource Include="Resources\gridSelect.png" />
+    <EmbeddedResource Include="Resources\gridSelect16.png" />
+    <EmbeddedResource Include="Resources\Icon1.ico" />
+    <EmbeddedResource Include="Resources\icon_BCF.jpg" />
+    <EmbeddedResource Include="Resources\icon_BSC.jpg" />
+    <EmbeddedResource Include="Resources\icon_BTS.jpg" />
+    <EmbeddedResource Include="Resources\icon_Category1.png" />
+    <EmbeddedResource Include="Resources\icon_Category2.png" />
+    <EmbeddedResource Include="Resources\icon_cell.bmp" />
+    <EmbeddedResource Include="Resources\icon_chart.jpg" />
+    <EmbeddedResource Include="Resources\icon_Element1.png" />
+    <EmbeddedResource Include="Resources\icon_GGSN.jpg" />
+    <EmbeddedResource Include="Resources\icon_LBTS.jpg" />
+    <EmbeddedResource Include="Resources\icon_legend.bmp" />
+    <EmbeddedResource Include="Resources\Icon_Legend.png" />
+    <EmbeddedResource Include="Resources\icon_legend2.png" />
+    <EmbeddedResource Include="Resources\icon_MGW.jpg" />
+    <EmbeddedResource Include="Resources\icon_MME.jpg" />
+    <EmbeddedResource Include="Resources\icon_MSC.jpg" />
+    <EmbeddedResource Include="Resources\icon_MSS.jpg" />
+    <EmbeddedResource Include="Resources\icon_PGW.jpg" />
+    <EmbeddedResource Include="Resources\icon_RNC.jpg" />
+    <EmbeddedResource Include="Resources\icon_SGSN.jpg" />
+    <EmbeddedResource Include="Resources\icon_SGW.jpg" />
+    <EmbeddedResource Include="Resources\icon_site_3gband1.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_3gband2.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_3gband3.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_3gband4.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_3gband5.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_4gband1.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_4gband2.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_4gband3.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_4gband4.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_blue.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_empty.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_magenta.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_red.bmp" />
+    <EmbeddedResource Include="Resources\icon_site_violet.bmp" />
+    <EmbeddedResource Include="Resources\icon_table.bmp" />
+    <EmbeddedResource Include="Resources\icon_tablegrid.bmp" />
+    <EmbeddedResource Include="Resources\icon_tag.JPG" />
+    <EmbeddedResource Include="Resources\icon_tbl_QuickTheme.png" />
+    <EmbeddedResource Include="Resources\icon_thematics.jpg" />
+    <EmbeddedResource Include="Resources\icon_thematics2.png" />
+    <EmbeddedResource Include="Resources\icon_thematics3.png" />
+    <EmbeddedResource Include="Resources\icon_WBTS.jpg" />
+    <EmbeddedResource Include="Resources\IOS_Logo_256.ico" />
+    <EmbeddedResource Include="Resources\IOS_Logo_3_128.ico" />
+    <EmbeddedResource Include="Resources\IOS_Logo_64p.ico" />
+    <EmbeddedResource Include="Resources\layerControl.png" />
+    <EmbeddedResource Include="Resources\layerControl16.png" />
+    <EmbeddedResource Include="Resources\Logo_Ericsson_Short.png" />
+    <EmbeddedResource Include="Resources\Logo_GoogleMaps.jpg" />
+    <EmbeddedResource Include="Resources\Logo_Huawei_Short.png" />
+    <EmbeddedResource Include="Resources\Logo_Ipaccess_Short.png" />
+    <EmbeddedResource Include="Resources\Logo_Nortel_Short.png" />
+    <EmbeddedResource Include="Resources\Logo_NSN_Short.jpg" />
+    <EmbeddedResource Include="Resources\Logo_YahooMaps.jpg" />
+    <EmbeddedResource Include="Resources\maps.png" />
+    <EmbeddedResource Include="Resources\measure.png" />
+    <EmbeddedResource Include="Resources\MI_ICON_LEGEND_24.png" />
+    <EmbeddedResource Include="Resources\MI_ICON_NEW_BROWSER_16.png" />
+    <EmbeddedResource Include="Resources\MI_selectable_on.PNG" />
+    <EmbeddedResource Include="Resources\Network-status.png" />
+    <EmbeddedResource Include="Resources\QuicklayerControl.png" />
+    <EmbeddedResource Include="Resources\removelayers_sm.PNG" />
+    <EmbeddedResource Include="Resources\Save_FloppyDisk.png" />
+    <EmbeddedResource Include="Resources\Select-parcel.png" />
+    <EmbeddedResource Include="Resources\Select-tilemap.png" />
+    <EmbeddedResource Include="Resources\Selection_Info.png" />
+    <EmbeddedResource Include="Resources\Selection_Info16.png" />
+    <EmbeddedResource Include="Resources\Selection_Info2.png" />
+    <EmbeddedResource Include="Resources\Selection_info_Show_Hide.png" />
+    <EmbeddedResource Include="Resources\select_Parsel.bmp" />
+    <EmbeddedResource Include="Resources\square_green.bmp" />
+    <EmbeddedResource Include="Resources\square_magenta.bmp" />
+    <EmbeddedResource Include="Resources\square_red.bmp" />
+    <EmbeddedResource Include="Resources\table_go2.png" />
+    <EmbeddedResource Include="Resources\Tags_Dialog.PNG" />
+    <EmbeddedResource Include="Resources\SaveIcon.png" />
+    <EmbeddedResource Include="Resources\Logo_NSN2.jpg" />
+    <EmbeddedResource Include="Resources\Logo_NSN.jpg" />
+    <EmbeddedResource Include="Resources\Logo_Nortel.jpg" />
+    <EmbeddedResource Include="Resources\Logo_Huawei2.jpg" />
+    <EmbeddedResource Include="Resources\Logo_Huawei.jpg" />
+    <EmbeddedResource Include="Resources\Logo_Ericsson.jpg" />
+    <EmbeddedResource Include="Resources\ìos_splashscreen_omni.jpg" />
+    <EmbeddedResource Include="Resources\ÌOS_SplashScreen.jpg" />
+    <EmbeddedResource Include="Resources\btn_Layer_2G1.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IOS.Configuration\IOS.Configuration.csproj">
+      <Project>{36701a40-cb1a-4012-8b37-a2f64a725180}</Project>
+      <Name>IOS.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IOS.DataLibrary\IOS.DataLibrary.vbproj">
+      <Project>{fa360bd8-e35a-4dfa-814e-8281dfa8bbb4}</Project>
+      <Name>IOS.DataLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IOS.Library\IOS.Library.vbproj">
+      <Project>{a29e4cf5-b622-4da0-b9b9-fd458cba853e}</Project>
+      <Name>IOS.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\XmlServRef\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="EnvDTE">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Leadtools">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Leadtools.Codecs">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="MapInfo.miAwareSDK">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="MapInfo.miAwareStubs">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.mshtml">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="stdole">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.3124.44\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.3124.44\build\Microsoft.Web.WebView2.targets'))" />
+    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_StartDate="2000/1/1" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+  <Import Project="..\packages\Microsoft.Web.WebView2.1.0.3124.44\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.3124.44\build\Microsoft.Web.WebView2.targets')" />
+  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

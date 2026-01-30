@@ -1,0 +1,20 @@
+﻿Public Class JobFields
+    Public Const JobID As String = "JobID"
+    Public Const JobName As String = "JobName"
+    Public Const JobDescription As String = "JobDescription"
+    Public Const JobCreatorID As String = "JobCreatorID"
+    Public Const JobActive As String = "JobActive"
+    Public Const JobInterval_Minutes As String = "JobInterval_Minutes"
+    Public Const JobInterval_Hours As String = "JobInterval_Hours"
+    Public Const JobInterval_Days As String = "JobInterval_Days"
+    Public Const JobStop_TimeOut_Minutes As String = "JobStop_TimeOut_Minutes"
+    Public Const JobStop_End As String = "JobStop_End"
+    Public Const JobNextRun As String = "JobNextRun"
+    Public Const JobOutputFormatID As String = "JobOutputFormatID"
+    Public Const JobOutputFileDestination As String = "JobOutputFileDestination"
+    Public Const JobOutputEmailDestination As String = "JobOutputEmailDestination"
+    Public Const JobThresholdOuputOnly As String = "JobThresholdOuputOnly"
+    Public Const JobSNMPAlarm As String = "JobSNMPAlarm"
+    Public Const JobSNMPAlarmComment As String = "JobSNMPAlarmComment"
+
+End Class

@@ -1,0 +1,46 @@
+﻿Public Class IOSInternalTechnology
+
+    Public Const Tech2G1 As String = "2G1"
+    Public Const Tech2G2 As String = "2G2"
+    Public Const Tech2G3 As String = "2G3"
+
+    Public Const Tech3G1 As String = "3G1"
+    Public Const Tech3G2 As String = "3G2"
+    Public Const Tech3G3 As String = "3G3"
+
+    Public Const Tech4G1 As String = "4G1"
+    Public Const Tech4G2 As String = "4G2"
+    Public Const Tech4G3 As String = "4G3"
+
+    Public Const Tech5G1 As String = "5G1"
+    Public Const Tech5G2 As String = "5G2"
+    Public Const Tech5G3 As String = "5G3"
+
+    Public Const TechNode1 As String = "NODE1"
+    Public Const TechNode2 As String = "NODE2"
+    Public Const TechNode3 As String = "NODE3"
+
+    Public Const EPC1 As String = "EPC1"
+    Public Const MSS As String = "MSS"
+    Public Const MGW As String = "MGW"
+    Public Const SGSN As String = "SGSN"
+    Public Const GGSN As String = "GGSN"
+    Public Const IMS As String = "IMS"
+    Public Const EPC2 As String = "EPC2"
+    Public Const EPC3 As String = "EPC3"
+    Public Const PGW As String = "PGW"
+    Public Const SGW As String = "SGW"
+    Public Const TX As String = "TX"
+    Public Const TX2 As String = "TX2"
+    Public Const SAPC As String = "SAPC"
+    Public Const MEE As String = "MEE"
+    Public Const CDRMSC As String = "CDRMSC"
+    Public Const CDRSGSN As String = "CDRSGSN"
+    Public Const CDRGGSN As String = "CDRGGSN"
+    Public Const COMMON As String = "COMMON"
+    Public Const TRANSPORT As String = "TRANSPORT"
+    Public Const PDUM As String = "PDUM"
+    Public Const TWAMP As String = "TWAMP"
+    Public Const HLR As String = "HLR"
+    Public Const DWDM As String = "DWDM"
+End Class

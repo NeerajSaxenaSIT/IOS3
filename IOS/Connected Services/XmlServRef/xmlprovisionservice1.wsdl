@@ -1,0 +1,1076 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetAuthorizeToken">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetAuthorizeTokenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAuthorizeTokenResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSessionID">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetSessionIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSessionIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDownloadedFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDownloadedFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDownloadedFileResult" type="tns:TaskOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TaskOfString">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Task" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Task" />
+      <s:element name="GetImportTask">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImportTaskResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetImportTaskResult" type="tns:TaskOfObject" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="TaskOfObject">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Task" />
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="QueryImportTask">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryImportTaskResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryImportTaskResult" type="tns:TaskOfObject" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetCMData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlJobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlFileID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="provisionID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetCMDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetCMDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetCMDataRollBack">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlJobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlFileID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="provisionID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetCMDataRollBackResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetCMDataRollBackResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryCMDataTask">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlJobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlCMTaskID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cmDataTaskUri" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryCMDataTaskResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryCMDataTaskResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryCMDataTaskReportPathUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlJobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlCMTaskID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="reportPathUri" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryCMDataTaskReportPathUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryCMDataTaskReportPathUrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteSetCMDataTask">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlJobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cmDataTaskUri" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteSetCMDataTaskResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteSetCMDataTaskResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoginUserEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoginUserEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginUserEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogoutUserEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogoutUserEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LogoutUserEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateImportJobEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sessionCookie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateImportJobEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateImportJobEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImportJobsEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sessionCookie" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImportJobsEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetImportJobsEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteImportJobEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sessionCookie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteImportJobEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteImportJobEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AttachXmlFileToImportJobEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sessionCookie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlJobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlFileID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileType" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AttachXmlFileToImportJobEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AttachXmlFileToImportJobEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParseAndValidateImportJobEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sessionCookie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ParseAndValidateImportJobEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ParseAndValidateImportJobEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImportJobsEricssonValidationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cookieVal" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlCMTaskID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobValidationID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImportJobsEricssonValidationResponseResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetImportJobsEricssonValidationResponseResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExecuteImportJobEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sessionCookie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlCMTaskID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExecuteImportJobEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ExecuteImportJobEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ViewImportJobOperationsEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cookieVal" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ViewImportJobOperationsEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ViewImportJobOperationsEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CancelImportJobsEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cookieVal" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CancelImportJobsEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CancelImportJobsEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImportJobsEricssonExportID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cookieVal" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImportJobsEricssonExportIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetImportJobsEricssonExportIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DownloadImportJobsEricssonFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="apiKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cookieVal" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="jobExportID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlCMTaskID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DownloadImportJobsEricssonFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DownloadImportJobsEricssonFileResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BulkImportJobsEricsson">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cookieVal" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BulkImportJobsEricssonResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="BulkImportJobsEricssonResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetAuthorizeTokenSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAuthorizeToken" />
+  </wsdl:message>
+  <wsdl:message name="GetAuthorizeTokenSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAuthorizeTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSessionIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSessionID" />
+  </wsdl:message>
+  <wsdl:message name="GetSessionIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSessionIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDownloadedFileSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDownloadedFile" />
+  </wsdl:message>
+  <wsdl:message name="GetDownloadedFileSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDownloadedFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetImportTaskSoapIn">
+    <wsdl:part name="parameters" element="tns:GetImportTask" />
+  </wsdl:message>
+  <wsdl:message name="GetImportTaskSoapOut">
+    <wsdl:part name="parameters" element="tns:GetImportTaskResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryImportTaskSoapIn">
+    <wsdl:part name="parameters" element="tns:QueryImportTask" />
+  </wsdl:message>
+  <wsdl:message name="QueryImportTaskSoapOut">
+    <wsdl:part name="parameters" element="tns:QueryImportTaskResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetCMDataSoapIn">
+    <wsdl:part name="parameters" element="tns:SetCMData" />
+  </wsdl:message>
+  <wsdl:message name="SetCMDataSoapOut">
+    <wsdl:part name="parameters" element="tns:SetCMDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetCMDataRollBackSoapIn">
+    <wsdl:part name="parameters" element="tns:SetCMDataRollBack" />
+  </wsdl:message>
+  <wsdl:message name="SetCMDataRollBackSoapOut">
+    <wsdl:part name="parameters" element="tns:SetCMDataRollBackResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryCMDataTaskSoapIn">
+    <wsdl:part name="parameters" element="tns:QueryCMDataTask" />
+  </wsdl:message>
+  <wsdl:message name="QueryCMDataTaskSoapOut">
+    <wsdl:part name="parameters" element="tns:QueryCMDataTaskResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryCMDataTaskReportPathUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:QueryCMDataTaskReportPathUrl" />
+  </wsdl:message>
+  <wsdl:message name="QueryCMDataTaskReportPathUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:QueryCMDataTaskReportPathUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSetCMDataTaskSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteSetCMDataTask" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSetCMDataTaskSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteSetCMDataTaskResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginUserEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:LoginUserEricsson" />
+  </wsdl:message>
+  <wsdl:message name="LoginUserEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:LoginUserEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="LogoutUserEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:LogoutUserEricsson" />
+  </wsdl:message>
+  <wsdl:message name="LogoutUserEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:LogoutUserEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateImportJobEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateImportJobEricsson" />
+  </wsdl:message>
+  <wsdl:message name="CreateImportJobEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateImportJobEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetImportJobsEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:GetImportJobsEricsson" />
+  </wsdl:message>
+  <wsdl:message name="GetImportJobsEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:GetImportJobsEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteImportJobEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteImportJobEricsson" />
+  </wsdl:message>
+  <wsdl:message name="DeleteImportJobEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteImportJobEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="AttachXmlFileToImportJobEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:AttachXmlFileToImportJobEricsson" />
+  </wsdl:message>
+  <wsdl:message name="AttachXmlFileToImportJobEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:AttachXmlFileToImportJobEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="ParseAndValidateImportJobEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:ParseAndValidateImportJobEricsson" />
+  </wsdl:message>
+  <wsdl:message name="ParseAndValidateImportJobEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:ParseAndValidateImportJobEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetImportJobsEricssonValidationResponseSoapIn">
+    <wsdl:part name="parameters" element="tns:GetImportJobsEricssonValidationResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetImportJobsEricssonValidationResponseSoapOut">
+    <wsdl:part name="parameters" element="tns:GetImportJobsEricssonValidationResponseResponse" />
+  </wsdl:message>
+  <wsdl:message name="ExecuteImportJobEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:ExecuteImportJobEricsson" />
+  </wsdl:message>
+  <wsdl:message name="ExecuteImportJobEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:ExecuteImportJobEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="ViewImportJobOperationsEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:ViewImportJobOperationsEricsson" />
+  </wsdl:message>
+  <wsdl:message name="ViewImportJobOperationsEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:ViewImportJobOperationsEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="CancelImportJobsEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:CancelImportJobsEricsson" />
+  </wsdl:message>
+  <wsdl:message name="CancelImportJobsEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:CancelImportJobsEricssonResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetImportJobsEricssonExportIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetImportJobsEricssonExportID" />
+  </wsdl:message>
+  <wsdl:message name="GetImportJobsEricssonExportIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetImportJobsEricssonExportIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="DownloadImportJobsEricssonFileSoapIn">
+    <wsdl:part name="parameters" element="tns:DownloadImportJobsEricssonFile" />
+  </wsdl:message>
+  <wsdl:message name="DownloadImportJobsEricssonFileSoapOut">
+    <wsdl:part name="parameters" element="tns:DownloadImportJobsEricssonFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="BulkImportJobsEricssonSoapIn">
+    <wsdl:part name="parameters" element="tns:BulkImportJobsEricsson" />
+  </wsdl:message>
+  <wsdl:message name="BulkImportJobsEricssonSoapOut">
+    <wsdl:part name="parameters" element="tns:BulkImportJobsEricssonResponse" />
+  </wsdl:message>
+  <wsdl:portType name="XmlProvisionServiceSoap">
+    <wsdl:operation name="GetAuthorizeToken">
+      <wsdl:input message="tns:GetAuthorizeTokenSoapIn" />
+      <wsdl:output message="tns:GetAuthorizeTokenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSessionID">
+      <wsdl:input message="tns:GetSessionIDSoapIn" />
+      <wsdl:output message="tns:GetSessionIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDownloadedFile">
+      <wsdl:input message="tns:GetDownloadedFileSoapIn" />
+      <wsdl:output message="tns:GetDownloadedFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetImportTask">
+      <wsdl:input message="tns:GetImportTaskSoapIn" />
+      <wsdl:output message="tns:GetImportTaskSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryImportTask">
+      <wsdl:input message="tns:QueryImportTaskSoapIn" />
+      <wsdl:output message="tns:QueryImportTaskSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetCMData">
+      <wsdl:input message="tns:SetCMDataSoapIn" />
+      <wsdl:output message="tns:SetCMDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetCMDataRollBack">
+      <wsdl:input message="tns:SetCMDataRollBackSoapIn" />
+      <wsdl:output message="tns:SetCMDataRollBackSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryCMDataTask">
+      <wsdl:input message="tns:QueryCMDataTaskSoapIn" />
+      <wsdl:output message="tns:QueryCMDataTaskSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryCMDataTaskReportPathUrl">
+      <wsdl:input message="tns:QueryCMDataTaskReportPathUrlSoapIn" />
+      <wsdl:output message="tns:QueryCMDataTaskReportPathUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSetCMDataTask">
+      <wsdl:input message="tns:DeleteSetCMDataTaskSoapIn" />
+      <wsdl:output message="tns:DeleteSetCMDataTaskSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoginUserEricsson">
+      <wsdl:input message="tns:LoginUserEricssonSoapIn" />
+      <wsdl:output message="tns:LoginUserEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LogoutUserEricsson">
+      <wsdl:input message="tns:LogoutUserEricssonSoapIn" />
+      <wsdl:output message="tns:LogoutUserEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateImportJobEricsson">
+      <wsdl:input message="tns:CreateImportJobEricssonSoapIn" />
+      <wsdl:output message="tns:CreateImportJobEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetImportJobsEricsson">
+      <wsdl:input message="tns:GetImportJobsEricssonSoapIn" />
+      <wsdl:output message="tns:GetImportJobsEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteImportJobEricsson">
+      <wsdl:input message="tns:DeleteImportJobEricssonSoapIn" />
+      <wsdl:output message="tns:DeleteImportJobEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AttachXmlFileToImportJobEricsson">
+      <wsdl:input message="tns:AttachXmlFileToImportJobEricssonSoapIn" />
+      <wsdl:output message="tns:AttachXmlFileToImportJobEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ParseAndValidateImportJobEricsson">
+      <wsdl:input message="tns:ParseAndValidateImportJobEricssonSoapIn" />
+      <wsdl:output message="tns:ParseAndValidateImportJobEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetImportJobsEricssonValidationResponse">
+      <wsdl:input message="tns:GetImportJobsEricssonValidationResponseSoapIn" />
+      <wsdl:output message="tns:GetImportJobsEricssonValidationResponseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteImportJobEricsson">
+      <wsdl:input message="tns:ExecuteImportJobEricssonSoapIn" />
+      <wsdl:output message="tns:ExecuteImportJobEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ViewImportJobOperationsEricsson">
+      <wsdl:input message="tns:ViewImportJobOperationsEricssonSoapIn" />
+      <wsdl:output message="tns:ViewImportJobOperationsEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelImportJobsEricsson">
+      <wsdl:input message="tns:CancelImportJobsEricssonSoapIn" />
+      <wsdl:output message="tns:CancelImportJobsEricssonSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetImportJobsEricssonExportID">
+      <wsdl:input message="tns:GetImportJobsEricssonExportIDSoapIn" />
+      <wsdl:output message="tns:GetImportJobsEricssonExportIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadImportJobsEricssonFile">
+      <wsdl:input message="tns:DownloadImportJobsEricssonFileSoapIn" />
+      <wsdl:output message="tns:DownloadImportJobsEricssonFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BulkImportJobsEricsson">
+      <wsdl:input message="tns:BulkImportJobsEricssonSoapIn" />
+      <wsdl:output message="tns:BulkImportJobsEricssonSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="XmlProvisionServiceSoap" type="tns:XmlProvisionServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAuthorizeToken">
+      <soap:operation soapAction="http://tempuri.org/GetAuthorizeToken" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSessionID">
+      <soap:operation soapAction="http://tempuri.org/GetSessionID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDownloadedFile">
+      <soap:operation soapAction="http://tempuri.org/GetDownloadedFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImportTask">
+      <soap:operation soapAction="http://tempuri.org/GetImportTask" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryImportTask">
+      <soap:operation soapAction="http://tempuri.org/QueryImportTask" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCMData">
+      <soap:operation soapAction="http://tempuri.org/SetCMData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCMDataRollBack">
+      <soap:operation soapAction="http://tempuri.org/SetCMDataRollBack" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryCMDataTask">
+      <soap:operation soapAction="http://tempuri.org/QueryCMDataTask" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryCMDataTaskReportPathUrl">
+      <soap:operation soapAction="http://tempuri.org/QueryCMDataTaskReportPathUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSetCMDataTask">
+      <soap:operation soapAction="http://tempuri.org/DeleteSetCMDataTask" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoginUserEricsson">
+      <soap:operation soapAction="http://tempuri.org/LoginUserEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogoutUserEricsson">
+      <soap:operation soapAction="http://tempuri.org/LogoutUserEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateImportJobEricsson">
+      <soap:operation soapAction="http://tempuri.org/CreateImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImportJobsEricsson">
+      <soap:operation soapAction="http://tempuri.org/GetImportJobsEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteImportJobEricsson">
+      <soap:operation soapAction="http://tempuri.org/DeleteImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AttachXmlFileToImportJobEricsson">
+      <soap:operation soapAction="http://tempuri.org/AttachXmlFileToImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParseAndValidateImportJobEricsson">
+      <soap:operation soapAction="http://tempuri.org/ParseAndValidateImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImportJobsEricssonValidationResponse">
+      <soap:operation soapAction="http://tempuri.org/GetImportJobsEricssonValidationResponse" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteImportJobEricsson">
+      <soap:operation soapAction="http://tempuri.org/ExecuteImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ViewImportJobOperationsEricsson">
+      <soap:operation soapAction="http://tempuri.org/ViewImportJobOperationsEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelImportJobsEricsson">
+      <soap:operation soapAction="http://tempuri.org/CancelImportJobsEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImportJobsEricssonExportID">
+      <soap:operation soapAction="http://tempuri.org/GetImportJobsEricssonExportID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadImportJobsEricssonFile">
+      <soap:operation soapAction="http://tempuri.org/DownloadImportJobsEricssonFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkImportJobsEricsson">
+      <soap:operation soapAction="http://tempuri.org/BulkImportJobsEricsson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="XmlProvisionServiceSoap12" type="tns:XmlProvisionServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAuthorizeToken">
+      <soap12:operation soapAction="http://tempuri.org/GetAuthorizeToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSessionID">
+      <soap12:operation soapAction="http://tempuri.org/GetSessionID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDownloadedFile">
+      <soap12:operation soapAction="http://tempuri.org/GetDownloadedFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImportTask">
+      <soap12:operation soapAction="http://tempuri.org/GetImportTask" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryImportTask">
+      <soap12:operation soapAction="http://tempuri.org/QueryImportTask" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCMData">
+      <soap12:operation soapAction="http://tempuri.org/SetCMData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCMDataRollBack">
+      <soap12:operation soapAction="http://tempuri.org/SetCMDataRollBack" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryCMDataTask">
+      <soap12:operation soapAction="http://tempuri.org/QueryCMDataTask" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryCMDataTaskReportPathUrl">
+      <soap12:operation soapAction="http://tempuri.org/QueryCMDataTaskReportPathUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSetCMDataTask">
+      <soap12:operation soapAction="http://tempuri.org/DeleteSetCMDataTask" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoginUserEricsson">
+      <soap12:operation soapAction="http://tempuri.org/LoginUserEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogoutUserEricsson">
+      <soap12:operation soapAction="http://tempuri.org/LogoutUserEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateImportJobEricsson">
+      <soap12:operation soapAction="http://tempuri.org/CreateImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImportJobsEricsson">
+      <soap12:operation soapAction="http://tempuri.org/GetImportJobsEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteImportJobEricsson">
+      <soap12:operation soapAction="http://tempuri.org/DeleteImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AttachXmlFileToImportJobEricsson">
+      <soap12:operation soapAction="http://tempuri.org/AttachXmlFileToImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParseAndValidateImportJobEricsson">
+      <soap12:operation soapAction="http://tempuri.org/ParseAndValidateImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImportJobsEricssonValidationResponse">
+      <soap12:operation soapAction="http://tempuri.org/GetImportJobsEricssonValidationResponse" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteImportJobEricsson">
+      <soap12:operation soapAction="http://tempuri.org/ExecuteImportJobEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ViewImportJobOperationsEricsson">
+      <soap12:operation soapAction="http://tempuri.org/ViewImportJobOperationsEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelImportJobsEricsson">
+      <soap12:operation soapAction="http://tempuri.org/CancelImportJobsEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImportJobsEricssonExportID">
+      <soap12:operation soapAction="http://tempuri.org/GetImportJobsEricssonExportID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadImportJobsEricssonFile">
+      <soap12:operation soapAction="http://tempuri.org/DownloadImportJobsEricssonFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BulkImportJobsEricsson">
+      <soap12:operation soapAction="http://tempuri.org/BulkImportJobsEricsson" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="XmlProvisionService">
+    <wsdl:port name="XmlProvisionServiceSoap" binding="tns:XmlProvisionServiceSoap">
+      <soap:address location="http://10.244.98.161:81/xmlprovisionservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="XmlProvisionServiceSoap12" binding="tns:XmlProvisionServiceSoap12">
+      <soap12:address location="http://10.244.98.161:81/xmlprovisionservice.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{36701A40-CB1A-4012-8B37-A2F64A725180}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IOS.Configuration</RootNamespace>
+    <AssemblyName>IOS.Configuration</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.XtraBars.v24.2">
+      <HintPath>..\References\DevExpress.XtraBars.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v24.2">
+      <HintPath>..\References\DevExpress.XtraEditors.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v24.2">
+      <HintPath>..\References\DevExpress.XtraGrid.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v24.2">
+      <HintPath>..\References\DevExpress.XtraLayout.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v24.2">
+      <HintPath>..\References\DevExpress.XtraTreeList.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="LidorSystems.IntegralUI">
+      <HintPath>..\References\LidorSystems.IntegralUI.dll</HintPath>
+    </Reference>
+    <Reference Include="LidorSystems.IntegralUI.Lists">
+      <HintPath>..\References\LidorSystems.IntegralUI.Lists.DLL</HintPath>
+    </Reference>
+    <Reference Include="LidorSystems.IntegralUI.Lists.TreeListView">
+      <HintPath>..\References\LidorSystems.IntegralUI.Lists.TreeListView.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CommonDialogExt, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CommonDialogExt.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CoreEngine, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CoreEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CoreEngine.Wrapper, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CoreEngine.Wrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CoreTypes, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CoreTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Design, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Ellis.ExtensibleDataProvider, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Ellis.ExtensibleDataProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.LinearReferencing, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.LinearReferencing.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Ogc, Version=9.3.0.93, Culture=neutral, PublicKeyToken=3c39af2a631aeb4f, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Ogc.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.PBAPIs, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.PBAPIs.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Services, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.TileServer.Client, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.TileServer.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.VectorTile.Server, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.VectorTile.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.VectorTiling, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.VectorTiling.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Web, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.WebControls, Version=9.3.0.93, Culture=neutral, PublicKeyToken=0a9556cc66c0af57, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.WebControls.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wfs.Server, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wfs.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows.Dialogs, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.Dialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows.Framework, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows.Printing, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.Printing.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wms.Client, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wms.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wms.Server, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wms.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wmts.Client, Version=9.3.0.93, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wmts.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\IOS V1\IOS1\IOS_Trunk\References\PowerPacks\Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.SQLite, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\lib\net451\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.118.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.118.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Reflection.Context" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChartAdjust\ChartAdjustProperties.cs" />
+    <Compile Include="DateTimeControl\IOS_UI_CustomDateTimePicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DateTimeControl\IOS_UI_CustomDateTimePicker.Designer.cs">
+      <DependentUpon>IOS_UI_CustomDateTimePicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EntityModel\Category.cs" />
+    <Compile Include="EntityModel\ConfigType.cs" />
+    <Compile Include="EntityModel\Control.cs" />
+    <Compile Include="EntityModel\IOSAdminInput.cs" />
+    <Compile Include="EntityModel\IOSForm.cs" />
+    <Compile Include="EntityModel\IOSUser.cs" />
+    <Compile Include="EntityModel\SandBoxFieldModel.cs" />
+    <Compile Include="EntityModel\SandBoxUser.cs" />
+    <Compile Include="ExcelManager\DataConverter.cs" />
+    <Compile Include="ExcelManager\XLSDataProvider.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="GeoAggregationManager.cs" />
+    <Compile Include="IOSAppConfigManage.cs" />
+    <Compile Include="IOSConfigManager.cs" />
+    <Compile Include="ManageResizingControl.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportManager\CustomDateTimeConverter.cs" />
+    <Compile Include="ReportManager\DateTimePickerEditor.cs" />
+    <Compile Include="ReportManager\ObjectChartProperties.cs" />
+    <Compile Include="ReportManager\ObjectProperties.cs" />
+    <Compile Include="ReportManager\ObjectTextBoxProperties.cs" />
+    <Compile Include="ReportManager\ReportProperties.cs" />
+    <Compile Include="ReportManager\SlideProperties.cs" />
+    <Compile Include="ReportManager\WorksheetProperties.cs" />
+    <Compile Include="TreeControl\ContainerNode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TreeControl\CustomTreeList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TreeControl\CustomTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TreeControl\CustomTreeView.Designer.cs">
+      <DependentUpon>CustomTreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TreeControl\XMLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TreeControl\XMLControl.designer.cs">
+      <DependentUpon>XMLControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TreeControl\XMLNode.cs" />
+    <Compile Include="TreeControl\XMLTree.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DateTimeControl\IOS_UI_CustomDateTimePicker.resx">
+      <DependentUpon>IOS_UI_CustomDateTimePicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="TreeControl\XMLControl.resx">
+      <DependentUpon>XMLControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TreeControl\XMLTree.resx">
+      <DependentUpon>XMLTree.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net451\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net451\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_StartDate="2000/1/1" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net451\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\build\net451\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

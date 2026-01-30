@@ -1,0 +1,435 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A29E4CF5-B622-4DA0-B9B9-FD458CBA853E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>IOS.Library</RootNamespace>
+    <AssemblyName>IOS.Library</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.BonusSkins.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\DevExpress.BonusSkins.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.Desktop.v24.2">
+      <HintPath>..\References\DevExpress.Data.Desktop.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v24.2">
+      <HintPath>..\References\DevExpress.Data.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Drawing.v24.2">
+      <HintPath>..\References\DevExpress.Drawing.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Office.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\DevExpress.Office.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v24.2.Core">
+      <HintPath>..\References\DevExpress.Printing.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\DevExpress.RichEdit.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v24.2">
+      <HintPath>..\References\DevExpress.Utils.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v24.2.UI, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\DevExpress.Utils.v24.2.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.DocumentViewer.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\DevExpress.Xpf.DocumentViewer.v24.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\DevExpress.XtraBars.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v24.2">
+      <HintPath>..\References\DevExpress.XtraEditors.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v24.2">
+      <HintPath>..\References\DevExpress.XtraGrid.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v24.2">
+      <HintPath>..\References\DevExpress.XtraLayout.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v24.2">
+      <HintPath>..\References\DevExpress.XtraTreeList.v24.2.dll</HintPath>
+    </Reference>
+    <Reference Include="dotnetCharting.WinForms, Version=10.2.0.0, Culture=neutral, PublicKeyToken=c3f34d622663b9f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\dotnetCharting.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="LidorSystems.IntegralUI, Version=3.0.3.0, Culture=neutral, PublicKeyToken=fc068d52871330d8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\LidorSystems.IntegralUI.dll</HintPath>
+    </Reference>
+    <Reference Include="LidorSystems.IntegralUI.Lists">
+      <HintPath>..\References\LidorSystems.IntegralUI.Lists.DLL</HintPath>
+    </Reference>
+    <Reference Include="LidorSystems.IntegralUI.Lists.TreeListView">
+      <HintPath>..\References\LidorSystems.IntegralUI.Lists.TreeListView.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CoreEngine, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CoreEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CoreEngine.Wrapper, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CoreEngine.Wrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.CoreTypes, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.CoreTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Design, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Ellis.ExtensibleDataProvider, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Ellis.ExtensibleDataProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.LinearReferencing, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.LinearReferencing.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Ogc, Version=7.0.0.200, Culture=neutral, PublicKeyToken=3c39af2a631aeb4f, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Ogc.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Services, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Web, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.WebControls, Version=7.0.0.200, Culture=neutral, PublicKeyToken=0a9556cc66c0af57, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.WebControls.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wfs.Server, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wfs.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows.Dialogs, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.Dialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows.Framework, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Windows.Printing, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Windows.Printing.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wms.Client, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wms.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.Wms.Server, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.Wms.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="MapInfo.WorkspaceManager.Extension, Version=7.0.0.200, Culture=neutral, PublicKeyToken=93e298a0f6b95eb1, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MapInfo.WorkspaceManager.Extension.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseType\clsComboBoxItem.vb" />
+    <Compile Include="BaseType\ExTableLayoutPanel.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BaseType\IOSToggleButton.Designer.vb">
+      <DependentUpon>IOSToggleButton.vb</DependentUpon>
+    </Compile>
+    <Compile Include="BaseType\IOSToggleButton.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BaseType\ITableInfo.vb" />
+    <Compile Include="BaseType\ReportChartGrid.Designer.vb">
+      <DependentUpon>ReportChartGrid.vb</DependentUpon>
+    </Compile>
+    <Compile Include="BaseType\ReportChartGrid.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BaseType\ucProgressPanel.Designer.vb">
+      <DependentUpon>ucProgressPanel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="BaseType\ucProgressPanel.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ChartImplementation\ChartComman.vb" />
+    <Compile Include="ChartImplementation\ChartPCHR.vb" />
+    <Compile Include="ChartManager\ReportChartGridManager.vb" />
+    <Compile Include="CommonMethods\SandBoxCheckedListBox.vb" />
+    <Compile Include="CommonMethods\SandBoxListBox.vb" />
+    <Compile Include="CommonMethods\SandBoxListOfString.vb" />
+    <Compile Include="CommonMethods\SandBoxTable.vb" />
+    <Compile Include="CommonMethods\SandBoxTextBox.vb" />
+    <Compile Include="CommonMethods\SandBoxTreeView.vb" />
+    <Compile Include="CommonMethods\VDataGrid.vb" />
+    <Compile Include="ConstantFields\AggregateConst.vb" />
+    <Compile Include="ConstantFields\ConstantFields.vb" />
+    <Compile Include="ConstantFields\OpratorConst.vb" />
+    <Compile Include="Constants\IOSInternalTechnology.vb" />
+    <Compile Include="Constants\IOSSqlIds.vb" />
+    <Compile Include="Constants\IOSVendors.vb" />
+    <Compile Include="Constants\Technologies.vb" />
+    <Compile Include="EntityModel\IOSAxis.vb" />
+    <Compile Include="EntityModel\IOSCategoryManager.vb" />
+    <Compile Include="EntityModel\IOSEntityKeys.vb" />
+    <Compile Include="EntityModel\IOSEvent.vb" />
+    <Compile Include="EntityModel\IOSFeatureGeometry.vb" />
+    <Compile Include="EntityModel\IOSLegandInfo.vb" />
+    <Compile Include="EntityModel\IOSStyleModifier.vb" />
+    <Compile Include="EntityModel\IOSTableInfoAdoNet.vb" />
+    <Compile Include="EntityModel\IOSTableInfoServer.vb" />
+    <Compile Include="EntityModel\SelectionToTreeFlags.vb" />
+    <Compile Include="Enum\IOSEnum.vb" />
+    <Compile Include="Enum\NetworksAll.vb" />
+    <Compile Include="IOSDevExpressGrid.vb" />
+    <Compile Include="IOSDevExTab.vb" />
+    <Compile Include="IOSExtension\DataTableExtensions.vb" />
+    <Compile Include="IOSHelper\clsPivot.vb" />
+    <Compile Include="IOSHelper\IOSEventHelper.vb" />
+    <Compile Include="IOSHelper\IOSGeomatryHelper.vb" />
+    <Compile Include="IOSHelper\IOSStyleHelper.vb" />
+    <Compile Include="IOSHelper\IOSThematicHelper.vb" />
+    <Compile Include="IOSPCHR\CellTab.vb" />
+    <Compile Include="IOSPCHR\IMSITab.vb" />
+    <Compile Include="IOSPCHR\PCHRTab.vb" />
+    <Compile Include="IOSThematic.vb" />
+    <Compile Include="IOSThematicKPI.vb" />
+    <Compile Include="IOSTreeView\WindowsTreeView.vb" />
+    <Compile Include="IOSUtility.vb" />
+    <Compile Include="Logic\IOSChartManager.vb" />
+    <Compile Include="Logic\IOSCustomSecurityProvider.vb" />
+    <Compile Include="Logic\IOSMapManager.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="SandBoxAxis.vb" />
+    <Compile Include="SandBoxChartManager.vb" />
+    <Compile Include="SQLGenerateParameters.vb" />
+    <Compile Include="Utility.vb" />
+    <Compile Include="VSandBoxField.vb">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BaseType\ReportChartGrid.resx">
+      <DependentUpon>ReportChartGrid.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BaseType\ucProgressPanel.resx">
+      <DependentUpon>ucProgressPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\licenses.licx" />
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IOS.Configuration\IOS.Configuration.csproj">
+      <Project>{36701a40-cb1a-4012-8b37-a2f64a725180}</Project>
+      <Name>IOS.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IOS.DataLibrary\IOS.DataLibrary.vbproj">
+      <Project>{fa360bd8-e35a-4dfa-814e-8281dfa8bbb4}</Project>
+      <Name>IOS.DataLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\IOS.Library.dll" />
+    <Content Include="bin\Debug\IOS.Library.pdb" />
+    <Content Include="bin\Release\DevExpress.CodeParser.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Data.Desktop.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Data.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.DataAccess.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Images.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Mvvm.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Mvvm.v21.1.xml" />
+    <Content Include="bin\Release\DevExpress.Office.v21.1.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Pdf.v21.1.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Pdf.v21.1.Core.xml" />
+    <Content Include="bin\Release\DevExpress.Pdf.v21.1.Drawing.dll" />
+    <Content Include="bin\Release\DevExpress.Pdf.v21.1.Drawing.xml" />
+    <Content Include="bin\Release\DevExpress.Printing.v21.1.Core.dll" />
+    <Content Include="bin\Release\DevExpress.RichEdit.v21.1.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Sparkline.v21.1.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Utils.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Utils.v21.1.UI.dll" />
+    <Content Include="bin\Release\DevExpress.Xpf.Core.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Xpf.Core.v21.1.xml" />
+    <Content Include="bin\Release\DevExpress.Xpf.DocumentViewer.v21.1.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Xpf.Grid.v21.1.Core.dll" />
+    <Content Include="bin\Release\DevExpress.Xpf.Grid.v21.1.Core.xml" />
+    <Content Include="bin\Release\DevExpress.Xpf.Grid.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Xpf.Grid.v21.1.xml" />
+    <Content Include="bin\Release\DevExpress.Xpf.Ribbon.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Xpf.Ribbon.v21.1.xml" />
+    <Content Include="bin\Release\DevExpress.Xpo.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.Xpo.v21.1.xml" />
+    <Content Include="bin\Release\DevExpress.XtraBars.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.XtraEditors.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.XtraGrid.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.XtraLayout.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.XtraPrinting.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.XtraRichEdit.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.XtraTreeList.v21.1.dll" />
+    <Content Include="bin\Release\DevExpress.XtraVerticalGrid.v21.1.dll" />
+    <Content Include="bin\Release\de\DevExpress.Pdf.v21.1.Core.resources.dll" />
+    <Content Include="bin\Release\de\DevExpress.Xpf.Core.v21.1.resources.dll" />
+    <Content Include="bin\Release\de\DevExpress.Xpf.Grid.v21.1.Core.resources.dll" />
+    <Content Include="bin\Release\de\DevExpress.Xpf.Ribbon.v21.1.resources.dll" />
+    <Content Include="bin\Release\de\DevExpress.Xpo.v21.1.resources.dll" />
+    <Content Include="bin\Release\dotnetCharting.WinForms.dll" />
+    <Content Include="bin\Release\es\DevExpress.Pdf.v21.1.Core.resources.dll" />
+    <Content Include="bin\Release\es\DevExpress.Xpf.Core.v21.1.resources.dll" />
+    <Content Include="bin\Release\es\DevExpress.Xpf.Grid.v21.1.Core.resources.dll" />
+    <Content Include="bin\Release\es\DevExpress.Xpf.Ribbon.v21.1.resources.dll" />
+    <Content Include="bin\Release\es\DevExpress.Xpo.v21.1.resources.dll" />
+    <Content Include="bin\Release\IOS.Configuration.dll" />
+    <Content Include="bin\Release\IOS.Configuration.pdb" />
+    <Content Include="bin\Release\IOS.DataLibrary.dll" />
+    <Content Include="bin\Release\IOS.DataLibrary.pdb" />
+    <Content Include="bin\Release\IOS.Library.dll" />
+    <Content Include="bin\Release\IOS.Library.pdb" />
+    <Content Include="bin\Release\ja\DevExpress.Pdf.v21.1.Core.resources.dll" />
+    <Content Include="bin\Release\ja\DevExpress.Xpf.Core.v21.1.resources.dll" />
+    <Content Include="bin\Release\ja\DevExpress.Xpf.Grid.v21.1.Core.resources.dll" />
+    <Content Include="bin\Release\ja\DevExpress.Xpf.Ribbon.v21.1.resources.dll" />
+    <Content Include="bin\Release\ja\DevExpress.Xpo.v21.1.resources.dll" />
+    <Content Include="bin\Release\LidorSystems.IntegralUI.dll" />
+    <Content Include="bin\Release\LidorSystems.IntegralUI.Lists.DLL" />
+    <Content Include="bin\Release\LidorSystems.IntegralUI.Lists.TreeListView.dll" />
+    <Content Include="bin\Release\Microsoft.Vsa.dll" />
+    <Content Include="bin\Release\Microsoft.Vsa.xml" />
+    <Content Include="bin\Release\ru\DevExpress.Pdf.v21.1.Core.resources.dll" />
+    <Content Include="bin\Release\ru\DevExpress.Xpf.Core.v21.1.resources.dll" />
+    <Content Include="bin\Release\ru\DevExpress.Xpf.Grid.v21.1.Core.resources.dll" />
+    <Content Include="bin\Release\ru\DevExpress.Xpf.Ribbon.v21.1.resources.dll" />
+    <Content Include="bin\Release\ru\DevExpress.Xpo.v21.1.resources.dll" />
+    <Content Include="Resources\Stopped.png" />
+    <Content Include="Resources\Loading.gif" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_StartDate="2000/1/1" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

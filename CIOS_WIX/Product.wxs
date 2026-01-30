@@ -1,0 +1,1010 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"  xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<?define IOS_TargetDir=$(var.IOS.TargetDir)?>
+	<?define IOS_CustomDir="C:\GitHub\CIOS\IOS3_WIX\CIOS_WIX\" ?>
+
+	<!--MODIFY VERSION IN PRODUCT ID AND UPGRADEID -  DO NOT CHANGE UPGRADECODE !-->
+	
+	<Product Id="*" Name="CIOS" Language="1033" Version="3.25.1011" Manufacturer="CellSens" UpgradeCode="{6f5d6210-b9fa-4f19-942d-c827601d0869}" Codepage="1252">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" AdminImage="no" Description="CellSens - Integrated Optimization Suite" Languages="1033" Manufacturer="CellSens" Platform="x64" ReadOnly="no" ShortNames="no"  />
+		<!--<Package InstallerVersion="200" Compressed="yes" InstallScope="perUser"  AdminImage="no" Description="CellSens - Integrated Optimization Suite" Languages="1033" Manufacturer="CellSens" Platform="x64" ReadOnly="no" ShortNames="no"  />-->
+
+
+		<MajorUpgrade
+			Schedule="afterInstallValidate"
+			MigrateFeatures="yes"
+			DowngradeErrorMessage="A newer version is already installed."/>
+
+
+		<!--<Upgrade Id="{6f5d6210-b9fa-4f19-942d-c827601d0869}">
+			<UpgradeVersion Minimum="0.0.0" Maximum="3.25.1011" Property="OLDPRODUCTFOUND" OnlyDetect="no" IncludeMinimum="yes" IncludeMaximum="no" Language="1033" />
+		</Upgrade>
+		
+		--><!--<CustomAction Id="RemoveOldVersion"	  Property="OLDPRODUCTFOUND"	  Value="1" />--><!--
+		
+		<InstallExecuteSequence>
+			<RemoveExistingProducts After="InstallFinalize" />
+			<Custom Action="SetTARGETDIR" Before="CostInitialize"><![CDATA[TARGETDIR = ""]]></Custom>
+			<Custom Action="PreventDowngrading" After="FindRelatedProducts"><![CDATA[NEWPRODUCTFOUND]]></Custom>
+			--><!--<Custom Action="MsiPublishAssemblies" After="InstallFinalize">NOT Installed</Custom>
+			<Custom Action="MsiUnpublishAssemblies" Before="RemoveFiles">REMOVE="ALL"</Custom>--><!--
+		</InstallExecuteSequence>-->
+		
+		
+		
+		<Media Id="1" Cabinet="product.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
+		<Media Id="2" Cabinet="Webview2.cab" EmbedCab="yes" />
+
+		<Property Id="DiskPrompt" Value="CIOS Installation [1]" />
+		<Property Id="ARPPRODUCTICON" Value="ProductIcon" />
+		<Property Id="ARPHELPLINK" Value="http://www.cellsens.com/FlySpray" />
+		<Property Id="ARPURLINFOABOUT" Value="http://www.cellsens.com/contact/" />
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<PropertyRef Id="NETFRAMEWORK40CLIENT" />
+		<Condition Message="This application requires .NET Framework 4.8. Please install the .NET Framework then run this installer again."><![CDATA[Installed OR NETFRAMEWORK40CLIENT]]></Condition>
+		<Icon Id="ProductIcon" SourceFile="IOS_Logo_3_128.ico" />
+		<CustomAction Id="PreventDowngrading" Error="Newer version already installed." />
+
+		<WixVariable Id="WixUIBannerBmp" Value="Images\installer_banner.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="Images\installer_background.bmp" />
+		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+
+		<UIRef Id="WixUI_InstallDir" />
+		
+		<Feature Id="ProductFeature" Title="CIOS" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="Resources_files" />
+			<ComponentGroupRef Id="x86" />
+			<ComponentGroupRef Id="x64" />
+			<ComponentGroupRef Id="native64" />
+			<ComponentGroupRef Id="native86" />
+			<ComponentRef Id="ApplicationShortcut" />
+			<ComponentRef Id="ApplicationShortcutDesktop" />
+			<ComponentRef Id="MyFontsFonts" />
+			<!--<ComponentRef Id="IOS.exe"/>-->
+			<MergeRef Id="merge_2f744851_e79d_48eb_a89e_8bfeba142591" />
+			<MergeRef Id="merge_ec8d75c7_94ba_481c_9f6e_15b4d4c0717e" />
+			<MergeRef Id="merge_24d50caf_3930_4d3e_a762_55ac58dc3db9" />
+			<MergeRef Id="merge_6263f8a8_28fd_4832_be4a_e17da09efe83" />
+			<MergeRef Id="merge_e8c0714e_e681_4c83_9ce6_1382fc7ca2f7" />
+			<MergeRef Id="merge_3cde2ac6_b81a_46fb_83f9_da1dbea02bec" />
+			<MergeRef Id="merge_437d4a07_7e32_45ba_a24b_e2f19f3d3788" />
+			<MergeRef Id="merge_c796dc92_7341_4f44_a8bb_a4ecace9c0b9" />
+			<MergeRef Id="merge_d06f461b_ed80_49e6_b5a7_d978af904814" />
+			<MergeRef Id="merge_10468a17_5bd5_4894_85d2_f53f215b0a0d" />
+		</Feature>
+
+		<CustomAction Id="SetTARGETDIR" Property="TARGETDIR" Value="[ProgramFiles64Folder]\[Manufacturer]\CIOS" Execute="firstSequence" Impersonate="yes" />
+		
+	</Product>	
+			
+	<Fragment>		
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="CellSens" Name="CellSens">
+					<Directory Id="INSTALLFOLDER" Name="CIOS">
+						<Directory Id="Resources" Name="Resources" />
+						<Directory Id="x86" Name="x86" />
+						<Directory Id="x64" Name="x64" />
+						<Directory Id="runtimes" Name="runtimes">
+							<Directory Id="winx64" Name="win-x64">
+								<Directory Id="native64" Name="native" />
+							</Directory>
+							<Directory Id="winx86" Name="win-x86">
+								<Directory Id="native86" Name="native" />
+							</Directory>
+						</Directory>
+						<Directory Id="bin" Name="bin">
+							<Directory Id="bin_Release" Name="Release" />
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+			<Directory Id="ProgramMenuFolder" Name="Program Menu">
+				<Directory Id="ApplicationProgramsFolder" Name="CIOS">
+					<!--<Component Id="ProgramMenuDir" Guid="">
+						<RemoveFolder Id="ProgramMenuDir" On="uninstall" />
+						<RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes"></RegistryValue>
+						</Component>-->
+				</Directory>
+			</Directory>
+			<Directory Id="DesktopFolder" Name="Desktop" />
+			<Merge Id="merge_2f744851_e79d_48eb_a89e_8bfeba142591" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MapInfoCoreEngineIntl_x64_9.3.0.msm" />
+			<Merge Id="merge_ec8d75c7_94ba_481c_9f6e_15b4d4c0717e" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MapInfoCustSymb_x64_9.3.0.msm" />
+			<Merge Id="merge_24d50caf_3930_4d3e_a762_55ac58dc3db9" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MapInfoDesktop_x64_9.3.0.msm" />
+			<Merge Id="merge_6263f8a8_28fd_4832_be4a_e17da09efe83" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MapInfoMXTConfig_x64_9.3.0.msm" />
+			<Merge Id="merge_e8c0714e_e681_4c83_9ce6_1382fc7ca2f7" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MapInfoServices_x64_9.3.0.msm" />
+			<Merge Id="merge_3cde2ac6_b81a_46fb_83f9_da1dbea02bec" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MapInfoWeb_x64_9.3.0.msm" />
+			<Merge Id="merge_437d4a07_7e32_45ba_a24b_e2f19f3d3788" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MapInfoWFS_x64_9.3.0.msm" />
+			<Merge Id="merge_c796dc92_7341_4f44_a8bb_a4ecace9c0b9" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MapInfoWMS_x64_9.3.0.msm" />
+			<Merge Id="merge_d06f461b_ed80_49e6_b5a7_d978af904814" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MapInfoWMTS_x64_9.3.0.msm" />
+			<Merge Id="merge_10468a17_5bd5_4894_85d2_f53f215b0a0d" Language="1033" DiskId="1" SourceFile="C:\Program Files\Common Files\Merge Modules\MIFonts_9.3.0.msm" />
+
+			<Directory Id="FontsFolder">
+				<Component Id="MyFontsFonts" Guid="{345daa75-fd70-4fe2-ad78-0c1fb3b19f1d}">
+					<File Id="font1.ttf" Source="MAPSYM.TTF" TrueType="yes" />
+					<File Id="font2.ttf" Source="TTMIOS__.TTF" TrueType="yes" />
+				</Component>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="ApplicationShortcut" Guid="83732101-1a96-422a-9558-aeb1fb4f2135">
+				<Shortcut Id="ApplicationStartMenuShortcut" Name="CIOS" Description="Integrated Optimization Suite" Target="[INSTALLFOLDER]\IOS.exe" WorkingDirectory="APPLICATIONROOTDIRECTORY">
+					<Icon Id="ApplicationShortcutIcon" SourceFile="IOS_Logo_3_128.ico" />
+				</Shortcut>
+				<RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\CIOS" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="ApplicationShortcutDesktop" Guid="1cbba83f-36f5-4c3d-80d0-b712bae1f35b">
+				<Shortcut Id="ApplicationDesktopShortcut" Name="CIOS" Description="Integrated Optimization Suite" Target="[INSTALLFOLDER]IOS.exe" WorkingDirectory="APPLICATIONROOTDIRECTORY">
+					<Icon Id="DesktopShortcutIcon" SourceFile="IOS_Logo_3_128.ico" />
+				</Shortcut>
+				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\CIOS" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+	  
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+
+			<!-- DEFINE ALL ODBC DATASOURCES -->
+	
+			<Component Id="cmp_IOS_Server" Guid="{B7D13BCD-A34C-4575-AE1E-4BA7D6A27D6C}" Win64="yes"> 
+				<ODBCDataSource Id="OdbcDataSource_IOS_Server" DriverName="SQL Server" Registration="machine" KeyPath="yes" Name="IOS_Server_JAZZ"> 
+					<Property Id="Server"       Value="10.50.143.96" /> 
+					<Property Id="Database"     Value="IOS_Server" /> 
+					<Property Id="Description"  Value="IOS_Server" /> 
+				</ODBCDataSource>
+			</Component>
+		  
+			<Component Id="cmp_IOS_DT" Guid="{6B77297F-1C0C-46AC-BC89-02916D2A3BD2}" Win64="yes"> 
+				<ODBCDataSource Id="OdbcDataSource_IOS_DT" DriverName="SQL Server" Registration="machine" KeyPath="yes" Name="IOS_DT"> 
+					<Property Id="Server"       Value="10.50.143.96" /> 
+					<Property Id="Database"     Value="IOS_DT" /> 
+					<Property Id="Description"  Value="IOS_DT" /> 
+				</ODBCDataSource>
+			</Component>
+
+			<Component Id="cmp_data_Huawei" Guid="{053163E3-7305-4073-9EE4-B26DC4CF61D3}" Win64="yes"> 
+				<ODBCDataSource Id="OdbcDataSource_data_Huawei" DriverName="SQL Server" Registration="machine" KeyPath="yes" Name="JAZZ_data_Huawei"> 
+					<Property Id="Server"       Value="10.50.143.96" /> 
+					<Property Id="Database"     Value="data_Huawei" /> 
+					<Property Id="Description"  Value="data_Huawei" /> 
+				</ODBCDataSource>
+			</Component>
+
+			<Component Id="cmp_data_Ericsson" Guid="{3af23525-199e-48c9-9332-46a01100085d}" Win64="yes"> 
+				<ODBCDataSource Id="OdbcDataSource_data_Ericsson" DriverName="SQL Server" Registration="machine" KeyPath="yes" Name="JAZZ_data_Ericsson"> 
+					<Property Id="Server"       Value="10.50.143.96" /> 
+					<Property Id="Database"     Value="data_Ericsson" /> 
+					<Property Id="Description"  Value="data_Ericsson" /> 
+				</ODBCDataSource>
+			</Component>
+
+			<Component Id="cmp_data_ZTE" Guid="{0f2ac4bc-7e53-4d35-93aa-b73d0c3555eb}" Win64="yes"> 
+				<ODBCDataSource Id="OdbcDataSource_data_ZTE" DriverName="SQL Server"  Registration="machine" KeyPath="yes"  Name="JAZZ_data_ZTE"> 
+					<Property Id="Server"       Value="10.50.143.96" /> 
+					<Property Id="Database"     Value="data_ZTE" /> 
+					<Property Id="Description"  Value="data_ZTE" /> 
+				</ODBCDataSource>
+			</Component>
+		  
+			<!-- END DATASOURCES -->	
+
+			<Component Id="Template.potx" Guid="D7CFCB6C-2063-40D7-BD8F-35711FE0466B" Win64="yes">
+				<File Id="Template.potx" Name="Template.potx" Source="$(var.IOS_TargetDir)Template.potx" KeyPath="yes" />
+			</Component>
+			<Component Id="CIOS_UserManual.chm" Guid="695df548-3ac9-410a-ad61-7b57ba6069e2" Win64="yes">
+				<File Id="CIOS_UserManual.chm" Name="CIOS_UserManual.chm" Source="$(var.IOS_TargetDir)CIOS_UserManual.chm" KeyPath="yes" />
+			</Component>
+			<Component Id="IOS_logo_chart.bmp" Guid="87EB8B33-586D-41CD-B45F-25DA02B0588D" Win64="yes">
+				<File Id="IOS_logo_chart.bmp" Name="IOS_logo_chart.bmp" Source="$(var.IOS_TargetDir)IOS_logo_chart.bmp" KeyPath="yes" />
+			</Component>
+			<Component Id="IOS_Logo_3_1281.ico" Guid="26C7F97E-74DC-4ACA-AD5F-E22D689D0D94" Win64="yes">
+				<File Id="IOS_Logo_3_1281.ico" Name="IOS_Logo_3_128.ico" Source="$(var.IOS_TargetDir)IOS_Logo_3_128.ico" KeyPath="yes" />
+			</Component>
+			<!--<Component Id="MapXtremeDesktop.lic" Guid="36C7F97E-74DC-4ACA-AD5F-E22D689D0D94">
+				<File Id="MapXtremeDesktop.lic" Name="MapXtremeDesktop.lic" Source="MapXtremeDesktop.lic" KeyPath="yes" />
+			</Component>-->
+			<Component Id="IOS.exe" Guid="3b6159a1-0169-43a4-89c2-dac4262738c9" Win64="yes">
+				<File Id="IOS.exe" Name="IOS.exe" Source="$(var.IOS_CustomDir)IOS.exe" KeyPath="yes" Vital="yes" />
+				<!--<File Id="SignScript" Source="$(var.IOS_TargetDir)SignScript.ps1" KeyPath="no"/>-->
+			</Component>
+			<Component Id="IOS.exe.config" Guid="236b2ad6-2c1f-4717-857a-c1ced5d9e942" Win64="yes">
+				<File Id="IOS.exe.config" Name="IOS.exe.config" Source="$(var.IOS_TargetDir)IOS.exe.config" KeyPath="yes">
+					<util:PermissionEx User="Administrators" GenericAll="yes" />
+					<util:PermissionEx User="Users" GenericAll="yes"  />
+				</File>
+			</Component>
+			<Component Id="IOS.Configuration.dll" Guid="f0cb3498-cf27-43f6-82dd-c12439b8f602" Win64="yes">
+				<File Id="IOS.Configuration.dll" Name="IOS.Configuration.dll" Source="$(var.IOS_CustomDir)IOS.Configuration.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="IOS.DataLibrary.dll" Guid="702af5f3-4092-4450-93de-7c4003450834" Win64="yes">
+				<File Id="IOS.DataLibrary.dll" Name="IOS.DataLibrary.dll" Source="$(var.IOS_CustomDir)IOS.DataLibrary.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="IOS.Library.dll" Guid="fe95ad1b-166d-4115-a2eb-cc4350a3b8d3" Win64="yes">
+				<File Id="IOS.Library.dll" Name="IOS.Library.dll" Source="$(var.IOS_CustomDir)IOS.Library.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="dotnetCharting.WinForms.dll" Guid="80a6bae6-9d22-438d-a524-a51217610bea" Win64="yes">
+				<File Id="dotnetCharting.WinForms.dll" Name="dotnetCharting.WinForms.dll" Source="$(var.IOS_TargetDir)dotnetCharting.WinForms.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="GMap.NET.Core.dll" Guid="53a5ba83-f092-475a-a3b6-9021e5aafa84" Win64="yes">
+				<File Id="GMap.NET.Core.dll" Name="GMap.NET.Core.dll" Source="$(var.IOS_TargetDir)GMap.NET.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="GMap.NET.WindowsForms.dll" Guid="4c57531b-3135-4ae2-885d-b15af92c7d50" Win64="yes">
+				<File Id="GMap.NET.WindowsForms.dll" Name="GMap.NET.WindowsForms.dll" Source="$(var.IOS_TargetDir)GMap.NET.WindowsForms.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="GMap.NET.Windows.dll" Guid="b6985307-4724-41a3-9298-384042ebf36d" Win64="yes">
+				<File Id="GMap.NET.Windows.dll" Name="GMap.NET.Windows.dll" Source="$(var.IOS_TargetDir)GMap.NET.Windows.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Google.Maps.dll" Guid="ea914942-5287-4315-a2e3-63ddc5b5e2cc" Win64="yes">
+				<File Id="Google.Maps.dll" Name="Google.Maps.dll" Source="$(var.IOS_TargetDir)Google.Maps.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="LidorSystems.IntegralUI.dll" Guid="12632a0e-a668-4915-a7bb-b9eb80ecb910" Win64="yes">
+				<File Id="LidorSystems.IntegralUI.dll" Name="LidorSystems.IntegralUI.dll" Source="$(var.IOS_TargetDir)LidorSystems.IntegralUI.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="LidorSystems.IntegralUI.Lists.DLL" Guid="b3e2b9e7-8faf-4ca2-8171-aa19492d9345" Win64="yes">
+				<File Id="LidorSystems.IntegralUI.Lists.DLL" Name="LidorSystems.IntegralUI.Lists.DLL" Source="$(var.IOS_TargetDir)LidorSystems.IntegralUI.Lists.DLL" KeyPath="yes" />
+			</Component>
+			<Component Id="LidorSystems.IntegralUI.Lists.TreeListView.dll" Guid="23625ed9-9943-4cfd-a7ca-b520a53c2fbc" Win64="yes">
+				<File Id="LidorSystems.IntegralUI.Lists.TreeListView.dll" Name="LidorSystems.IntegralUI.Lists.TreeListView.dll" Source="$(var.IOS_TargetDir)LidorSystems.IntegralUI.Lists.TreeListView.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="log4net.dll" Guid="278cc69d-e8ea-4875-8ac6-3eeefebe8590" Win64="yes">
+				<File Id="log4net.dll" Name="log4net.dll" Source="$(var.IOS_TargetDir)log4net.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.VisualBasic.PowerPacks.dll" Guid="11561612-2936-4056-acb9-be60e188d7c4" Win64="yes">
+				<File Id="Microsoft.VisualBasic.PowerPacks.dll" Name="Microsoft.VisualBasic.PowerPacks.dll" Source="$(var.IOS_TargetDir)Microsoft.VisualBasic.PowerPacks.dll" KeyPath="yes" />
+			</Component>
+			<!--<Component Id="griddll.dll" Guid="f47ac10b-58cc-4372-a567-0e02b2c3d479">
+				<File Id="griddll.dll" Name="griddll.dll" Source="$(var.IOS_TargetDir)griddll.dll" KeyPath="yes" />
+			</Component>-->
+			<Component Id="MapInfo.Design.dll" Guid="CF8A0D2F-849B-4077-A273-C71429C3074C" Permanent="no" SharedDllRefCount="no" Transitive="no" Win64="yes">
+				<File Id="MapInfo.Design.dll" DiskId="1" Hidden="no" ReadOnly="no" System="no" Vital="yes" Name="MapInfo.Design.dll" Source="$(var.IOS_TargetDir)MapInfo.Design.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Ogc.dll" Guid="58d4ee62-8669-4b25-b975-16f7751a631a" Win64="yes">
+				<File Id="MapInfo.Ogc.dll" Name="MapInfo.Ogc.dll" Source="$(var.IOS_TargetDir)MapInfo.Ogc.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Ellis.ExtensibleDataProvider.dll" Guid="95489db7-95a8-4ca9-9f05-641b16b047a0" Win64="yes">
+				<File Id="MapInfo.Ellis.ExtensibleDataProvider.dll" Name="MapInfo.Ellis.ExtensibleDataProvider.dll" Source="$(var.IOS_TargetDir)MapInfo.Ellis.ExtensibleDataProvider.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.LinearReferencing.dll" Guid="e36b441f-6a6a-48bf-a477-efaa8346c8ea" Win64="yes">
+				<File Id="MapInfo.LinearReferencing.dll" Name="MapInfo.LinearReferencing.dll" Source="$(var.IOS_TargetDir)MapInfo.LinearReferencing.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.PBAPIs.dll" Guid="03d3c533-955d-4581-913e-8f298c726e00" Win64="yes">
+				<File Id="MapInfo.PBAPIs.dll" Name="MapInfo.PBAPIs.dll" Source="$(var.IOS_TargetDir)MapInfo.PBAPIs.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Services.dll" Guid="073e28d5-b474-4ab8-bc36-f3cacf630af5" Win64="yes">
+				<File Id="MapInfo.Services.dll" Name="MapInfo.Services.dll" Source="$(var.IOS_TargetDir)MapInfo.Services.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.TileServer.Client.dll" Guid="28c0d5dd-918e-4079-a782-e3ca0fdc626d" Win64="yes">
+				<File Id="MapInfo.TileServer.Client.dll" Name="MapInfo.TileServer.Client.dll" Source="$(var.IOS_TargetDir)MapInfo.TileServer.Client.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.VectorTile.Server.dll" Guid="70715715-a125-41ca-8267-973d0fcc8941" Win64="yes">
+				<File Id="MapInfo.VectorTile.Server.dll" Name="MapInfo.VectorTile.Server.dll" Source="$(var.IOS_TargetDir)MapInfo.VectorTile.Server.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.VectorTiling.dll" Guid="9b642f0e-38ac-4079-9fd0-9b3a29748671" Win64="yes">
+				<File Id="MapInfo.VectorTiling.dll" Name="MapInfo.VectorTiling.dll" Source="$(var.IOS_TargetDir)MapInfo.VectorTiling.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Web.dll" Guid="fe6aa489-0c89-44f1-b7bf-bea29e474abc" Win64="yes">
+				<File Id="MapInfo.Web.dll" Name="MapInfo.Web.dll" Source="$(var.IOS_TargetDir)MapInfo.Web.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.WebControls.dll" Guid="64f01935-5136-498a-85b0-367e9b68456f" Win64="yes">
+				<File Id="MapInfo.WebControls.dll" Name="MapInfo.WebControls.dll" Source="$(var.IOS_TargetDir)MapInfo.WebControls.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Wfs.Server.dll" Guid="cb5159df-9b97-454e-b973-c54d23f50faa" Win64="yes">
+				<File Id="MapInfo.Wfs.Server.dll" Name="MapInfo.Wfs.Server.dll" Source="$(var.IOS_TargetDir)MapInfo.Wfs.Server.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Windows.dll" Guid="e479494e-d913-4825-a793-9a79b1999f41" Win64="yes">
+				<File Id="MapInfo.Windows.dll" Name="MapInfo.Windows.dll" Source="$(var.IOS_TargetDir)MapInfo.Windows.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Windows.Dialogs.dll" Guid="093733a1-3797-46a7-8df6-acf02ce5cf57" Win64="yes">
+				<File Id="MapInfo.Windows.Dialogs.dll" Name="MapInfo.Windows.Dialogs.dll" Source="$(var.IOS_TargetDir)MapInfo.Windows.Dialogs.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Windows.Framework.dll" Guid="44d5de54-a052-4587-a2af-72e49b43f5ff" Win64="yes">
+				<File Id="MapInfo.Windows.Framework.dll" Name="MapInfo.Windows.Framework.dll" Source="$(var.IOS_TargetDir)MapInfo.Windows.Framework.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Windows.Printing.dll" Guid="f2719620-3ee0-4292-a399-8387b0c099c7" Win64="yes">
+				<File Id="MapInfo.Windows.Printing.dll" Name="MapInfo.Windows.Printing.dll" Source="$(var.IOS_TargetDir)MapInfo.Windows.Printing.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Wms.Client.dll" Guid="12effb0c-fdc7-4582-bbf0-ad67d10586ec" Win64="yes">
+				<File Id="MapInfo.Wms.Client.dll" Name="MapInfo.Wms.Client.dll" Source="$(var.IOS_TargetDir)MapInfo.Wms.Client.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Wms.Server.dll" Guid="de256dbe-0e9f-489d-9b97-2fb0e4cbb78b" Win64="yes">
+				<File Id="MapInfo.Wms.Server.dll" Name="MapInfo.Wms.Server.dll" Source="$(var.IOS_TargetDir)MapInfo.Wms.Server.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.Wmts.Client.dll" Guid="63ea7d51-e6df-4baf-9304-7234cfe2d596" Win64="yes">
+				<File Id="MapInfo.Wmts.Client.dll" Name="MapInfo.Wmts.Client.dll" Source="$(var.IOS_TargetDir)MapInfo.Wmts.Client.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapperAndLayout.dll" Guid="83ccf83b-053d-4ab5-b6d5-2304c2e211b6" Win64="yes">
+				<File Id="MapperAndLayout.dll" Name="MapperAndLayout.dll" Source="$(var.IOS_TargetDir)MapperAndLayout.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MIApp.dll" Guid="99d6d20f-0d91-46bc-99ff-9da7e662f599" Win64="yes">
+				<File Id="MIApp.dll" Name="MIApp.dll" Source="$(var.IOS_TargetDir)MIApp.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="micm.dll" Guid="23188041-56cc-470f-911e-993884f58d04" Win64="yes">
+				<File Id="micm.dll" Name="micm.dll" Source="$(var.IOS_TargetDir)micm.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.Bcl.AsyncInterfaces.dll" Guid="6dc691ec-5e8c-4d04-8ea8-a3c54f050ee4" Win64="yes">
+				<File Id="Microsoft.Bcl.AsyncInterfaces.dll" Name="Microsoft.Bcl.AsyncInterfaces.dll" Source="$(var.IOS_TargetDir)Microsoft.Bcl.AsyncInterfaces.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.Bcl.HashCode.dll" Guid="16882dac-ae50-4aa7-a16a-e4c94e2ae469" Win64="yes">
+				<File Id="Microsoft.Bcl.HashCode.dll" Name="Microsoft.Bcl.HashCode.dll" Source="$(var.IOS_TargetDir)Microsoft.Bcl.HashCode.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Guid="a55dad21-0e49-4ca9-8e3f-a7de348dafa2" Win64="yes">
+				<File Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Name="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Source="$(var.IOS_TargetDir)Microsoft.Extensions.DependencyInjection.Abstractions.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.Abstractions.dll" Guid="5a5c978e-c7d6-4878-a941-490e3e8ac58d" Win64="yes">
+				<File Id="Microsoft.Extensions.Logging.Abstractions.dll" Name="Microsoft.Extensions.Logging.Abstractions.dll" Source="$(var.IOS_TargetDir)Microsoft.Extensions.Logging.Abstractions.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.mshtml.dll" Guid="bf3b85f5-89ad-48d5-995a-85f0da7055db" Win64="yes">
+				<File Id="Microsoft.mshtml.dll" Name="Microsoft.mshtml.dll" Source="$(var.IOS_TargetDir)Microsoft.mshtml.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.SqlServer.Types.dll" Guid="a059ef96-9bf2-4bb6-b1e4-9105c565bca5" Win64="yes">
+				<File Id="Microsoft.SqlServer.Types.dll" Name="Microsoft.SqlServer.Types.dll" Source="$(var.IOS_TargetDir)Microsoft.SqlServer.Types.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.Vsa.dll" Guid="89011abb-f9f6-4015-a89b-44f22dd97090" Win64="yes">
+				<File Id="Microsoft.Vsa.dll" Name="Microsoft.Vsa.dll" Source="$(var.IOS_TargetDir)Microsoft.Vsa.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.Web.WebView2.Core.dll" Guid="2f9ac402-c125-4c8d-99e4-37fb63c44838" Win64="yes">
+				<File Id="Microsoft.Web.WebView2.Core.dll" Name="Microsoft.Web.WebView2.Core.dll" Source="$(var.IOS_TargetDir)Microsoft.Web.WebView2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.Web.WebView2.WinForms.dll" Guid="4c5ee91a-8657-44fe-96a1-f3437fcbc904" Win64="yes">
+				<File Id="Microsoft.Web.WebView2.WinForms.dll" Name="Microsoft.Web.WebView2.WinForms.dll" Source="$(var.IOS_TargetDir)Microsoft.Web.WebView2.WinForms.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Microsoft.Web.WebView2.Wpf.dll" Guid="ceb0ca56-58fe-4c4d-ade9-18b30062af82" Win64="yes">
+				<File Id="Microsoft.Web.WebView2.Wpf.dll" Name="Microsoft.Web.WebView2.Wpf.dll" Source="$(var.IOS_TargetDir)Microsoft.Web.WebView2.Wpf.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="migdiplus.dll" Guid="6120d529-35cb-4d42-9916-17810dc3d95b" Win64="yes">
+				<File Id="migdiplus.dll" Name="migdiplus.dll" Source="$(var.IOS_TargetDir)migdiplus.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MILexer.dll" Guid="54c408a5-45d2-4b0a-8acc-49c9fdddd2d3" Win64="yes">
+				<File Id="MILexer.dll" Name="MILexer.dll" Source="$(var.IOS_TargetDir)MILexer.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MIMetadata.dll" Guid="e6fa3e1a-c937-4b6d-a875-24d80949fb7d" Win64="yes">
+				<File Id="MIMetadata.dll" Name="MIMetadata.dll" Source="$(var.IOS_TargetDir)MIMetadata.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MIOci.dll" Guid="849aad40-ed5f-4a60-987d-8f628f031d10" Win64="yes">
+				<File Id="MIOci.dll" Name="MIOci.dll" Source="$(var.IOS_TargetDir)MIOci.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MIOdbc.dll" Guid="a067b871-bca4-4a20-a068-ad3c9196147e" Win64="yes">
+				<File Id="MIOdbc.dll" Name="MIOdbc.dll" Source="$(var.IOS_TargetDir)MIOdbc.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MIRdb.dll" Guid="58ff6e26-0309-4d80-af30-4a5d69572744" Win64="yes">
+				<File Id="MIRdb.dll" Name="MIRdb.dll" Source="$(var.IOS_TargetDir)MIRdb.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MIRdbSpatial.dll" Guid="5b54856a-db80-4a5e-9665-e408a681e613" Win64="yes">
+				<File Id="MIRdbSpatial.dll" Name="MIRdbSpatial.dll" Source="$(var.IOS_TargetDir)MIRdbSpatial.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MIWindow.dll" Guid="d8c4fddf-aaf1-42c7-ab0e-f6875e34d44c" Win64="yes">
+				<File Id="MIWindow.dll" Name="MIWindow.dll" Source="$(var.IOS_TargetDir)MIWindow.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Newtonsoft.Json.dll" Guid="ff5e4a2b-68ec-4390-8657-b7cccdfa5d7c" Win64="yes">
+				<File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.IOS_TargetDir)Newtonsoft.Json.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Npgsql.dll" Guid="962a59f5-ce07-4fae-816b-7a7cac6a8a20" Win64="yes">
+				<File Id="Npgsql.dll" Name="Npgsql.dll" Source="$(var.IOS_TargetDir)Npgsql.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Oracle.ManagedDataAccess.dll" Guid="46d87f9f-8fc7-463d-83f5-2207541f1bda" Win64="yes">
+				<File Id="Oracle.ManagedDataAccess.dll" Name="Oracle.ManagedDataAccess.dll" Source="$(var.IOS_TargetDir)Oracle.ManagedDataAccess.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Program.dll" Guid="abe82895-df71-44fa-bde8-1d30e454bd47" Win64="yes">
+				<File Id="Program.dll" Name="Program.dll" Source="$(var.IOS_TargetDir)Program.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Raster.dll" Guid="e922973e-492a-47f8-a463-719ffe3f5a6d" Win64="yes">
+				<File Id="Raster.dll" Name="Raster.dll" Source="$(var.IOS_TargetDir)Raster.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="stdole.dll" Guid="291e1642-180a-4276-8f13-3289cf1a8590" Win64="yes">
+				<File Id="stdole.dll" Name="stdole.dll" Source="$(var.IOS_TargetDir)stdole.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Styles.dll" Guid="8c84bfa0-d029-4f8a-b42c-56b3645a0d38" Win64="yes">
+				<File Id="Styles.dll" Name="Styles.dll" Source="$(var.IOS_TargetDir)Styles.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Buffers.dll" Guid="b7cd3f3d-ba94-473d-b8e4-93b3443b2e89" Win64="yes">
+				<File Id="System.Buffers.dll" Name="System.Buffers.dll" Source="$(var.IOS_TargetDir)System.Buffers.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Collections.Immutable.dll" Guid="fdfa4f7b-cb1d-4c10-af70-eedd5f8f2da2" Win64="yes">
+				<File Id="System.Collections.Immutable.dll" Name="System.Collections.Immutable.dll" Source="$(var.IOS_TargetDir)System.Collections.Immutable.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Configuration.dll" Guid="6adc9284-7088-4a88-b07a-205b2ec272d4" Win64="yes">
+				<File Id="System.Configuration.dll" Name="System.Configuration.dll" Source="$(var.IOS_TargetDir)System.Configuration.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Data.Linq.dll" Guid="a23eef00-8c9a-4e28-a500-1403f967217b" Win64="yes">
+				<File Id="System.Data.Linq.dll" Name="System.Data.Linq.dll" Source="$(var.IOS_TargetDir)System.Data.Linq.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Data.SQLite.dll" Guid="8f9ce660-95ef-4cd1-b2ce-154d6388d403" Win64="yes">
+				<File Id="System.Data.SQLite.dll" Name="System.Data.SQLite.dll" Source="$(var.IOS_TargetDir)System.Data.SQLite.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Data.SQLite.EF6.dll" Guid="4f7e6463-d6df-47b1-b543-9530323ee7e4" Win64="yes">
+				<File Id="System.Data.SQLite.EF6.dll" Name="System.Data.SQLite.EF6.dll" Source="$(var.IOS_TargetDir)System.Data.SQLite.EF6.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Data.SQLite.Linq.dll" Guid="0667e302-485a-47d0-bd90-ce8904304098" Win64="yes">
+				<File Id="System.Data.SQLite.Linq.dll" Name="System.Data.SQLite.Linq.dll" Source="$(var.IOS_TargetDir)System.Data.SQLite.Linq.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Diagnostics.DiagnosticSource.dll" Guid="ebc1e4d2-e997-4426-90df-433e879db4bb" Win64="yes">
+				<File Id="System.Diagnostics.DiagnosticSource.dll" Name="System.Diagnostics.DiagnosticSource.dll" Source="$(var.IOS_TargetDir)System.Diagnostics.DiagnosticSource.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.dll" Guid="a5462cf6-e2fb-458f-88a6-70af8f4e41f4" Win64="yes">
+				<File Id="System.dll" Name="System.dll" Source="$(var.IOS_TargetDir)System.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.IO.Pipelines.dll" Guid="62102703-5d74-4f25-8f93-6f37752e559f" Win64="yes">
+				<File Id="System.IO.Pipelines.dll" Name="System.IO.Pipelines.dll" Source="$(var.IOS_TargetDir)System.IO.Pipelines.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Memory.dll" Guid="d78f425f-452c-4466-9dfb-9085b9d44154" Win64="yes">
+				<File Id="System.Memory.dll" Name="System.Memory.dll" Source="$(var.IOS_TargetDir)System.Memory.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Numerics.Vectors.dll" Guid="ca7d83b7-9a41-45f1-b5eb-a2226a5ed9bb" Win64="yes">
+				<File Id="System.Numerics.Vectors.dll" Name="System.Numerics.Vectors.dll" Source="$(var.IOS_TargetDir)System.Numerics.Vectors.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Runtime.CompilerServices.Unsafe.dll" Guid="f61635ac-7397-486a-9fab-a3f2a2692174" Win64="yes">
+				<File Id="System.Runtime.CompilerServices.Unsafe.dll" Name="System.Runtime.CompilerServices.Unsafe.dll" Source="$(var.IOS_TargetDir)System.Runtime.CompilerServices.Unsafe.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Runtime.Serialization.dll" Guid="3fa12298-3271-4ad9-9fce-f2c55ded8ebc" Win64="yes">
+				<File Id="System.Runtime.Serialization.dll" Name="System.Runtime.Serialization.dll" Source="$(var.IOS_TargetDir)System.Runtime.Serialization.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Text.Encodings.Web.dll" Guid="b3fe68c2-45ce-45ca-a8ea-202e67c452dc" Win64="yes">
+				<File Id="System.Text.Encodings.Web.dll" Name="System.Text.Encodings.Web.dll" Source="$(var.IOS_TargetDir)System.Text.Encodings.Web.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Text.Json.dll" Guid="4eeb6625-012b-4f28-b28f-8af73eee4b3b" Win64="yes">
+				<File Id="System.Text.Json.dll" Name="System.Text.Json.dll" Source="$(var.IOS_TargetDir)System.Text.Json.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Threading.Channels.dll" Guid="a80c7d3c-2f5a-4d81-a598-eef7575288ca" Win64="yes">
+				<File Id="System.Threading.Channels.dll" Name="System.Threading.Channels.dll" Source="$(var.IOS_TargetDir)System.Threading.Channels.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Threading.Tasks.Extensions.dll" Guid="2f7fa3c1-8fc1-471e-9025-785df693c8ff" Win64="yes">
+				<File Id="System.Threading.Tasks.Extensions.dll" Name="System.Threading.Tasks.Extensions.dll" Source="$(var.IOS_TargetDir)System.Threading.Tasks.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.ValueTuple.dll" Guid="9a2259fc-53ee-4077-bd8b-5e9d4e7e9c7a" Win64="yes">
+				<File Id="System.ValueTuple.dll" Name="System.ValueTuple.dll" Source="$(var.IOS_TargetDir)System.ValueTuple.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="System.Xml.dll" Guid="b6007eca-540d-4560-bfe4-bf4f804abd2c" Win64="yes">
+				<File Id="System.Xml.dll" Name="System.Xml.dll" Source="$(var.IOS_TargetDir)System.Xml.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="TextFileReader.dll" Guid="5073ca84-a3ab-4e07-8e8e-8cde6a097c1f" Win64="yes">
+				<File Id="TextFileReader.dll" Name="TextFileReader.dll" Source="$(var.IOS_TargetDir)TextFileReader.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Thematics.dll" Guid="63cf0745-3270-4a85-9158-e5df69701b57" Win64="yes">
+				<File Id="Thematics.dll" Name="Thematics.dll" Source="$(var.IOS_TargetDir)Thematics.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="TileServer.Wrapper.dll" Guid="3d90f77a-90ab-442a-b5d4-12e5d1ca137c" Win64="yes">
+				<File Id="TileServer.Wrapper.dll" Name="TileServer.Wrapper.dll" Source="$(var.IOS_TargetDir)TileServer.Wrapper.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="TileViewLayer.dll" Guid="059554e5-852c-4466-816f-eaa07e3120c4" Win64="yes">
+				<File Id="TileViewLayer.dll" Name="TileViewLayer.dll" Source="$(var.IOS_TargetDir)TileViewLayer.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Tokens.dll" Guid="d19b32c2-d9c0-4525-932f-313266dff667" Win64="yes">
+				<File Id="Tokens.dll" Name="Tokens.dll" Source="$(var.IOS_TargetDir)Tokens.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Tools.dll" Guid="f02d8c9e-8d0d-4163-94f0-e0a37d8ed5dd" Win64="yes">
+				<File Id="Tools.dll" Name="Tools.dll" Source="$(var.IOS_TargetDir)Tools.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Triangle.dll" Guid="f9d14e3f-a3f4-4637-b99d-af7248e8d32b" Win64="yes">
+				<File Id="Triangle.dll" Name="Triangle.dll" Source="$(var.IOS_TargetDir)Triangle.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Utility.dll" Guid="41bda737-71cb-40e2-9242-35aed4e5e4bb" Win64="yes">
+				<File Id="Utility.dll" Name="Utility.dll" Source="$(var.IOS_TargetDir)Utility.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="XmlUtil.dll" Guid="33efb5b7-ab26-46b6-9fca-bf5141de2c6a" Win64="yes">
+				<File Id="XmlUtil.dll" Name="XmlUtil.dll" Source="$(var.IOS_TargetDir)XmlUtil.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.CoreTypes.dll" Guid="cebd3f04-e06d-409d-ad32-3860626b95fd" Win64="yes">
+				<File Id="MapInfo.CoreTypes.dll" Name="MapInfo.CoreTypes.dll" Source="$(var.IOS_TargetDir)MapInfo.CoreTypes.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.CoreEngine.Wrapper.dll" Guid="44d8fbfa-ccae-424e-bbff-09d83e48918b" Win64="yes">
+				<File Id="MapInfo.CoreEngine.Wrapper.dll" Name="MapInfo.CoreEngine.Wrapper.dll" Source="$(var.IOS_TargetDir)MapInfo.CoreEngine.Wrapper.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.CoreEngine.dll" Guid="85c02975-7724-4127-9436-6e202ff162fc" Win64="yes">
+				<File Id="MapInfo.CoreEngine.dll" Name="MapInfo.CoreEngine.dll" Source="$(var.IOS_TargetDir)MapInfo.CoreEngine.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapInfo.CommonDialogExt.dll" Guid="5052c8ef-7edc-497e-a340-5efc9eebab7c" Win64="yes">
+				<File Id="MapInfo.CommonDialogExt.dll" Name="MapInfo.CommonDialogExt.dll" Source="$(var.IOS_TargetDir)MapInfo.CommonDialogExt.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapBasicTranslator.dll" Guid="c8df15a2-4f6b-4976-99d3-1bd04f462879" Win64="yes">
+				<File Id="MapBasicTranslator.dll" Name="MapBasicTranslator.dll" Source="$(var.IOS_TargetDir)MapBasicTranslator.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="MapBasicInternalFcn.dll" Guid="f61929b9-3bca-4efa-8df1-65243b3b595b" Win64="yes">
+				<File Id="MapBasicInternalFcn.dll" Name="MapBasicInternalFcn.dll" Source="$(var.IOS_TargetDir)MapBasicInternalFcn.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="libspw_mi.dll" Guid="a9b4178b-3d25-403e-80eb-1d59aa604a2e" Win64="yes">
+				<File Id="libspw_mi.dll" Name="libspw_mi.dll" Source="$(var.IOS_TargetDir)libspw_mi.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Legend.dll" Guid="2fac985a-4a6b-4013-9455-a4ead0a36bf7" Win64="yes">
+				<File Id="Legend.dll" Name="Legend.dll" Source="$(var.IOS_TargetDir)Legend.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Leadtools.Drawing.dll" Guid="8d334ae2-9c06-4afa-b0f7-99014be53a22" Win64="yes">
+				<File Id="Leadtools.Drawing.dll" Name="Leadtools.Drawing.dll" Source="$(var.IOS_TargetDir)Leadtools.Drawing.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Leadtools.dll" Guid="296a4a52-afa0-4b01-ab10-b542e321087d" Win64="yes">
+				<File Id="Leadtools.dll" Name="Leadtools.dll" Source="$(var.IOS_TargetDir)Leadtools.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Leadtools.Codecs.dll" Guid="e1c4a10b-cc31-4d79-a3e6-b9270ab9d9e7" Win64="yes">
+				<File Id="Leadtools.Codecs.dll" Name="Leadtools.Codecs.dll" Source="$(var.IOS_TargetDir)Leadtools.Codecs.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="icuuc55.dll" Guid="ce91748e-acb7-4f79-830e-511eff1f54e7" Win64="yes">
+				<File Id="icuuc55.dll" Name="icuuc55.dll" Source="$(var.IOS_TargetDir)icuuc55.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="icuin55.dll" Guid="d9287972-2264-4a22-9262-10d57d53e00c" Win64="yes">
+				<File Id="icuin55.dll" Name="icuin55.dll" Source="$(var.IOS_TargetDir)icuin55.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="icudt55.dll" Guid="759732e2-57dc-40fb-bd1d-f6de778d3342" Win64="yes">
+				<File Id="icudt55.dll" Name="icudt55.dll" Source="$(var.IOS_TargetDir)icudt55.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="gpkg.dll" Guid="9c111752-64cf-4b85-8139-6a9abe45113a" Win64="yes">
+				<File Id="gpkg.dll" Name="gpkg.dll" Source="$(var.IOS_TargetDir)gpkg.dll" KeyPath="yes" />
+			</Component>
+			<!--<Component Id="Google.Protobuf.dll" Guid="6cefbc1a-4806-442e-8508-5ab4271b04b2" Win64="yes">
+				<File Id="Google.Protobuf.dll" Name="Google.Protobuf.dll" Source="$(var.IOS_TargetDir)Google.Protobuf.dll" KeyPath="yes" />
+			</Component>-->
+			<Component Id="Geoset.dll" Guid="02240248-90a2-4153-bdf3-b0816c41a322" Win64="yes">
+				<File Id="Geoset.dll" Name="Geoset.dll" Source="$(var.IOS_TargetDir)Geoset.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Geopackage.dll" Guid="45a4b025-edd3-4fae-8904-df01c133c170" Win64="yes">
+				<File Id="Geopackage.dll" Name="Geopackage.dll" Source="$(var.IOS_TargetDir)Geopackage.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="GeoObjectProcess.dll" Guid="7a9cbfc2-70be-4190-a569-c8e0c25714d9" Win64="yes">
+				<File Id="GeoObjectProcess.dll" Name="GeoObjectProcess.dll" Source="$(var.IOS_TargetDir)GeoObjectProcess.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="GeoObject.dll" Guid="579ce723-9daf-4878-9131-b95fcd314c08" Win64="yes">
+				<File Id="GeoObject.dll" Name="GeoObject.dll" Source="$(var.IOS_TargetDir)GeoObject.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="GeoJSON.Net.dll" Guid="ffbd09c1-bc1c-436a-bb92-d0da0d814b0c" Win64="yes">
+				<File Id="GeoJSON.Net.dll" Name="GeoJSON.Net.dll" Source="$(var.IOS_TargetDir)GeoJSON.Net.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Geo.dll" Guid="9f16cb99-4aca-4714-ac14-110d5a2606c1" Win64="yes">
+				<File Id="Geo.dll" Name="Geo.dll" Source="$(var.IOS_TargetDir)Geo.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Find.dll" Guid="a1ff7631-2903-40b2-9154-5f76164aca2d" Win64="yes">
+				<File Id="Find.dll" Name="Find.dll" Source="$(var.IOS_TargetDir)Find.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="FcnInfoServer.dll" Guid="203577de-8671-489e-84ce-9317f43d23f7" Win64="yes">
+				<File Id="FcnInfoServer.dll" Name="FcnInfoServer.dll" Source="$(var.IOS_TargetDir)FcnInfoServer.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="ExprPacketCreator.dll" Guid="c0424380-da16-4623-ad3e-2c8108eee250" Win64="yes">
+				<File Id="ExprPacketCreator.dll" Name="ExprPacketCreator.dll" Source="$(var.IOS_TargetDir)ExprPacketCreator.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="ExprPacket.dll" Guid="01732411-2d3d-43ce-ab0d-eb3375172ee0" Win64="yes">
+				<File Id="ExprPacket.dll" Name="ExprPacket.dll" Source="$(var.IOS_TargetDir)ExprPacket.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="EnvDTE.dll" Guid="8ae3a77f-e15a-4b5b-99c6-1ef867387d33" Win64="yes">
+				<File Id="EnvDTE.dll" Name="EnvDTE.dll" Source="$(var.IOS_TargetDir)EnvDTE.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="EntityFramework.SqlServer.dll" Guid="e000d3e9-99a6-4f98-aaac-914b21865918" Win64="yes">
+				<File Id="EntityFramework.SqlServer.dll" Name="EntityFramework.SqlServer.dll" Source="$(var.IOS_TargetDir)EntityFramework.SqlServer.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="EntityFramework.dll" Guid="ee884545-7219-4969-b455-a632921a9512" Win64="yes">
+				<File Id="EntityFramework.dll" Name="EntityFramework.dll" Source="$(var.IOS_TargetDir)EntityFramework.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DocumentFormat.OpenXml.Framework.dll" Guid="76365a8f-e50d-4153-a5d1-931fe66b265d" Win64="yes">
+				<File Id="DocumentFormat.OpenXml.Framework.dll" Name="DocumentFormat.OpenXml.Framework.dll" Source="$(var.IOS_TargetDir)DocumentFormat.OpenXml.Framework.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DocumentFormat.OpenXml.dll" Guid="d290edcb-6a7c-4a9b-a274-2a6279ffe660" Win64="yes">
+				<File Id="DocumentFormat.OpenXml.dll" Name="DocumentFormat.OpenXml.dll" Source="$(var.IOS_TargetDir)DocumentFormat.OpenXml.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="AllType.dll" Guid="c1e67b62-79b8-475b-a3e6-4856be2732bf" Win64="yes">
+				<File Id="AllType.dll" Name="AllType.dll" Source="$(var.IOS_TargetDir)AllType.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="AppSelection.dll" Guid="7f678e88-4b22-483a-9868-bef48c86e550" Win64="yes">
+				<File Id="AppSelection.dll" Name="AppSelection.dll" Source="$(var.IOS_TargetDir)AppSelection.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="AppUtil.dll" Guid="3539dcc5-0838-4b89-a3a9-807417743dbc" Win64="yes">
+				<File Id="AppUtil.dll" Name="AppUtil.dll" Source="$(var.IOS_TargetDir)AppUtil.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="ChangeManager.dll" Guid="82e8ceb3-4bde-4c9c-b142-53c41257eef9" Win64="yes">
+				<File Id="ChangeManager.dll" Name="ChangeManager.dll" Source="$(var.IOS_TargetDir)ChangeManager.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="CommandProcessor.dll" Guid="d91e9c63-a498-478b-854c-989ed2706487" Win64="yes">
+				<File Id="CommandProcessor.dll" Name="CommandProcessor.dll" Source="$(var.IOS_TargetDir)CommandProcessor.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="CommonDialogExtRes.dll" Guid="3c48b316-e25e-49f7-962e-c53baf402e49" Win64="yes">
+				<File Id="CommonDialogExtRes.dll" Name="CommonDialogExtRes.dll" Source="$(var.IOS_TargetDir)CommonDialogExtRes.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="Compiler.dll" Guid="564f42a1-95e8-4cea-997c-b7f48cc3331f" Win64="yes">
+				<File Id="Compiler.dll" Name="Compiler.dll" Source="$(var.IOS_TargetDir)Compiler.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="CoordSys.dll" Guid="f8105e08-01ea-4c13-b007-0087f8168b8a" Win64="yes">
+				<File Id="CoordSys.dll" Name="CoordSys.dll" Source="$(var.IOS_TargetDir)CoordSys.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="CustomProperties.dll" Guid="b77c72eb-c42e-4b98-b0c5-e56b25337300" Win64="yes">
+				<File Id="CustomProperties.dll" Name="CustomProperties.dll" Source="$(var.IOS_TargetDir)CustomProperties.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DAEngine.dll" Guid="69d21f6d-195c-41e9-b457-c007ba0cfecf" Win64="yes">
+				<File Id="DAEngine.dll" Name="DAEngine.dll" Source="$(var.IOS_TargetDir)DAEngine.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DBInfo.dll" Guid="c2055d3d-2038-4318-99a1-bdd80e1c2284" Win64="yes">
+				<File Id="DBInfo.dll" Name="DBInfo.dll" Source="$(var.IOS_TargetDir)DBInfo.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DBLayer.dll" Guid="11508312-dd94-4e1e-be6d-4c2f4aab0236" Win64="yes">
+				<File Id="DBLayer.dll" Name="DBLayer.dll" Source="$(var.IOS_TargetDir)DBLayer.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.BonusSkins.v24.2.dll" Guid="7847c4e0-f861-4ed1-9b93-51f90b4fae57" Win64="yes">
+				<File Id="DevExpress.BonusSkins.v24.2.dll" Name="DevExpress.BonusSkins.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.BonusSkins.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Charts.v24.2.Core.dll" Guid="21d38544-48cf-48c1-8f10-ccb7f7e035f1" Win64="yes">
+				<File Id="DevExpress.Charts.v24.2.Core.dll" Name="DevExpress.Charts.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Charts.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.CodeParser.v24.2.dll" Guid="180101ec-6de7-4c91-a4b9-170e2e35b5e9" Win64="yes">
+				<File Id="DevExpress.CodeParser.v24.2.dll" Name="DevExpress.CodeParser.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.CodeParser.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Dashboard.v24.2.Core.dll" Guid="262813fe-87e7-4206-a1af-fee7892568d8" Win64="yes">
+				<File Id="DevExpress.Dashboard.v24.2.Core.dll" Name="DevExpress.Dashboard.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Dashboard.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Dashboard.v24.2.Win.dll" Guid="58d506d3-4f30-43f9-9b7d-67add9ef6add" Win64="yes">
+				<File Id="DevExpress.Dashboard.v24.2.Win.dll" Name="DevExpress.Dashboard.v24.2.Win.dll" Source="$(var.IOS_TargetDir)DevExpress.Dashboard.v24.2.Win.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Data.Desktop.v24.2.dll" Guid="27e33060-8ab1-4bc5-b9cb-19cdd8b584a7" Win64="yes">
+				<File Id="DevExpress.Data.Desktop.v24.2.dll" Name="DevExpress.Data.Desktop.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Data.Desktop.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Data.v24.2.dll" Guid="843802a8-4e0e-4505-bc0a-68a0f2a6d375" Win64="yes">
+				<File Id="DevExpress.Data.v24.2.dll" Name="DevExpress.Data.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Data.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.DataAccess.v24.2.dll" Guid="16205559-3fb9-4dc7-adde-504754b13ade" Win64="yes">
+				<File Id="DevExpress.DataAccess.v24.2.dll" Name="DevExpress.DataAccess.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.DataAccess.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.DataAccess.v24.2.UI.dll" Guid="0e9685bb-a1e0-4884-b04d-6c7cf6f4852e" Win64="yes">
+				<File Id="DevExpress.DataAccess.v24.2.UI.dll" Name="DevExpress.DataAccess.v24.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.DataAccess.v24.2.UI.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.DataVisualization.v24.2.Core.dll" Guid="ace33f82-153f-45c8-9e37-3fa8b706a573" Win64="yes">
+				<File Id="DevExpress.DataVisualization.v24.2.Core.dll" Name="DevExpress.DataVisualization.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.DataVisualization.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Diagram.v24.2.Core.dll" Guid="9a50eae1-c65d-4dc5-b65e-52dc78e76e8d" Win64="yes">
+				<File Id="DevExpress.Diagram.v24.2.Core.dll" Name="DevExpress.Diagram.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Diagram.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Dialogs.v24.2.Core.dll" Guid="67d0999e-386e-47d2-8b7c-ff5dc5329e6d" Win64="yes">
+				<File Id="DevExpress.Dialogs.v24.2.Core.dll" Name="DevExpress.Dialogs.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Dialogs.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Docs.v24.2.dll" Guid="b7f85e66-53c7-4baa-8e73-aefe8f827bc7" Win64="yes">
+				<File Id="DevExpress.Docs.v24.2.dll" Name="DevExpress.Docs.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Docs.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Drawing.v24.2.dll" Guid="2310441e-64c7-4e52-bec5-21b1b8b6c2fe" Win64="yes">
+				<File Id="DevExpress.Drawing.v24.2.dll" Name="DevExpress.Drawing.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Drawing.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Images.v24.2.dll" Guid="697cdd23-0345-45d3-9c8d-6fe077a04111" Win64="yes">
+				<File Id="DevExpress.Images.v24.2.dll" Name="DevExpress.Images.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Images.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Map.v24.2.Core.dll" Guid="b123c7a5-6f21-47ec-9317-d49090fc00de" Win64="yes">
+				<File Id="DevExpress.Map.v24.2.Core.dll" Name="DevExpress.Map.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Map.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Mvvm.v24.2.dll" Guid="9e1c5526-5688-4a2f-ae76-197b464715a8" Win64="yes">
+				<File Id="DevExpress.Mvvm.v24.2.dll" Name="DevExpress.Mvvm.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Mvvm.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Office.v24.2.Core.dll" Guid="474601bd-2bf3-4c2e-b67f-26288d4890e4" Win64="yes">
+				<File Id="DevExpress.Office.v24.2.Core.dll" Name="DevExpress.Office.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Office.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Pdf.v24.2.Core.dll" Guid="e8d25d15-11cf-4d45-8a10-a044e464a010" Win64="yes">
+				<File Id="DevExpress.Pdf.v24.2.Core.dll" Name="DevExpress.Pdf.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Pdf.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Pdf.v24.2.Drawing.dll" Guid="770deeb6-9cf8-46b7-b53c-d98444177bd0" Win64="yes">
+				<File Id="DevExpress.Pdf.v24.2.Drawing.dll" Name="DevExpress.Pdf.v24.2.Drawing.dll" Source="$(var.IOS_TargetDir)DevExpress.Pdf.v24.2.Drawing.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.PivotGrid.v24.2.Core.dll" Guid="cc9eaeaf-3779-4403-9209-e552d5e5e00a" Win64="yes">
+				<File Id="DevExpress.PivotGrid.v24.2.Core.dll" Name="DevExpress.PivotGrid.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.PivotGrid.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Printing.v24.2.Core.dll" Guid="fd0d8638-9d17-4907-9a68-47569b748b1a" Win64="yes">
+				<File Id="DevExpress.Printing.v24.2.Core.dll" Name="DevExpress.Printing.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Printing.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.RichEdit.v24.2.Core.dll" Guid="2c8e7c3a-4a57-4e21-93da-47cb77658894" Win64="yes">
+				<File Id="DevExpress.RichEdit.v24.2.Core.dll" Name="DevExpress.RichEdit.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.RichEdit.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Snap.v24.2.Core.dll" Guid="256bd003-1f65-40e4-9131-46ed6de81878" Win64="yes">
+				<File Id="DevExpress.Snap.v24.2.Core.dll" Name="DevExpress.Snap.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Snap.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Sparkline.v24.2.Core.dll" Guid="c01fe589-3edd-46aa-834e-26e1fd202455" Win64="yes">
+				<File Id="DevExpress.Sparkline.v24.2.Core.dll" Name="DevExpress.Sparkline.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Sparkline.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Spreadsheet.v24.2.Core.dll" Guid="e58e1a58-7c35-4dda-bdc1-d2e8b9e311ff" Win64="yes">
+				<File Id="DevExpress.Spreadsheet.v24.2.Core.dll" Name="DevExpress.Spreadsheet.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Spreadsheet.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.TreeMap.v24.2.Core.dll" Guid="4d562e2c-6017-45ad-bd34-d07ae3770244" Win64="yes">
+				<File Id="DevExpress.TreeMap.v24.2.Core.dll" Name="DevExpress.TreeMap.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.TreeMap.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Utils.v24.2.dll" Guid="7bf37b07-104a-4b03-9cfc-14862a19a2d2" Win64="yes">
+				<File Id="DevExpress.Utils.v24.2.dll" Name="DevExpress.Utils.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Utils.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Utils.v24.2.UI.dll" Guid="1932c34d-fbfe-4fe1-a424-dcc8130c317a" Win64="yes">
+				<File Id="DevExpress.Utils.v24.2.UI.dll" Name="DevExpress.Utils.v24.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.Utils.v24.2.UI.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Xpf.Core.v24.2.dll" Guid="3e7e2f8f-5e12-412c-a4da-92448c110dac" Win64="yes">
+				<File Id="DevExpress.Xpf.Core.v24.2.dll" Name="DevExpress.Xpf.Core.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Core.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Xpf.Docking.v24.2.dll" Guid="831819da-1b2b-40ea-a402-e7efbcd8cf39" Win64="yes">
+				<File Id="DevExpress.Xpf.Docking.v24.2.dll" Name="DevExpress.Xpf.Docking.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Docking.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Xpf.DocumentViewer.v24.2.Core.dll" Guid="9de03d82-54b7-4f00-9c24-6fb400864ef8" Win64="yes">
+				<File Id="DevExpress.Xpf.DocumentViewer.v24.2.Core.dll" Name="DevExpress.Xpf.DocumentViewer.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.DocumentViewer.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Xpf.Grid.v24.2.Core.dll" Guid="f167e4a6-340a-4527-af5f-5731d0eb7ed9" Win64="yes">
+				<File Id="DevExpress.Xpf.Grid.v24.2.Core.dll" Name="DevExpress.Xpf.Grid.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Grid.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Xpf.Grid.v24.2.dll" Guid="eff34d76-6352-48ca-b93b-5df183f9f182" Win64="yes">
+				<File Id="DevExpress.Xpf.Grid.v24.2.dll" Name="DevExpress.Xpf.Grid.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Grid.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Xpf.Layout.v24.2.Core.dll" Guid="3e9b3707-3898-4f66-8432-eeb658798232" Win64="yes">
+				<File Id="DevExpress.Xpf.Layout.v24.2.Core.dll" Name="DevExpress.Xpf.Layout.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Layout.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Xpf.Ribbon.v24.2.dll" Guid="b0c3e537-611b-42bb-a635-ae72745f8e73" Win64="yes">
+				<File Id="DevExpress.Xpf.Ribbon.v24.2.dll" Name="DevExpress.Xpf.Ribbon.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Ribbon.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.Xpo.v24.2.dll" Guid="f4552eea-fdba-423b-83dc-292feed4c873" Win64="yes">
+				<File Id="DevExpress.Xpo.v24.2.dll" Name="DevExpress.Xpo.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpo.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraBars.v24.2.dll" Guid="1e5f2f4d-6f4f-4da9-afd9-3012317775d6" Win64="yes">
+				<File Id="DevExpress.XtraBars.v24.2.dll" Name="DevExpress.XtraBars.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraBars.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraCharts.v24.2.dll" Guid="18d0d3d4-8fca-47ae-a96e-5e61c15adb2f" Win64="yes">
+				<File Id="DevExpress.XtraCharts.v24.2.dll" Name="DevExpress.XtraCharts.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraCharts.v24.2.Extensions.dll" Guid="0eeda9bc-56d6-4fa0-a149-0caf2cbeb630" Win64="yes">
+				<File Id="DevExpress.XtraCharts.v24.2.Extensions.dll" Name="DevExpress.XtraCharts.v24.2.Extensions.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v24.2.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraCharts.v24.2.UI.dll" Guid="c40c0f1d-d930-4970-ba0e-6b01d835d5b4" Win64="yes">
+				<File Id="DevExpress.XtraCharts.v24.2.UI.dll" Name="DevExpress.XtraCharts.v24.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v24.2.UI.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraCharts.v24.2.Wizard.dll" Guid="064fd149-287f-4737-8b58-c747eee01b92" Win64="yes">
+				<File Id="DevExpress.XtraCharts.v24.2.Wizard.dll" Name="DevExpress.XtraCharts.v24.2.Wizard.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v24.2.Wizard.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraDiagram.v24.2.dll" Guid="7fb6ac17-47ec-45bf-8d98-3f056ec1965f" Win64="yes">
+				<File Id="DevExpress.XtraDiagram.v24.2.dll" Name="DevExpress.XtraDiagram.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraDiagram.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraDialogs.v24.2.dll" Guid="934e9cb1-30df-4c53-b0c5-706e3703b47e" Win64="yes">
+				<File Id="DevExpress.XtraDialogs.v24.2.dll" Name="DevExpress.XtraDialogs.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraDialogs.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraEditors.v24.2.dll" Guid="41cde46b-58bb-4e3c-b66e-7626717968db" Win64="yes">
+				<File Id="DevExpress.XtraEditors.v24.2.dll" Name="DevExpress.XtraEditors.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraEditors.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraGauges.v24.2.Core.dll" Guid="708e4a0f-aaa6-4426-85bc-dc5d8925caf4" Win64="yes">
+				<File Id="DevExpress.XtraGauges.v24.2.Core.dll" Name="DevExpress.XtraGauges.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGauges.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraGauges.v24.2.Presets.dll" Guid="e57f2046-f3d8-4b0c-af4a-bc9ac058f14d" Win64="yes">
+				<File Id="DevExpress.XtraGauges.v24.2.Presets.dll" Name="DevExpress.XtraGauges.v24.2.Presets.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGauges.v24.2.Presets.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraGauges.v24.2.Win.dll" Guid="cb5b7cfe-8347-4b44-9ab5-b532a4fbcb8e" Win64="yes">
+				<File Id="DevExpress.XtraGauges.v24.2.Win.dll" Name="DevExpress.XtraGauges.v24.2.Win.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGauges.v24.2.Win.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraGrid.v24.2.dll" Guid="21d3e14d-10d2-480c-818e-6c4cb9ade239" Win64="yes">
+				<File Id="DevExpress.XtraGrid.v24.2.dll" Name="DevExpress.XtraGrid.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGrid.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraLayout.v24.2.dll" Guid="c2f003b5-4534-4575-869b-c1baee919032" Win64="yes">
+				<File Id="DevExpress.XtraLayout.v24.2.dll" Name="DevExpress.XtraLayout.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraLayout.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraMap.v24.2.dll" Guid="c2e489e0-7e21-4545-af42-26a2e8bdf46d" Win64="yes">
+				<File Id="DevExpress.XtraMap.v24.2.dll" Name="DevExpress.XtraMap.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraMap.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraNavBar.v24.2.dll" Guid="97d4b4db-3675-4b28-902b-3c82908f8ff7" Win64="yes">
+				<File Id="DevExpress.XtraNavBar.v24.2.dll" Name="DevExpress.XtraNavBar.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraNavBar.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraPivotGrid.v24.2.dll" Guid="995e4622-3914-41d6-a8fb-fedc5f3a760b" Win64="yes">
+				<File Id="DevExpress.XtraPivotGrid.v24.2.dll" Name="DevExpress.XtraPivotGrid.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraPivotGrid.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraPrinting.v24.2.dll" Guid="f6f972bc-f78b-4703-afd6-090e81c67db7" Win64="yes">
+				<File Id="DevExpress.XtraPrinting.v24.2.dll" Name="DevExpress.XtraPrinting.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraPrinting.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraReports.v24.2.dll" Guid="62f6bd2d-0768-4ab5-8a90-fcdd0a3a6d98" Win64="yes">
+				<File Id="DevExpress.XtraReports.v24.2.dll" Name="DevExpress.XtraReports.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraReports.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraReports.v24.2.Extensions.dll" Guid="43e7b03e-1a22-4e5f-97ea-ee51611277bb" Win64="yes">
+				<File Id="DevExpress.XtraReports.v24.2.Extensions.dll" Name="DevExpress.XtraReports.v24.2.Extensions.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraReports.v24.2.Extensions.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraReports.v24.2.Service.dll" Guid="026f2e66-e8db-44da-bc10-d7f29d58b6e2" Win64="yes">
+				<File Id="DevExpress.XtraReports.v24.2.Service.dll" Name="DevExpress.XtraReports.v24.2.Service.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraReports.v24.2.Service.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraRichEdit.v24.2.dll" Guid="8b301c77-44e3-48f2-81ee-083cc87b6ca3" Win64="yes">
+				<File Id="DevExpress.XtraRichEdit.v24.2.dll" Name="DevExpress.XtraRichEdit.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraRichEdit.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraScheduler.v24.2.Core.Desktop.dll" Guid="43a4b593-f877-4c87-8a2f-e2adfe628178" Win64="yes">
+				<File Id="DevExpress.XtraScheduler.v24.2.Core.Desktop.dll" Name="DevExpress.XtraScheduler.v24.2.Core.Desktop.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraScheduler.v24.2.Core.Desktop.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraScheduler.v24.2.Core.dll" Guid="05361ca3-7ca1-4958-accc-586dffb68db6" Win64="yes">
+				<File Id="DevExpress.XtraScheduler.v24.2.Core.dll" Name="DevExpress.XtraScheduler.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraScheduler.v24.2.Core.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraScheduler.v24.2.dll" Guid="190cd726-48a8-4c70-a842-bc59afc46699" Win64="yes">
+				<File Id="DevExpress.XtraScheduler.v24.2.dll" Name="DevExpress.XtraScheduler.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraScheduler.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraTreeList.v24.2.dll" Guid="066093ff-bf12-45e1-bf38-ad8df847c55d" Win64="yes">
+				<File Id="DevExpress.XtraTreeList.v24.2.dll" Name="DevExpress.XtraTreeList.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraTreeList.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraTreeMap.v24.2.dll" Guid="5275faf0-1e46-45d8-be9f-c8e976217557" Win64="yes">
+				<File Id="DevExpress.XtraTreeMap.v24.2.dll" Name="DevExpress.XtraTreeMap.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraTreeMap.v24.2.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraTreeMap.v24.2.UI.dll" Guid="695e07e1-aed5-46ea-82f2-0ce56297fc4d" Win64="yes">
+				<File Id="DevExpress.XtraTreeMap.v24.2.UI.dll" Name="DevExpress.XtraTreeMap.v24.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraTreeMap.v24.2.UI.dll" KeyPath="yes" />
+			</Component>
+			<Component Id="DevExpress.XtraVerticalGrid.v24.2.dll" Guid="c3f1fa14-8fe6-4bc4-a465-480d3b5633dc" Win64="yes">
+				<File Id="DevExpress.XtraVerticalGrid.v24.2.dll" Name="DevExpress.XtraVerticalGrid.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraVerticalGrid.v24.2.dll" KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="x86" Directory="x86">
+			<Component Id="SQLite.Interopx86.dll" Guid="294a7a34-174a-4e06-a7b3-63b3b06b9307" Win64="yes">
+				<File Id="SQLite.Interopx86.dll" Name="SQLite.Interop.dll" Source="$(var.IOS_TargetDir)\x86\SQLite.Interop.dll"/>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+	
+	<Fragment>
+		<ComponentGroup Id="x64" Directory="x64">
+			<Component Id="SQLite.Interopx64.dll" Guid="e73540f3-6e3e-46c7-83a9-559d3ad780ae" Win64="yes">
+				<File Id="SQLite.Interopx64.dll" Name="SQLite.Interop.dll" Source="$(var.IOS_TargetDir)\x64\SQLite.Interop.dll"/>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+	
+	<Fragment>
+		<ComponentGroup Id="native64" Directory="native64">
+			<Component Id="WebView2Loader64.dll" Guid="cd76ed51-6f9f-4dfb-a4ff-924ce11ffe4b" Win64="yes">
+				<File Id="WebView2Loader64.dll" Name="WebView2Loader.dll" Source="$(var.IOS_TargetDir)runtimes\win-x64\native\WebView2Loader.dll"/>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+	
+	<Fragment>
+		<ComponentGroup Id="native86" Directory="native86">
+			<Component Id="WebView2Loader86.dll" Guid="aaf9c832-cff1-4d8b-9ee6-07acd5260087" Win64="yes">
+				<File Id="WebView2Loader86.dll" Name="WebView2Loader.dll" Source="$(var.IOS_TargetDir)runtimes\win-x86\native\WebView2Loader.dll"/>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+	
+	<Fragment>
+		<ComponentGroup Id="Resources_files" Directory="Resources">
+			<Component Id="IOS_Logo_3_128.ico" Guid="C24489CE-A46E-4960-AACA-A113CC8CC683" Win64="yes">
+				<File Id="IOS_Logo_3_128.ico" Name="IOS_Logo_3_128.ico" Source="$(var.IOS_TargetDir)Resources\IOS_Logo_3_128.ico" />
+			</Component>
+			<Component Id="Resources_2G.png" Guid="756c7c19-41e6-4f9e-b21a-12de6a9bfcf1" Win64="yes">
+				<File Id="Resources_2G.png" Name="2G.png" Source="$(var.IOS_TargetDir)Resources\2G.png" />
+			</Component>
+			<Component Id="Resources_3G.png" Guid="54b27227-ac43-4aea-8724-511193a633f4" Win64="yes">
+				<File Id="Resources_3G.png" Name="3G.png" Source="$(var.IOS_TargetDir)Resources\3G.png" />
+			</Component>
+			<Component Id="Resources_4G.png" Guid="3aa60f58-2c24-4966-a343-eb5b384fbfe4" Win64="yes">
+				<File Id="Resources_4G.png" Name="4G.png" Source="$(var.IOS_TargetDir)Resources\4G.png" />
+			</Component>
+			<Component Id="Resources_Chart.png" Guid="ede2eea2-bc08-48a1-8374-f079f9e6e803" Win64="yes">
+				<File Id="Resources_Chart.png" Name="Chart.png" Source="$(var.IOS_TargetDir)Resources\Chart.png" />
+			</Component>
+			<Component Id="Resources_Client_Configuration.png" Guid="0faa15b9-a1b9-40f3-af72-718d6d41557b" Win64="yes">
+				<File Id="Resources_Client_Configuration.png" Name="Client Configuration.png" Source="$(var.IOS_TargetDir)Resources\Client Configuration.png" />
+			</Component>
+			<Component Id="Resources_Close_All.png" Guid="5dbf5da0-3a63-4c21-97a6-c877a1c96410" Win64="yes">
+				<File Id="Resources_Close_All.png" Name="Close All.png" Source="$(var.IOS_TargetDir)Resources\Close All.png" />
+			</Component>
+			<Component Id="Resources_Close.png" Guid="b393df0c-b532-4a0d-99aa-624dfa79ae99" Win64="yes">
+				<File Id="Resources_Close.png" Name="Close.png" Source="$(var.IOS_TargetDir)Resources\Close.png" />
+			</Component>
+			<Component Id="Resources_CM.png" Guid="4aca760e-0c32-42c7-a56e-3d25aa06b8e4" Win64="yes">
+				<File Id="Resources_CM.png" Name="CM.png" Source="$(var.IOS_TargetDir)Resources\CM.png" />
+			</Component>
+			<Component Id="Resources_Customer_Experience.png" Guid="798237b6-97ff-4e5d-81b5-e566e344aa81" Win64="yes">
+				<File Id="Resources_Customer_Experience.png" Name="Customer Experience.png" Source="$(var.IOS_TargetDir)Resources\Customer Experience.png" />
+			</Component>
+			<Component Id="Resources_Dashboard.png" Guid="fa79af9e-20b3-4a84-9de7-9a7c6b2f48ea" Win64="yes">
+				<File Id="Resources_Dashboard.png" Name="Dashboard.png" Source="$(var.IOS_TargetDir)Resources\Dashboard.png" />
+			</Component>
+			<Component Id="Resources_Direvertest.png" Guid="c54b8c40-7a88-4343-b79e-d98679568e2d" Win64="yes">
+				<File Id="Resources_Direvertest.png" Name="Direvertest.png" Source="$(var.IOS_TargetDir)Resources\Direvertest.png" />
+			</Component>
+			<Component Id="Resources_DUMP.png" Guid="ac44dea8-5d28-4a97-baed-e1713e1bd493" Win64="yes">
+				<File Id="Resources_DUMP.png" Name="DUMP.png" Source="$(var.IOS_TargetDir)Resources\DUMP.png" />
+			</Component>
+			<Component Id="Resources_GIS_Search.png" Guid="33cd6752-f1cb-45c9-8866-c7465f095379" Win64="yes">
+				<File Id="Resources_GIS_Search.png" Name="GIS Search.png" Source="$(var.IOS_TargetDir)Resources\GIS Search.png" />
+			</Component>
+			<Component Id="Resources_Manual.png" Guid="f8aa9eb0-df8b-4ba8-8607-c9161e6ed5d1" Win64="yes">
+				<File Id="Resources_Manual.png" Name="Manual.png" Source="$(var.IOS_TargetDir)Resources\Manual.png" />
+			</Component>
+			<Component Id="Resources_Map_External_Data.png" Guid="ffe0751f-c09c-47bb-8848-649e43db491a" Win64="yes">
+				<File Id="Resources_Map_External_Data.png" Name="Map External Data.png" Source="$(var.IOS_TargetDir)Resources\Map External Data.png" />
+			</Component>
+			<Component Id="Resources_Open.png" Guid="c74b3e33-364c-44ec-a57f-589ef27e1184" Win64="yes">
+				<File Id="Resources_Open.png" Name="Open.png" Source="$(var.IOS_TargetDir)Resources\Open.png" />
+			</Component>
+			<Component Id="Resources_Parameter_History.png" Guid="a4adf800-45dd-4c4b-b454-1f6ac2f9d79f" Win64="yes">
+				<File Id="Resources_Parameter_History.png" Name="Parameter History.png" Source="$(var.IOS_TargetDir)Resources\Parameter History.png" />
+			</Component>
+			<Component Id="Resources_PM_KPIs.png" Guid="c4d6f32d-3d6f-45dd-8d6c-07462fa0699c" Win64="yes">
+				<File Id="Resources_PM_KPIs.png" Name="PM KPIs.png" Source="$(var.IOS_TargetDir)Resources\PM KPIs.png" />
+			</Component>
+			<Component Id="Resources_Query_Builder.png" Guid="588255c6-2e6f-48fe-be20-a9857494e064" Win64="yes">
+				<File Id="Resources_Query_Builder.png" Name="Query Builder.png" Source="$(var.IOS_TargetDir)Resources\Query Builder.png" />
+			</Component>
+			<Component Id="Resources_Report.png" Guid="7c4286f6-1b3e-43ad-9c9b-a6563e5357e2" Win64="yes">
+				<File Id="Resources_Report.png" Name="Report.png" Source="$(var.IOS_TargetDir)Resources\Report.png" />
+			</Component>
+			<Component Id="Resources_Save.png" Guid="7e24dce6-8a2f-47d6-8916-e2e6747cdd2c" Win64="yes">
+				<File Id="Resources_Save.png" Name="Save.png" Source="$(var.IOS_TargetDir)Resources\Save.png" />
+			</Component>
+			<Component Id="Resources_Son.png" Guid="00aa68d6-c7d1-4ebf-9072-237809f23c29" Win64="yes">
+				<File Id="Resources_Son.png" Name="Son.png" Source="$(var.IOS_TargetDir)Resources\Son.png" />
+			</Component>
+			<Component Id="Resources_Tags.png" Guid="57d816b8-0979-4353-b2c8-24cd2bdea975" Win64="yes">
+				<File Id="Resources_Tags.png" Name="Tags.png" Source="$(var.IOS_TargetDir)Resources\Tags.png" />
+			</Component>
+			<Component Id="Resources_Virtual_Azimuth_Detection.png" Guid="4281164c-3194-4ed5-91b9-08df98860ed6" Win64="yes">
+				<File Id="Resources_Virtual_Azimuth_Detection.png" Name="Virtual Azimuth Detection.png" Source="$(var.IOS_TargetDir)Resources\Virtual Azimuth Detection.png" />
+			</Component>
+			<Component Id="Resources_Web_Client.png" Guid="5eb09104-060d-4641-a501-0b2013337cef" Win64="yes">
+				<File Id="Resources_Web_Client.png" Name="Web Client.png" Source="$(var.IOS_TargetDir)Resources\Web Client.png" />
+			</Component>
+			<Component Id="Resources_yellowfin.jpg" Guid="d8c3e0b5-b2f8-4b52-ae47-f5df5f57bc8b" Win64="yes">
+				<File Id="Resources_yellowfin.jpg" Name="yellowfin.jpg" Source="$(var.IOS_TargetDir)Resources\yellowfin.jpg" />
+			</Component>
+			<Component Id="Resources_CS_Menu.png" Guid="283b1023-305a-4291-8f94-22dc565a1562" Win64="yes">
+				<File Id="Resources_CS_Menu.png" Name="CS_Menu.png" Source="$(var.IOS_TargetDir)Resources\CS_Menu.png" />
+			</Component>
+			<Component Id="Resources_Exit.png" Guid="fe9e9aeb-af5d-48be-85a2-8c1b5c70e008" Win64="yes">
+				<File Id="Resources_Exit.png" Name="Exit.png" Source="$(var.IOS_TargetDir)Resources\Exit.png" />
+			</Component>
+			<Component Id="Resources_G.png" Guid="d307509c-054a-4f6e-98ea-a151b436bfa9" Win64="yes">
+				<File Id="Resources_G.png" Name="G.png" Source="$(var.IOS_TargetDir)Resources\G.png" />
+			</Component>
+			<Component Id="Resources_GISSearch.png" Guid="f45ff0c5-451d-420d-9f07-8650bd48f906" Win64="yes">
+				<File Id="Resources_GISSearch.png" Name="GISSearch.png" Source="$(var.IOS_TargetDir)Resources\GISSearch.png" />
+			</Component>
+			<Component Id="Resources_GPEH_Menu.png" Guid="aaf5babb-c24f-4abb-97da-03d09eab734c" Win64="yes">
+				<File Id="Resources_GPEH_Menu.png" Name="GPEH_Menu.png" Source="$(var.IOS_TargetDir)Resources\GPEH_Menu.png" />
+			</Component>
+			<Component Id="Resources_Help.png" Guid="61c3124b-b284-4f4b-9438-538c66e6bfa2" Win64="yes">
+				<File Id="Resources_Help.png" Name="Help.png" Source="$(var.IOS_TargetDir)Resources\Help.png" />
+			</Component>
+			<Component Id="Resources_Import.png" Guid="b3796347-e53d-4509-9d21-2ce145ac8a01" Win64="yes">
+				<File Id="Resources_Import.png" Name="Import.png" Source="$(var.IOS_TargetDir)Resources\Import.png" />
+			</Component>
+			<Component Id="Resources_Import_DT.png" Guid="1bc954d3-d268-42f7-b29f-c6cd0b6c4d6a" Win64="yes">
+				<File Id="Resources_Import_DT.png" Name="Import_DT.png" Source="$(var.IOS_TargetDir)Resources\Import_DT.png" />
+			</Component>
+			<Component Id="Resources_Mapimport.png" Guid="6f45c585-3269-48f5-a1c3-ae1e702fcbb3" Win64="yes">
+				<File Id="Resources_Mapimport.png" Name="Mapimport.png" Source="$(var.IOS_TargetDir)Resources\Mapimport.png" />
+			</Component>
+			<Component Id="Resources_MapWindows.png" Guid="292880ff-ca7c-4c2a-a2fe-b5a740f70149" Win64="yes">
+				<File Id="Resources_MapWindows.png" Name="MapWindows.png" Source="$(var.IOS_TargetDir)Resources\MapWindows.png" />
+			</Component>
+			<Component Id="Resources_Menu.png" Guid="3b46f620-31ba-4115-854b-6fd5ab73dbdc" Win64="yes">
+				<File Id="Resources_Menu.png" Name="Menu.png" Source="$(var.IOS_TargetDir)Resources\Menu.png" />
+			</Component>
+			<Component Id="Resources_ParameterHistory.png" Guid="ebd91336-fb82-4f99-bf40-f1efe4b71864" Win64="yes">
+				<File Id="Resources_ParameterHistory.png" Name="ParameterHistory.png" Source="$(var.IOS_TargetDir)Resources\ParameterHistory.png" />
+			</Component>
+			<Component Id="Resources_PCHR.png" Guid="37e7ae1a-759d-4926-a049-a3c2ee1c2291" Win64="yes">
+				<File Id="Resources_PCHR.png" Name="PCHR.png" Source="$(var.IOS_TargetDir)Resources\PCHR.png" />
+			</Component>
+			<Component Id="Resources_PCHR_Menu.png" Guid="17dd4df2-7ddf-4f23-b383-1b759d9fca7c" Win64="yes">
+				<File Id="Resources_PCHR_Menu.png" Name="PCHR_Menu.png" Source="$(var.IOS_TargetDir)Resources\PCHR_Menu.png" />
+			</Component>
+			<Component Id="Resources_PS_Menu.png" Guid="aef37676-47f9-42b4-b12f-7d49f35dd400" Win64="yes">
+				<File Id="Resources_PS_Menu.png" Name="PS_Menu.png" Source="$(var.IOS_TargetDir)Resources\PS_Menu.png" />
+			</Component>
+			<Component Id="Resources_TemplateManage.png" Guid="e0aa957c-3982-4eb6-b3d2-16470ed47416" Win64="yes">
+				<File Id="Resources_TemplateManage.png" Name="TemplateManage.png" Source="$(var.IOS_TargetDir)Resources\TemplateManage.png" />
+			</Component>
+			<Component Id="Resources_Stopped.png" Guid="4c4a2b93-21c4-4325-88df-cd3cca80f0df" Win64="yes">
+				<File Id="Resources_Stopped.png" Name="Stopped.png" Source="$(var.IOS_TargetDir)Resources\Stopped.png" />
+			</Component>
+			<Component Id="Resources_Loading.gif" Guid="a1048305-e668-439c-b5d7-4b234924003b" Win64="yes">
+				<File Id="Resources_Loading.gif" Name="Loading.gif" Source="$(var.IOS_TargetDir)Resources\Loading.gif" />
+			</Component>
+			<Component Id="Resources_Blue_with_letter_48x48.ico" Guid="16d34287-18d2-4a1e-8ca7-1bab0cbee3d3" Win64="yes">
+				<File Id="Resources_Blue_with_letter_48x48.ico" Name="Blue_with_letter 48x48.ico" Source="$(var.IOS_TargetDir)Resources\Blue_with_letter 48x48.ico" />
+			</Component>
+			<Component Id="Resources_Exit.ico" Guid="b3e6c5d3-70a1-4a8e-93a8-7b60cfee4d99" Win64="yes">
+				<File Id="Resources_Exit.ico" Name="Exit.ico" Source="$(var.IOS_TargetDir)Resources\Exit.ico" />
+			</Component>
+			<Component Id="Resources_Logo_ZTE_Short.png" Guid="{461750B4-7208-4066-B3D2-4CA2AFF131F9}" Win64="yes">
+				<File Id="Resources_Logo_ZTE_Short.png" Name="Logo_ZTE_Short.png" Source="$(var.IOS_TargetDir)Resources\Logo_ZTE_Short.png" />
+			</Component>
+			<Component Id="Resources_Logo_ZTE.png" Guid="dafd5df2-7208-4ad4-99a7-5d704f15ece3" Win64="yes">
+				<File Id="Resources_Logo_ZTE.png" Name="Logo_ZTE.png" Source="$(var.IOS_TargetDir)Resources\Logo_ZTE.png" />
+			</Component>
+			<Component Id="Resources_Logo_NSN_Short.jpg" Guid="498d7d12-2426-4ba9-a007-755f91ff4489" Win64="yes">
+				<File Id="Resources_Logo_NSN_Short.jpg" Name="Logo_NSN_Short.jpg" Source="$(var.IOS_TargetDir)Resources\Logo_NSN_Short.jpg" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+
+</Wix>

@@ -1,0 +1,190 @@
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+Partial Class dlgAddNewReport
+    Inherits DevExpress.XtraEditors.XtraForm
+
+    'Form overrides dispose to clean up the component list.
+    <System.Diagnostics.DebuggerNonUserCode()> _
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        If disposing AndAlso components IsNot Nothing Then
+            components.Dispose()
+        End If
+        MyBase.Dispose(disposing)
+    End Sub
+
+    'Required by the Windows Form Designer
+    Private components As System.ComponentModel.IContainer
+
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.  
+    'Do not modify it using the code editor.
+    <System.Diagnostics.DebuggerStepThrough()> _
+    Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(dlgAddNewReport))
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.LabelControl5 = New DevExpress.XtraEditors.LabelControl()
+        Me.txtReportName = New DevExpress.XtraEditors.TextEdit()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btnCancel = New DevExpress.XtraEditors.SimpleButton()
+        Me.btnOk = New DevExpress.XtraEditors.SimpleButton()
+        Me.lblMessage = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl1 = New DevExpress.XtraEditors.LabelControl()
+        Me.cmbReportType = New DevExpress.XtraEditors.ComboBoxEdit()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.TableLayoutPanel1.SuspendLayout()
+        CType(Me.txtReportName.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel2.SuspendLayout()
+        CType(Me.cmbReportType.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 2
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.LabelControl5, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.txtReportName, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel2, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.lblMessage, 0, 6)
+        Me.TableLayoutPanel1.Controls.Add(Me.LabelControl1, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.cmbReportType, 1, 3)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 7
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(398, 158)
+        Me.TableLayoutPanel1.TabIndex = 1
+        '
+        'LabelControl5
+        '
+        Me.LabelControl5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LabelControl5.Location = New System.Drawing.Point(3, 18)
+        Me.LabelControl5.Name = "LabelControl5"
+        Me.LabelControl5.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.LabelControl5.Size = New System.Drawing.Size(94, 22)
+        Me.LabelControl5.TabIndex = 8
+        Me.LabelControl5.Text = "Report Name"
+        '
+        'txtReportName
+        '
+        Me.txtReportName.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtReportName.Location = New System.Drawing.Point(103, 19)
+        Me.txtReportName.Margin = New System.Windows.Forms.Padding(3, 4, 3, 3)
+        Me.txtReportName.Name = "txtReportName"
+        Me.txtReportName.Properties.MaxLength = 200
+        Me.txtReportName.Size = New System.Drawing.Size(292, 20)
+        Me.txtReportName.TabIndex = 9
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 2
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.btnCancel, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.btnOk, 0, 0)
+        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(101, 76)
+        Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(1)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 1
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(296, 33)
+        Me.TableLayoutPanel2.TabIndex = 11
+        '
+        'btnCancel
+        '
+        Me.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btnCancel.Location = New System.Drawing.Point(151, 3)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(142, 27)
+        Me.btnCancel.TabIndex = 11
+        Me.btnCancel.Text = "Cancel"
+        '
+        'btnOk
+        '
+        Me.btnOk.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btnOk.Location = New System.Drawing.Point(3, 3)
+        Me.btnOk.Name = "btnOk"
+        Me.btnOk.Size = New System.Drawing.Size(142, 27)
+        Me.btnOk.TabIndex = 10
+        Me.btnOk.Text = "OK"
+        '
+        'lblMessage
+        '
+        Me.TableLayoutPanel1.SetColumnSpan(Me.lblMessage, 2)
+        Me.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lblMessage.Location = New System.Drawing.Point(3, 113)
+        Me.lblMessage.Name = "lblMessage"
+        Me.lblMessage.Padding = New System.Windows.Forms.Padding(4, 0, 0, 0)
+        Me.lblMessage.Size = New System.Drawing.Size(392, 42)
+        Me.lblMessage.TabIndex = 12
+        '
+        'LabelControl1
+        '
+        Me.LabelControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LabelControl1.Location = New System.Drawing.Point(3, 48)
+        Me.LabelControl1.Name = "LabelControl1"
+        Me.LabelControl1.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.LabelControl1.Size = New System.Drawing.Size(94, 22)
+        Me.LabelControl1.TabIndex = 13
+        Me.LabelControl1.Text = "Report Type"
+        '
+        'cmbReportType
+        '
+        Me.cmbReportType.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cmbReportType.EditValue = "Select"
+        Me.cmbReportType.Location = New System.Drawing.Point(103, 49)
+        Me.cmbReportType.Margin = New System.Windows.Forms.Padding(3, 4, 3, 3)
+        Me.cmbReportType.Name = "cmbReportType"
+        Me.cmbReportType.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.cmbReportType.Properties.Items.AddRange(New Object() {"Select", "Excel", "PowerPoint", "DashboardPDF"})
+        Me.cmbReportType.Size = New System.Drawing.Size(292, 20)
+        Me.cmbReportType.TabIndex = 14
+        '
+        'Timer1
+        '
+        Me.Timer1.Interval = 6000
+        '
+        'dlgAddNewReport
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.ClientSize = New System.Drawing.Size(398, 158)
+        Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.IconOptions.Image = CType(resources.GetObject("dlgAddNewReport.IconOptions.Image"), System.Drawing.Image)
+        Me.MaximizeBox = False
+        Me.MaximumSize = New System.Drawing.Size(400, 190)
+        Me.MinimizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(400, 190)
+        Me.Name = "dlgAddNewReport"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Add New Report"
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TableLayoutPanel1.PerformLayout()
+        CType(Me.txtReportName.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        CType(Me.cmbReportType.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ResumeLayout(False)
+
+    End Sub
+
+    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
+    Friend WithEvents LabelControl5 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txtReportName As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
+    Friend WithEvents btnCancel As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents btnOk As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents lblMessage As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl1 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents cmbReportType As DevExpress.XtraEditors.ComboBoxEdit
+    Friend WithEvents Timer1 As Timer
+End Class

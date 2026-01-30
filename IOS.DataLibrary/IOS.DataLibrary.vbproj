@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FA360BD8-E35A-4DFA-814E-8281DFA8BBB4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>IOS.DataLibrary</RootNamespace>
+    <AssemblyName>IOS.DataLibrary</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommonModule.vb" />
+    <Compile Include="DataAccessorODBC.vb" />
+    <Compile Include="DataAccessorSQL.vb" />
+    <Compile Include="DatabaseFields\AggregationsObjectsFields.vb" />
+    <Compile Include="DatabaseFields\AggregationsTimeFields.vb" />
+    <Compile Include="DatabaseFields\CalculatedSeriesTypesFields.vb" />
+    <Compile Include="DatabaseFields\DashboardGroupDashboardsFields.vb" />
+    <Compile Include="DatabaseFields\DashboardGroupsFields.vb" />
+    <Compile Include="DatabaseFields\DashBoardGroups_View.vb" />
+    <Compile Include="DatabaseFields\DashboardGroupUsersFields.vb" />
+    <Compile Include="DatabaseFields\DashboardReportsFields.vb" />
+    <Compile Include="DatabaseFields\DashboardsFields.vb" />
+    <Compile Include="DatabaseFields\DashBoardTreeFields.vb" />
+    <Compile Include="DatabaseFields\JobDropZonesFields.vb" />
+    <Compile Include="DatabaseFields\JobFields.vb" />
+    <Compile Include="DatabaseFields\JobFormatFields.vb" />
+    <Compile Include="DatabaseFields\JobFormatsField.vb" />
+    <Compile Include="DatabaseFields\JobGroupFields.vb" />
+    <Compile Include="DatabaseFields\JobGroupUsersFields.vb" />
+    <Compile Include="DatabaseFields\JobGroup_JobsFields.vb" />
+    <Compile Include="DatabaseFields\JobGroup_View.vb" />
+    <Compile Include="DatabaseFields\JobHistoryFields.vb" />
+    <Compile Include="DatabaseFields\JobReportFields.vb" />
+    <Compile Include="DatabaseFields\JobTree_View.vb" />
+    <Compile Include="DatabaseFields\Job_View.vb" />
+    <Compile Include="DatabaseFields\KPIGroupFields.vb" />
+    <Compile Include="DatabaseFields\LicensesFields.vb" />
+    <Compile Include="DatabaseFields\PredefinedPeriodFields.vb" />
+    <Compile Include="DatabaseFields\ReportCategoryFields.vb" />
+    <Compile Include="DatabaseFields\ReportChartAxisFields.vb" />
+    <Compile Include="DatabaseFields\ReportChartFields.vb" />
+    <Compile Include="DatabaseFields\ReportChartSeriesFields.vb" />
+    <Compile Include="DatabaseFields\ReportContentDimensionsFields.vb" />
+    <Compile Include="DatabaseFields\ReportContentFilterFields.vb" />
+    <Compile Include="DatabaseFields\ReportContentObjectsFields.vb" />
+    <Compile Include="DatabaseFields\ReportContentSourceTimeFields.vb" />
+    <Compile Include="DatabaseFields\ReportGroupsFields.vb" />
+    <Compile Include="DatabaseFields\ReportGroupUsersFields.vb" />
+    <Compile Include="DatabaseFields\ReportsFields.vb" />
+    <Compile Include="DatabaseFields\ReportTreeFields.vb" />
+    <Compile Include="DatabaseFields\SandBoxUsageFields.vb" />
+    <Compile Include="DatabaseFields\TechnologyCountersFields.vb" />
+    <Compile Include="DatabaseFields\TechnologyKPIsFields.vb" />
+    <Compile Include="DatabaseFields\TechnologyMeasurementsFields.vb" />
+    <Compile Include="DatabaseFields\TechnologyObjectTypesFields.vb" />
+    <Compile Include="DatabaseFields\TechnologyPackageCountersFields.vb" />
+    <Compile Include="DatabaseFields\TechnologyPackageKPIFields.vb" />
+    <Compile Include="DatabaseFields\TechnologyPackageObjectsFields.vb" />
+    <Compile Include="DatabaseFields\TechnologyPackagesFields.vb" />
+    <Compile Include="DatabaseFields\TechnologySourceObjectsFields.vb" />
+    <Compile Include="DatabaseFields\ThresholdTypeFields.vb" />
+    <Compile Include="DatabaseFields\tmpKPIFields.vb" />
+    <Compile Include="DatabaseFields\UserGroupsFields.vb" />
+    <Compile Include="DatabaseTable\DataBaseTableName.vb" />
+    <Compile Include="DatabaseTable\StoreProcedurName.vb" />
+    <Compile Include="DatabaseTable\ViewName.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="SQLCommands.vb" />
+    <Compile Include="SQLCommands\SQLAggregationsObjects.vb" />
+    <Compile Include="SQLCommands\SQLAggregationsTime.vb" />
+    <Compile Include="SQLCommands\SQLCalculatedSeriesTypes.vb" />
+    <Compile Include="SQLCommands\SQLCommanCommand.vb" />
+    <Compile Include="SQLCommands\SQLDashboardGroups.vb" />
+    <Compile Include="SQLCommands\SQLDashboardReports.vb" />
+    <Compile Include="SQLCommands\SQLDashboardReportTree.vb" />
+    <Compile Include="SQLCommands\SQLDashboards.vb" />
+    <Compile Include="SQLCommands\SQLJobDropZones.vb" />
+    <Compile Include="SQLCommands\SQLJobFormats.vb" />
+    <Compile Include="SQLCommands\SQLJobGroups.vb" />
+    <Compile Include="SQLCommands\SQLJobHistory.vb" />
+    <Compile Include="SQLCommands\SQLJobReports.vb" />
+    <Compile Include="SQLCommands\SQLJobs.vb" />
+    <Compile Include="SQLCommands\SQLJobTree.vb" />
+    <Compile Include="SQLCommands\SQLKpiCategory.vb" />
+    <Compile Include="SQLCommands\SQLKpiGroup.vb" />
+    <Compile Include="SQLCommands\SQLLicenses.vb" />
+    <Compile Include="SQLCommands\SQLPredefinedPeriod.vb" />
+    <Compile Include="SQLCommands\SQLReportCategory.vb" />
+    <Compile Include="SQLCommands\SQLReportChart.vb" />
+    <Compile Include="SQLCommands\SQLReportChartSeries.vb" />
+    <Compile Include="SQLCommands\SQLReportContent.vb" />
+    <Compile Include="SQLCommands\SQLReportContentDimensions.vb" />
+    <Compile Include="SQLCommands\SQLReportContentFilter.vb" />
+    <Compile Include="SQLCommands\SQLReportContentObjects.vb" />
+    <Compile Include="SQLCommands\SQLReportContentSourceTime.vb" />
+    <Compile Include="SQLCommands\SQLReportGroups.vb" />
+    <Compile Include="SQLCommands\SQLReports.vb" />
+    <Compile Include="SQLCommands\SQLReportTree.vb" />
+    <Compile Include="SQLCommands\SQLSandBoxUsage.vb" />
+    <Compile Include="SQLCommands\SQLSchedularJobGroup.vb" />
+    <Compile Include="SQLCommands\SQLTechnologyCounters.vb" />
+    <Compile Include="SQLCommands\SQLTechnologyKPIs.vb" />
+    <Compile Include="SQLCommands\SQLTechnologyMeasurements.vb" />
+    <Compile Include="SQLCommands\SQLTechnologyObjectTypes.vb" />
+    <Compile Include="SQLCommands\SQLTechnologyPackage.vb" />
+    <Compile Include="SQLCommands\SQLTechnologyPackageCounters.vb" />
+    <Compile Include="SQLCommands\SQLTechnologyPackageObjects.vb" />
+    <Compile Include="SQLCommands\SQLTechnologySourceObjects.vb" />
+    <Compile Include="SQLCommands\SQLThresholdTypes.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_StartDate="2000/1/1" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
