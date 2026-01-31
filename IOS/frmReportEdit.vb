@@ -18,6 +18,7 @@ Imports DevExpress.DashboardCommon
 Imports DevExpress.DataAccess.Native.Sql
 Imports DevExpress.DataAccess.Sql
 Imports DevExpress.DataAccess.ConnectionParameters
+Imports DevExpress.Pdf
 
 Public Class frmReportEdit
 
@@ -71,6 +72,7 @@ Public Class frmReportEdit
     Dim slide As DocumentFormat.OpenXml.Presentation.Slide = Nothing
     Dim slidePart As SlidePart = Nothing
     Private dshbrd As Dashboard
+    Dim dtObjectsPerSlide As New DataTable
 
 #End Region
 
@@ -1607,8 +1609,6 @@ Public Class frmReportEdit
                     ElseIf nd("ReportType").ToString.ToUpper = "DASHBOARDPDF" Then
                         RenameContextMenuItems("Dashboard")
                         tsmi_ReportCopy.Enabled = False
-                        tsmi_ReportRunConfigured.Enabled = False
-                        tsmi_ReportRunCurrent.Enabled = False
                     End If
 
                 ElseIf nd.Level = 1 Then
@@ -1860,6 +1860,7 @@ Public Class frmReportEdit
 
         Dim ExcelreportFilePath As String = Nothing
         Dim PptreportFilePath As String = Nothing
+        Dim dashbaordPDfFilePath As String = Nothing
 
         If Me.reportType.ToLower = "excel" Then
             CreateConfiguredReportInExcel(nd.Tag, nd.GetDisplayText("Report Name"), ExcelreportFilePath)
@@ -1869,6 +1870,8 @@ Public Class frmReportEdit
             ElseIf Me.reportMethod = ReportMethodType.OpenXml Then
                 CreateReportWithOpenXMLMethod(pptfile, ReportingTemplateFileName, nd.GetDisplayText("Report Name"), nd.Tag, PptreportFilePath)
             End If
+        ElseIf Me.reportType.ToLower = "dashboardpdf" Then
+            CreateReport_DashboardPDF(nd.Tag, nd.GetDisplayText("Report Name"), dashbaordPDfFilePath)
         End If
 
         Me.Cursor = Cursors.Default
@@ -1907,6 +1910,7 @@ Public Class frmReportEdit
         Dim pptfile As String = Application.StartupPath & "\" & ReportingTemplateFileName
         Dim ExcelreportFilePath As String = Nothing
         Dim PptreportFilePath As String = Nothing
+        Dim dashbaordPDfFilePath As String = Nothing
 
         Me.Cursor = Cursors.WaitCursor
         WaitScreenReportEditor.ShowWaitScreen("Generating Report...", 0)
@@ -1930,10 +1934,11 @@ Public Class frmReportEdit
                     CreateReportWithOpenXMLMethod(pptfile, ReportingTemplateFileName, nd.GetDisplayText("Report Name"), nd.Tag, PptreportFilePath)
                 End If
                 frmMDI.WindowState = FormWindowState.Maximized
+            ElseIf Me.reportType.ToLower = "dashboardpdf" Then
+                CreateReport_DashboardPDF(nd.Tag, nd.GetDisplayText("Report Name"), dashbaordPDfFilePath)
             End If
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "ERROR", ex.Message.ToString & " " & ex.StackTrace.ToString)
-
         End Try
 
         Me.Cursor = Cursors.Default
@@ -1949,6 +1954,8 @@ Public Class frmReportEdit
                 Process.Start("explorer.exe", "/select," & PptreportFilePath)
             ElseIf reportType.ToLower = "excel" Then
                 Process.Start("explorer.exe", "/select," & ExcelreportFilePath)
+            ElseIf reportType.ToLower = "dashboardpdf" Then
+                Process.Start("explorer.exe", "/select," & dashbaordPDfFilePath)
             End If
         Catch ex As Exception
             XtraMessageBox.Show("Failed to open folder location, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
@@ -1959,6 +1966,8 @@ Public Class frmReportEdit
                 Process.Start(PptreportFilePath)
             ElseIf reportType.ToLower = "excel" Then
                 Process.Start(ExcelreportFilePath)
+            ElseIf reportType.ToLower = "dashboardpdf" Then
+                Process.Start(dashbaordPDfFilePath)
             End If
         Catch ex As Exception
             XtraMessageBox.Show("Failed to open report, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
@@ -8170,6 +8179,117 @@ Public Class frmReportEdit
         End Try
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
     End Sub
+
+#Region "Dashboard PDF Report"
+
+    Private Function CreateReport_DashboardPDF(reportID As Integer, reportName As String, ByRef reportFilePath As String) As Boolean
+        ' Set report PDF name
+        reportFilePath = GetUserDataPath() & "\Data\" & reportName & "_" & Format(Now(), "yyyyMMdd_HHmmss")
+
+        Dim slideDistinct As DataTable = dtReports.Select("ReportID=" & reportID).CopyToDataTable.AsDataView.ToTable(True, "SlideID", "SlideName", "SlideOrdinal")
+
+        If (slideDistinct.Rows.Count > 0) Then
+            For Each drObject As DataRow In slideDistinct.Rows
+                dtObjectsPerSlide = dtReports.Select("SlideID=" & Chr(39) & drObject("SlideID").ToString & Chr(39)).CopyToDataTable()
+
+                If (dtObjectsPerSlide.Rows.Count > 0) Then
+
+                    Dim dashboardXmlFile As String = Nothing
+                    Dim dashboardName As String = Nothing
+
+                    Dim dtDashboard As DataTable = clsSQLCommands.GetDashboardFromID(connStrIOSServer, dtObjectsPerSlide.Rows(0)("DashboardID"))
+
+                    Dim str = dtDashboard.Rows(0)("DashboardFile").ToString
+                    dashboardName = dtDashboard.Rows(0)("DashboardName").ToString
+
+                    If str.Trim.Contains("<?xml") Then
+                        dashboardXmlFile = str
+                    Else
+                        dashboardXmlFile = GetDecryptedConnectionString(str)
+                    End If
+
+                    Dim ms As New System.IO.MemoryStream()
+                    ms = StringToStream(dashboardXmlFile)
+
+                    ExportDashboardItemToPdf(ms, reportFilePath, dashboardName)
+
+                End If
+            Next
+        End If
+        Return True
+    End Function
+
+    Public Sub ExportDashboardItemToPdf(dashboardStream As Stream, outputFolder As String, dashboardName As String)
+        If Not Directory.Exists(outputFolder) Then
+            Directory.CreateDirectory(outputFolder)
+        End If
+
+        ' Load dashboard from stream
+        dshbrd = New Dashboard()
+        AddHandler dshbrd.ConfigureDataConnection, AddressOf dashboard_ConfigureDataConnection
+        dshbrd.LoadFromXml(dashboardStream)
+
+        ' Create exporter
+        Dim exporter As New DashboardExporter()
+        AddHandler exporter.ConnectionError, AddressOf Exporter_ConnectionError
+        AddHandler exporter.DataLoadingError, AddressOf Exporter_DataLoadingError
+        AddHandler exporter.DashboardItemDataLoadingError, AddressOf Exporter_DashboardItemDataLoadingError
+
+        ' Locate all TabContainers
+        Dim tabContainers = dshbrd.Items.OfType(Of TabContainerDashboardItem)().ToList()
+
+        Dim pdfOptions As DashboardPdfExportOptions = New DashboardPdfExportOptions With {
+            .PageLayout = DashboardExportPageLayout.Landscape,
+            .ExportParameters = True,
+            .ExportFilters = True,
+            .DashboardStatePosition = DashboardStateExportPosition.Below,
+            .GridPrintHeadersOnEveryPage = True,
+            .PaperKind = DevExpress.Drawing.Printing.DXPaperKind.A4,
+            .ChartAutomaticPageLayout = True,
+            .AutoFitPageCount = 1,
+            .DocumentScaleMode = DashboardExportDocumentScaleMode.AutoFitToPagesWidth,
+            .DashboardAutomaticPageLayout = True,
+            .ShowTitle = DevExpress.Utils.DefaultBoolean.True
+        }
+
+        If tabContainers.Count = 0 Then
+            ' No tab container → export entire dashboard
+            Console.WriteLine("Started Exporting Dashboard: " & dashboardName)
+            exporter.ExportToPdf(dshbrd, outputFolder & "\" & dashboardName & ".pdf",,, pdfOptions)
+            Return
+        End If
+
+        ' Iterate through each TabContainer
+        For Each tabContainer In tabContainers
+
+            Dim lstPdfFiles As New List(Of String)
+
+            For iCntr As Integer = 0 To tabContainer.TabPages.Count - 1
+
+                Dim dashTabPage As DashboardTabPage = tabContainer.TabPages(iCntr)
+                Console.WriteLine("Started Exporting Dashboard TabPage: " & dashTabPage.ComponentName)
+
+                lstPdfFiles.Add(outputFolder & "\" & dashboardName & iCntr & ".pdf")
+                exporter.ExportDashboardItemToPdf(dshbrd, dashTabPage.ComponentName, outputFolder & "\" & dashboardName & iCntr & ".pdf",,, pdfOptions)
+
+            Next
+
+            'merge dashboard parts pdf files into a single pdf file...
+            Using pdfDocProcessor As New PdfDocumentProcessor()
+                pdfDocProcessor.CreateEmptyDocument(outputFolder & "\" & dashboardName & ".pdf")
+                For Each pdfFile In lstPdfFiles
+                    pdfDocProcessor.AppendDocument(pdfFile)
+                Next
+            End Using
+
+            'delete dashboard parts pdf files...
+            For Each pdfFile In lstPdfFiles
+                File.Delete(pdfFile)
+            Next
+        Next
+    End Sub
+
+#End Region
 
 #End Region
 

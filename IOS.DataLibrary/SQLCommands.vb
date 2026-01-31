@@ -1180,7 +1180,7 @@ Public Class clsSQLCommands
         sqlQuery.AppendLine("Select [Accessibility]  FROM [dbo].[IOS_Chart_Configuration_ChartSet]")
         sqlQuery.AppendLine("Where TechTab = '" & tech & "' and ChartSetName = '" & chartSetName & "'")
         Dim dt As DataTable = DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
-        Return dt.Rows(0)("Accessibility").ToString
+        If dt.Rows.Count > 0 Then Return dt.Rows(0)("Accessibility").ToString Else Return ""
     End Function
 
 #End Region

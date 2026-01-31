@@ -4677,6 +4677,15 @@ Public Class frmChartCustomization
                 Dim s As String = Clipboard.GetText()
                 Dim rows() As String = s.Split(ControlChars.NewLine)
                 cm_ChartPaste.Enabled = (rows.Count > 0)
+                If cmbChartSetName.SelectedItem.ToString.ToLower = Environment.UserName.ToString.ToLower Then
+                    cm_InserCategory.Enabled = False
+                    cm_DeleteCategory.Enabled = False
+                    cm_RenameCategory.Enabled = False
+                Else
+                    cm_InserCategory.Enabled = True
+                    cm_DeleteCategory.Enabled = True
+                    cm_RenameCategory.Enabled = True
+                End If
             Else
                 cm_CustomChart_Delete.Enabled = False
                 cm_CustomChart_Add.Enabled = False
