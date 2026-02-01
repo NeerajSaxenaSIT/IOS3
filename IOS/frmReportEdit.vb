@@ -73,6 +73,7 @@ Public Class frmReportEdit
     Dim slidePart As SlidePart = Nothing
     Private dshbrd As Dashboard
     Dim dtObjectsPerSlide As New DataTable
+    Private lstPdfFiles As List(Of String)
 
 #End Region
 
@@ -1955,7 +1956,7 @@ Public Class frmReportEdit
             ElseIf reportType.ToLower = "excel" Then
                 Process.Start("explorer.exe", "/select," & ExcelreportFilePath)
             ElseIf reportType.ToLower = "dashboardpdf" Then
-                Process.Start("explorer.exe", "/select," & dashbaordPDfFilePath)
+                Process.Start("explorer.exe", "/select," & dashbaordPDfFilePath & ".pdf")
             End If
         Catch ex As Exception
             XtraMessageBox.Show("Failed to open folder location, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
@@ -1967,7 +1968,7 @@ Public Class frmReportEdit
             ElseIf reportType.ToLower = "excel" Then
                 Process.Start(ExcelreportFilePath)
             ElseIf reportType.ToLower = "dashboardpdf" Then
-                Process.Start(dashbaordPDfFilePath)
+                Process.Start(dashbaordPDfFilePath & ".pdf")
             End If
         Catch ex As Exception
             XtraMessageBox.Show("Failed to open report, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
@@ -8184,6 +8185,8 @@ Public Class frmReportEdit
 
     Private Function CreateReport_DashboardPDF(reportID As Integer, reportName As String, ByRef reportFilePath As String) As Boolean
         ' Set report PDF name
+        lstPdfFiles = New List(Of String)
+        Dim tempFilePath As String = GetUserDataPath() & "\Data\"
         reportFilePath = GetUserDataPath() & "\Data\" & reportName & "_" & Format(Now(), "yyyyMMdd_HHmmss")
 
         Dim slideDistinct As DataTable = dtReports.Select("ReportID=" & reportID).CopyToDataTable.AsDataView.ToTable(True, "SlideID", "SlideName", "SlideOrdinal")
@@ -8211,10 +8214,25 @@ Public Class frmReportEdit
                     Dim ms As New System.IO.MemoryStream()
                     ms = StringToStream(dashboardXmlFile)
 
-                    ExportDashboardItemToPdf(ms, reportFilePath, dashboardName)
+                    ExportDashboardItemToPdf(ms, tempFilePath, dashboardName)
 
                 End If
             Next
+
+            'merge dashboard parts pdf files into a single pdf file...
+            WaitScreenReportEditor.ShowWaitScreen("Merging PDF Files...")
+            Using pdfDocProcessor As New PdfDocumentProcessor()
+                pdfDocProcessor.CreateEmptyDocument(reportFilePath & ".pdf")
+                For Each pdfFile In lstPdfFiles
+                    pdfDocProcessor.AppendDocument(pdfFile)
+                Next
+            End Using
+
+            'delete dashboard parts pdf files...
+            For Each pdfFile In lstPdfFiles
+                File.Delete(pdfFile)
+            Next
+
         End If
         Return True
     End Function
@@ -8255,6 +8273,8 @@ Public Class frmReportEdit
         If tabContainers.Count = 0 Then
             ' No tab container → export entire dashboard
             Console.WriteLine("Started Exporting Dashboard: " & dashboardName)
+            lstPdfFiles.Add(outputFolder & "\" & dashboardName & ".pdf")
+            WaitScreenReportEditor.ShowWaitScreen("Generating: " & dashboardName)
             exporter.ExportToPdf(dshbrd, outputFolder & "\" & dashboardName & ".pdf",,, pdfOptions)
             Return
         End If
@@ -8262,29 +8282,15 @@ Public Class frmReportEdit
         ' Iterate through each TabContainer
         For Each tabContainer In tabContainers
 
-            Dim lstPdfFiles As New List(Of String)
-
             For iCntr As Integer = 0 To tabContainer.TabPages.Count - 1
 
                 Dim dashTabPage As DashboardTabPage = tabContainer.TabPages(iCntr)
                 Console.WriteLine("Started Exporting Dashboard TabPage: " & dashTabPage.ComponentName)
 
                 lstPdfFiles.Add(outputFolder & "\" & dashboardName & iCntr & ".pdf")
+                WaitScreenReportEditor.ShowWaitScreen("Generating: " & dashboardName)
                 exporter.ExportDashboardItemToPdf(dshbrd, dashTabPage.ComponentName, outputFolder & "\" & dashboardName & iCntr & ".pdf",,, pdfOptions)
 
-            Next
-
-            'merge dashboard parts pdf files into a single pdf file...
-            Using pdfDocProcessor As New PdfDocumentProcessor()
-                pdfDocProcessor.CreateEmptyDocument(outputFolder & "\" & dashboardName & ".pdf")
-                For Each pdfFile In lstPdfFiles
-                    pdfDocProcessor.AppendDocument(pdfFile)
-                Next
-            End Using
-
-            'delete dashboard parts pdf files...
-            For Each pdfFile In lstPdfFiles
-                File.Delete(pdfFile)
             Next
         Next
     End Sub
