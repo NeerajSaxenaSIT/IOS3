@@ -890,6 +890,7 @@ Partial Class frmTechnology
         Me.xtpTimeBased = New DevExpress.XtraTab.XtraTabPage()
         Me.SplitContainerEval_TB = New DevExpress.XtraEditors.SplitContainerControl()
         Me.gcTimeBasedPrdComp = New DevExpress.XtraEditors.GroupControl()
+        Me.sccTimeEvalTop = New DevExpress.XtraEditors.SplitContainerControl()
         Me.gcEvalTimeBased = New DevExpress.XtraGrid.GridControl()
         Me.cmEvalTimeBased = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.tsmi_Send2ObjBasedTab = New System.Windows.Forms.ToolStripMenuItem()
@@ -904,6 +905,8 @@ Partial Class frmTechnology
         Me.tsmi_EvalTBExportRawCSV = New System.Windows.Forms.ToolStripMenuItem()
         Me.gvEvalTimeBased = New DevExpress.XtraGrid.Views.Grid.GridView()
         Me.ToolTipCtrlEval = New DevExpress.Utils.ToolTipController(Me.components)
+        Me.gcEvalCompare = New DevExpress.XtraGrid.GridControl()
+        Me.gvEvalCompare = New DevExpress.XtraGrid.Views.Grid.GridView()
         Me.tcLowEvaluateTB = New DevExpress.XtraTab.XtraTabControl()
         Me.xtpInfo = New DevExpress.XtraTab.XtraTabPage()
         Me.gcEvalInfo = New DevExpress.XtraGrid.GridControl()
@@ -976,9 +979,7 @@ Partial Class frmTechnology
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolTipCtrlParamFilters = New DevExpress.Utils.ToolTipController(Me.components)
-        Me.sccTimeEvalTop = New DevExpress.XtraEditors.SplitContainerControl()
-        Me.gcEvalCompare = New DevExpress.XtraGrid.GridControl()
-        Me.gvEvalCompare = New DevExpress.XtraGrid.Views.Grid.GridView()
+        Me.tsmi_CopyURLClipboard = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.xtcTechnology, System.ComponentModel.ISupportInitialize).BeginInit
         Me.xtcTechnology.SuspendLayout
         Me.xtpStats.SuspendLayout
@@ -1324,9 +1325,17 @@ Partial Class frmTechnology
         Me.SplitContainerEval_TB.SuspendLayout
         CType(Me.gcTimeBasedPrdComp, System.ComponentModel.ISupportInitialize).BeginInit
         Me.gcTimeBasedPrdComp.SuspendLayout
+        CType(Me.sccTimeEvalTop, System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.sccTimeEvalTop.Panel1, System.ComponentModel.ISupportInitialize).BeginInit
+        Me.sccTimeEvalTop.Panel1.SuspendLayout
+        CType(Me.sccTimeEvalTop.Panel2, System.ComponentModel.ISupportInitialize).BeginInit
+        Me.sccTimeEvalTop.Panel2.SuspendLayout
+        Me.sccTimeEvalTop.SuspendLayout
         CType(Me.gcEvalTimeBased, System.ComponentModel.ISupportInitialize).BeginInit
         Me.cmEvalTimeBased.SuspendLayout
         CType(Me.gvEvalTimeBased, System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.gcEvalCompare, System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.gvEvalCompare, System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.tcLowEvaluateTB, System.ComponentModel.ISupportInitialize).BeginInit
         Me.tcLowEvaluateTB.SuspendLayout
         Me.xtpInfo.SuspendLayout
@@ -1358,14 +1367,6 @@ Partial Class frmTechnology
         Me.cmTopX.SuspendLayout
         Me.cmTopXChart.SuspendLayout
         CType(Me.documentViewerRibbonController1, System.ComponentModel.ISupportInitialize).BeginInit
-        CType(Me.sccTimeEvalTop, System.ComponentModel.ISupportInitialize).BeginInit
-        CType(Me.sccTimeEvalTop.Panel1, System.ComponentModel.ISupportInitialize).BeginInit
-        Me.sccTimeEvalTop.Panel1.SuspendLayout
-        CType(Me.sccTimeEvalTop.Panel2, System.ComponentModel.ISupportInitialize).BeginInit
-        Me.sccTimeEvalTop.Panel2.SuspendLayout
-        Me.sccTimeEvalTop.SuspendLayout
-        CType(Me.gcEvalCompare, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.gvEvalCompare, System.ComponentModel.ISupportInitialize).BeginInit
         Me.SuspendLayout
         '
         'xtcTechnology
@@ -1415,7 +1416,7 @@ Partial Class frmTechnology
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
-        Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 304.0!))
+        Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 305.0!))
         Me.tlpCounterTypeStats.Controls.Add(Me.btnApplyStats, 2, 0)
         Me.tlpCounterTypeStats.Controls.Add(Me.seChartsPerRowStats, 8, 0)
         Me.tlpCounterTypeStats.Controls.Add(Me.lblObjectsStats, 0, 0)
@@ -1450,7 +1451,7 @@ Partial Class frmTechnology
         '
         Me.seChartsPerRowStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.seChartsPerRowStats.EditValue = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.seChartsPerRowStats.Location = New System.Drawing.Point(777, 4)
+        Me.seChartsPerRowStats.Location = New System.Drawing.Point(776, 4)
         Me.seChartsPerRowStats.Name = "seChartsPerRowStats"
         Me.seChartsPerRowStats.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.seChartsPerRowStats.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
@@ -1493,7 +1494,7 @@ Partial Class frmTechnology
         Me.lblChartHeightStats.Appearance.Options.UseTextOptions = True
         Me.lblChartHeightStats.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.lblChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblChartHeightStats.Location = New System.Drawing.Point(818, 4)
+        Me.lblChartHeightStats.Location = New System.Drawing.Point(817, 4)
         Me.lblChartHeightStats.LookAndFeel.SkinName = "Office 2013"
         Me.lblChartHeightStats.LookAndFeel.UseDefaultLookAndFeel = False
         Me.lblChartHeightStats.Name = "lblChartHeightStats"
@@ -1524,7 +1525,7 @@ Partial Class frmTechnology
         Me.lblChartsPerRow.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.lblChartsPerRow.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
         Me.lblChartsPerRow.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblChartsPerRow.Location = New System.Drawing.Point(691, 4)
+        Me.lblChartsPerRow.Location = New System.Drawing.Point(690, 4)
         Me.lblChartsPerRow.LookAndFeel.SkinName = "Office 2013"
         Me.lblChartsPerRow.LookAndFeel.UseDefaultLookAndFeel = False
         Me.lblChartsPerRow.Name = "lblChartsPerRow"
@@ -1539,27 +1540,27 @@ Partial Class frmTechnology
         Me.flpCounterTypeStats.Location = New System.Drawing.Point(356, 1)
         Me.flpCounterTypeStats.Margin = New System.Windows.Forms.Padding(0)
         Me.flpCounterTypeStats.Name = "flpCounterTypeStats"
-        Me.flpCounterTypeStats.Size = New System.Drawing.Size(280, 28)
+        Me.flpCounterTypeStats.Size = New System.Drawing.Size(279, 28)
         Me.flpCounterTypeStats.TabIndex = 6
         '
         'tbChartHeightStats
         '
         Me.tbChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbChartHeightStats.EditValue = 480
-        Me.tbChartHeightStats.Location = New System.Drawing.Point(894, 4)
+        Me.tbChartHeightStats.Location = New System.Drawing.Point(893, 4)
         Me.tbChartHeightStats.Name = "tbChartHeightStats"
         Me.tbChartHeightStats.Properties.LabelAppearance.Options.UseTextOptions = True
         Me.tbChartHeightStats.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.tbChartHeightStats.Properties.Maximum = 1000
         Me.tbChartHeightStats.Properties.Minimum = 100
-        Me.tbChartHeightStats.Size = New System.Drawing.Size(298, 22)
+        Me.tbChartHeightStats.Size = New System.Drawing.Size(299, 22)
         Me.tbChartHeightStats.TabIndex = 7
         Me.tbChartHeightStats.Value = 480
         '
         'btnExportStats
         '
         Me.btnExportStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btnExportStats.Location = New System.Drawing.Point(639, 3)
+        Me.btnExportStats.Location = New System.Drawing.Point(638, 3)
         Me.btnExportStats.Margin = New System.Windows.Forms.Padding(2)
         Me.btnExportStats.Name = "btnExportStats"
         Me.btnExportStats.Size = New System.Drawing.Size(46, 24)
@@ -5568,7 +5569,7 @@ Partial Class frmTechnology
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
-        Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 304.0!))
+        Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 305.0!))
         Me.tlpCounterTypeTopX.Controls.Add(Me.tbChartHeightTopX, 8, 0)
         Me.tlpCounterTypeTopX.Controls.Add(Me.btnApplyTopX, 2, 0)
         Me.tlpCounterTypeTopX.Controls.Add(Me.LabelTopX1, 0, 0)
@@ -5591,13 +5592,13 @@ Partial Class frmTechnology
         '
         Me.tbChartHeightTopX.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbChartHeightTopX.EditValue = 480
-        Me.tbChartHeightTopX.Location = New System.Drawing.Point(894, 4)
+        Me.tbChartHeightTopX.Location = New System.Drawing.Point(893, 4)
         Me.tbChartHeightTopX.Name = "tbChartHeightTopX"
         Me.tbChartHeightTopX.Properties.LabelAppearance.Options.UseTextOptions = True
         Me.tbChartHeightTopX.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.tbChartHeightTopX.Properties.Maximum = 1000
         Me.tbChartHeightTopX.Properties.Minimum = 100
-        Me.tbChartHeightTopX.Size = New System.Drawing.Size(298, 22)
+        Me.tbChartHeightTopX.Size = New System.Drawing.Size(299, 22)
         Me.tbChartHeightTopX.TabIndex = 10
         Me.tbChartHeightTopX.Value = 480
         '
@@ -5656,7 +5657,7 @@ Partial Class frmTechnology
         Me.flpCounterTypeTopX.Location = New System.Drawing.Point(356, 1)
         Me.flpCounterTypeTopX.Margin = New System.Windows.Forms.Padding(0)
         Me.flpCounterTypeTopX.Name = "flpCounterTypeTopX"
-        Me.flpCounterTypeTopX.Size = New System.Drawing.Size(357, 28)
+        Me.flpCounterTypeTopX.Size = New System.Drawing.Size(356, 28)
         Me.flpCounterTypeTopX.TabIndex = 7
         '
         'ucProgPnlTopX
@@ -5672,7 +5673,7 @@ Partial Class frmTechnology
         'tglDataGridTopX
         '
         Me.tglDataGridTopX.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tglDataGridTopX.Location = New System.Drawing.Point(714, 1)
+        Me.tglDataGridTopX.Location = New System.Drawing.Point(713, 1)
         Me.tglDataGridTopX.LookAndFeel.SkinName = "McSkin"
         Me.tglDataGridTopX.LookAndFeel.UseDefaultLookAndFeel = False
         Me.tglDataGridTopX.Margin = New System.Windows.Forms.Padding(0)
@@ -5685,7 +5686,7 @@ Partial Class frmTechnology
         'LabelControl15
         '
         Me.LabelControl15.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LabelControl15.Location = New System.Drawing.Point(818, 4)
+        Me.LabelControl15.Location = New System.Drawing.Point(817, 4)
         Me.LabelControl15.Name = "LabelControl15"
         Me.LabelControl15.Padding = New System.Windows.Forms.Padding(4, 0, 0, 0)
         Me.LabelControl15.Size = New System.Drawing.Size(69, 22)
@@ -9929,6 +9930,27 @@ Partial Class frmTechnology
         Me.gcTimeBasedPrdComp.TabIndex = 5
         Me.gcTimeBasedPrdComp.Text = "Period Comparison"
         '
+        'sccTimeEvalTop
+        '
+        Me.sccTimeEvalTop.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.sccTimeEvalTop.Location = New System.Drawing.Point(2, 23)
+        Me.sccTimeEvalTop.Name = "sccTimeEvalTop"
+        '
+        'sccTimeEvalTop.Panel1
+        '
+        Me.sccTimeEvalTop.Panel1.Controls.Add(Me.gcEvalTimeBased)
+        Me.sccTimeEvalTop.Panel1.MinSize = 400
+        Me.sccTimeEvalTop.Panel1.Text = "Panel1"
+        '
+        'sccTimeEvalTop.Panel2
+        '
+        Me.sccTimeEvalTop.Panel2.Controls.Add(Me.gcEvalCompare)
+        Me.sccTimeEvalTop.Panel2.MinSize = 400
+        Me.sccTimeEvalTop.Panel2.Text = "Panel2"
+        Me.sccTimeEvalTop.Size = New System.Drawing.Size(898, 441)
+        Me.sccTimeEvalTop.SplitterPosition = 488
+        Me.sccTimeEvalTop.TabIndex = 0
+        '
         'gcEvalTimeBased
         '
         Me.gcEvalTimeBased.ContextMenuStrip = Me.cmEvalTimeBased
@@ -10023,6 +10045,31 @@ Partial Class frmTechnology
         '
         'ToolTipCtrlEval
         '
+        '
+        'gcEvalCompare
+        '
+        Me.gcEvalCompare.ContextMenuStrip = Me.cmEvalTimeBased
+        Me.gcEvalCompare.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gcEvalCompare.Location = New System.Drawing.Point(0, 0)
+        Me.gcEvalCompare.MainView = Me.gvEvalCompare
+        Me.gcEvalCompare.Name = "gcEvalCompare"
+        Me.gcEvalCompare.Size = New System.Drawing.Size(400, 441)
+        Me.gcEvalCompare.TabIndex = 5
+        Me.gcEvalCompare.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.gvEvalCompare})
+        '
+        'gvEvalCompare
+        '
+        Me.gvEvalCompare.GridControl = Me.gcEvalCompare
+        Me.gvEvalCompare.Name = "gvEvalCompare"
+        Me.gvEvalCompare.OptionsBehavior.AllowAddRows = DevExpress.Utils.DefaultBoolean.[False]
+        Me.gvEvalCompare.OptionsBehavior.AllowDeleteRows = DevExpress.Utils.DefaultBoolean.[False]
+        Me.gvEvalCompare.OptionsBehavior.AllowFixedGroups = DevExpress.Utils.DefaultBoolean.[False]
+        Me.gvEvalCompare.OptionsBehavior.Editable = False
+        Me.gvEvalCompare.OptionsBehavior.ReadOnly = True
+        Me.gvEvalCompare.OptionsClipboard.AllowCopy = DevExpress.Utils.DefaultBoolean.[True]
+        Me.gvEvalCompare.OptionsSelection.MultiSelect = True
+        Me.gvEvalCompare.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CellSelect
+        Me.gvEvalCompare.OptionsView.ShowGroupPanel = False
         '
         'tcLowEvaluateTB
         '
@@ -10351,9 +10398,9 @@ Partial Class frmTechnology
         '
         'cmTopX
         '
-        Me.cmTopX.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cm_Topx_Text, Me.cm_Topx_sep1TopX, Me.tsmi_cmTopx_Stats, Me.cm_Topx_MapSel, Me.tsmi_TopxPolygonMapKPITopX, Me.tsmi_TopXGeoIDMapKPI, Me.ToolStripSeparator1TopX, Me.tsmi_TopX_AllowCellCopy, Me.tsmi_TopX_CopySelectionWOHeader, Me.tsmi_TopX_CopySelectionWithHeader, Me.ToolStripSeparator1, Me.tsmi_ExportToKML, Me.ToolStripMenuItem1, Me.cm_Topx_Hide, Me.ToolStripMenuItemTopX3})
+        Me.cmTopX.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cm_Topx_Text, Me.cm_Topx_sep1TopX, Me.tsmi_cmTopx_Stats, Me.cm_Topx_MapSel, Me.tsmi_TopxPolygonMapKPITopX, Me.tsmi_TopXGeoIDMapKPI, Me.ToolStripSeparator1TopX, Me.tsmi_TopX_AllowCellCopy, Me.tsmi_TopX_CopySelectionWOHeader, Me.tsmi_TopX_CopySelectionWithHeader, Me.ToolStripSeparator1, Me.tsmi_ExportToKML, Me.ToolStripMenuItem1, Me.cm_Topx_Hide, Me.tsmi_CopyURLClipboard, Me.ToolStripMenuItemTopX3})
         Me.cmTopX.Name = "cm_TopX"
-        Me.cmTopX.Size = New System.Drawing.Size(239, 270)
+        Me.cmTopX.Size = New System.Drawing.Size(239, 314)
         '
         'cm_Topx_Text
         '
@@ -10577,51 +10624,11 @@ Partial Class frmTechnology
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
         Me.ToolStripSeparator7.Size = New System.Drawing.Size(177, 6)
         '
-        'sccTimeEvalTop
+        'tsmi_CopyURLClipboard
         '
-        Me.sccTimeEvalTop.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.sccTimeEvalTop.Location = New System.Drawing.Point(2, 23)
-        Me.sccTimeEvalTop.Name = "sccTimeEvalTop"
-        '
-        'sccTimeEvalTop.sccTimeEvalTop_Panel1
-        '
-        Me.sccTimeEvalTop.Panel1.Controls.Add(Me.gcEvalTimeBased)
-        Me.sccTimeEvalTop.Panel1.MinSize = 400
-        Me.sccTimeEvalTop.Panel1.Text = "Panel1"
-        '
-        'sccTimeEvalTop.sccTimeEvalTop_Panel2
-        '
-        Me.sccTimeEvalTop.Panel2.Controls.Add(Me.gcEvalCompare)
-        Me.sccTimeEvalTop.Panel2.MinSize = 400
-        Me.sccTimeEvalTop.Panel2.Text = "Panel2"
-        Me.sccTimeEvalTop.Size = New System.Drawing.Size(898, 441)
-        Me.sccTimeEvalTop.SplitterPosition = 488
-        Me.sccTimeEvalTop.TabIndex = 0
-        '
-        'gcEvalCompare
-        '
-        Me.gcEvalCompare.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gcEvalCompare.Location = New System.Drawing.Point(0, 0)
-        Me.gcEvalCompare.MainView = Me.gvEvalCompare
-        Me.gcEvalCompare.Name = "gcEvalCompare"
-        Me.gcEvalCompare.Size = New System.Drawing.Size(400, 441)
-        Me.gcEvalCompare.TabIndex = 5
-        Me.gcEvalCompare.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.gvEvalCompare})
-        Me.gcEvalCompare.ContextMenuStrip = Me.cmEvalTimeBased
-        '
-        'gvEvalCompare
-        '
-        Me.gvEvalCompare.GridControl = Me.gcEvalCompare
-        Me.gvEvalCompare.Name = "gvEvalCompare"
-        Me.gvEvalCompare.OptionsBehavior.AllowAddRows = DevExpress.Utils.DefaultBoolean.[False]
-        Me.gvEvalCompare.OptionsBehavior.AllowDeleteRows = DevExpress.Utils.DefaultBoolean.[False]
-        Me.gvEvalCompare.OptionsBehavior.AllowFixedGroups = DevExpress.Utils.DefaultBoolean.[False]
-        Me.gvEvalCompare.OptionsBehavior.Editable = False
-        Me.gvEvalCompare.OptionsBehavior.ReadOnly = True
-        Me.gvEvalCompare.OptionsClipboard.AllowCopy = DevExpress.Utils.DefaultBoolean.[True]
-        Me.gvEvalCompare.OptionsSelection.MultiSelect = True
-        Me.gvEvalCompare.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CellSelect
-        Me.gvEvalCompare.OptionsView.ShowGroupPanel = False
+        Me.tsmi_CopyURLClipboard.Name = "tsmi_CopyURLClipboard"
+        Me.tsmi_CopyURLClipboard.Size = New System.Drawing.Size(238, 22)
+        Me.tsmi_CopyURLClipboard.Text = "Copy URL - Clipboard"
         '
         'frmTechnology
         '
@@ -11034,9 +11041,17 @@ Partial Class frmTechnology
         Me.SplitContainerEval_TB.ResumeLayout(False)
         CType(Me.gcTimeBasedPrdComp, System.ComponentModel.ISupportInitialize).EndInit
         Me.gcTimeBasedPrdComp.ResumeLayout(False)
+        CType(Me.sccTimeEvalTop.Panel1, System.ComponentModel.ISupportInitialize).EndInit
+        Me.sccTimeEvalTop.Panel1.ResumeLayout(False)
+        CType(Me.sccTimeEvalTop.Panel2, System.ComponentModel.ISupportInitialize).EndInit
+        Me.sccTimeEvalTop.Panel2.ResumeLayout(False)
+        CType(Me.sccTimeEvalTop, System.ComponentModel.ISupportInitialize).EndInit
+        Me.sccTimeEvalTop.ResumeLayout(False)
         CType(Me.gcEvalTimeBased, System.ComponentModel.ISupportInitialize).EndInit
         Me.cmEvalTimeBased.ResumeLayout(False)
         CType(Me.gvEvalTimeBased, System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.gcEvalCompare, System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.gvEvalCompare, System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.tcLowEvaluateTB, System.ComponentModel.ISupportInitialize).EndInit
         Me.tcLowEvaluateTB.ResumeLayout(False)
         Me.xtpInfo.ResumeLayout(False)
@@ -11070,14 +11085,6 @@ Partial Class frmTechnology
         Me.cmTopX.ResumeLayout(False)
         Me.cmTopXChart.ResumeLayout(False)
         CType(Me.documentViewerRibbonController1, System.ComponentModel.ISupportInitialize).EndInit
-        CType(Me.sccTimeEvalTop.Panel1, System.ComponentModel.ISupportInitialize).EndInit
-        Me.sccTimeEvalTop.Panel1.ResumeLayout(False)
-        CType(Me.sccTimeEvalTop.Panel2, System.ComponentModel.ISupportInitialize).EndInit
-        Me.sccTimeEvalTop.Panel2.ResumeLayout(False)
-        CType(Me.sccTimeEvalTop, System.ComponentModel.ISupportInitialize).EndInit
-        Me.sccTimeEvalTop.ResumeLayout(False)
-        CType(Me.gcEvalCompare, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.gvEvalCompare, System.ComponentModel.ISupportInitialize).EndInit
         Me.ResumeLayout(False)
 
     End Sub
@@ -11852,4 +11859,5 @@ Partial Class frmTechnology
     Friend WithEvents sccTimeEvalTop As DevExpress.XtraEditors.SplitContainerControl
     Friend WithEvents gcEvalCompare As DevExpress.XtraGrid.GridControl
     Friend WithEvents gvEvalCompare As DevExpress.XtraGrid.Views.Grid.GridView
+    Friend WithEvents tsmi_CopyURLClipboard As ToolStripMenuItem
 End Class

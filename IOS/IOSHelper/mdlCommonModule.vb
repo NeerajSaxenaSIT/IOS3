@@ -5610,11 +5610,15 @@ Module mdlCommonModule
         End Try
     End Sub
 
-    Public Sub LoadGridWithHyperlink(grid As GridControl, view As GridView, table As DataTable, columnName As String)
+    Public Sub LoadGridWithHyperlink(grid As GridControl, view As GridView, table As DataTable, columnName As String, Optional columnToHide As String = Nothing)
         Try
             grid.DataSource = table
             grid.MainView = view
             view.PopulateColumns()
+
+            If Not String.IsNullOrWhiteSpace(columnToHide) AndAlso view.Columns.ColumnByFieldName(columnToHide) IsNot Nothing Then
+                view.Columns(columnToHide).Visible = False
+            End If
 
             If Not table.Columns.Contains(columnName) Then Exit Sub
 
@@ -5663,12 +5667,12 @@ Module mdlCommonModule
 
                 If match.Success Then
                     If columnName.ToLower = "ticketurl" Then
-                        If objTechTicketsUrlWC Is Nothing Then
-                            objTechTicketsUrlWC = New frmInternetExplorer("PM TopX Ticket Url", match.Groups(1).Value)
-                        End If
-                        objTechTicketsUrlWC.NavigationUrl = match.Groups(1).Value.ToString
-                        objTechTicketsUrlWC.WebRequestFrom = "PMTopX"
-                        frmMDI.OpenFormAsDockPanel("PM TopX Ticket Url",, objTechTicketsUrlWC, match.Groups(1).Value.ToString)
+                        'If objTechTicketsUrlWC Is Nothing Then
+                        '    objTechTicketsUrlWC = New frmInternetExplorer("PM TopX Ticket Url", match.Groups(1).Value)
+                        'End If
+                        'objTechTicketsUrlWC.NavigationUrl = match.Groups(1).Value.ToString
+                        'objTechTicketsUrlWC.WebRequestFrom = "PMTopX"
+                        'frmMDI.OpenFormAsDockPanel("PM TopX Ticket Url",, objTechTicketsUrlWC, match.Groups(1).Value.ToString)
                     ElseIf columnName.ToLower = "weblink" Then
                         If objReportEditWebLinkWC Is Nothing Then
                             objReportEditWebLinkWC = New frmInternetExplorer("Report Editor WebLink", match.Groups(1).Value)
@@ -5800,7 +5804,7 @@ Module mdlCommonModule
         Dim match = dt.AsEnumerable().
         Select(Function(r) r.Field(Of String)(colName)).
         FirstOrDefault(Function(v) v IsNot Nothing AndAlso
-                                   v.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+        v.StartsWith(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
 
         If match IsNot Nothing Then
             SetComboBox(cmb, ComboSelectBased.TextBased, match)

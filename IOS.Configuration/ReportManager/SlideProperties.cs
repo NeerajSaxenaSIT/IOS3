@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Drawing.Design;
+using System.Windows.Forms.Design;
+using System.Windows.Forms;
+using System.Data;
+
 namespace IOS.Configuration.ReportManager
 {
     [DefaultPropertyAttribute("Slide Properties")]
@@ -16,6 +21,13 @@ namespace IOS.Configuration.ReportManager
         private int _slideWidth = 720;
         private string _slideeOrientation;
         private string _styleOwner = Environment.UserName;
+        private string _dashboardTabPages;
+        private string _selectedPages;
+
+        public bool SetEditable;
+        public string TabPages;
+        public string SelectPages;
+
         [ReadOnly(true), DescriptionAttribute("Selected Object's Style Owner name")]
         public String StyleOwner
         {
@@ -85,11 +97,30 @@ namespace IOS.Configuration.ReportManager
             }
             set { _slideeOrientation = value; }
         }
+
+        [Browsable(true)]
+        [TypeConverter(typeof(CheckedListConverter))]
+        [ReadOnly(false)]
+        [Category("Slide Dashboard"), Description("Select multiple pages"), Editor(typeof(CheckedListEditor), typeof(UITypeEditor))]
+        public string DashboardTabPages
+        {
+            get { return _dashboardTabPages; }
+            set { _dashboardTabPages = value; }
+        }
+
+        [Browsable(true)]
+        [TypeConverter(typeof(CheckedListConverter))]
+        [ReadOnly(true)]
+        [Category("Slide Dashboard"), Description("Dashboard pages to print"), Editor(typeof(CheckedListEditor), typeof(UITypeEditor))]
+        public string SelectedPages
+        {
+            get { return _selectedPages; }
+            set { _selectedPages = value; }
+        }
     }
     internal class OrientationType
     {
         internal static string[] _orientationType = { "Horizontal", "Vertical" };
-
     }
     public class OrientationConverter : StringConverter
     {
@@ -113,4 +144,63 @@ namespace IOS.Configuration.ReportManager
             return new StandardValuesCollection(OrientationType._orientationType);
         }
     }
+    public class CheckedListEditor : UITypeEditor
+    {
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.DropDown;
+        }
+
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (context.PropertyDescriptor.IsReadOnly)
+            {
+                return value;
+            }
+
+            var edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+
+            if (edSvc == null)
+                return value;
+
+            var slide = context.Instance as SlideProperties;
+            if (slide == null || string.IsNullOrWhiteSpace(slide.TabPages))
+                return value;
+
+            CheckedListBox clb = new CheckedListBox();
+            clb.BorderStyle = BorderStyle.None;
+            clb.CheckOnClick = true;
+                        
+            var availableItems = slide.TabPages.Split(',').Select(x => x.Trim()).Where(x => x != "").ToList();
+
+            var selectedItems = value?.ToString().Split(',').Select(x => x.Trim()).ToList();
+
+            if (selectedItems == null)
+            {
+                foreach (var item in availableItems)
+                    clb.Items.Add(item, true);
+            }
+            else
+            {
+                foreach (var item in availableItems)
+                    clb.Items.Add(item, selectedItems.Contains(item));
+            }
+
+            edSvc.DropDownControl(clb);
+            var result = clb.CheckedItems.Cast<string>().ToArray();
+            return string.Join(",", result);
+        }
+    }
+    public class CheckedListConverter : TypeConverter
+    {
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return destinationType == typeof(string);
+        }
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        {
+            return value?.ToString();
+        }
+    }
+
 }

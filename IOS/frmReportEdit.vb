@@ -192,6 +192,8 @@ Public Class frmReportEdit
                         sqlCommand = "Set SlideOrdinal=" & Chr(39) & changedPropertyItem.Value & Chr(39)
                     ElseIf (changedPropertyItem.Label.ToLower = "worksheettitle") Then
                         sqlCommand = " Set SlideTitle=" & Chr(39) & changedPropertyItem.Value & Chr(39)
+                    ElseIf (changedPropertyItem.Label.ToLower = "dashboardtabpages") Then
+                        sqlCommand = " Set SelectedPages=" & Chr(39) & changedPropertyItem.Value & Chr(39)
                     End If
                     Try
                         If (sqlCommand IsNot Nothing) Then
@@ -200,6 +202,9 @@ Public Class frmReportEdit
                     Catch ex As Exception
                         _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
                     End Try
+                    isObjectSelect = True
+                    isIndexEventFired = True
+                    cmbStyleName_SelectedIndexChanged(Nothing, Nothing)
                 ElseIf (selectedNode.Level = 2) Then
                     If (changedPropertyItem.Label.ToLower = "predefinedtime") Then
                         sqlCommand = "Set PredefinedTime=" & Chr(39) & changedPropertyItem.Value & Chr(39)
@@ -1210,16 +1215,22 @@ Public Class frmReportEdit
             slidePropertyG.Width = Convert.ToInt32(dtSlideStyle.Rows(0)("SlideWidth"))
             slidePropertyG.Orientation = dtSlideStyle.Rows(0)("SlideOrientation")
             slidePropertyG.StyleOwner = dtSlideStyle.Rows(0)("StyleOwner")
-            If (isObjectSelect) Then
-                slidePropertyG.SlideOrdinal = Convert.ToInt32(dtSlideStyle.Rows(0)("SlideOrdinal"))
-                slidePropertyG.SlideText = nZ(dtSlideStyle.Rows(0)("SlideText"), "")
-                slidePropertyG.SlideTitle = nZ(dtSlideStyle.Rows(0)("SlideTitle"), "")
-                slidePropertyG.SlideName = nZ(dtSlideStyle.Rows(0)("SlideName"), "")
-                isObjectSelect = False
+            If IsDBNull(dtSlideStyle.Rows(0)("DashboardID")) Then
+                slidePropertyG.TabPages = "All"
+            Else
+                slidePropertyG.TabPages = IIf(IsDBNull(dtSlideStyle.Rows(0)("DashboardTabPages")), "All", dtSlideStyle.Rows(0)("DashboardTabPages"))
+                slidePropertyG.SelectedPages = IIf(IsDBNull(dtSlideStyle.Rows(0)("SelectedPages")), "", dtSlideStyle.Rows(0)("SelectedPages"))
             End If
-            _slideProperties = slidePropertyG
-        End If
-        Return _slideProperties
+            If (isObjectSelect) Then
+                    slidePropertyG.SlideOrdinal = Convert.ToInt32(dtSlideStyle.Rows(0)("SlideOrdinal"))
+                    slidePropertyG.SlideText = nZ(dtSlideStyle.Rows(0)("SlideText"), "")
+                    slidePropertyG.SlideTitle = nZ(dtSlideStyle.Rows(0)("SlideTitle"), "")
+                    slidePropertyG.SlideName = nZ(dtSlideStyle.Rows(0)("SlideName"), "")
+                    isObjectSelect = False
+                End If
+                _slideProperties = slidePropertyG
+            End If
+            Return _slideProperties
     End Function
 
     Private Function GetWorksheetPropeties(ByVal styleID As String, ByVal isByWorksheet As Boolean) As WorksheetProperties
@@ -1762,8 +1773,36 @@ Public Class frmReportEdit
             Dim tsmi As ToolStripMenuItem = TryCast(sender, ToolStripMenuItem)
             Dim reportID As Integer = tlvReports.FocusedNode.Tag
             Dim dashboardID As Integer = tsmi.Tag
+            Dim dashboardXmlFile As String = Nothing
+            Dim dbTabPages As String = Nothing
+
+            Dim dtDashboard As DataTable = clsSQLCommands.GetDashboardFileFromID(connStrIOSServer, dashboardID)
+
+            Dim str = dtDashboard.Rows(0)("DashboardFile").ToString
+            If str.Trim.Contains("<?xml") Then
+                dashboardXmlFile = str
+            Else
+                dashboardXmlFile = GetDecryptedConnectionString(str)
+            End If
+
+            Dim ms As New System.IO.MemoryStream()
+            ms = StringToStream(dashboardXmlFile)
+
+            dshbrd = New Dashboard()
+            AddHandler dshbrd.ConfigureDataConnection, AddressOf dashboard_ConfigureDataConnection
+            dshbrd.LoadFromXml(ms)
+
+            Dim tabContainers = dshbrd.Items.OfType(Of TabContainerDashboardItem)().ToList()
+            If tabContainers.Count <> 0 Then
+                dbTabPages = String.Join(",", tabContainers.
+                                         Where(Function(x) x.TabPages IsNot Nothing).
+                                         SelectMany(Function(y) y.TabPages).Where(Function(y) Not String.IsNullOrWhiteSpace(y.Name)).
+                                         Select(Function(z) z.Name))
+            End If
+
             Dim slideName As String = "Dashboard - " & tsmi.Text
-            clsSQLCommands.InsertDashboardSlide(connStrIOSServer, reportID, dashboardID, slideName)
+            clsSQLCommands.InsertDashboardSlide(connStrIOSServer, reportID, dashboardID, slideName, dbTabPages)
+
             btnRefresh_Click(Nothing, Nothing)
             tlvReports.SetFocusedNode(fnd)
             ExpandTree(tsmi.Text, reportID)
@@ -4312,7 +4351,7 @@ Public Class frmReportEdit
                                 Dim dashboardXmlFile As String = Nothing
                                 Dim dashboardName As String = Nothing
 
-                                Dim dtDashboard As DataTable = clsSQLCommands.GetDashboardFromID(connStrIOSServer, dtObjectsPerSlide.Rows(0)("DashboardID"))
+                                Dim dtDashboard As DataTable = clsSQLCommands.GetDashboardFromID(connStrIOSServer, reportID, dtObjectsPerSlide.Rows(0)("DashboardID"))
 
                                 Dim str = dtDashboard.Rows(0)("DashboardFile").ToString
                                 dashboardName = dtDashboard.Rows(0)("DashboardName").ToString
@@ -8199,11 +8238,13 @@ Public Class frmReportEdit
 
                     Dim dashboardXmlFile As String = Nothing
                     Dim dashboardName As String = Nothing
+                    Dim dbTabPages As String = Nothing
 
-                    Dim dtDashboard As DataTable = clsSQLCommands.GetDashboardFromID(connStrIOSServer, dtObjectsPerSlide.Rows(0)("DashboardID"))
+                    Dim dtDashboard As DataTable = clsSQLCommands.GetDashboardFromID(connStrIOSServer, reportID, dtObjectsPerSlide.Rows(0)("DashboardID"))
 
                     Dim str = dtDashboard.Rows(0)("DashboardFile").ToString
                     dashboardName = dtDashboard.Rows(0)("DashboardName").ToString
+                    dbTabPages = IIf(IsDBNull(dtDashboard.Rows(0)("SelectedPages")), "All", dtDashboard.Rows(0)("SelectedPages").ToString)
 
                     If str.Trim.Contains("<?xml") Then
                         dashboardXmlFile = str
@@ -8214,7 +8255,7 @@ Public Class frmReportEdit
                     Dim ms As New System.IO.MemoryStream()
                     ms = StringToStream(dashboardXmlFile)
 
-                    ExportDashboardItemToPdf(ms, tempFilePath, dashboardName)
+                    ExportDashboardItemToPdf(ms, tempFilePath, dashboardName, dbTabPages)
 
                 End If
             Next
@@ -8237,7 +8278,7 @@ Public Class frmReportEdit
         Return True
     End Function
 
-    Public Sub ExportDashboardItemToPdf(dashboardStream As Stream, outputFolder As String, dashboardName As String)
+    Public Sub ExportDashboardItemToPdf(dashboardStream As Stream, outputFolder As String, dashboardName As String, dbPages As String)
         If Not Directory.Exists(outputFolder) Then
             Directory.CreateDirectory(outputFolder)
         End If
@@ -8279,17 +8320,27 @@ Public Class frmReportEdit
             Return
         End If
 
+        Dim lstPages As List(Of String) = dbPages.Split(","c).Select(Function(s) s.Trim()).ToList()
+
         ' Iterate through each TabContainer
         For Each tabContainer In tabContainers
 
             For iCntr As Integer = 0 To tabContainer.TabPages.Count - 1
 
                 Dim dashTabPage As DashboardTabPage = tabContainer.TabPages(iCntr)
-                Console.WriteLine("Started Exporting Dashboard TabPage: " & dashTabPage.ComponentName)
+                If dbPages.ToUpper = "ALL" Then
+                    Console.WriteLine("Started Exporting Dashboard TabPage: " & dashTabPage.ComponentName)
 
-                lstPdfFiles.Add(outputFolder & "\" & dashboardName & iCntr & ".pdf")
-                WaitScreenReportEditor.ShowWaitScreen("Generating: " & dashboardName)
-                exporter.ExportDashboardItemToPdf(dshbrd, dashTabPage.ComponentName, outputFolder & "\" & dashboardName & iCntr & ".pdf",,, pdfOptions)
+                    lstPdfFiles.Add(outputFolder & "\" & dashboardName & iCntr & ".pdf")
+                    WaitScreenReportEditor.ShowWaitScreen("Generating: " & dashboardName)
+                    exporter.ExportDashboardItemToPdf(dshbrd, dashTabPage.ComponentName, outputFolder & "\" & dashboardName & iCntr & ".pdf",,, pdfOptions)
+                ElseIf lstPages.Any(Function(s) s.Equals(dashTabPage.Name, StringComparison.OrdinalIgnoreCase)) Then
+                    Console.WriteLine("Started Exporting Dashboard TabPage: " & dashTabPage.ComponentName)
+
+                    lstPdfFiles.Add(outputFolder & "\" & dashboardName & iCntr & ".pdf")
+                    WaitScreenReportEditor.ShowWaitScreen("Generating: " & dashboardName)
+                    exporter.ExportDashboardItemToPdf(dshbrd, dashTabPage.ComponentName, outputFolder & "\" & dashboardName & iCntr & ".pdf",,, pdfOptions)
+                End If
 
             Next
         Next
@@ -8329,6 +8380,9 @@ Public Class frmReportEdit
     Private Sub tsmt_SlideDelete_Click(sender As Object, e As EventArgs) Handles tsmt_SlideDelete.Click
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Invoked")
         Try
+            tlvReports.Cursor = Cursors.WaitCursor
+            Application.DoEvents()
+
             Dim tlv As TreeList = CType(cmsReport.SourceControl, TreeList)
             Dim nd As TreeListNode = tlv.FocusedNode
 
@@ -8341,6 +8395,9 @@ Public Class frmReportEdit
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        Finally
+            tlvReports.Cursor = Cursors.WaitCursor
+            Application.DoEvents()
         End Try
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
     End Sub

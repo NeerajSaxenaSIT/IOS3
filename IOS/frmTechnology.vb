@@ -166,7 +166,7 @@ Public Class frmTechnology
                 tsmi_ReportAddChart, tsmi_ChartDataCSV, tsmi_ChartDataGrid, tsmi_cmTopx_Stats, cm_Topx_MapSel, tsmi_TopxPolygonMapKPITopX, tsmi_TopXGeoIDMapKPI, cm_Topx_Hide, ToolStripMenuItemTopX3, tsmi_Topx_Chart_SelectTopX,
                 tsmi_Topx_Chart_Launch, tsmi_Topx_Chart_Map, tsmi_TopX_Chart_DrillDown, tsmi_topx_KPIInfo, tsmi_Topx_Chart_Copy, tsmi_Topx_Chart_Print, tsmi_Chart_TopX_SQL, tsmi_TopX_Chart_Custom, tsmi_Report_AddChart,
                 tsmi_RecordCount, tsmi_dgv_ToStats, tsmi_dgv_ToTopX, tsmi_dgv_CopyClipboardWOHeader, tsmi_dgv_CopyClipboardWithHeader, tsmi_dgv_CopyAll, tsmi_ExportToExcel, tsmi_KPIFilterTemplate_Add, tsmi_KPIFilterTemplate_Del,
-                tsmi_KPIFilterTemplate_Rename, tsmi_Send2ObjBasedTab, btnCreateReport, btnReportDesigner, acePeriodCalculationStats, prdCalcChkCmbVisuals
+                tsmi_KPIFilterTemplate_Rename, tsmi_Send2ObjBasedTab, btnCreateReport, btnReportDesigner, acePeriodCalculationStats, prdCalcChkCmbVisuals, tsmi_CopyURLClipboard
             }
 
             For Each frmControl As Object In formControls
@@ -5454,8 +5454,7 @@ Public Class frmTechnology
                         Dim dgView As GridView = dgCtrl.MainView
                         AddHandler dgView.KeyDown, AddressOf dgTopXGridView_KeyDown
                         dgCtrl.DataSource = Nothing
-                        'dgCtrl.DataSource = dt_topx
-                        LoadGridWithHyperlink(dgCtrl, dgView, dt_topx, "TicketURL")
+                        LoadGridWithHyperlink(dgCtrl, dgView, dt_topx, "TicketURL", "TicketNumber")
                         dgCtrl.MainView.PopulateColumns()
                         dgCtrl.Tag = tech
 
@@ -5471,7 +5470,7 @@ Public Class frmTechnology
                                     End If
                                 Next
                             Else
-                                If bTopXHideGridCols = False Then
+                                If (bTopXHideGridCols = False) AndAlso (col.FieldName.ToLower <> "ticketnumber") Then
                                     col.Visible = True
                                 Else
                                     col.Visible = False
@@ -6608,7 +6607,11 @@ Public Class frmTechnology
                         If dgv.Columns(0).Visible = False Then
                             For Each dcol As Columns.GridColumn In dgv.Columns
                                 If dt_IOS_ObjectConfig.AsEnumerable().Where(Function(x) x.Field(Of String)("Object") = dcol.FieldName).Count > 0 Or dcol.FieldName = "OPT_ZONE" Then
-                                    dcol.Visible = True
+                                    If dcol.FieldName.ToLower = "ticketnumber" Then
+                                        dcol.Visible = False
+                                    Else
+                                        dcol.Visible = True
+                                    End If
                                 End If
                             Next
                             bTopXHideGridCols = False
@@ -7132,11 +7135,15 @@ Public Class frmTechnology
                 Next
             End If
 
+            RemoveHandler tsmi_CopyURLClipboard.Click, AddressOf tsmi_CopyURLClipboard_Click
             If dgv.Columns(0).Visible Then
                 cm_Topx_Hide.Text = "Hide Objects"
+                tsmi_CopyURLClipboard.Enabled = True
             Else
                 cm_Topx_Hide.Text = "UnHide Objects"
+                tsmi_CopyURLClipboard.Enabled = False
             End If
+            AddHandler tsmi_CopyURLClipboard.Click, AddressOf tsmi_CopyURLClipboard_Click
 
             Dim tscmb_TabFile As ToolStripComboBox = TryCast(tsmi_TopxPolygonMapKPITopX.DropDownItems.Item(1), ToolStripComboBox)
             If (selectedPolyTabFile IsNot Nothing) Then
@@ -7153,6 +7160,25 @@ Public Class frmTechnology
             End If
         Catch ex As Exception
         End Try
+    End Sub
+
+    Private Sub tsmi_CopyURLClipboard_Click(sender As Object, e As EventArgs)
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info")
+        Try
+            Clipboard.Clear()
+            Dim dgCtrl As GridControl
+            dgCtrl = cm_sourcecontrol
+            Dim dgv As GridView = dgCtrl.MainView
+            Dim ticketNumber As String = dgv.GetRowCellValue(dgv.FocusedRowHandle, "TicketNumber").ToString
+            Dim ticketUrl As String = dgv.GetRowCellValue(dgv.FocusedRowHandle, "TicketURL").ToString.Replace("<br><a href=", "").Replace(ticketNumber, "").Replace("<a>", "").Replace("</a>", "").Replace(">", "").Replace("""", "")
+            If Not String.IsNullOrWhiteSpace(ticketUrl) Then
+                Clipboard.SetText(ticketUrl)
+            End If
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        End Try
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
     End Sub
 
     Private Sub tsmiGeoIDMapKPI_ItemClick(sender As System.Object, e As System.EventArgs)

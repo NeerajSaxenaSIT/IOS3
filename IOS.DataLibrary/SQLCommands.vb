@@ -1257,14 +1257,14 @@ Public Class clsSQLCommands
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 
-    Public Shared Function InsertDashboardSlide(connStr As String, reportID As Integer, ByVal dashboardID As Integer, slideName As String) As Integer
+    Public Shared Function InsertDashboardSlide(connStr As String, reportID As Integer, ByVal dashboardID As Integer, slideName As String, dbTabPages As String) As Integer
         sqlQuery = New StringBuilder()
         sqlQuery.AppendLine("Select (ISNULL(Max(SlideOrdinal),0) + 1) As SlideOrdinal From [dbo].[IOS_Reports_Slides] Where [ReportID] = " & reportID & ";")
         Dim dt As DataTable = DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
 
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("INSERT INTO [dbo].[IOS_Reports_Slides] ([ReportID],[SlideName],[SlideStyleID],[SlideOrdinal],[DashboardID])")
-        sqlQuery.AppendLine("VALUES (" & reportID & "," & Chr(39) & slideName & Chr(39) & ",1," & CInt(dt.Rows(0)("SlideOrdinal")) & "," & dashboardID & ");")
+        sqlQuery.AppendLine("INSERT INTO [dbo].[IOS_Reports_Slides] ([ReportID],[SlideName],[SlideStyleID],[SlideOrdinal],[DashboardID],[DashboardTabPages])")
+        sqlQuery.AppendLine("VALUES (" & reportID & "," & Chr(39) & slideName & Chr(39) & ",1," & CInt(dt.Rows(0)("SlideOrdinal")) & "," & dashboardID & "," & Chr(39) & dbTabPages & Chr(39) & ");")
         sqlQuery.AppendLine("Select IDENT_CURRENT('[dbo].[IOS_Reports_Slides]')")
         Return DataAccessorODBC.ExecuteNonQuery(connStr, sqlQuery.ToString)
     End Function
@@ -1339,8 +1339,8 @@ Public Class clsSQLCommands
         Try
             sqlQuery = New StringBuilder()
             If (isBySlide) Then
-                sqlQuery.AppendLine("Select SlideHeight,SlideWidth,SlideOrientation,SlideOrdinal,SlideText,SlideTitle,RS.[SlideStyleID],RS.SlideID,StyleOwner,RS.SlideName FROM IOS_Reports_SlideStyles RSS RIGHT JOIN")
-                sqlQuery.AppendLine("(Select SlideID,SlideName,SlideOrdinal,SlideText,SlideTitle,[SlideStyleID] from [IOS_Reports_Slides] WHERE SlideID='" & styleID & "') AS RS on RSS.SlideStyleID=RS.SlideStyleID")
+                sqlQuery.AppendLine("Select SlideHeight,SlideWidth,SlideOrientation,SlideOrdinal,SlideText,SlideTitle,RS.[SlideStyleID],RS.SlideID,StyleOwner,RS.SlideName,RS.DashboardID,RS.DashboardTabPages,RS.SelectedPages FROM IOS_Reports_SlideStyles RSS RIGHT JOIN")
+                sqlQuery.AppendLine("(Select SlideID,SlideName,SlideOrdinal,SlideText,SlideTitle,[SlideStyleID],[DashboardID],[DashboardTabPages],[SelectedPages] from [IOS_Reports_Slides] WHERE SlideID='" & styleID & "') AS RS on RSS.SlideStyleID=RS.SlideStyleID")
             Else
                 sqlQuery.AppendLine("SELECT [SlideStyleID],SlideHeight,SlideWidth,SlideOrientation,StyleOwner FROM [IOS_Reports_SlideStyles] WHERE SlideStyleID=" & styleID)
             End If
@@ -1576,9 +1576,18 @@ Public Class clsSQLCommands
         DataAccessorODBC.ExecuteNonQuery(connStr, sqlQuery.ToString)
     End Sub
 
-    Public Shared Function GetDashboardFromID(connStr As String, dashboardID As Integer) As DataTable
+    Public Shared Function GetDashboardFileFromID(connStr As String, dashboardID As Integer) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("Select [DashboardName],[DashboardFile] From [dbo].[IOS_Dashboards] Where [DashboardID] = " & dashboardID & ";")
+        sqlQuery.AppendLine("Select [DashboardFile]")
+        sqlQuery.AppendLine("From [dbo].[IOS_Dashboards] Where [DashboardID] = " & dashboardID & ";")
+        Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
+    End Function
+
+    Public Shared Function GetDashboardFromID(connStr As String, reportID As Integer, dashboardID As Integer) As DataTable
+        sqlQuery = New StringBuilder()
+        sqlQuery.AppendLine("Select DB.[DashboardName],DB.[DashboardFile], RS.SelectedPages ")
+        sqlQuery.AppendLine("From [dbo].[IOS_Dashboards] DB Inner Join [dbo].[IOS_Reports_Slides] RS On DB.DashboardID = RS.DashboardID")
+        sqlQuery.AppendLine("Where RS.ReportID = " & reportID & " And DB.[DashboardID] = " & dashboardID & ";")
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 
