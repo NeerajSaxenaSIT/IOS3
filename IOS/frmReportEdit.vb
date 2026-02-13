@@ -75,6 +75,9 @@ Public Class frmReportEdit
     Dim dtObjectsPerSlide As New DataTable
     Private lstPdfFiles As List(Of String)
 
+    Private tsmi_DB_Reports As ToolStripMenuItem
+    Private tsmi_SON_Reports As ToolStripMenuItem
+
 #End Region
 
     Enum ReportMethodType
@@ -1616,11 +1619,24 @@ Public Class frmReportEdit
 
                     If nd("ReportType").ToString.ToUpper = "POWERPOINT" Then
                         RenameContextMenuItems("Slide")
+                        tsmi_ReportSlideAdd.DropDownItems.Clear()
                     ElseIf nd("ReportType").ToString.ToUpper = "EXCEL" Then
                         RenameContextMenuItems("Worksheet")
+                        tsmi_ReportSlideAdd.DropDownItems.Clear()
                     ElseIf nd("ReportType").ToString.ToUpper = "DASHBOARDPDF" Then
                         RenameContextMenuItems("Dashboard")
                         tsmi_ReportCopy.Enabled = False
+
+                        tsmi_ReportSlideAdd.DropDownItems.Clear()
+                        tsmi_DB_Reports = New ToolStripMenuItem("Dashboard Reports")
+                        tsmi_DB_Reports.ToolTipText = "Add Dashboard Reports"
+                        AddHandler tsmi_DB_Reports.DropDownOpening, AddressOf tsmi_DB_Reports_DropDownOpening
+                        tsmi_ReportSlideAdd.DropDownItems.Add(tsmi_DB_Reports)
+
+                        tsmi_SON_Reports = New ToolStripMenuItem("SON Reports")
+                        tsmi_SON_Reports.ToolTipText = "Add SON Reports"
+                        AddHandler tsmi_SON_Reports.DropDownOpening, AddressOf tsmi_SON_Reports_DropDownOpening
+                        tsmi_ReportSlideAdd.DropDownItems.Add(tsmi_SON_Reports)
                     End If
 
                 ElseIf nd.Level = 1 Then
@@ -1737,32 +1753,122 @@ Public Class frmReportEdit
         End Try
     End Sub
 
-    Private Sub tsmi_ReportSlideAdd_DropDownOpening(sender As Object, e As EventArgs) Handles tsmi_ReportSlideAdd.DropDownOpening
-        'Add Dashboard DropDown
+    Private Sub tsmi_DB_Reports_DropDownOpening(sender As Object, e As EventArgs)
         Try
-            tlvReports.Cursor = Cursors.WaitCursor
+            Me.Cursor = Cursors.WaitCursor
             Application.DoEvents()
 
-            Dim dtPubDash As DataTable = dtDashboardReports.AsEnumerable().Where(Function(x) x.Field(Of String)("AccessFlag") = "Public").CopyToDataTable
-            tsmi_ReportSlideAdd.DropDownItems.Clear()
+            Dim dtDashRpts As DataTable = dtDashboardReports.AsEnumerable().Where(Function(x) x.Field(Of String)("DashboardModule") = "Dashboard").OrderBy(Function(x) x.Field(Of String)("DashboardName")).CopyToDataTable
+            tsmi_DB_Reports.DropDownItems.Clear()
 
-            If Not dtDashboardReports Is Nothing Then
-                For Each drow As DataRow In dtPubDash.Rows
+            Dim ownerDropDown = CType(tsmi_DB_Reports.Owner, ToolStripDropDown)
+            Dim itemBounds As Rectangle = tsmi_DB_Reports.Bounds
+            Dim screenPoint As Point = ownerDropDown.PointToScreen(New Point(itemBounds.Right, itemBounds.Top))
+            Dim items As New List(Of ToolStripMenuItem)
+
+            If Not dtDashRpts Is Nothing Then
+                For Each drow As DataRow In dtDashRpts.Rows
                     Dim tsmi_DB As ToolStripMenuItem = New ToolStripMenuItem(drow("DashboardName").ToString.Trim)
                     tsmi_DB.Tag = drow("DashboardID").ToString.Trim
-                    tsmi_DB.ToolTipText = drow("DashboardName").ToString.Trim
+                    'tsmi_DB.ToolTipText = drow("DashboardName").ToString.Trim
                     AddHandler tsmi_DB.Click, AddressOf tsmi_Dashboard_Click
-                    tsmi_ReportSlideAdd.DropDownItems.Add(tsmi_DB)
+                    items.Add(tsmi_DB)
                 Next
             End If
+
+            Dim dd As New ToolStripDropDownMenu()
+
+            For Each it In items
+                dd.Items.Add(it)
+            Next
+
+            Dim itemHeight As Integer = 24
+            dd.MaximumSize = New Size(0, itemHeight * 10)
+
+            tsmi_DB_Reports.DropDown = dd
+
+            tsmi_DB_Reports.DropDownDirection = ToolStripDropDownDirection.Right
+            tsmi_DB_Reports.DropDown.Location = screenPoint
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
         Finally
-            tlvReports.Cursor = Cursors.Default
+            Me.Cursor = Cursors.Default
             Application.DoEvents()
         End Try
     End Sub
+
+    Private Sub tsmi_SON_Reports_DropDownOpening(sender As Object, e As EventArgs)
+        Try
+            Me.Cursor = Cursors.WaitCursor
+            Application.DoEvents()
+
+            Dim dtSonRpts As DataTable = dtDashboardReports.AsEnumerable().Where(Function(x) x.Field(Of String)("DashboardModule") = "SON").OrderBy(Function(x) x.Field(Of String)("DashboardName")).CopyToDataTable
+            tsmi_SON_Reports.DropDownItems.Clear()
+
+            Dim ownerDropDown = CType(tsmi_SON_Reports.Owner, ToolStripDropDown)
+            Dim itemBounds As Rectangle = tsmi_SON_Reports.Bounds
+            Dim screenPoint As Point = ownerDropDown.PointToScreen(New Point(itemBounds.Right, itemBounds.Top))
+            Dim items As New List(Of ToolStripMenuItem)
+
+            If Not dtSonRpts Is Nothing Then
+                For Each drow As DataRow In dtSonRpts.Rows
+                    Dim tsmi_DB As ToolStripMenuItem = New ToolStripMenuItem(drow("DashboardName").ToString.Trim)
+                    tsmi_DB.Tag = drow("DashboardID").ToString.Trim
+                    'tsmi_DB.ToolTipText = drow("DashboardName").ToString.Trim
+                    AddHandler tsmi_DB.Click, AddressOf tsmi_Dashboard_Click
+                    items.Add(tsmi_DB)
+                Next
+            End If
+
+            Dim dd As New ToolStripDropDownMenu()
+
+            For Each it In items
+                dd.Items.Add(it)
+            Next
+
+            Dim itemHeight As Integer = 24
+            dd.MaximumSize = New Size(0, itemHeight * 10)
+
+            tsmi_SON_Reports.DropDown = dd
+
+            tsmi_SON_Reports.DropDownDirection = ToolStripDropDownDirection.Right
+            tsmi_SON_Reports.DropDown.Location = screenPoint
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        Finally
+            Me.Cursor = Cursors.Default
+            Application.DoEvents()
+        End Try
+    End Sub
+
+    'Private Sub tsmi_ReportSlideAdd_DropDownOpening(sender As Object, e As EventArgs) Handles tsmi_ReportSlideAdd.DropDownOpening
+    '    'Add Dashboard DropDown
+    '    Try
+    '        tlvReports.Cursor = Cursors.WaitCursor
+    '        Application.DoEvents()
+
+    '        Dim dtSonRpts As DataTable = dtDashboardReports.AsEnumerable().Where(Function(x) x.Field(Of String)("AccessFlag") = "Public").CopyToDataTable
+    '        tsmi_ReportSlideAdd.DropDownItems.Clear()
+
+    '        If Not dtDashboardReports Is Nothing Then
+    '            For Each drow As DataRow In dtSonRpts.Rows
+    '                Dim tsmi_DB As ToolStripMenuItem = New ToolStripMenuItem(drow("DashboardName").ToString.Trim)
+    '                tsmi_DB.Tag = drow("DashboardID").ToString.Trim
+    '                tsmi_DB.ToolTipText = drow("DashboardName").ToString.Trim
+    '                AddHandler tsmi_DB.Click, AddressOf tsmi_Dashboard_Click
+    '                tsmi_ReportSlideAdd.DropDownItems.Add(tsmi_DB)
+    '            Next
+    '        End If
+    '    Catch ex As Exception
+    '        _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+    '        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+    '    Finally
+    '        tlvReports.Cursor = Cursors.Default
+    '        Application.DoEvents()
+    '    End Try
+    'End Sub
 
     Private Sub tsmi_Dashboard_Click(sender As Object, e As EventArgs)
         Try
@@ -1774,7 +1880,7 @@ Public Class frmReportEdit
             Dim reportID As Integer = tlvReports.FocusedNode.Tag
             Dim dashboardID As Integer = tsmi.Tag
             Dim dashboardXmlFile As String = Nothing
-            Dim dbTabPages As String = Nothing
+            Dim dbTabPages As String = "ALL"
 
             Dim dtDashboard As DataTable = clsSQLCommands.GetDashboardFileFromID(connStrIOSServer, dashboardID)
 
@@ -1794,6 +1900,7 @@ Public Class frmReportEdit
 
             Dim tabContainers = dshbrd.Items.OfType(Of TabContainerDashboardItem)().ToList()
             If tabContainers.Count <> 0 Then
+                dbTabPages = ""
                 dbTabPages = String.Join(",", tabContainers.
                                          Where(Function(x) x.TabPages IsNot Nothing).
                                          SelectMany(Function(y) y.TabPages).Where(Function(y) Not String.IsNullOrWhiteSpace(y.Name)).

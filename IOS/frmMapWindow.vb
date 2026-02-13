@@ -17248,6 +17248,7 @@ function toggleHeatmap() {
 
     Private Async Sub LoadTicketsDataFromWebAPI(ByVal apiConfigXml As String)
         Try
+            'Calling service now api to fetch live tickets data and load on map
             Dim dsTicketsConfig As DataSet = Nothing
 
             Using sr As New System.IO.StringReader(apiConfigXml)

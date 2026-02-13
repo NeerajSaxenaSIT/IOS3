@@ -2775,10 +2775,10 @@ Public Class frmChartCustomization
 
     Private Sub CustomCharts_Serie_Update(ByVal SerieColor As Integer, ByVal SerieType As String, ByVal SerieForm As String, ByVal yaxis_leftright As String, ByVal yaxis_left_label As String, ByVal yaxis_precision As String, ByVal yaxis_ABdPerc As String, Optional ByVal serieOrder As String = "")
         Try
-            For Each tlvnode As TreeListViewNode In tlvCustomChartsSeries.Nodes
-                tlvnode.SubItems(9).Text = ""
-                tlvCustomChartsSeries.Refresh()
-            Next
+            'For Each tlvnode As TreeListViewNode In tlvCustomChartsSeries.Nodes
+            '    tlvnode.SubItems(9).Text = ""
+            '    tlvCustomChartsSeries.Refresh()
+            'Next
 
             For Each tlvnode As TreeListViewNode In tlvCustomChartsSeries.SelectedNodes
                 tlvnode.SubItems(2).Text = SerieType
@@ -3312,6 +3312,11 @@ Public Class frmChartCustomization
                 SetDefaultValue()
             End If
             CustomCharts_Update()
+
+            For Each nd As TreeListViewNode In tlvCustomChartsSeries.Nodes
+                nd.Selected = False
+            Next
+
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
         Finally
@@ -3321,9 +3326,9 @@ Public Class frmChartCustomization
     End Sub
 
     Private Sub tlvCustomChartsSeries_DragDrop(sender As Object, e As DragEventArgs) Handles tlvCustomChartsSeries.DragDrop, Chart1.DragDrop
-        Dim items As System.Data.DataTable = e.Data.GetData("System.Data.DataTable")
+        Dim dtKpi As System.Data.DataTable = e.Data.GetData("System.Data.DataTable")
         Try
-            If (items IsNot Nothing) Then
+            If (dtKpi IsNot Nothing) Then
                 Dim serieorder As String = ""
                 'Dim colorint As Integer = ColorTranslator.ToOle(cpCustomizeSerieColor.Color)
 
@@ -3363,7 +3368,7 @@ Public Class frmChartCustomization
                 End If
 
                 If tlvnodetest Is Nothing Then
-                    For Each Item As DataRow In items.Rows
+                    For Each Item As DataRow In dtKpi.Rows
                         Dim rnd As Random = New Random(rndCntr)
                         Dim clr As Color = Color.FromArgb(rnd.Next(255), rnd.Next(255), rnd.Next(255))
                         CustomCharts_Serie_Insert(Item(1).ToString, Item(0), ColorTranslator.ToOle(clr), cmbCustomizeSerieType.SelectedItem.ToString, cmbCustomizeSerieAxisType.SelectedItem.ToString, cmbCustomizeSerieAxis.SelectedItem.ToString,
@@ -3372,7 +3377,7 @@ Public Class frmChartCustomization
                         rndCntr = rndCntr + 1
                     Next
                 Else
-                    For Each Item As DataRow In items.Rows
+                    For Each Item As DataRow In dtKpi.Rows
                         CustomCharts_Serie_Update_KPI(tlvnodetest, Item(1).ToString, Item(0))
                     Next
                 End If
@@ -3392,6 +3397,16 @@ Public Class frmChartCustomization
 
                 RefrashChartSeriesTLV(tlvCustomChartsSeries)
                 tlvCustomChartsSeries_SubItemSelectionChanged(Nothing, Nothing)
+
+                'Select only the dragged KPIs from KPI grid (rest all the KPIs remain unselected)
+                For Each nd As TreeListViewNode In tlvCustomChartsSeries.Nodes
+                    Dim iFound As Integer = dtKpi.Select("KPI_Name='" & nd.SubItems(0).Text & "'").Length
+                    If iFound > 0 Then
+                        nd.Selected = True
+                    Else
+                        nd.Selected = False
+                    End If
+                Next
             End If
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
@@ -3797,9 +3812,29 @@ Public Class frmChartCustomization
     Private Sub cmb_Customize_Serie_Axis_SelectedItemChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmbCustomizeSerieAxis.SelectedIndexChanged
         If bl_CustomSerieSelected = False Then
             Try
+                Dim matchingAxisFound As Boolean = False
+                Dim ndIndex As Integer = -1
                 Dim colorint As Integer = ColorTranslator.ToOle(cpCustomizeSerieColor.Color)
-                CustomCharts_Serie_Update(colorint, cmbCustomizeSerieType.SelectedItem.ToString, cmbCustomizeSerieAxisType.SelectedItem.ToString, cmbCustomizeSerieAxis.SelectedItem.ToString, txtCustomChartsAxisLabel.Text,
-                                          nudCustomizeChartPrecision.Value, cmbCustomChartsAbsPerc.SelectedItem.ToString, cmbCustomizeSeriesOrder.Text)
+                For Each tnd As TreeListViewNode In tlvCustomChartsSeries.Nodes
+                    If cmbCustomizeSerieAxis.SelectedItem.ToString.ToLower = tnd.SubItems(5).Text.ToLower Then
+                        matchingAxisFound = True
+                        ndIndex = tnd.Index
+                        Exit For
+                    End If
+                Next
+
+                If matchingAxisFound = True Then
+                    For Each tnd As TreeListViewNode In tlvCustomChartsSeries.Nodes
+                        If tnd.Index = ndIndex Then
+                            CustomCharts_Serie_Update(colorint, tnd.SubItems(2).Text.Trim, tnd.SubItems(3).Text.Trim, cmbCustomizeSerieAxis.SelectedItem.ToString, tnd.SubItems(8).Text.Trim,
+                                                  tnd.SubItems(6).Text.Trim, tnd.SubItems(7).Text.Trim, tnd.SubItems(9).Text.Trim)
+                            Exit For
+                        End If
+                    Next
+                Else
+                    CustomCharts_Serie_Update(colorint, cmbCustomizeSerieType.SelectedItem.ToString, cmbCustomizeSerieAxisType.SelectedItem.ToString, cmbCustomizeSerieAxis.SelectedItem.ToString, txtCustomChartsAxisLabel.Text,
+                                                                      nudCustomizeChartPrecision.Value, cmbCustomChartsAbsPerc.SelectedItem.ToString, cmbCustomizeSeriesOrder.Text)
+                End If
             Catch
             End Try
         End If
