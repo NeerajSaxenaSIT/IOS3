@@ -407,6 +407,7 @@ Public Class frmTechnology
 
                 IOSDevExpressGrid.PopulateDataInGrid(gcPrdCalcEval, gvPrdCalcEval, dtPrdCalcEval, "ALL", Nothing, "PeriodName", "yyyy-MM-dd")
             End If
+            dtEditStartTimeEval.EditValue = CDate(dtPrdCalcEval.Rows(0)("PeriodStart"))
         End If
     End Sub
 
@@ -6606,7 +6607,7 @@ Public Class frmTechnology
                     If dgv.Columns.Count > 0 Then
                         If dgv.Columns(0).Visible = False Then
                             For Each dcol As Columns.GridColumn In dgv.Columns
-                                If dt_IOS_ObjectConfig.AsEnumerable().Where(Function(x) x.Field(Of String)("Object") = dcol.FieldName).Count > 0 Or dcol.FieldName = "OPT_ZONE" Then
+                                If dt_IOS_ObjectConfig.AsEnumerable().Where(Function(x) x.Field(Of String)("Object") = dcol.FieldName).Count > 0 Or dcol.FieldName = "OPT_ZONE" Or dcol.FieldName = "TicketURL" Then
                                     If dcol.FieldName.ToLower = "ticketnumber" Then
                                         dcol.Visible = False
                                     Else
@@ -6626,7 +6627,7 @@ Public Class frmTechnology
                             For Each dcol As Columns.GridColumn In dgv.Columns
                                 If dcol.FieldName.ToUpper = obj Then
                                     setstate = True
-                                ElseIf dt_IOS_ObjectConfig.AsEnumerable().Where(Function(x) x.Field(Of String)("Object") = dcol.FieldName).Count > 0 Or dcol.FieldName = "OPT_ZONE" Then
+                                ElseIf dt_IOS_ObjectConfig.AsEnumerable().Where(Function(x) x.Field(Of String)("Object") = dcol.FieldName).Count > 0 Or dcol.FieldName = "OPT_ZONE" Or dcol.FieldName = "TicketURL" Then
                                     dcol.Visible = setstate
                                 End If
                                 setstate = False
@@ -7135,15 +7136,15 @@ Public Class frmTechnology
                 Next
             End If
 
-            RemoveHandler tsmi_CopyURLClipboard.Click, AddressOf tsmi_CopyURLClipboard_Click
+            'RemoveHandler tsmi_CopyURLClipboard.Click, AddressOf tsmi_CopyURLClipboard_Click
             If dgv.Columns(0).Visible Then
                 cm_Topx_Hide.Text = "Hide Objects"
-                tsmi_CopyURLClipboard.Enabled = True
+                tsmi_CopyURLClipboard.Visible = False
             Else
                 cm_Topx_Hide.Text = "UnHide Objects"
-                tsmi_CopyURLClipboard.Enabled = False
+                tsmi_CopyURLClipboard.Visible = False
             End If
-            AddHandler tsmi_CopyURLClipboard.Click, AddressOf tsmi_CopyURLClipboard_Click
+            'AddHandler tsmi_CopyURLClipboard.Click, AddressOf tsmi_CopyURLClipboard_Click
 
             Dim tscmb_TabFile As ToolStripComboBox = TryCast(tsmi_TopxPolygonMapKPITopX.DropDownItems.Item(1), ToolStripComboBox)
             If (selectedPolyTabFile IsNot Nothing) Then
@@ -24244,6 +24245,7 @@ Public Class frmTechnology
                         End If
                     Next
 
+                    LoadObjectFilterTemplateData(cmbObjectTreeEval.SelectedItem.ToString)
                     BindObjFilterTemplateCombo(cmbFilterTemplateEval)
                     LoadObjectFilterParams(cmbObjectTreeEval, "Eval")
                     ChangeSaveTemplateButtonBackColor(cmbObjectTreeEval.Name, Nothing)
@@ -25483,6 +25485,7 @@ Public Class frmTechnology
         BindDevExComboBoxWithValueMember(cmbThresholdSetEval, dtPMThresholdSetList, "ThresholdSetID", "ThresholdSetName", "Select")
         SelectComboByMatchingString(cmbThresholdSetEval, dtPMThresholdSetList, "ThresholdSetName", cmbChartSetNameEval.SelectedItem.ToString)
         AddHandler cmbThresholdSetEval.SelectedIndexChanged, AddressOf cmbThresholdSetEval_SelectedIndexChanged
+        cmbThresholdSetEval_SelectedIndexChanged(Nothing, Nothing)
     End Sub
 
     Public Sub BindComboWithKPISet()
@@ -25491,6 +25494,7 @@ Public Class frmTechnology
         BindDevExComboBoxWithValueMember(cmbKPISetEval, dtPMKpiSetList, "KPISetID", "KPISetName", "Select")
         SelectComboByMatchingString(cmbKPISetEval, dtPMKpiSetList, "KPISetName", cmbChartSetNameEval.SelectedItem.ToString)
         AddHandler cmbKPISetEval.SelectedIndexChanged, AddressOf cmbKPISetEval_SelectedIndexChanged
+        cmbKPISetEval_SelectedIndexChanged(Nothing, Nothing)
     End Sub
 
     Protected Friend Sub Process_EvaluateTime_Invoked()

@@ -83,7 +83,7 @@ Partial Class AboutBox
         Me.LabelCopyright.Name = "LabelCopyright"
         Me.LabelCopyright.Size = New System.Drawing.Size(394, 21)
         Me.LabelCopyright.TabIndex = 0
-        Me.LabelCopyright.Text = "Copyright © 2025 - CellSens B.V."
+        Me.LabelCopyright.Text = "Copyright © 2026 - CellSens B.V."
         '
         'LabelCompanyName
         '

@@ -1790,7 +1790,7 @@ Partial Class frmRefCheck
         '
         Me.cmsGrid.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_RecordCount, Me.ToolStripSeparator18, Me.tsmiAllowCellCopy, Me.tsmiCopyAllToCSV, Me.tsmiCopySelectionWOHeader, Me.tsmiCopySelectionWithHeader, Me.tsmiCopyFilteredToClipboard, Me.tsmiCopyFilteredToExcel, Me.tsmi_UpdateTemplateWithSelectedValue, Me.tsmi_Go2Configuration, Me.ToolStripSeparator4, Me.tsmi_ParamDescResultsGrids, Me.ToolStripSeparator2, Me.tsmi_ParameterMappingCells, Me.tsmi_ParameterMappingVoronoi, Me.tsmi_ParameterMappingLabel, Me.tsmi_ParameterMappingIncon, Me.ToolStripSeparator5, Me.tsmi_AddSelectionToXMLJob, Me.tsmi_AddParameterToExclusionList})
         Me.cmsGrid.Name = "cm_SON_Incon_dgvResult"
-        Me.cmsGrid.Size = New System.Drawing.Size(271, 380)
+        Me.cmsGrid.Size = New System.Drawing.Size(271, 402)
         '
         'tsmi_RecordCount
         '
@@ -2872,7 +2872,7 @@ Partial Class frmRefCheck
         Me.tlpChartsSub.ColumnCount = 3
         Me.tlpChartsSub.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.tlpChartsSub.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
-        Me.tlpChartsSub.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 457.0!))
+        Me.tlpChartsSub.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 458.0!))
         Me.tlpChartsSub.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.tlpChartsSub.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.tlpChartsSub.Controls.Add(Me.lblChartHeightStats, 1, 0)
@@ -2893,7 +2893,7 @@ Partial Class frmRefCheck
         Me.lblChartHeightStats.Appearance.Options.UseTextOptions = True
         Me.lblChartHeightStats.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.lblChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblChartHeightStats.Location = New System.Drawing.Point(583, 4)
+        Me.lblChartHeightStats.Location = New System.Drawing.Point(582, 4)
         Me.lblChartHeightStats.LookAndFeel.SkinName = "Office 2013"
         Me.lblChartHeightStats.LookAndFeel.UseDefaultLookAndFeel = False
         Me.lblChartHeightStats.Name = "lblChartHeightStats"
@@ -2905,13 +2905,13 @@ Partial Class frmRefCheck
         '
         Me.tbChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbChartHeightStats.EditValue = 400
-        Me.tbChartHeightStats.Location = New System.Drawing.Point(664, 4)
+        Me.tbChartHeightStats.Location = New System.Drawing.Point(663, 4)
         Me.tbChartHeightStats.Name = "tbChartHeightStats"
         Me.tbChartHeightStats.Properties.LabelAppearance.Options.UseTextOptions = True
         Me.tbChartHeightStats.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.tbChartHeightStats.Properties.Maximum = 1000
         Me.tbChartHeightStats.Properties.Minimum = 300
-        Me.tbChartHeightStats.Size = New System.Drawing.Size(451, 24)
+        Me.tbChartHeightStats.Size = New System.Drawing.Size(452, 24)
         Me.tbChartHeightStats.TabIndex = 8
         Me.tbChartHeightStats.Value = 400
         '

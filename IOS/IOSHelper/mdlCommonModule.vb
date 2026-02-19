@@ -5673,6 +5673,9 @@ Module mdlCommonModule
                         'objTechTicketsUrlWC.NavigationUrl = match.Groups(1).Value.ToString
                         'objTechTicketsUrlWC.WebRequestFrom = "PMTopX"
                         'frmMDI.OpenFormAsDockPanel("PM TopX Ticket Url",, objTechTicketsUrlWC, match.Groups(1).Value.ToString)
+                        If Not String.IsNullOrWhiteSpace(match.Groups(1).Value.ToString) Then
+                            Process.Start(New ProcessStartInfo(match.Groups(1).Value.ToString) With {.UseShellExecute = True})
+                        End If
                     ElseIf columnName.ToLower = "weblink" Then
                         If objReportEditWebLinkWC Is Nothing Then
                             objReportEditWebLinkWC = New frmInternetExplorer("Report Editor WebLink", match.Groups(1).Value)
@@ -5803,8 +5806,7 @@ Module mdlCommonModule
     Public Sub SelectComboByMatchingString(ByRef cmb As ComboBoxEdit, ByRef dt As DataTable, colName As String, searchText As String)
         Dim match = dt.AsEnumerable().
         Select(Function(r) r.Field(Of String)(colName)).
-        FirstOrDefault(Function(v) v IsNot Nothing AndAlso
-        v.StartsWith(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+        FirstOrDefault(Function(v) v IsNot Nothing AndAlso v.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
 
         If match IsNot Nothing Then
             SetComboBox(cmb, ComboSelectBased.TextBased, match)
