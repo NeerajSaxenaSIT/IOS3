@@ -4034,13 +4034,17 @@ Public Class frmTechnology
             If rdoHourlyTopX.Checked Or rdoRawTopX.Checked = True Then
                 deStartTimeTopX.EditValue = DateAdd(DateInterval.Hour, -4, DateSerial(Now().Year, Now().Month, Now.Day).AddHours(Now.Hour))
                 deEndTimeTopX.EditValue = DateAdd(DateInterval.Hour, -4, DateSerial(Now().Year, Now().Month, Now.Day).AddHours(Now.Hour))
-                deStartTimeTopX.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
-                deStartTimeTopX.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
-                deStartTimeTopX.Properties.EditMask = "dd/MM/yyyy HH:mm"
+                'deStartTimeTopX.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
+                'deStartTimeTopX.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
+                'deStartTimeTopX.Properties.EditMask = "dd/MM/yyyy HH:mm"
 
-                deEndTimeTopX.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
-                deEndTimeTopX.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
-                deEndTimeTopX.Properties.EditMask = "dd/MM/yyyy HH:mm"
+                ConfigureDatePickerTimeEditing(deStartTimeTopX)
+
+                'deEndTimeTopX.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
+                'deEndTimeTopX.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
+                'deEndTimeTopX.Properties.EditMask = "dd/MM/yyyy HH:mm"
+
+                ConfigureDatePickerTimeEditing(deEndTimeTopX)
             End If
             If chkEnableComparisonTopX.Checked = True Then
                 SetTopXDeltaInterval()
@@ -4064,6 +4068,10 @@ Public Class frmTechnology
         Try
             Dim rdo As RadioButton
             rdo = CType(sender, System.Windows.Forms.RadioButton)
+
+            deStartTimeTopX.Properties.CalendarTimeEditing = DevExpress.Utils.DefaultBoolean.False
+            deEndTimeTopX.Properties.CalendarTimeEditing = DevExpress.Utils.DefaultBoolean.False
+
             If rdo.Checked Then
                 If rdo.Text = "Daily" Or rdo.Text = "Daily BH - 1" Or rdo.Text = "Daily BH - 2" Then
                     deStartTimeTopX.EditValue = DateSerial(Now().Year, Now().Month, Now.Day - 1)
@@ -19845,13 +19853,17 @@ Public Class frmTechnology
                 dtEditStartTimeStats.EditValue = DateAdd(DateInterval.Day, -1, New DateTime(Now().Year, Now().Month, Now.Day, 0, 0, 0))
                 dtEditEndTimeStats.EditValue = New DateTime(Now().Year, Now().Month, Now.Day, Now().Hour + 1, 0, 0)
 
-                dtEditStartTimeStats.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
-                dtEditStartTimeStats.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
-                dtEditStartTimeStats.Properties.EditMask = "dd/MM/yyyy HH:mm"
+                'dtEditStartTimeStats.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
+                'dtEditStartTimeStats.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
+                'dtEditStartTimeStats.Properties.EditMask = "dd/MM/yyyy HH:mm"
 
-                dtEditEndTimeStats.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
-                dtEditEndTimeStats.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
-                dtEditEndTimeStats.Properties.EditMask = "dd/MM/yyyy HH:mm"
+                ConfigureDatePickerTimeEditing(dtEditStartTimeStats)
+
+                'dtEditEndTimeStats.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
+                'dtEditEndTimeStats.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
+                'dtEditEndTimeStats.Properties.EditMask = "dd/MM/yyyy HH:mm"
+
+                ConfigureDatePickerTimeEditing(dtEditEndTimeStats)
 
                 cmbPredefTimeStats.SelectedIndex = 0
                 cmbPredefTimeStats.Update()
@@ -19867,10 +19879,40 @@ Public Class frmTechnology
         End Try
     End Sub
 
+    Private Sub ConfigureDatePickerTimeEditing(ByRef de As DateEdit)
+        de.Properties.UseMaskAsDisplayFormat = True
+
+        de.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
+        de.Properties.Mask.EditMask = "yyyy-MM-dd HH:mm"
+
+        de.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+        de.Properties.DisplayFormat.FormatString = "yyyy-MM-dd HH:mm"
+
+        de.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+        de.Properties.EditFormat.FormatString = "yyyy-MM-dd HH:mm"
+
+        de.Properties.CalendarTimeEditing = DevExpress.Utils.DefaultBoolean.True
+        de.Properties.CalendarView = DevExpress.XtraEditors.Repository.CalendarView.Vista
+        de.Properties.VistaDisplayMode = DevExpress.Utils.DefaultBoolean.True
+
+        If regionalSettings = False Then
+            de.Properties.Mask.Culture = System.Globalization.CultureInfo.InvariantCulture
+            de.Properties.CalendarTimeProperties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
+            de.Properties.CalendarTimeProperties.Mask.EditMask = "HH:mm"
+        Else
+            de.Properties.CalendarTimeProperties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
+            de.Properties.CalendarTimeProperties.Mask.EditMask = CultureInfoDefault.DateTimeFormat.ShortTimePattern
+        End If
+    End Sub
+
     Private Sub rdoDailyStats_CheckedChanged(sender As Object, e As EventArgs) Handles rdoDailyStats.CheckedChanged, rdoDailyBHStats.CheckedChanged, rdoWeeklyStats.CheckedChanged, rdoDailyBH2Stats.CheckedChanged, rdoMonthlyStats.CheckedChanged
         Try
             Dim rdo As RadioButton
             rdo = CType(sender, System.Windows.Forms.RadioButton)
+
+            dtEditStartTimeStats.Properties.CalendarTimeEditing = DevExpress.Utils.DefaultBoolean.False
+            dtEditEndTimeStats.Properties.CalendarTimeEditing = DevExpress.Utils.DefaultBoolean.False
+
             If rdo.Checked Then
                 dtEditStartTimeStats.Properties.DisplayFormat.FormatString = "dd/MM/yyyy"
                 dtEditStartTimeStats.Properties.EditFormat.FormatString = "dd/MM/yyyy"
