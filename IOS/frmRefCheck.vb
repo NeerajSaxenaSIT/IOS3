@@ -2869,8 +2869,12 @@ Public Class frmRefCheck
                 Exit Sub
             End If
 
+            SetMessage("Please Wait..While Rows Are Added To XML Job")
+
             selectedXmlJobID = Save_XmlJob_GetXmlJobID()
             AddRowsToXmlJob()
+
+            SetMessage("Rows Added Successfully To XML Job")
 
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
@@ -2888,8 +2892,12 @@ Public Class frmRefCheck
             Me.Cursor = Cursors.WaitCursor
             Application.DoEvents()
 
+            SetMessage("Please Wait..While Rows Are Added To XML Job")
+
             selectedXmlJobID = TryCast(sender, ToolStripMenuItem).Tag
             AddRowsToXmlJob()
+
+            SetMessage("Rows Added Successfully To XML Job")
 
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
