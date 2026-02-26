@@ -50,6 +50,12 @@
     Public Const KPI_TREE_DWDM As String = "70015"
     Public Const KPI_TREE_TOPX_DWDM As String = "70017"
 
+    Public Const KPI_TREE_HSS As String = "71015"
+    Public Const KPI_TREE_TOPX_HSS As String = "71017"
+
+    Public Const KPI_TREE_UDR As String = "72015"
+    Public Const KPI_TREE_TOPX_UDR As String = "72017"
+
     Public Const KPI_TREE_TOPX_4G1 As String = "10017"
     Public Const KPI_Tree_TopX_4G2 As String = "15017"
     Public Const KPI_Tree_TopX_4G3 As String = "17017"

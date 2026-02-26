@@ -1843,33 +1843,6 @@ Public Class frmReportEdit
         End Try
     End Sub
 
-    'Private Sub tsmi_ReportSlideAdd_DropDownOpening(sender As Object, e As EventArgs) Handles tsmi_ReportSlideAdd.DropDownOpening
-    '    'Add Dashboard DropDown
-    '    Try
-    '        tlvReports.Cursor = Cursors.WaitCursor
-    '        Application.DoEvents()
-
-    '        Dim dtSonRpts As DataTable = dtDashboardReports.AsEnumerable().Where(Function(x) x.Field(Of String)("AccessFlag") = "Public").CopyToDataTable
-    '        tsmi_ReportSlideAdd.DropDownItems.Clear()
-
-    '        If Not dtDashboardReports Is Nothing Then
-    '            For Each drow As DataRow In dtSonRpts.Rows
-    '                Dim tsmi_DB As ToolStripMenuItem = New ToolStripMenuItem(drow("DashboardName").ToString.Trim)
-    '                tsmi_DB.Tag = drow("DashboardID").ToString.Trim
-    '                tsmi_DB.ToolTipText = drow("DashboardName").ToString.Trim
-    '                AddHandler tsmi_DB.Click, AddressOf tsmi_Dashboard_Click
-    '                tsmi_ReportSlideAdd.DropDownItems.Add(tsmi_DB)
-    '            Next
-    '        End If
-    '    Catch ex As Exception
-    '        _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
-    '        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-    '    Finally
-    '        tlvReports.Cursor = Cursors.Default
-    '        Application.DoEvents()
-    '    End Try
-    'End Sub
-
     Private Sub tsmi_Dashboard_Click(sender As Object, e As EventArgs)
         Try
             tlvReports.Cursor = Cursors.WaitCursor

@@ -18,6 +18,7 @@ Imports DevExpress.Export.Xl
 Imports System.Net.NetworkInformation
 Imports DevExpress.XtraEditors.Controls
 Imports System.Text.RegularExpressions
+Imports Microsoft.VisualBasic.FileIO
 
 Module mdlCommonModule
 
@@ -137,6 +138,10 @@ Module mdlCommonModule
     Public dsTreeTopXHLR_kpi As DataSet
     Public dsTreeDwdm_kpi As DataSet
     Public dsTreeTopXDwdm_kpi As DataSet
+    Public dsTreeHSS_kpi As DataSet
+    Public dsTreeTopXHSS_kpi As DataSet
+    Public dsTreeUDR_kpi As DataSet
+    Public dsTreeTopXUDR_kpi As DataSet
 
     Public dsTree4G1_Kpi As DataSet
     Public dsTree4G2_Kpi As DataSet
@@ -210,6 +215,8 @@ Module mdlCommonModule
     Public dsTreeTwampVendor As New DataSet
     Public dsTreeHLRVendor As New DataSet
     Public dsTreeDwdmVendor As New DataSet
+    Public dsTreeHSSVendor As New DataSet
+    Public dsTreeUDRVendor As New DataSet
 
     Public dsTreeCommonTech As New DataSet
     Public dsGridColumnsConfig As New DataSet
@@ -3213,6 +3220,47 @@ Module mdlCommonModule
         Return GetType(Object)
     End Function
 
+    Public Function ConvertCSVToDataTable(ByVal filePath As String) As DataTable
+        Dim dt As New DataTable()
+
+        ' Ensure the file exists
+        'If Not File.Exists(filePath) Then
+        '    Throw New FileNotFoundException($"The file was not found: {filePath}")
+        'End If
+
+        Using parser As New TextFieldParser(filePath)
+            ' Set the parser to treat the file as delimited text
+            parser.TextFieldType = FileIO.FieldType.Delimited
+            parser.SetDelimiters(",") ' Specify the delimiter
+            parser.HasFieldsEnclosedInQuotes = True ' Handle fields enclosed in quotes, e.g., "Smith, John"
+
+            ' 1. Read the header row and create columns
+            Dim headers As String() = parser.ReadFields()
+            If headers IsNot Nothing Then
+                For Each header In headers
+                    dt.Columns.Add(New DataColumn(header, GetType(String)))
+                Next
+            End If
+
+            ' 2. Read the data rows
+            While Not parser.EndOfData
+                Dim fields() As String = parser.ReadFields()
+                If fields IsNot Nothing Then
+                    ' Ensure the number of fields matches the number of columns to prevent errors
+                    If fields.Length = dt.Columns.Count Then
+                        dt.Rows.Add(fields)
+                    Else
+                        ' Handle cases where rows have a variable number of columns if necessary
+                        ' You might log a warning or adjust the logic based on your needs
+                        Console.WriteLine("Warning: Skipping row due to mismatched field count.")
+                    End If
+                End If
+            End While
+        End Using
+
+        Return dt
+    End Function
+
 #End Region
 
 #Region "Bind ComboBox Methods"
@@ -4443,6 +4491,10 @@ Module mdlCommonModule
                     networkAll.NetworkHLR = "not used"
                 Case IOSInternalTechnology.DWDM
                     networkAll.NetworkDWDM = "not used"
+                Case IOSInternalTechnology.HSS
+                    networkAll.NetworkHSS = "not used"
+                Case IOSInternalTechnology.UDR
+                    networkAll.NetworkUDR = "not used"
             End Select
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
@@ -4616,6 +4668,14 @@ Module mdlCommonModule
                 Case IOSInternalTechnology.DWDM
                     networkAll.NetworkDWDM = dr("Tech").ToString
                     ds2use = dsTreeDwdmVendor
+
+                Case IOSInternalTechnology.HSS
+                    networkAll.NetworkHSS = dr("Tech").ToString
+                    ds2use = dsTreeHSSVendor
+
+                Case IOSInternalTechnology.UDR
+                    networkAll.NetworkUDR = dr("Tech").ToString
+                    ds2use = dsTreeUDRVendor
             End Select
 
             If Not ds2use Is Nothing Then
@@ -5021,6 +5081,10 @@ Module mdlCommonModule
                         networkAll.NetworkHLR = dr("Tech").ToString
                     Case IOSInternalTechnology.DWDM
                         networkAll.NetworkDWDM = dr("Tech").ToString
+                    Case IOSInternalTechnology.HSS
+                        networkAll.NetworkHSS = dr("Tech").ToString
+                    Case IOSInternalTechnology.UDR
+                        networkAll.NetworkUDR = dr("Tech").ToString
                 End Select
             Next
         End If
@@ -5325,6 +5389,24 @@ Module mdlCommonModule
                     dsTreeTopXDwdm_kpi = New System.Data.DataSet
                     sqlAndConnectionStr = GetSQL(IOSSqlIds.KPI_TREE_TOPX_DWDM, parray, dt_IOS_SQL)
                     dsTreeTopXDwdm_kpi = DataAccessorODBC.GetDataSet(sqlAndConnectionStr(0), sqlAndConnectionStr(1), iQryTimeOut)
+
+                Case networkAll.NetworkHSS.ToUpper
+                    dsTreeHSS_kpi = New System.Data.DataSet
+                    sqlAndConnectionStr = GetSQL(IOSSqlIds.KPI_TREE_HSS, parray, dt_IOS_SQL)
+                    dsTreeHSS_kpi = DataAccessorODBC.GetDataSet(sqlAndConnectionStr(0), sqlAndConnectionStr(1), iQryTimeOut)
+                Case "TOPX_" & networkAll.NetworkHSS.ToUpper
+                    dsTreeTopXHSS_kpi = New System.Data.DataSet
+                    sqlAndConnectionStr = GetSQL(IOSSqlIds.KPI_TREE_TOPX_HSS, parray, dt_IOS_SQL)
+                    dsTreeTopXHSS_kpi = DataAccessorODBC.GetDataSet(sqlAndConnectionStr(0), sqlAndConnectionStr(1), iQryTimeOut)
+
+                Case networkAll.NetworkUDR.ToUpper
+                    dsTreeUDR_kpi = New System.Data.DataSet
+                    sqlAndConnectionStr = GetSQL(IOSSqlIds.KPI_TREE_UDR, parray, dt_IOS_SQL)
+                    dsTreeUDR_kpi = DataAccessorODBC.GetDataSet(sqlAndConnectionStr(0), sqlAndConnectionStr(1), iQryTimeOut)
+                Case "TOPX_" & networkAll.NetworkUDR.ToUpper
+                    dsTreeTopXUDR_kpi = New System.Data.DataSet
+                    sqlAndConnectionStr = GetSQL(IOSSqlIds.KPI_TREE_TOPX_UDR, parray, dt_IOS_SQL)
+                    dsTreeTopXUDR_kpi = DataAccessorODBC.GetDataSet(sqlAndConnectionStr(0), sqlAndConnectionStr(1), iQryTimeOut)
             End Select
         Catch ex As Exception
         End Try
@@ -5428,6 +5510,10 @@ Module mdlCommonModule
                 Return dsTreeHLRVendor
             Case "DWDM"
                 Return dsTreeDwdmVendor
+            Case "HSS"
+                Return dsTreeHSSVendor
+            Case "UDR"
+                Return dsTreeUDRVendor
         End Select
         Return Nothing
     End Function

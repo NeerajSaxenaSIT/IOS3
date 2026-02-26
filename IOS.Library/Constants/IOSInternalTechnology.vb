@@ -43,4 +43,6 @@
     Public Const TWAMP As String = "TWAMP"
     Public Const HLR As String = "HLR"
     Public Const DWDM As String = "DWDM"
+    Public Const HSS As String = "HSS"
+    Public Const UDR As String = "UDR"
 End Class

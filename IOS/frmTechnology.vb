@@ -790,7 +790,7 @@ Public Class frmTechnology
                         Dim tblname As String = "dsTree3G1_" & objectType
                         tblname = "dsTree" & _techInternal & "_" & objectType
                         Select Case _strNetwork.ToUpper
-                            Case "SGSN", "GGSN", "MGW", "MME", "MSS", "PGW", "SGW", "IMS", "TX", "TRANSPORT", "PDUM", "TWAMP", "HLR", "DWDM"
+                            Case "SGSN", "GGSN", "MGW", "MME", "MSS", "PGW", "SGW", "IMS", "TX", "TRANSPORT", "PDUM", "TWAMP", "HLR", "DWDM", "HSS", "UDR"
                                 If tl.Tag.ToString.ToLower.Contains("topx") Then
                                     tl.PopulateTreeList("1001", tlNode, _dsTreeVendorTopX, tblname, filterObject, objectType, Network)
                                 Else
@@ -901,7 +901,7 @@ Public Class frmTechnology
                 cmb.SelectedItem = cmb.Properties.Items(0)
 
                 Select Case _strNetwork
-                    Case "SGSN", "GGSN", "MGW", "MME", "MSS", "PGW", "SGW", "IMS", "TX", "TRANSPORT", "PDUM", "TWAMP", "HLR", "DWDM"
+                    Case "SGSN", "GGSN", "MGW", "MME", "MSS", "PGW", "SGW", "IMS", "TX", "TRANSPORT", "PDUM", "TWAMP", "HLR", "DWDM", "HSS", "UDR"
                     Case Else
                         cmbitem = New IOS.Library.clsComboBoxItem()
                         cmbitem.Text = "TAGS"
@@ -12317,6 +12317,12 @@ Public Class frmTechnology
             ElseIf _strNetwork.ToUpper = networkAll.NetworkDWDM.ToUpper Then
                 connstring = GetSQL(70016, parray)(0)
                 sql_alarm = GetSQL(70016, parray)(1)
+            ElseIf _strNetwork.ToUpper = networkAll.NetworkHSS.ToUpper Then
+                connstring = GetSQL(71016, parray)(0)
+                sql_alarm = GetSQL(71016, parray)(1)
+            ElseIf _strNetwork.ToUpper = networkAll.NetworkUDR.ToUpper Then
+                connstring = GetSQL(72016, parray)(0)
+                sql_alarm = GetSQL(72016, parray)(1)
             End If
 
             Dim dtQODBC As System.Data.DataTable = DataAccessorODBC.GetDataTable(connstring, sql_alarm)

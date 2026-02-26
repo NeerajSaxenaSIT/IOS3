@@ -33,6 +33,8 @@
     Public Const TechTwamp = "TWAMP"
     Public Const TechHLR = "HLR"
     Public Const TechDWDM = "DWDM"
+    Public Const TechHSS = "HSS"
+    Public Const TechUDR = "UDR"
 End Class
 
 Public Class TechnologyLevel

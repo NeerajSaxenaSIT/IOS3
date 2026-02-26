@@ -382,5 +382,25 @@
             _networkDWDM = value
         End Set
     End Property
+
+    Private _networkHSS As String = "not used"
+    Public Property NetworkHSS() As String
+        Get
+            Return _networkHSS
+        End Get
+        Set(ByVal value As String)
+            _networkHSS = value
+        End Set
+    End Property
+
+    Private _networkUDR As String = "not used"
+    Public Property NetworkUDR() As String
+        Get
+            Return _networkUDR
+        End Get
+        Set(ByVal value As String)
+            _networkUDR = value
+        End Set
+    End Property
 End Class
 

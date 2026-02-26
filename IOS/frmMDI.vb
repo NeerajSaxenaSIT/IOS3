@@ -1936,6 +1936,10 @@ Public Class frmMDI
                 dicKPI.Add(IOSInternalTechnology.HLR, dsTreeHLR_kpi)
             ElseIf (baseTech = BaseTechnology.TechDWDM) Then
                 dicKPI.Add(IOSInternalTechnology.DWDM, dsTreeDwdm_kpi)
+            ElseIf (baseTech = BaseTechnology.TechHSS) Then
+                dicKPI.Add(IOSInternalTechnology.HSS, dsTreeHSS_kpi)
+            ElseIf (baseTech = BaseTechnology.TechUDR) Then
+                dicKPI.Add(IOSInternalTechnology.UDR, dsTreeUDR_kpi)
             End If
         Else
             If (baseTech = BaseTechnology.Tech2G) Then
@@ -2006,6 +2010,10 @@ Public Class frmMDI
                 dicKPI.Add(IOSInternalTechnology.HLR, dsTreeTopXHLR_kpi)
             ElseIf (baseTech = BaseTechnology.TechDWDM) Then
                 dicKPI.Add(IOSInternalTechnology.DWDM, dsTreeTopXDwdm_kpi)
+            ElseIf (baseTech = BaseTechnology.Techhss) Then
+                dicKPI.Add(IOSInternalTechnology.HSS, dsTreeTopXHSS_kpi)
+            ElseIf (baseTech = BaseTechnology.TechUDR) Then
+                dicKPI.Add(IOSInternalTechnology.UDR, dsTreeTopXUDR_kpi)
             End If
         End If
 
@@ -2099,6 +2107,10 @@ Public Class frmMDI
                 Return BaseTechnology.TechHLR
             ElseIf (techName.ToUpper.Trim = "DWDM") Then
                 Return BaseTechnology.TechDWDM
+            ElseIf (techName.ToUpper.Trim = "HSS") Then
+                Return BaseTechnology.TechHSS
+            ElseIf (techName.ToUpper.Trim = "UDR") Then
+                Return BaseTechnology.TechUDR
             End If
         Catch ex As Exception
             Return Nothing
