@@ -8973,7 +8973,11 @@ Public Class frmMapWindow
                     PanToolStripButton1, SelectRectToolStripButton2, SelectRadiusToolStripButton1, SelectPolygonToolStripButton1, SelectRegionToolStripButton1, DistanceToolStripButton1, AddLineToolStripButton1,
                     AddPolylineToolStripButton1, AddRectangleToolStripButton2, AddPolygonToolStripButton1, AddCircleToolStripButton1, AddTextToolStripButton1, tlb_SelInfo, bCellFootPrint, tlb_ParcelSelector, tlb_Layer_GM,
                     tlb_datagrid, tlb_Legend, tlb_QuickLayer, tlb_QuickLayerTrans, tlb_SiteLayers, tlb_Voronoi, tbl_QuickTheme, tsmi_SendToTopXandRun, btnSrvCheck, ceNetworkStatusAlarms, ceNetworkStatusTickets, ceNetworkStatusAvailability,
-                    ace_NetworkSelection, ace_NetworkStatus, ace_NeighborInfo, ace_CustomerInfo, ace_SearchTools, ace_FrequencyTools, ace_DriveTestInfo, ace_CNEInfo, ace_KpiInfo
+                    ace_NetworkSelection, ace_NetworkStatus, ace_NeighborInfo, ace_CustomerInfo, ace_SearchTools, ace_FrequencyTools, ace_DriveTestInfo, ace_CNEInfo, ace_KpiInfo, btnGenerateNetworks, btnGetNetworks, btnNetworkStatus2,
+                    btnRefreshCNE, btnCNESaveTemplate, btnCNEDelTemplate, btnCNECreateAnalysis, btnKpiSelLeftArrow, btnKpiSelRightArrow, btnKpiInfoClearSel, btnRefreshCalendar, btnNeighbors, btnNBClear, btnCustomerGet, btnFreqCalc, btnFreqClear,
+                    btnRefreshDtTree, btnGetRadio, btnCompare, btnGetEvents, tsmi_info, tsmi_DeleteProject, tsmi_RenameProject, tsmi_DeleteDrivetest, tsmi_RenameDrivetest, tsmi_DeleteUE, tsmi_RenameUE,
+                    tsmi_SendToVA, tsmi_CellTAYesterday, tsmi_CellTASpecificDays, tsmi_dgv_CopyClipboardCell, tsmi_AllowGridCellSelection, tsmi_CreateDeleteNeighbors, tsmi_AddNewTiltCampaign,
+                    tsmi_dgv_CopyClipboardWithHeader, tsmi_Neighbors2G, tsmi_Neighbors3G, tsmi_Neighbors4G, tsmi_Neighbors5G
                 }
 
                 For Each frmControl As Object In formControls
