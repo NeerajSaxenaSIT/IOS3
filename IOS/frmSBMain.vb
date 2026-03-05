@@ -126,8 +126,8 @@ Public Class frmSBMain
             Else
                 ClearComboBox(cmbKPIGroup, "ALL")
             End If
-            btnAddCategory.Enabled = False
-            btnAddKPI.Enabled = False
+            btnAddCategory.Enabled = True
+            btnAddKPI.Enabled = True
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
@@ -351,8 +351,9 @@ Public Class frmSBMain
             cmbCalculatedYAxis.SelectedIndex = 0
             accPeriodSelection.Tag = accPeriodSelection.Height
 
-            btnAddCategory.Enabled = False
-            btnAddKPI.Enabled = False
+            btnAddCategory.Enabled = True
+            btnAddKPIGroup.Enabled = True
+            btnAddKPI.Enabled = True
             ConfigureIOSDatamart("frmSBMain")
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
@@ -448,16 +449,19 @@ Public Class frmSBMain
                 Dim dt As DataTable = DataAccessorODBC.GetDataTable(connStrSandBoxServer, selectTechnologyPackageKPI)
                 BindKPITree(dt)
 
-                btnAddCategory.Enabled = False
-                btnAddKPI.Enabled = False
+                'btnAddCategory.Enabled = False
+                'btnAddKPI.Enabled = False
             Else
                 Dim selectTechnologyPackageKPI As String = SQLTechnologyKPIs.GetByTechAndCreator(TryCast(cmbReportTechnology.SelectedItem, clsComboBoxItem).Value, cmbKPIGroup.SelectedItem.ToString)
                 Dim dt As DataTable = DataAccessorODBC.GetDataTable(connStrSandBoxServer, selectTechnologyPackageKPI)
                 BindKPITree(dt)
 
-                btnAddCategory.Enabled = True
-                btnAddKPI.Enabled = True
+                'btnAddCategory.Enabled = True
+                'btnAddKPI.Enabled = True
             End If
+
+            btnAddCategory.Enabled = True
+            btnAddKPI.Enabled = True
 
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
@@ -1143,7 +1147,7 @@ Public Class frmSBMain
             If (e.Value IsNot Nothing) Then
                 'If Not (e.Value = True Or e.Value = False) Then
                 Try
-                    If Not (e.Value = treeNode.Item(KPIGroupFields.KPI_CATEGORY_NAME)) Then
+                    If (e.Value.GetType.ToString <> "System.Boolean") AndAlso Not (e.Value = treeNode.Item(KPIGroupFields.KPI_CATEGORY_NAME)) Then
                         Dim selectedNodeId As String = lstTechKPI.FocusedNode.Tag
                         If (treeNode.Level = 0) Then
                             DataAccessorODBC.ExecuteNonQuery(connStrSandBoxServer, SQLKpiCategory.ModifyCategory(selectedNodeId, e.Value.ToString))
@@ -4941,8 +4945,10 @@ Public Class frmSBMain
                             Next
                         ElseIf vSandBoxFieldSelected.VSandBoxType = DatamartFieldType.Kpi Then
                             Dim nd = lstTechKPI.FindNodeByFieldValue(KPIGroupFields.KPI_CATEGORY_NAME, vSandBoxFieldSelected.Text)
-                            nd.SetValue("riChkEdit", False)
-                            viewCheckedKPINameList.Remove(vSandBoxFieldSelected.Text)
+                            If nd IsNot Nothing Then
+                                nd.SetValue("riChkEdit", False)
+                                viewCheckedKPINameList.Remove(vSandBoxFieldSelected.Text)
+                            End If
                         End If
                     End If
                 End If
@@ -10668,7 +10674,15 @@ Public Class frmSBMain
     Public Sub RefreshKPITree()
         Dim selectTechnologyPackageKPI As String = SQLTechnologyKPIs.GetByTechAndCreator(TryCast(cmbReportTechnology.SelectedItem, clsComboBoxItem).Value, cmbKPIGroup.SelectedItem.ToString)
         dt_TechnologyPackageKPI = DataAccessorODBC.GetDataTable(connStrSandBoxServer, selectTechnologyPackageKPI)
-        BindKPITree(dt_TechnologyPackageKPI)
+        If cmbObjectSource.SelectedIndex = 0 Then
+            BindKPITree(dt_TechnologyPackageKPI)
+        Else
+            Dim filterSourceObject = dt_TechnologyPackageKPI.AsEnumerable().Where(Function(n) n.Field(Of Integer)("SourceObjectID") = CInt(CType(cmbObjectSource.SelectedItem, clsComboBoxItem).Value))
+            If filterSourceObject.Any() Then
+                Dim dtSourceFilter As DataTable = filterSourceObject.CopyToDataTable
+                BindKPITree(dtSourceFilter)
+            End If
+        End If
     End Sub
 
     Private Sub tsmi_DashboardReportHideAndShowTitle_Click(sender As Object, e As EventArgs) Handles tsmi_DashboardReportHideAndShowTitle.Click

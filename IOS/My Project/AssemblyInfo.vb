@@ -13,7 +13,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Integrated Optimization Suite")>
 <Assembly: AssemblyCompany("CellSens")>
 <Assembly: AssemblyProduct("CIOS")>
-<Assembly: AssemblyCopyright("Copyright © CellSens 2025")>
+<Assembly: AssemblyCopyright("Copyright © CellSens 2026")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: log4net.Config.XmlConfigurator(ConfigFile:="IOS.exe.log4net", Watch:=True)>
 <Assembly: ComVisible(True)>
@@ -32,9 +32,9 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("3.2025.1015.10015")>
+<Assembly: AssemblyVersion("3.2026.2000.20262")>
 <Assembly: NeutralResourcesLanguage("en-US")>
-<Assembly: AssemblyFileVersion("3.2025.1015.10015")>
+<Assembly: AssemblyFileVersion("3.2026.2000.20262")>
 
 
 '<Assembly: AssemblyFileVersion("1.2016.*.*")> 

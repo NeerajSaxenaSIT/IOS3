@@ -11566,11 +11566,15 @@ Public Class frmTechnology
 
     Private Sub Notes_Add(tech As String, targettype As String)
         Dim objs As String = tvObjectsTreeStats.GetChecked2String(tech, targettype, "Naked", strTreeFilter)
-        Dim checkcount As Integer = Split(objs, ",").Count
+        If objs <> String.Empty Then
+            Dim checkcount As Integer = Split(objs, ",").Count
 
-        frmNotes.SetForm_New(tech, System.Environment.UserName, targettype, checkcount, 0, objs)
-        frmNotes.Show()
-        Notes_Get(tech)
+            frmNotes.SetForm_New(tech, System.Environment.UserName, targettype, checkcount, 0, objs)
+            frmNotes.Show()
+            Notes_Get(tech)
+        Else
+            XtraMessageBox.Show("Please select an object in the object tree", "Add Note", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
     End Sub
 
     Private Sub btnDeleteNote_Click(sender As Object, e As EventArgs) Handles btnDeleteNote.Click
@@ -21905,7 +21909,7 @@ Public Class frmTechnology
             prdCalcAxisMarkerColl = New AxisMarkerCollection()
             dicPrdCalcAxisMarkers = New Dictionary(Of String, AxisMarkerCollection)
             dicPrdCalcSeriesData = New Dictionary(Of String, DataTable)
-            If prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked Then
+            If prdCalcChkCmbVisuals.Properties.Items.Item(3).CheckState = CheckState.Checked Then
                 showPrdCalcSeries = True
             Else
                 showPrdCalcSeries = False
@@ -22012,7 +22016,7 @@ Public Class frmTechnology
 
                                     'taking series with period calc enabled
                                     Dim prdCalcEnabled As Boolean = False
-                                    If prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked Then
+                                    If prdCalcChkCmbVisuals.Properties.Items.Item(3).CheckState = CheckState.Checked Then
                                         showPrdCalcSeries = True
                                         Dim s_selected As Series = Nothing
                                         Dim ds As New DataSet()
@@ -22204,7 +22208,7 @@ Public Class frmTechnology
                                         If Not dtPrdCalcStats Is Nothing AndAlso dtPrdCalcStats.Rows.Count > 0 Then
 
                                             'adding period calculation bands
-                                            If prdCalcChkCmbVisuals.Properties.Items.Item(2).CheckState = CheckState.Checked Then
+                                            If prdCalcChkCmbVisuals.Properties.Items.Item(4).CheckState = CheckState.Checked Then
                                                 For Each dr As DataRow In dtPrdCalcStats.Rows
                                                     Dim shadeThreshold As AxisMarker = Nothing
                                                     If GetFromTech_RadioButton(tech, "Raw").Checked Then
@@ -22315,7 +22319,11 @@ Public Class frmTechnology
                                                 Next
 
                                                 ' Set an orientation for the custom legend.
-                                                newLegend.Orientation = Orientation.Right
+                                                If prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked Then
+                                                    newLegend.Orientation = Orientation.Right
+                                                ElseIf prdCalcChkCmbVisuals.Properties.Items.Item(2).CheckState = CheckState.Checked Then
+                                                    newLegend.Orientation = Orientation.Bottom
+                                                End If
 
                                                 ' The the new legend to the chart.
                                                 ch.ExtraLegendBoxes.Add(newLegend)
@@ -22324,7 +22332,7 @@ Public Class frmTechnology
                                             End If
 
                                             'adding weekend bands
-                                            If prdCalcChkCmbVisuals.Properties.Items.Item(3).CheckState = CheckState.Checked Then
+                                            If prdCalcChkCmbVisuals.Properties.Items.Item(5).CheckState = CheckState.Checked Then
                                                 prdCalcWeekendAM = True
                                                 Dim cp As New CalendarPattern(TimeInterval.Day, TimeInterval.Week, "1000001")
                                                 cp.AdjustmentUnit = TimeInterval.Day
@@ -22369,7 +22377,7 @@ Public Class frmTechnology
                                             connstring = GetSQL(8823, parray)(0)
                                             Dim dtHolidayMkr As DataTable = DataAccessorODBC.GetDataTable(connstring, sqlParam)
 
-                                            If prdCalcChkCmbVisuals.Properties.Items.Item(4).CheckState = CheckState.Checked Then
+                                            If prdCalcChkCmbVisuals.Properties.Items.Item(6).CheckState = CheckState.Checked Then
                                                 prdCalcHolidayAM = True
                                                 If dtHolidayMkr.Rows.Count > 0 Then
                                                     For Each dr As DataRow In dtHolidayMkr.Rows
@@ -22594,7 +22602,12 @@ Public Class frmTechnology
 
                         'median
                         Dim medianObj As Object
-                        Dim dr() As DataRow = dt.Select(filter, KPIName & " ASC")
+                        Dim dr() As DataRow = dt.AsEnumerable().Where(Function(n)
+                                                                          Dim rowDate = n.Field(Of DateTime)("Date")
+                                                                          Return rowDate >= prevStr AndAlso rowDate < curStr
+                                                                      End Function).OrderBy(Function(n) n.Field(Of Object)(KPIName)).ToArray()
+                        'dt.Select(filter, KPIName & " ASC")
+
                         If dr.Count Mod 2 = 0 Then
                             medianObj = (dr(((dr.Count) / 2) - 1)(KPIName) + dr(((dr.Count) / 2))(KPIName)) / 2
                         Else

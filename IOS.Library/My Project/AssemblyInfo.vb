@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("CellSens")> 
 <Assembly: AssemblyProduct("IOS.Library")>
-<Assembly: AssemblyCopyright("Copyright ©  2025")>
+<Assembly: AssemblyCopyright("Copyright ©  2026")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("3.2025.1015.10015")>
-<Assembly: AssemblyFileVersion("3.2025.1015.10015")>
+<Assembly: AssemblyVersion("3.2026.2000.20262")>
+<Assembly: AssemblyFileVersion("3.2026.2000.20262")>

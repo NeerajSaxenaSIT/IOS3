@@ -1156,7 +1156,7 @@ Public Class frmReportEdit
         }
         Dim sql As String = GetSQL(8551, parray)(1)
         Dim connstring As String = GetSQL(8551, parray)(0)
-        Dim dt = DataAccessorODBC.GetDataTable(connstring, sql)
+        Dim dt = DataAccessorODBC.GetDataTable(connstring, sql, iQryTimeOut)
         LoadGridWithHyperlink(gcReportHistory, gvReportHistory, dt, "WebLink")
     End Sub
 

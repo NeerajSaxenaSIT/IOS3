@@ -148,12 +148,12 @@ Public Class frmSBReportContentFilters
             For i As Integer = 0 To dt.Rows.Count - 1
                 alreadyAdded = False
 
-                For Each ctrl As Object In objSandbox.flp_ValueX.Controls
-                    If (TryCast(ctrl, DevExSandBoxField).Text = dt.Rows(i)(0).ToString) Then
-                        alreadyAdded = True
-                        Exit For
-                    End If
-                Next
+                'For Each ctrl As Object In objSandbox.flp_ValueX.Controls
+                '    If (TryCast(ctrl, DevExSandBoxField).Text = dt.Rows(i)(0).ToString) Then
+                '        alreadyAdded = True
+                '        Exit For
+                '    End If
+                'Next
 
                 If (Not alreadyAdded) Then
                     vSandBoxFieldNew = New DevExSandBoxField()
@@ -313,7 +313,7 @@ Public Class frmSBReportContentFilters
 
     Private Sub CheckFilterApply()
         Dim dtExitReportContentFilter As DataTable = DataAccessorODBC.GetDataTable(connStrSandBoxServer, SQLReportContentFilter.GetReportContentFilter(_reportId))
-        If (dtExitReportContentFilter.Rows.Count > 0) Then
+        If (dtExitReportContentFilter IsNot Nothing) AndAlso (dtExitReportContentFilter.Rows.Count > 0) Then
             _isFilterInserted = True
         Else
             _isFilterInserted = False
