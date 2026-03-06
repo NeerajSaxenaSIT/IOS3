@@ -13651,12 +13651,10 @@ Public Class frmTechnology
                     dateFormat = "yyyy-MM-dd HH:mm:ss"
                 End If
 
-                'If (prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Unchecked) OrElse (prdCalcApplied = False) Then
                 Try
                     IOSDevExpressGrid.PopulateDataInGrid(dataGrid_ChartsTech, dataGrid_ChartsTech.DefaultView, dgv.ToTable(True, SeriesList), "ALL",,, dateFormat)
                 Catch
                 End Try
-                'End If
 
                 If showPrdCalcSeries = True AndAlso dicPrdCalcSeriesData IsNot Nothing Then
                     If dicPrdCalcSeriesData.ContainsKey(mychart.Name) Then
@@ -22014,6 +22012,12 @@ Public Class frmTechnology
                                     Catch
                                     End Try
 
+                                    If prdCalcChkCmbVisuals.Properties.Items.Item(0).CheckState = CheckState.Checked Then
+                                        ch.LegendBox.Visible = True
+                                    Else
+                                        ch.LegendBox.Visible = False
+                                    End If
+
                                     'taking series with period calc enabled
                                     Dim prdCalcEnabled As Boolean = False
                                     If prdCalcChkCmbVisuals.Properties.Items.Item(3).CheckState = CheckState.Checked Then
@@ -22154,7 +22158,7 @@ Public Class frmTechnology
                                                     cloned.Type = SeriesType.Line
                                                     cloned.Line.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
                                                     cloned.Line.Width = 2
-                                                    cloned.DefaultElement.Color = Color.FromArgb(255, 0, 0, 0)
+                                                    cloned.DefaultElement.Color = s_selected.DefaultElement.Color 'Color.FromArgb(255, 0, 0, 0)
                                                     cloned.EmptyElement.Mode = EmptyElementMode.Ignore
                                                     'ch.SeriesCollection.Add(cloned)
 
@@ -22163,7 +22167,7 @@ Public Class frmTechnology
                                                     cloned_stdUp.Type = SeriesType.Line
                                                     cloned_stdUp.Line.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
                                                     cloned_stdUp.Line.Width = 1
-                                                    cloned_stdUp.DefaultElement.Color = Color.FromArgb(255, 100, 50, 50)
+                                                    cloned_stdUp.DefaultElement.Color = s_selected.DefaultElement.Color 'Color.FromArgb(255, 100, 50, 50)
                                                     cloned_stdUp.EmptyElement.Mode = EmptyElementMode.Ignore
                                                     'ch.SeriesCollection.Add(cloned_stdUp)
 
@@ -22172,7 +22176,7 @@ Public Class frmTechnology
                                                     cloned_stdDown.Type = SeriesType.Line
                                                     cloned_stdDown.Line.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
                                                     cloned_stdDown.Line.Width = 1
-                                                    cloned_stdDown.DefaultElement.Color = Color.FromArgb(255, 100, 50, 50)
+                                                    cloned_stdDown.DefaultElement.Color = s_selected.DefaultElement.Color 'Color.FromArgb(255, 100, 50, 50)
                                                     cloned_stdDown.EmptyElement.Mode = EmptyElementMode.Ignore
                                                     'ch.SeriesCollection.Add(cloned_stdDown)
 
@@ -22261,7 +22265,8 @@ Public Class frmTechnology
                                             End If
 
                                             'adding period calc legend
-                                            If prdCalcChkCmbVisuals.Properties.Items.Item(0).CheckState = CheckState.Checked Then
+                                            If (prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked) Or
+                                                (prdCalcChkCmbVisuals.Properties.Items.Item(2).CheckState = CheckState.Checked) Then
 
                                                 Dim distinctPeriods = dt_periodCalc.AsEnumerable().
                                                                     Select(Function(r) r.Field(Of String)("PeriodName")).
@@ -22274,55 +22279,106 @@ Public Class frmTechnology
                                                 Dim newLegend As LegendBox = New LegendBox()
                                                 Dim header1 As LegendEntry
 
-                                                If NumOfPeriods = 1 Then
-                                                    newLegend.Template = "%Icon %Name  %Value"
-                                                ElseIf NumOfPeriods = 2 Then
-                                                    newLegend.Template = "%Icon %Name  %Value %ValueP2 %ValueDelta %ValueDeltaP"
-                                                    header1 = New LegendEntry("KPI", distinctPeriods(0), "   ")
-                                                    header1.CustomAttributes = "Icon=   "
-                                                    header1.CustomAttributes.Add("ValueP2", distinctPeriods(1))
-                                                    header1.CustomAttributes.Add("ValueDelta", "Delta")
-                                                    header1.CustomAttributes.Add("ValueDeltaP", "Delta%")
-                                                    header1.SortOrder = -1
-                                                    header1.LabelStyle.Font = New Font("Arial", 8, FontStyle.Bold)
-                                                    newLegend.ExtraEntries.Add(header1)
-                                                End If
-
-                                                For Each kpi As String In distinctKPI
+                                                If prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked Then
 
                                                     If NumOfPeriods = 1 Then
-                                                        Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
-                                                        Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
-                                                        le.SortOrder = 2
-
-                                                        newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
-
-                                                        newLegend.ExtraEntries.Add(le)
-
+                                                        newLegend.Template = "%Icon %Name  %Value"
                                                     ElseIf NumOfPeriods = 2 Then
-                                                        Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
-                                                        Dim ValP2 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(1) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
-
-                                                        Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
-
-                                                        le.CustomAttributes.Add("ValueP2", Math.Round(CDbl(ValP2), 2))
-                                                        le.CustomAttributes.Add("ValueDelta", Math.Round(CDbl(ValP2) - CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
-                                                        le.CustomAttributes.Add("ValueDeltaP", Math.Round(100 * (CDbl(ValP2) - CDbl(ValP1)) / CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
-                                                        le.SortOrder = 2
-
-                                                        newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
-
-                                                        newLegend.ExtraEntries.Add(le)
-
+                                                        newLegend.Template = "%Icon %Name  %Value %ValueP2 %ValueDelta %ValueDeltaP"
+                                                        header1 = New LegendEntry("KPI", distinctPeriods(0), "   ")
+                                                        header1.CustomAttributes = "Icon=   "
+                                                        header1.CustomAttributes.Add("ValueP2", distinctPeriods(1))
+                                                        header1.CustomAttributes.Add("ValueDelta", "Delta")
+                                                        header1.CustomAttributes.Add("ValueDeltaP", "Delta%")
+                                                        header1.SortOrder = -1
+                                                        header1.LabelStyle.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                        newLegend.ExtraEntries.Add(header1)
                                                     End If
 
-                                                Next
+                                                    For Each kpi As String In distinctKPI
 
-                                                ' Set an orientation for the custom legend.
-                                                If prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked Then
+                                                        If NumOfPeriods = 1 Then
+                                                            Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                                            Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+                                                            le.SortOrder = 2
+
+                                                            newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+
+                                                            newLegend.ExtraEntries.Add(le)
+
+                                                        ElseIf NumOfPeriods = 2 Then
+                                                            Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                                            Dim ValP2 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(1) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+
+                                                            Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+
+                                                            le.CustomAttributes.Add("ValueP2", Math.Round(CDbl(ValP2), 2))
+                                                            le.CustomAttributes.Add("ValueDelta", Math.Round(CDbl(ValP2) - CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                                            le.CustomAttributes.Add("ValueDeltaP", Math.Round(100 * (CDbl(ValP2) - CDbl(ValP1)) / CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                                            le.SortOrder = 2
+
+                                                            newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+
+                                                            newLegend.ExtraEntries.Add(le)
+
+                                                        End If
+
+                                                    Next
+
+                                                    ' Set orientation for the custom legend
                                                     newLegend.Orientation = Orientation.Right
+
                                                 ElseIf prdCalcChkCmbVisuals.Properties.Items.Item(2).CheckState = CheckState.Checked Then
+
+                                                    If NumOfPeriods = 1 Then
+                                                        newLegend.Template = "%Icon %Name %Value"
+                                                    ElseIf NumOfPeriods = 2 Then
+                                                        newLegend.Template = "%Icon %Name %Value %ValueP2 %ValueDelta %ValueDeltaP"
+                                                        header1 = New LegendEntry("KPI", distinctPeriods(0), "   ")
+                                                        header1.CustomAttributes = "Icon=   "
+                                                        header1.CustomAttributes.Add("ValueP2", distinctPeriods(1))
+                                                        header1.CustomAttributes.Add("ValueDelta", "Delta")
+                                                        header1.CustomAttributes.Add("ValueDeltaP", "Delta%")
+                                                        header1.SortOrder = 99
+                                                        header1.LabelStyle.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                        header1.HeaderMode = LegendEntryHeaderMode.RepeatOnEachColumn
+                                                        newLegend.ExtraEntries.Add(header1)
+                                                    End If
+
+                                                    For Each kpi As String In distinctKPI
+
+                                                        If NumOfPeriods = 1 Then
+                                                            Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                                            Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+                                                            le.SortOrder = 2
+
+                                                            newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+
+                                                            newLegend.ExtraEntries.Add(le)
+
+                                                        ElseIf NumOfPeriods = 2 Then
+                                                            Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                                            Dim ValP2 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(1) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+
+                                                            Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+
+                                                            le.CustomAttributes.Add("ValueP2", Math.Round(CDbl(ValP2), 2))
+                                                            le.CustomAttributes.Add("ValueDelta", Math.Round(CDbl(ValP2) - CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                                            le.CustomAttributes.Add("ValueDeltaP", Math.Round(100 * (CDbl(ValP2) - CDbl(ValP1)) / CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                                            le.SortOrder = 1
+
+                                                            newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+
+                                                            newLegend.ExtraEntries.Add(le)
+
+                                                        End If
+
+                                                    Next
+
+                                                    ' Set orientation for the custom legend
+                                                    newLegend.ListTopToBottom = True
                                                     newLegend.Orientation = Orientation.Bottom
+
                                                 End If
 
                                                 ' The the new legend to the chart.
