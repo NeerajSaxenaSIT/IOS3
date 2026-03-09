@@ -1526,6 +1526,7 @@ Public Class frmChartCustomization
         Dim chart_ElShowDatapoints() As Boolean = {False}
         Dim chart_SeriesVisible() As Boolean = {True}
         Dim chart_SeriesAutoScale() As Boolean = {True}
+        Dim chart_AxisLabelText() As String = {"0"}
 
         Dim j As Integer = 0
         Dim rownum As Integer = 0
@@ -1697,6 +1698,7 @@ Public Class frmChartCustomization
                             ReDim Preserve chart_ElShowDatapoints(j)
                             ReDim Preserve chart_SeriesVisible(j)
                             ReDim Preserve chart_SeriesAutoScale(j)
+                            ReDim Preserve chart_AxisLabelText(j)
 
                             chart_elements(j) = nd.SubItems(0).Text.Trim
                             chart_elementsYAxis(j) = nd.SubItems(5).Text.Trim
@@ -1706,6 +1708,7 @@ Public Class frmChartCustomization
                             chart_ElShowDatapoints(j) = CBool(nd.SubItems(12).Text.Trim)
                             chart_SeriesVisible(j) = CBool(nZ(nd.SubItems(13).Text.Trim, True))
                             chart_SeriesAutoScale(j) = CBool(nZ(nd.SubItems(14).Text.Trim, True))
+                            chart_AxisLabelText(j) = CStr(nZ(nd.SubItems(8).Text.Trim, ""))
 
                             If UCase(chart_elementsYAxis(j)) = "LEFT" Then
                                 chart_YaxisScale(0) = nd.SubItems(3).Text.Trim
@@ -1791,7 +1794,6 @@ Public Class frmChartCustomization
                                             Exit Select
                                     End Select
                                 End If
-
                             End If
                         Next
 
@@ -1818,6 +1820,8 @@ Public Class frmChartCustomization
                                     End If
                                     If Not yaxis1.Label.Text.Contains(LeftAxisLabelAddition) Then
                                         yaxis1.Label.Text = yaxis1.Label.Text + LeftAxisLabelAddition
+                                    Else
+                                        yaxis1.Label.Text = chart_AxisLabelText(i)
                                     End If
                                     sc(i).YAxis = yaxis1
                                     If chart_SeriesAutoScale(i) = False Then
@@ -1831,6 +1835,8 @@ Public Class frmChartCustomization
 
                                     If Not yaxis2.Label.Text.Contains(RightAxisLabelAddition) Then
                                         yaxis2.Label.Text = yaxis2.Label.Text + RightAxisLabelAddition
+                                    Else
+                                        yaxis2.Label.Text = chart_AxisLabelText(i)
                                     End If
                                     sc(i).YAxis = yaxis2
                                     If chart_SeriesAutoScale(i) = False Then
@@ -1908,6 +1914,7 @@ Public Class frmChartCustomization
                     ReDim chart_ElShowDatapoints(True)
                     ReDim chart_SeriesVisible(True)
                     ReDim chart_SeriesAutoScale(True)
+                    ReDim chart_AxisLabelText(0)
                     j = 0
                 End If
 

@@ -774,7 +774,10 @@ Public Class frmTechnology
                     Case "tags"
                         Dim ds_tag As New DataSet
                         Try
-                            Dim parray()() As String = {New String() {"@Tech", Chr(39) & _strNetwork & Chr(39)}}
+                            Dim parray()() As String = {
+                                New String() {"@Tech", Chr(39) & _strNetwork & Chr(39)},
+                                New String() {"@TagOwner", Environment.UserName.ToString}
+                            }
                             Dim sqlAndConnectionStr() As String = GetSQL(IOSSqlIds.TAGS_OBJECT_TREE, parray, dt_IOS_SQL)
                             ds_tag = DataAccessorODBC.GetDataSet(sqlAndConnectionStr(0), sqlAndConnectionStr(1), iQryTimeOut)
                             tl.PopulateTreeList("PLMN", tlNode, ds_tag, "0")

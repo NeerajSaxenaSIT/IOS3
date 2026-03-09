@@ -900,7 +900,7 @@ Module mdlCommonModule
                     Try
                         Dim parray()() As String = {
                             New String() {"@Tech", Chr(39) & Technology & Chr(39)},
-                            New String() {"@TagOwner", Chr(39) & Environment.UserName.ToString & Chr(39)}
+                            New String() {"@TagOwner", Environment.UserName.ToString}
                         }
                         Dim sqlAndConnectionStr() As String = GetSQL(IOSSqlIds.TAGS_OBJECT_TREE, parray, dt_IOS_SQL)
                         ds_tag = DataAccessorODBC.GetDataSet(sqlAndConnectionStr(0), sqlAndConnectionStr(1), iQryTimeOut)
@@ -1386,7 +1386,7 @@ Module mdlCommonModule
                     Try
                         Dim parray()() As String = {
                             New String() {"@Tech", Chr(39) & tech & Chr(39)},
-                            New String() {"@TagOwner", Chr(39) & Environment.UserName.ToString & Chr(39)}
+                            New String() {"@TagOwner", Environment.UserName.ToString}
                         }
                         Dim sqlAndConnectionStr() As String = GetSQL(IOSSqlIds.TAGS_OBJECT_TREE, parray, dt_IOS_SQL)
                         ds_tag = DataAccessorODBC.GetDataSet(sqlAndConnectionStr(0), sqlAndConnectionStr(1), iQryTimeOut)

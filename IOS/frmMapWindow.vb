@@ -8977,7 +8977,7 @@ Public Class frmMapWindow
                     btnRefreshCNE, btnCNESaveTemplate, btnCNEDelTemplate, btnCNECreateAnalysis, btnKpiSelLeftArrow, btnKpiSelRightArrow, btnKpiInfoClearSel, btnRefreshCalendar, btnNeighbors, btnNBClear, btnCustomerGet, btnFreqCalc, btnFreqClear,
                     btnRefreshDtTree, btnGetRadio, btnCompare, btnGetEvents, tsmi_info, tsmi_DeleteProject, tsmi_RenameProject, tsmi_DeleteDrivetest, tsmi_RenameDrivetest, tsmi_DeleteUE, tsmi_RenameUE,
                     tsmi_SendToVA, tsmi_CellTAYesterday, tsmi_CellTASpecificDays, tsmi_dgv_CopyClipboardCell, tsmi_AllowGridCellSelection, tsmi_CreateDeleteNeighbors, tsmi_AddNewTiltCampaign,
-                    tsmi_dgv_CopyClipboardWithHeader, tsmi_Neighbors2G, tsmi_Neighbors3G, tsmi_Neighbors4G, tsmi_Neighbors5G
+                    tsmi_dgv_CopyClipboardWithHeader, tsmi_Neighbors2G, tsmi_Neighbors3G, tsmi_Neighbors4G, tsmi_Neighbors5G, cmbNetworkArea
                 }
 
                 For Each frmControl As Object In formControls
