@@ -559,6 +559,7 @@ Public Class frmTechnology
             End If
         Next
         SetCustomPeriodSelectionStats("daily")
+        PrdCalcLoadHolidaySets()
 
         'Period Calculation Stats Datatable Initialization...
         dtPrdCalcStats = New DataTable
@@ -11619,9 +11620,9 @@ Public Class frmTechnology
 
                         If ch.Type <> ChartType.Surface Then
 
-                            'If manulaAxisMarkerApplied = False Then
-                            'ch.XAxis.Markers.Clear()
-                            'End If
+                            If colprio Is Nothing Then
+                                ch.XAxis.Markers.Clear()
+                            End If
 
                             For Each drow As DataRow In dt.Rows
                                 Dim datestart As DateTime = Nothing
@@ -21932,6 +21933,14 @@ Public Class frmTechnology
                 If tcTabControlHighStats.SelectedTabPage.Controls.Count > 0 Then
                     Dim statsXtc As XtraTabControl = CType(tcTabControlHighStats.SelectedTabPage.Controls(0), XtraTabControl)
                     Dim xtp As XtraTabPage = statsXtc.SelectedTabPage
+                    Dim showBandLabel As Boolean = False
+
+                    'show/hide all bands' label text
+                    If prdCalcChkCmbVisuals.Properties.Items.Item(6).CheckState = CheckState.Checked Then
+                        showBandLabel = True
+                    Else
+                        showBandLabel = False
+                    End If
 
                     dicPrdCalcSeriesData.Clear()
 
@@ -22015,6 +22024,7 @@ Public Class frmTechnology
                                     Catch
                                     End Try
 
+                                    'show/hide chart series/kpi legend
                                     If prdCalcChkCmbVisuals.Properties.Items.Item(0).CheckState = CheckState.Checked Then
                                         ch.LegendBox.Visible = True
                                     Else
@@ -22214,35 +22224,102 @@ Public Class frmTechnology
 
                                         If Not dtPrdCalcStats Is Nothing AndAlso dtPrdCalcStats.Rows.Count > 0 Then
 
+                                            Dim iPrdCalcBandCntr As Integer = 0
+
                                             'adding period calculation bands
                                             If prdCalcChkCmbVisuals.Properties.Items.Item(4).CheckState = CheckState.Checked Then
                                                 For Each dr As DataRow In dtPrdCalcStats.Rows
-                                                    Dim shadeThreshold As AxisMarker = Nothing
-                                                    If GetFromTech_RadioButton(tech, "Raw").Checked Then
-                                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
-                                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+
+                                                    If iPrdCalcBandCntr = 0 Then
+
+                                                        Dim shadeThreshold As AxisMarker = Nothing
+                                                        If GetFromTech_RadioButton(tech, "Raw").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                                        End If
+
+                                                        shadeThreshold.LegendEntry.Visible = False
+                                                        shadeThreshold.Label.LineAlignment = StringAlignment.Center
+                                                        shadeThreshold.Label.Alignment = StringAlignment.Near
+                                                        shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                        shadeThreshold.LegendEntry.Value = ""
+                                                        shadeThreshold.BringToFront = True
+                                                        If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
+                                                            ch.XAxis.Markers.Add(shadeThreshold)
+                                                        End If
+
+                                                        If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
+                                                            prdCalcAxisMarkerColl.Add(shadeThreshold)
+                                                        End If
+
+                                                    ElseIf iPrdCalcBandCntr = 1 Then
+
+                                                        Dim shadeThreshold As AxisMarker = Nothing
+                                                        If GetFromTech_RadioButton(tech, "Raw").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                                        End If
+
+                                                        shadeThreshold.LegendEntry.Visible = False
+                                                        shadeThreshold.Label.LineAlignment = StringAlignment.Center
+                                                        shadeThreshold.Label.Alignment = StringAlignment.Near
+                                                        shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                        shadeThreshold.LegendEntry.Value = ""
+                                                        shadeThreshold.BringToFront = True
+                                                        If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
+                                                            ch.XAxis.Markers.Add(shadeThreshold)
+                                                        End If
+
+                                                        If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
+                                                            prdCalcAxisMarkerColl.Add(shadeThreshold)
+                                                        End If
+
+                                                    Else
+
+                                                        Dim shadeThreshold As AxisMarker = Nothing
+                                                        If GetFromTech_RadioButton(tech, "Raw").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                                        End If
+
+                                                        shadeThreshold.LegendEntry.Visible = False
+                                                        shadeThreshold.Label.LineAlignment = StringAlignment.Center
+                                                        shadeThreshold.Label.Alignment = StringAlignment.Near
+                                                        shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                        shadeThreshold.LegendEntry.Value = ""
+                                                        shadeThreshold.BringToFront = True
+                                                        If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
+                                                            ch.XAxis.Markers.Add(shadeThreshold)
+                                                        End If
+
+                                                        If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
+                                                            prdCalcAxisMarkerColl.Add(shadeThreshold)
+                                                        End If
+
                                                     End If
 
-                                                    shadeThreshold.LegendEntry.Visible = False
-                                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
-                                                    shadeThreshold.Label.Alignment = StringAlignment.Near
-                                                    shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
-                                                    shadeThreshold.LegendEntry.Value = ""
-                                                    shadeThreshold.BringToFront = True
-                                                    If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
-                                                        ch.XAxis.Markers.Add(shadeThreshold)
-                                                    End If
-
-                                                    If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
-                                                        prdCalcAxisMarkerColl.Add(shadeThreshold)
-                                                    End If
+                                                    iPrdCalcBandCntr = iPrdCalcBandCntr + 1
                                                 Next
                                             Else
                                                 If dtPrdCalcStats.Rows.Count > 0 Then
@@ -22425,42 +22502,49 @@ Public Class frmTechnology
                                             End If
 
                                             'adding holiday bands
-                                            Dim sqlParam As String = Nothing
-                                            Dim connstring As String = Nothing
-                                            Dim parray()() As String = {
-                                                New String() {"@PeriodStart", Chr(39) & CDate(dtEditStartTimeStats.EditValue).ToString("yyyy-MM-dd") & Chr(39)},
-                                                New String() {"@PeriodEnd", Chr(39) & CDate(dtEditEndTimeStats.EditValue).ToString("yyyy-MM-dd") & Chr(39)}
-                                            }
+                                            Dim dtHolidayMkr As DataTable = Nothing
+                                            If prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked Or
+                                               prdCalcChkCmbVisuals.Properties.Items.Item(8).CheckState = CheckState.Checked Then
 
-                                            sqlParam = GetSQL(8823, parray)(1)
-                                            connstring = GetSQL(8823, parray)(0)
-                                            Dim dtHolidayMkr As DataTable = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+                                                Dim HolidaySet As String = IIf(prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked, prdCalcChkCmbVisuals.Properties.Items.Item(7).Value, prdCalcChkCmbVisuals.Properties.Items.Item(8).Value)
+                                                Dim sqlParam As String = Nothing
+                                                Dim connstring As String = Nothing
+                                                Dim parray()() As String = {
+                                                    New String() {"@PeriodStart", Chr(39) & CDate(dtEditStartTimeStats.EditValue).ToString("yyyy-MM-dd") & Chr(39)},
+                                                    New String() {"@PeriodEnd", Chr(39) & CDate(dtEditEndTimeStats.EditValue).ToString("yyyy-MM-dd") & Chr(39)},
+                                                    New String() {"@HolidaySet", Chr(39) & HolidaySet & Chr(39)}
+                                                }
 
-                                            If prdCalcChkCmbVisuals.Properties.Items.Item(6).CheckState = CheckState.Checked Then
+                                                sqlParam = GetSQL(8823, parray)(1)
+                                                connstring = GetSQL(8823, parray)(0)
+                                                dtHolidayMkr = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+
                                                 prdCalcHolidayAM = True
-                                                If dtHolidayMkr.Rows.Count > 0 Then
-                                                    For Each dr As DataRow In dtHolidayMkr.Rows
-                                                        Dim holidayAM As AxisMarker = Nothing
-                                                        holidayAM = New AxisMarker(dr("HolidayName"), New Background(Color.FromArgb(100, Color.LightYellow)), CDate(dr("StartDate")), CDate(dr("EndDate")))
+                                                If dtHolidayMkr IsNot Nothing Then
+                                                    If dtHolidayMkr.Rows.Count > 0 Then
+                                                        For Each dr As DataRow In dtHolidayMkr.Rows
+                                                            Dim holidayAM As AxisMarker = Nothing
+                                                            holidayAM = New AxisMarker(IIf(showBandLabel, dr("HolidayName"), ""), New Background(Color.FromArgb(100, Color.LightYellow)), CDate(dr("StartDate")), CDate(dr("EndDate")))
 
-                                                        holidayAM.LegendEntry.Visible = False
-                                                        holidayAM.Label.LineAlignment = StringAlignment.Center
-                                                        holidayAM.Label.Alignment = StringAlignment.Near
-                                                        holidayAM.Label.Font = New Font("Arial", 8, FontStyle.Regular)
-                                                        holidayAM.LegendEntry.Value = ""
-                                                        holidayAM.BringToFront = True
-                                                        If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, holidayAM) Then
-                                                            ch.XAxis.Markers.Add(holidayAM)
-                                                        End If
+                                                            holidayAM.LegendEntry.Visible = False
+                                                            holidayAM.Label.LineAlignment = StringAlignment.Center
+                                                            holidayAM.Label.Alignment = StringAlignment.Near
+                                                            holidayAM.Label.Font = New Font("Arial", 8, FontStyle.Regular)
+                                                            holidayAM.LegendEntry.Value = ""
+                                                            holidayAM.BringToFront = True
+                                                            If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, holidayAM) Then
+                                                                ch.XAxis.Markers.Add(holidayAM)
+                                                            End If
 
-                                                        If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, holidayAM) Then
-                                                            prdCalcAxisMarkerColl.Add(holidayAM)
-                                                        End If
-                                                    Next
+                                                            If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, holidayAM) Then
+                                                                prdCalcAxisMarkerColl.Add(holidayAM)
+                                                            End If
+                                                        Next
+                                                    End If
                                                 End If
                                             Else
                                                 prdCalcHolidayAM = False
-                                                If dtHolidayMkr.Rows.Count > 0 Then
+                                                If (dtHolidayMkr IsNot Nothing) AndAlso (dtHolidayMkr.Rows.Count > 0) Then
                                                     For Each dr As DataRow In dtHolidayMkr.Rows
                                                         For i As Integer = 0 To prdCalcAxisMarkerColl.Count - 1
                                                             Dim am As AxisMarker = prdCalcAxisMarkerColl(i)
@@ -24259,6 +24343,30 @@ Public Class frmTechnology
                 Next
             End If
         End If
+    End Sub
+
+    Private Sub PrdCalcLoadHolidaySets()
+        Try
+            Dim FirstItemChecked As Boolean = False
+            Dim sqlParam As String = Nothing
+            Dim connstring As String = Nothing
+            Dim parray()() As String = Nothing
+
+            sqlParam = GetSQL(8825, parray)(1)
+            connstring = GetSQL(8825, parray)(0)
+            Dim dt = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+            If dt IsNot Nothing Then
+                If dt.Rows.Count > 0 Then
+                    For Each dr As DataRow In dt.Rows
+                        prdCalcChkCmbVisuals.Properties.Items.Add(dr("HolidaySet"), IIf(FirstItemChecked, CheckState.Unchecked, CheckState.Checked))
+                        FirstItemChecked = True
+                    Next
+                End If
+            End If
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        End Try
     End Sub
 
 #End Region
