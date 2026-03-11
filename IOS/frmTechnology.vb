@@ -22006,6 +22006,14 @@ Public Class frmTechnology
                                         End If
                                     End If
 
+                                    If tsmi_ObjectAggregationOnOff.Checked = False Then
+                                        If dgv.Table.Columns.Contains(dgv.Table.TableName) Then
+                                            dgv.RowFilter = dgv.Table.TableName & "='" & ch.Title.Split("'")(1) & "'"
+                                        Else
+                                            dgv.RowFilter = cmbObjectTreeStats.SelectedItem.ToString & "='" & ch.Title.Split(":")(1).ToString.Replace("'", "").Trim & "'"
+                                        End If
+                                    End If
+
                                     If dgv Is Nothing Then
                                         Continue For
                                     End If
@@ -22749,7 +22757,6 @@ Public Class frmTechnology
                                                                           Dim rowDate = n.Field(Of DateTime)("Date")
                                                                           Return rowDate >= prevStr AndAlso rowDate < curStr
                                                                       End Function).OrderBy(Function(n) n.Field(Of Object)(KPIName)).ToArray()
-                        'dt.Select(filter, KPIName & " ASC")
 
                         If dr.Count Mod 2 = 0 Then
                             medianObj = (dr(((dr.Count) / 2) - 1)(KPIName) + dr(((dr.Count) / 2))(KPIName)) / 2
