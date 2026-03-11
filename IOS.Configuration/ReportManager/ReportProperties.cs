@@ -152,7 +152,7 @@ namespace IOS.Configuration.ReportManager
         }
         internal class objScheduleInterval
         {
-            internal static string[] _oInterval = { "Daily", "Weekly", "Monthly" };
+            internal static string[] _oInterval = { "Hourly", "Daily", "Weekly", "Monthly" };
         }
         public class ScheduleIntervalConverter : StringConverter
         {
