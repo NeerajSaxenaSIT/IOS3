@@ -578,6 +578,7 @@ Public Class frmTechnology
         dtPrdCalcStats.Columns.Add("PeriodEnd", GetType(Date))
 
         '============= Evaluate ================
+        tcHighEvaluate.SelectedTabPageIndex = 0
         tvObjectsTreeEval.SelectImageList = imgListObject
         tvObjectsTreeEval.Tag = _strNetwork
 
@@ -22107,8 +22108,8 @@ Public Class frmTechnology
                                             ds.Tables.Add(dtData)
 
                                             Dim lst_seriesToadd As New List(Of Series)
-                                            Try
-                                                For Each s As Series In ch.SeriesCollection
+                                            For Each s As Series In ch.SeriesCollection
+                                                Try
                                                     Dim row As DataRow = chartConfigTable.AsEnumerable().FirstOrDefault(Function(r) String.Equals(r.Field(Of String)("ChartName"), ch.Name, StringComparison.Ordinal) AndAlso String.Equals(r.Field(Of String)("ChartElements"), s.Name, StringComparison.Ordinal))
                                                     prdCalcEnabled = If(row IsNot Nothing, row.Field(Of Boolean?)("PeriodCalcEnabled").GetValueOrDefault(False), False)
                                                     If prdCalcEnabled = True Then
@@ -22272,19 +22273,22 @@ Public Class frmTechnology
 
                                                         End If
                                                     End If
-                                                Next
+                                                Catch ex As Exception
+                                                    UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                                                End Try
+                                            Next
 
-                                                For Each s As Series In lst_seriesToadd
+                                            For Each s As Series In lst_seriesToadd
+                                                Try
                                                     If s.YAxis.Label.Text.Contains("Thousand") Then
                                                         s = Series.Divide(s, 1000)
                                                     ElseIf s.YAxis.Label.Text.Contains("Million") Then
                                                         s = Series.Divide(s, 1000000)
                                                     End If
                                                     ch.SeriesCollection.Add(s)
-                                                Next
-                                            Catch ex As Exception
-                                                UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-                                            End Try
+                                                Catch
+                                                End Try
+                                            Next
 
                                         End If
 
@@ -22320,8 +22324,8 @@ Public Class frmTechnology
                                                         newLegend.ExtraEntries.Add(header1)
                                                     End If
 
-                                                    Try
-                                                        For Each kpi As String In distinctKPI
+                                                    For Each kpi As String In distinctKPI
+                                                        Try
                                                             If NumOfPeriods = 1 Then
                                                                 Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
                                                                 Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
@@ -22345,10 +22349,10 @@ Public Class frmTechnology
                                                                 newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
                                                                 newLegend.ExtraEntries.Add(le)
                                                             End If
-                                                        Next
-                                                    Catch ex As Exception
-                                                        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-                                                    End Try
+                                                        Catch ex As Exception
+                                                            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                                                        End Try
+                                                    Next
 
                                                     ' Set orientation for the custom legend
                                                     newLegend.Orientation = Orientation.Right
@@ -22538,83 +22542,85 @@ Public Class frmTechnology
                                         End If
                                     End If
 
-                                    'adding weekend bands
-                                    If prdCalcChkCmbVisuals.Properties.Items.Item(5).CheckState = CheckState.Checked Then
-                                            prdCalcWeekendAM = True
-                                            Dim cp As New CalendarPattern(TimeInterval.Day, TimeInterval.Week, "1000001")
-                                            cp.AdjustmentUnit = TimeInterval.Day
-                                            Dim am As New AxisMarker("", New Background(Color.FromArgb(100, Color.LightGray)), 0, 0)
-                                            am.CalendarPattern = cp
-                                            am.LegendEntry.Visible = False
-                                            am.BringToFront = True
-                                            If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, am) Then
-                                                ch.XAxis.Markers.Add(am)
-                                            End If
+                                End If
 
-                                            If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, am) Then
-                                                prdCalcAxisMarkerColl.Add(am)
-                                            End If
-                                        Else
-                                            prdCalcWeekendAM = False
-
-                                            For k As Integer = ch.XAxis.Markers.Count - 1 To 0 Step -1
-                                                Dim am As AxisMarker = ch.XAxis.Markers(k)
-                                                If (am.Value.GetType().Name = "Double") AndAlso (am.Value = 0) AndAlso (am.ValueLow = 0) AndAlso (am.ValueHigh = 0) Then
-                                                    ch.XAxis.Markers.RemoveAt(k)
-                                                End If
-                                            Next
-
-                                            For Each am As AxisMarker In prdCalcAxisMarkerColl
-                                                If am.CalendarPattern IsNot Nothing Then
-                                                    prdCalcAxisMarkerColl.Remove(am)
-                                                    Exit For
-                                                End If
-                                            Next
+                                'adding weekend bands
+                                If prdCalcChkCmbVisuals.Properties.Items.Item(5).CheckState = CheckState.Checked Then
+                                        prdCalcWeekendAM = True
+                                        Dim cp As New CalendarPattern(TimeInterval.Day, TimeInterval.Week, "1000001")
+                                        cp.AdjustmentUnit = TimeInterval.Day
+                                        Dim am As New AxisMarker("", New Background(Color.FromArgb(100, Color.LightGray)), 0, 0)
+                                        am.CalendarPattern = cp
+                                        am.LegendEntry.Visible = False
+                                        am.BringToFront = True
+                                        If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, am) Then
+                                            ch.XAxis.Markers.Add(am)
                                         End If
 
-                                    'adding holiday bands
-                                    Dim dtHolidayMkr As DataTable = Nothing
-                                    If prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked Or
-                                               prdCalcChkCmbVisuals.Properties.Items.Item(8).CheckState = CheckState.Checked Then
+                                        If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, am) Then
+                                            prdCalcAxisMarkerColl.Add(am)
+                                        End If
+                                    Else
+                                        prdCalcWeekendAM = False
 
-                                        Dim HolidaySet As String = IIf(prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked, prdCalcChkCmbVisuals.Properties.Items.Item(7).Value, prdCalcChkCmbVisuals.Properties.Items.Item(8).Value)
-                                        Dim sqlParam As String = Nothing
-                                        Dim connstring As String = Nothing
-                                        Dim parray()() As String = {
+                                        For k As Integer = ch.XAxis.Markers.Count - 1 To 0 Step -1
+                                            Dim am As AxisMarker = ch.XAxis.Markers(k)
+                                            If (am.Value.GetType().Name = "Double") AndAlso (am.Value = 0) AndAlso (am.ValueLow = 0) AndAlso (am.ValueHigh = 0) Then
+                                                ch.XAxis.Markers.RemoveAt(k)
+                                            End If
+                                        Next
+
+                                        For Each am As AxisMarker In prdCalcAxisMarkerColl
+                                            If am.CalendarPattern IsNot Nothing Then
+                                                prdCalcAxisMarkerColl.Remove(am)
+                                                Exit For
+                                            End If
+                                        Next
+                                    End If
+
+                                'adding holiday bands
+                                Dim dtHolidayMkr As DataTable = Nothing
+                                If prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked Or
+                                       prdCalcChkCmbVisuals.Properties.Items.Item(8).CheckState = CheckState.Checked Then
+
+                                    Dim HolidaySet As String = IIf(prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked, prdCalcChkCmbVisuals.Properties.Items.Item(7).Value, prdCalcChkCmbVisuals.Properties.Items.Item(8).Value)
+                                    Dim sqlParam As String = Nothing
+                                    Dim connstring As String = Nothing
+                                    Dim parray()() As String = {
                                             New String() {"@PeriodStart", Chr(39) & CDate(dtEditStartTimeStats.EditValue).ToString("yyyy-MM-dd") & Chr(39)},
                                             New String() {"@PeriodEnd", Chr(39) & CDate(dtEditEndTimeStats.EditValue).ToString("yyyy-MM-dd") & Chr(39)},
                                             New String() {"@HolidaySet", Chr(39) & HolidaySet & Chr(39)}
                                         }
 
-                                        sqlParam = GetSQL(8823, parray)(1)
-                                        connstring = GetSQL(8823, parray)(0)
-                                        dtHolidayMkr = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+                                    sqlParam = GetSQL(8823, parray)(1)
+                                    connstring = GetSQL(8823, parray)(0)
+                                    dtHolidayMkr = DataAccessorODBC.GetDataTable(connstring, sqlParam)
 
-                                        prdCalcHolidayAM = True
-                                        If dtHolidayMkr IsNot Nothing Then
-                                            If dtHolidayMkr.Rows.Count > 0 Then
-                                                For Each dr As DataRow In dtHolidayMkr.Rows
-                                                    Dim holidayAM As AxisMarker = Nothing
-                                                    holidayAM = New AxisMarker(IIf(showBandLabel, dr("HolidayName"), ""), New Background(Color.FromArgb(100, Color.LightYellow)), CDate(dr("StartDate")), CDate(dr("EndDate")))
+                                    prdCalcHolidayAM = True
+                                    If dtHolidayMkr IsNot Nothing Then
+                                        If dtHolidayMkr.Rows.Count > 0 Then
+                                            For Each dr As DataRow In dtHolidayMkr.Rows
+                                                Dim holidayAM As AxisMarker = Nothing
+                                                holidayAM = New AxisMarker(IIf(showBandLabel, dr("HolidayName"), ""), New Background(Color.FromArgb(100, Color.LightYellow)), CDate(dr("StartDate")), CDate(dr("EndDate")))
 
-                                                    holidayAM.LegendEntry.Visible = False
-                                                    holidayAM.Label.LineAlignment = StringAlignment.Center
-                                                    holidayAM.Label.Alignment = StringAlignment.Near
-                                                    holidayAM.Label.Font = New Font("Arial", 8, FontStyle.Regular)
-                                                    holidayAM.LegendEntry.Value = ""
-                                                    holidayAM.BringToFront = True
-                                                    If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, holidayAM) Then
-                                                        ch.XAxis.Markers.Add(holidayAM)
-                                                    End If
+                                                holidayAM.LegendEntry.Visible = False
+                                                holidayAM.Label.LineAlignment = StringAlignment.Center
+                                                holidayAM.Label.Alignment = StringAlignment.Near
+                                                holidayAM.Label.Font = New Font("Arial", 8, FontStyle.Regular)
+                                                holidayAM.LegendEntry.Value = ""
+                                                holidayAM.BringToFront = True
+                                                If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, holidayAM) Then
+                                                    ch.XAxis.Markers.Add(holidayAM)
+                                                End If
 
-                                                    If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, holidayAM) Then
-                                                        prdCalcAxisMarkerColl.Add(holidayAM)
-                                                    End If
-                                                Next
-                                            End If
+                                                If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, holidayAM) Then
+                                                    prdCalcAxisMarkerColl.Add(holidayAM)
+                                                End If
+                                            Next
                                         End If
-                                    Else
-                                        prdCalcHolidayAM = False
+                                    End If
+                                Else
+                                    prdCalcHolidayAM = False
                                             If (dtHolidayMkr IsNot Nothing) AndAlso (dtHolidayMkr.Rows.Count > 0) Then
                                                 For Each dr As DataRow In dtHolidayMkr.Rows
                                                     For i As Integer = 0 To prdCalcAxisMarkerColl.Count - 1
@@ -22627,11 +22633,10 @@ Public Class frmTechnology
                                             End If
                                         End If
 
-                                    If Not dicPrdCalcAxisMarkers.ContainsKey(ch.Name) Then
-                                        dicPrdCalcAxisMarkers.Add(ch.Name, prdCalcAxisMarkerColl)
-                                    End If
-
+                                If Not dicPrdCalcAxisMarkers.ContainsKey(ch.Name) Then
+                                    dicPrdCalcAxisMarkers.Add(ch.Name, prdCalcAxisMarkerColl)
                                 End If
+
                             Catch ex As Exception
                                 _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
                                 UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
@@ -22782,8 +22787,8 @@ Public Class frmTechnology
 
             For Each cur As DataRow In inputDates_Sorted.Rows
                 ' Column name shown with your preferred format (to the minute)
-                Try
-                    For Each KPIName As String In ChartElements_Original
+                For Each KPIName As String In ChartElements_Original
+                    Try
                         '    Dim colName As String = columnPrefix & "_" & KPIName & "_" & cur("PeriodName")
                         '    If dt.Columns.Contains(colName) Then dt.Columns.Remove(colName)
 
@@ -22820,46 +22825,52 @@ Public Class frmTechnology
                                                                               Return rowDate >= prevStr AndAlso rowDate < curStr
                                                                           End Function).OrderBy(Function(n) n.Field(Of Object)(KPIName)).ToArray()
 
-                            If dr.Count Mod 2 = 0 Then
-                                medianObj = (dr(((dr.Count) / 2) - 1)(KPIName) + dr(((dr.Count) / 2))(KPIName)) / 2
-                            Else
-                                medianObj = dr((dr.Count - 1) / 2)(KPIName)
+                            If dr.Length > 0 Then
+
+                                Try
+                                    If dr.Count Mod 2 = 0 Then
+                                        medianObj = (dr(((dr.Count) / 2) - 1)(KPIName) + dr(((dr.Count) / 2))(KPIName)) / 2
+                                    Else
+                                        medianObj = dr((dr.Count - 1) / 2)(KPIName)
+                                    End If
+                                Catch
+                                End Try
+
+                                'percentile
+                                Dim p90 As Object
+                                p90 = PercentileCalculation(dr.CopyToDataTable, KPIName, 90)
+
+                                Dim p10 As Object
+                                p10 = PercentileCalculation(dr.CopyToDataTable, KPIName, 10)
+
+                                'If avgObj IsNot DBNull.Value Then
+                                '    Dim avg As Double = Convert.ToDouble(avgObj, Globalization.CultureInfo.InvariantCulture)
+                                '    For Each r In dt.Select(filter)
+                                '        '   r(colName) = avg
+                                '        r(colName) = r(KPIName)
+                                '    Next
+                                'End If
+
+                                Dim nr As DataRow = dt_period_summary.NewRow
+                                nr("PeriodName") = cur("PeriodName")
+                                nr("KPIName") = KPIName
+                                nr("AVG") = avgObj
+                                nr("MIN") = minObj
+                                nr("MAX") = maxObj
+                                nr("STDEV") = stdObj
+                                nr("COUNT") = countObj
+                                nr("MEDIAN") = medianObj
+                                nr("P90") = p90
+                                nr("P10") = p10
+
+                                dt_period_summary.Rows.Add(nr)
+
                             End If
-
-                            'percentile
-                            Dim p90 As Object
-                            p90 = PercentileCalculation(dr.CopyToDataTable, KPIName, 90)
-
-                            Dim p10 As Object
-                            p10 = PercentileCalculation(dr.CopyToDataTable, KPIName, 10)
-
-                            'If avgObj IsNot DBNull.Value Then
-                            '    Dim avg As Double = Convert.ToDouble(avgObj, Globalization.CultureInfo.InvariantCulture)
-                            '    For Each r In dt.Select(filter)
-                            '        '   r(colName) = avg
-                            '        r(colName) = r(KPIName)
-                            '    Next
-                            'End If
-
-                            Dim nr As DataRow = dt_period_summary.NewRow
-                            nr("PeriodName") = cur("PeriodName")
-                            nr("KPIName") = KPIName
-                            nr("AVG") = avgObj
-                            nr("MIN") = minObj
-                            nr("MAX") = maxObj
-                            nr("STDEV") = stdObj
-                            nr("COUNT") = countObj
-                            nr("MEDIAN") = medianObj
-                            nr("P90") = p90
-                            nr("P10") = p10
-
-                            dt_period_summary.Rows.Add(nr)
-
                         End If
-                    Next
-                Catch ex As Exception
-                    UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-                End Try
+                    Catch ex As Exception
+                        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                    End Try
+                Next
             Next
 
             Return dt_period_summary
@@ -22870,29 +22881,34 @@ Public Class frmTechnology
     End Function
 
     Public Function PercentileCalculation(dt As DataTable, columnName As String, ptile As Double) As Double
-        ' Get non-null numeric values
-        Dim values = dt.AsEnumerable().
+        Try
+            ' Get non-null numeric values
+            Dim values = dt.AsEnumerable().
             Where(Function(r) Not r.IsNull(columnName)).
             Select(Function(r) Convert.ToDouble(r(columnName))).
             OrderBy(Function(v) v).
             ToArray()
 
-        If values.Count = 0 Then
-            Console.WriteLine("No data available to calculate percentile.")
-        End If
+            If values.Count = 0 Then
+                Console.WriteLine("No data available to calculate percentile.")
+            Else
+                ' Percentile position (0-based index)
+                Dim position As Double = (ptile / 100) * (values.Length - 1)
+                Dim lowerIndex As Integer = Math.Floor(position)
+                Dim upperIndex As Integer = Math.Ceiling(position)
 
-        ' Percentile position (0-based index)
-        Dim position As Double = (ptile / 100) * (values.Length - 1)
-        Dim lowerIndex As Integer = Math.Floor(position)
-        Dim upperIndex As Integer = Math.Ceiling(position)
-
-        ' Linear interpolation between nearest ranks
-        If lowerIndex = upperIndex Then
-            Return values(lowerIndex)
-        Else
-            Dim fraction As Double = position - lowerIndex
-            Return values(lowerIndex) + fraction * (values(upperIndex) - values(lowerIndex))
-        End If
+                ' Linear interpolation between nearest ranks
+                If lowerIndex = upperIndex Then
+                    Return values(lowerIndex)
+                Else
+                    Dim fraction As Double = position - lowerIndex
+                    Return values(lowerIndex) + fraction * (values(upperIndex) - values(lowerIndex))
+                End If
+            End If
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        End Try
     End Function
 
     Private Sub LoadPeriodCalculationData()
@@ -22933,62 +22949,68 @@ Public Class frmTechnology
                 dtMergeFinal.Columns.Add("Delta", GetType(Double))
                 dtMergeFinal.Columns.Add("DeltaPercentage", GetType(Double))
 
-                For Each kvp In dicPrdCalcData
+                If dicPrdCalcData.Count > 0 Then
 
-                    dtMerge1 = Nothing
-                    dtMerge2 = Nothing
-                    Dim dt As DataTable = kvp.Value
+                    For Each kvp In dicPrdCalcData
 
-                    If dt IsNot Nothing Then
-                        Dim excludeCols() As String = {"PeriodName", "KPIName"}
-                        Dim CalcTypeCols = dt.Columns.Cast(Of DataColumn)().Where(Function(c) Not excludeCols.Contains(c.ColumnName)).Select(Function(c) c.ColumnName).ToList()
+                        dtMerge1 = Nothing
+                        dtMerge2 = Nothing
+                        Dim dt As DataTable = kvp.Value
 
-                        dtMerge1 = dt.AsEnumerable().Where(Function(x) x.Field(Of String)("PeriodName") = distinctPeriods(0)).CopyToDataTable
-                        dtMerge2 = dt.AsEnumerable().Where(Function(x) x.Field(Of String)("PeriodName") = distinctPeriods(1)).CopyToDataTable
+                        If dt IsNot Nothing Then
+                            Dim excludeCols() As String = {"PeriodName", "KPIName"}
+                            Dim CalcTypeCols = dt.Columns.Cast(Of DataColumn)().Where(Function(c) Not excludeCols.Contains(c.ColumnName)).Select(Function(c) c.ColumnName).ToList()
 
-                        For Each drMerge1 As DataRow In dtMerge1.Rows
-                            For Each calcType In CalcTypeCols
-                                Dim drMergeFnial As DataRow = dtMergeFinal.NewRow()
-                                If dtMerge1.Columns.Contains(calcType) Then
+                            dtMerge1 = dt.AsEnumerable().Where(Function(x) x.Field(Of String)("PeriodName") = distinctPeriods(0)).CopyToDataTable
+                            dtMerge2 = dt.AsEnumerable().Where(Function(x) x.Field(Of String)("PeriodName") = distinctPeriods(1)).CopyToDataTable
 
-                                    drMergeFnial(distinctPeriods(0) & "_Dates") = p1_date
-                                    drMergeFnial(distinctPeriods(1) & "_Dates") = p2_date
+                            For Each drMerge1 As DataRow In dtMerge1.Rows
+                                For Each calcType In CalcTypeCols
+                                    Dim drMergeFnial As DataRow = dtMergeFinal.NewRow()
+                                    If dtMerge1.Columns.Contains(calcType) Then
 
-                                    drMergeFnial("KPIName") = drMerge1("KPIName").ToString
-                                    drMergeFnial("CalculationType") = calcType.ToString
-                                    drMergeFnial(distinctPeriods(0)) = Math.Round(CDbl(drMerge1(calcType)), 2)
-                                    Dim drMerge2 As DataRow = dtMerge2.Select("KPIName='" & drMerge1("KPIName").ToString & "'")(0)
-                                    drMergeFnial(distinctPeriods(1)) = Math.Round(CDbl(drMerge2(calcType)), 2)
-                                    drMergeFnial("Delta") = Math.Round(CDbl(drMerge2(calcType)) - CDbl(drMerge1(calcType)), IIf(drMergeFnial("KPIName").ToLower.Contains("rat"), 2, 1))
-                                    drMergeFnial("DeltaPercentage") = Math.Round(100 * (CDbl(drMerge2(calcType)) - CDbl(drMerge1(calcType))) / CDbl(drMerge1(calcType)), IIf(drMergeFnial("KPIName").ToLower.Contains("rat"), 2, 1))
-                                End If
-                                dtMergeFinal.Rows.Add(drMergeFnial)
+                                        drMergeFnial(distinctPeriods(0) & "_Dates") = p1_date
+                                        drMergeFnial(distinctPeriods(1) & "_Dates") = p2_date
+
+                                        drMergeFnial("KPIName") = drMerge1("KPIName").ToString
+                                        drMergeFnial("CalculationType") = calcType.ToString
+                                        drMergeFnial(distinctPeriods(0)) = Math.Round(CDbl(drMerge1(calcType)), 2)
+                                        Dim drMerge2 As DataRow = dtMerge2.Select("KPIName='" & drMerge1("KPIName").ToString & "'")(0)
+                                        drMergeFnial(distinctPeriods(1)) = Math.Round(CDbl(drMerge2(calcType)), 2)
+                                        drMergeFnial("Delta") = Math.Round(CDbl(drMerge2(calcType)) - CDbl(drMerge1(calcType)), IIf(drMergeFnial("KPIName").ToLower.Contains("rat"), 2, 1))
+                                        drMergeFnial("DeltaPercentage") = Math.Round(100 * (CDbl(drMerge2(calcType)) - CDbl(drMerge1(calcType))) / CDbl(drMerge1(calcType)), IIf(drMergeFnial("KPIName").ToLower.Contains("rat"), 2, 1))
+                                    End If
+                                    dtMergeFinal.Rows.Add(drMergeFnial)
+                                Next
                             Next
-                        Next
+                        End If
+
+                    Next
+
+                    IOSDevExpressGrid.PopulateDataInGrid(gcPrdCalcCompStats, gvPrdCalcCompStats, dtMergeFinal, "ALL")
+
+                    If gvPrdCalcCompStats.RowCount > 0 Then
+
+                        gvPrdCalcCompStats.Columns("CalculationType").FilterInfo = New DevExpress.XtraGrid.Columns.ColumnFilterInfo("[CalculationType]='" & cmbPrdCalcStats.Text.ToUpper & "'")
+                        gvPrdCalcCompStats.BeginSort()
+
+                        Try
+                            gvPrdCalcCompStats.ClearSorting()
+                            gvPrdCalcCompStats.Columns("DeltaPercentage").SortOrder = DevExpress.Data.ColumnSortOrder.Descending
+                            gvPrdCalcCompStats.TopRowIndex = 0
+                            gvPrdCalcCompStats.FocusedRowHandle = 0
+                        Finally
+                            gvPrdCalcCompStats.EndSort()
+                        End Try
+
+                        gvPrdCalcCompStats.BestFitColumns()
+
+                        dtMerge1 = Nothing
+                        dtMerge2 = Nothing
+
                     End If
-
-                Next
-
-                IOSDevExpressGrid.PopulateDataInGrid(gcPrdCalcCompStats, gvPrdCalcCompStats, dtMergeFinal, "ALL")
-
-                gvPrdCalcCompStats.Columns("CalculationType").FilterInfo = New DevExpress.XtraGrid.Columns.ColumnFilterInfo("[CalculationType]='" & cmbPrdCalcStats.Text.ToUpper & "'")
-                gvPrdCalcCompStats.BeginSort()
-
-                Try
-                    gvPrdCalcCompStats.ClearSorting()
-                    gvPrdCalcCompStats.Columns("DeltaPercentage").SortOrder = DevExpress.Data.ColumnSortOrder.Descending
-                    gvPrdCalcCompStats.TopRowIndex = 0
-                    gvPrdCalcCompStats.FocusedRowHandle = 0
-                Finally
-                    gvPrdCalcCompStats.EndSort()
-                End Try
-
-                gvPrdCalcCompStats.BestFitColumns()
-
-                dtMerge1 = Nothing
-                dtMerge2 = Nothing
+                End If
             End If
-
             AddHandler gvPrdCalcCompStats.FocusedRowChanged, AddressOf gvPrdCalcCompStats_FocusedRowChanged
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
