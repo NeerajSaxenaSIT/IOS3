@@ -406,6 +406,16 @@ Public Class frmTechnology
                 dtPrdCalcEval.AcceptChanges()
 
                 IOSDevExpressGrid.PopulateDataInGrid(gcPrdCalcEval, gvPrdCalcEval, dtPrdCalcEval, "ALL", Nothing, "PeriodName", "yyyy-MM-dd")
+
+                Dim dtEditPrdStart As New RepositoryItemDateEdit()
+                dtEditPrdStart.Mask.EditMask = "yyyy-MM-dd"
+                dtEditPrdStart.Mask.UseMaskAsDisplayFormat = True
+                gvPrdCalcEval.Columns("PeriodStart").ColumnEdit = dtEditPrdStart
+
+                Dim dtEditPrdEnd As New RepositoryItemDateEdit()
+                dtEditPrdEnd.Mask.EditMask = "yyyy-MM-dd"
+                dtEditPrdEnd.Mask.UseMaskAsDisplayFormat = True
+                gvPrdCalcEval.Columns("PeriodEnd").ColumnEdit = dtEditPrdEnd
             End If
             dtEditStartTimeEval.EditValue = CDate(dtPrdCalcEval.Rows(0)("PeriodStart"))
         End If
@@ -609,6 +619,7 @@ Public Class frmTechnology
         AddHandler tvKPITopX.NodeChanged, AddressOf tvKPITopX_NodeChanged
         AddHandler tvObjTreeFilterTempStats.NodeChanged, AddressOf tvObjTreeFilterTempStats_NodeChanged
         AddHandler tvObjTreeFilterTempTopX.NodeChanged, AddressOf tvObjTreeFilterTempTopX_NodeChanged
+        AddHandler tvObjTreeFilterTempEval.NodeChanged, AddressOf tvObjTreeFilterTempEval_NodeChanged
 
         'Period Calculation Eval Datatable Initialization...
         dtPrdCalcEval = New DataTable
@@ -777,7 +788,7 @@ Public Class frmTechnology
                         Try
                             Dim parray()() As String = {
                                 New String() {"@Tech", Chr(39) & _strNetwork & Chr(39)},
-                                New String() {"@TagOwner", Environment.UserName.ToString}
+                                New String() {"@TagOwner", Chr(39) & Environment.UserName.ToString & Chr(39)}
                             }
                             Dim sqlAndConnectionStr() As String = GetSQL(IOSSqlIds.TAGS_OBJECT_TREE, parray, dt_IOS_SQL)
                             ds_tag = DataAccessorODBC.GetDataSet(sqlAndConnectionStr(0), sqlAndConnectionStr(1), iQryTimeOut)
@@ -992,28 +1003,43 @@ Public Class frmTechnology
                     dtPeriod = DataAccessorODBC.GetDataTable(connStrIOSServer, SQL)
                     If dtPeriod IsNot Nothing AndAlso dtPeriod.Rows.Count > 0 Then
                         If cmb.Name.Contains("TopX") Then
-                            deStartTimeTopX.EditValue = dtPeriod.Rows(0)(0)
-                            deEndTimeTopX.EditValue = dtPeriod.Rows(0)(1)
-                            If xtcPSFilterTopX.SelectedTabPage.Text = "Days" Then
-                                deEndTimeTopX.EditValue = deEndTimeTopX.DateTime.Date
-                            ElseIf xtcPSFilterTopX.SelectedTabPage.Text = "Hours" Then
-                                deEndTimeTopX.EditValue = deEndTimeTopX.DateTime.AddHours(23).AddMinutes(59)
+                            If rdoHourlyTopX.Checked Or rdoRawTopX.Checked Then
+                                deStartTimeTopX.EditValue = dtPeriod.Rows(0)(0)
+                                deEndTimeTopX.EditValue = dtPeriod.Rows(0)(1)
+                            Else
+                                deStartTimeTopX.EditValue = dtPeriod.Rows(0)(0)
+                                deEndTimeTopX.EditValue = dtPeriod.Rows(0)(1)
+                                If xtcPSFilterTopX.SelectedTabPage.Text = "Days" Then
+                                    deEndTimeTopX.EditValue = deEndTimeTopX.DateTime.Date
+                                ElseIf xtcPSFilterTopX.SelectedTabPage.Text = "Hours" Then
+                                    deEndTimeTopX.EditValue = deEndTimeTopX.DateTime.AddHours(23).AddMinutes(59)
+                                End If
                             End If
                         ElseIf cmb.Name.Contains("Stats") Then
-                            dtEditStartTimeStats.EditValue = dtPeriod.Rows(0)(0)
-                            dtEditEndTimeStats.EditValue = dtPeriod.Rows(0)(1)
-                            If xtcPSFilterStats.SelectedTabPage.Text = "Days" Then
-                                dtEditEndTimeStats.EditValue = dtEditEndTimeStats.DateTime.Date
-                            ElseIf xtcPSFilterStats.SelectedTabPage.Text = "Hours" Then
-                                dtEditEndTimeStats.EditValue = dtEditEndTimeStats.DateTime.AddHours(23).AddMinutes(59)
+                            If rdoHourlyStats.Checked Or rdoRawStats.Checked Then
+                                dtEditStartTimeStats.EditValue = dtPeriod.Rows(0)(0)
+                                dtEditEndTimeStats.EditValue = dtPeriod.Rows(0)(1)
+                            Else
+                                dtEditStartTimeStats.EditValue = dtPeriod.Rows(0)(0)
+                                dtEditEndTimeStats.EditValue = dtPeriod.Rows(0)(1)
+                                If xtcPSFilterStats.SelectedTabPage.Text = "Days" Then
+                                    dtEditEndTimeStats.EditValue = dtEditEndTimeStats.DateTime.Date
+                                ElseIf xtcPSFilterStats.SelectedTabPage.Text = "Hours" Then
+                                    dtEditEndTimeStats.EditValue = dtEditEndTimeStats.DateTime.AddHours(23).AddMinutes(59)
+                                End If
                             End If
                         Else
-                            dtEditStartTimeEval.EditValue = dtPeriod.Rows(0)(0)
-                            dtEditEndTimeEval.EditValue = dtPeriod.Rows(0)(1)
-                            If xtcPSFilterEval.SelectedTabPage.Text = "Days" Then
-                                dtEditEndTimeEval.EditValue = dtEditEndTimeEval.DateTime.Date
-                            ElseIf xtcPSFilterEval.SelectedTabPage.Text = "Hours" Then
-                                dtEditEndTimeEval.EditValue = dtEditEndTimeEval.DateTime.AddHours(23).AddMinutes(59)
+                            If rdoHourlyEval.Checked Or rdoRawEval.Checked Then
+                                dtEditStartTimeEval.EditValue = dtPeriod.Rows(0)(0)
+                                dtEditEndTimeEval.EditValue = dtPeriod.Rows(0)(1)
+                            Else
+                                dtEditStartTimeEval.EditValue = dtPeriod.Rows(0)(0)
+                                dtEditEndTimeEval.EditValue = dtPeriod.Rows(0)(1)
+                                If xtcPSFilterEval.SelectedTabPage.Text = "Days" Then
+                                    dtEditEndTimeEval.EditValue = dtEditEndTimeEval.DateTime.Date
+                                ElseIf xtcPSFilterEval.SelectedTabPage.Text = "Hours" Then
+                                    dtEditEndTimeEval.EditValue = dtEditEndTimeEval.DateTime.AddHours(23).AddMinutes(59)
+                                End If
                             End If
                         End If
                     End If
@@ -1243,6 +1269,7 @@ Public Class frmTechnology
                     LoadFilterTemplateObjectTree(cmb, CInt(CType(cmb.SelectedItem, clsComboBoxItem).Value))
                 ElseIf cmb.Name.ToLower.Contains("eval") Then
                     UpdateObjFilterTemplateGrid(cmb, gcParamFiltersEval)
+                    LoadFilterTemplateObjectTree(cmb, CInt(CType(cmb.SelectedItem, clsComboBoxItem).Value))
                 End If
             Else
                 ClearTemplateData(cmb)
@@ -1275,6 +1302,8 @@ Public Class frmTechnology
                 FillFilterTemplateObjectTree(dt, tvObjTreeFilterTempStats)
             ElseIf cmb.Name.ToString.ToLower.Contains("topx") Then
                 FillFilterTemplateObjectTree(dt, tvObjTreeFilterTempTopX)
+            ElseIf cmb.Name.ToString.ToLower.Contains("eval") Then
+                FillFilterTemplateObjectTree(dt, tvObjTreeFilterTempEval)
             End If
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
@@ -1408,6 +1437,9 @@ Public Class frmTechnology
         ElseIf cmb.Name.ToLower.Contains("eval") Then
             gcParamFiltersEval.DataSource = Nothing
             gvParamFiltersEval.Columns.Clear()
+
+            tvObjTreeFilterTempEval.Nodes.Clear()
+            tvObjTreeFilterTempEval.Columns.Clear()
         End If
     End Sub
 
@@ -1473,6 +1505,11 @@ Public Class frmTechnology
             End If
         ElseIf cmb.Name.ToLower.Contains("eval") Then
             targetType = cmbObjectTreeEval.SelectedItem.ToString
+            If dtObjFilterTemplate.AsEnumerable().Where(Function(x) x.Field(Of String)("TargetType") = targetType).Count <> 0 Then
+                dt = dtObjFilterTemplate.AsEnumerable().Where(Function(x) x.Field(Of String)("TargetType") = targetType).CopyToDataTable()
+            End If
+        ElseIf cmb.Name.ToLower.Contains("eval") Then
+            targetType = cmbObjectTreeEval.SelectedItem.ToString()
             If dtObjFilterTemplate.AsEnumerable().Where(Function(x) x.Field(Of String)("TargetType") = targetType).Count <> 0 Then
                 dt = dtObjFilterTemplate.AsEnumerable().Where(Function(x) x.Field(Of String)("TargetType") = targetType).CopyToDataTable()
             End If
@@ -1774,9 +1811,11 @@ Public Class frmTechnology
                 sqlParam = GetSQL(8818, parray)(1)
                 Dim dt As DataTable = DataAccessorODBC.GetDataTable(strConnection, sqlParam, iQryTimeOut)
 
-                Dim dtCopy = dt.Copy()
-                dtCopy.TableName = paramName
-                dsParamValues.Tables.Add(dtCopy)
+                If dt IsNot Nothing Then
+                    Dim dtCopy = dt.Copy()
+                    dtCopy.TableName = paramName
+                    dsParamValues.Tables.Add(dtCopy)
+                End If
             End If
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
@@ -1999,8 +2038,8 @@ Public Class frmTechnology
                 tl = tvObjTreeFilterTempTopX
                 cmb = cmbFilterTemplateTopX
             ElseIf procType.ToUpper = "EVAL" Then
-                'gv = gvParamFiltersEval
-                'cmb = cmbFilterTemplateEval
+                tl = tvObjTreeFilterTempEval
+                cmb = cmbFilterTemplateEval
             End If
 
             If cmb.SelectedIndex <> 0 Then
@@ -2130,7 +2169,7 @@ Public Class frmTechnology
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
     End Sub
 
-    Private Sub TreeListObjectFilter_ColumnFilterChanged(sender As Object, e As EventArgs) Handles tvObjTreeFilterTempStats.ColumnFilterChanged, tvObjTreeFilterTempTopX.ColumnFilterChanged
+    Private Sub TreeListObjectFilter_ColumnFilterChanged(sender As Object, e As EventArgs) Handles tvObjTreeFilterTempStats.ColumnFilterChanged, tvObjTreeFilterTempTopX.ColumnFilterChanged, tvObjTreeFilterTempEval.ColumnFilterChanged
         Try
             Me.Cursor = Cursors.WaitCursor
             Application.DoEvents()
@@ -4038,17 +4077,18 @@ Public Class frmTechnology
             If rdoHourlyTopX.Checked Or rdoRawTopX.Checked = True Then
                 deStartTimeTopX.EditValue = DateAdd(DateInterval.Hour, -4, DateSerial(Now().Year, Now().Month, Now.Day).AddHours(Now.Hour))
                 deEndTimeTopX.EditValue = DateAdd(DateInterval.Hour, -4, DateSerial(Now().Year, Now().Month, Now.Day).AddHours(Now.Hour))
-                'deStartTimeTopX.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
-                'deStartTimeTopX.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
-                'deStartTimeTopX.Properties.EditMask = "dd/MM/yyyy HH:mm"
 
                 ConfigureDatePickerTimeEditing(deStartTimeTopX)
 
-                'deEndTimeTopX.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
-                'deEndTimeTopX.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
-                'deEndTimeTopX.Properties.EditMask = "dd/MM/yyyy HH:mm"
+                deStartTimeTopX.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
+                deStartTimeTopX.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
+                deStartTimeTopX.Properties.EditMask = "dd/MM/yyyy HH:mm"
 
                 ConfigureDatePickerTimeEditing(deEndTimeTopX)
+
+                deEndTimeTopX.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
+                deEndTimeTopX.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
+                deEndTimeTopX.Properties.EditMask = "dd/MM/yyyy HH:mm"
             End If
             If chkEnableComparisonTopX.Checked = True Then
                 SetTopXDeltaInterval()
@@ -5274,7 +5314,10 @@ Public Class frmTechnology
                         ch.LegendBox.Visible = False
                     End If
 
-                    ch.Annotations.Clear()
+                    If Not ch.Annotations Is Nothing Then
+                        ch.Annotations.Clear()
+                    End If
+
                     ch.Annotations.Add(New Annotation(tech))
                     ch.Annotations(0).Position = New System.Drawing.Point(ch.Width - 70, 2)
                     ch.Annotations(0).DefaultCorner = BoxCorner.Square
@@ -12767,9 +12810,20 @@ Public Class frmTechnology
                 conn.Open()
 
                 If (chSetName = chartSetName) Then
-                    sql = "SELECT techtab,  Categorytabindex, Categorytab, ObjectTab FROM IOS_Chart_Configuration left outer join IOS_Object_Configuration on tech=techtab and [Object]=ObjectTab WHERE (((ChartSetName = " & Chr(39) & chartSetName & Chr(39) & ") OR (ChartSetName = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "))  AND TechTab = " & Chr(39) & techname & Chr(39) & ") GROUP BY techtab, Categorytab, categorytabindex, ObjectTab, loadorder ORDER BY techtab, loadorder desc, categorytabindex"
+                    sql = "SELECT techtab,  Categorytabindex, Categorytab, ObjectTab 
+                           FROM IOS_Chart_Configuration 
+                            left outer join IOS_Object_Configuration on tech=techtab and [Object]=ObjectTab 
+                            INNER JOIN (select ObjectConfigProfile from IOS_Licenses where LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & ") IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                            WHERE (((ChartSetName = " & Chr(39) & chartSetName & Chr(39) & ") OR (ChartSetName = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "))  AND TechTab = " & Chr(39) & techname & Chr(39) & ")" & "
+                            GROUP BY techtab, Categorytab, categorytabindex, ObjectTab, loadorder 
+                            ORDER BY techtab, loadorder desc, categorytabindex"
                 Else
-                    sql = "SELECT techtab,  Categorytabindex, Categorytab, ObjectTab FROM IOS_Chart_Configuration left outer join IOS_Object_Configuration on tech=techtab and [Object]=ObjectTab WHERE ((ChartSetName = " & Chr(39) & chSetName & Chr(39) & ")  AND (TechTab = " & Chr(39) & techname & Chr(39) & ") AND (CategoryTab <> 'Dummy')) GROUP BY techtab, Categorytab, categorytabindex, ObjectTab, loadorder ORDER BY techtab, loadorder desc, categorytabindex"
+                    sql = "SELECT techtab,  Categorytabindex, Categorytab, ObjectTab FROM IOS_Chart_Configuration 
+                            left outer join IOS_Object_Configuration on tech=techtab and [Object]=ObjectTab 
+                            INNER JOIN (select ObjectConfigProfile from IOS_Licenses where LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & ") IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                            WHERE ((ChartSetName = " & Chr(39) & chSetName & Chr(39) & ")  AND (TechTab = " & Chr(39) & techname & Chr(39) & ") AND (CategoryTab <> 'Dummy'))  " & "
+                            GROUP BY techtab, Categorytab, categorytabindex, ObjectTab, loadorder 
+                            ORDER BY techtab, loadorder desc, categorytabindex"
                 End If
 
                 Using comm As New Odbc.OdbcCommand(sql, conn)
@@ -13240,7 +13294,7 @@ Public Class frmTechnology
     Private Function GetTabPage(tabcontrol As XtraTabControl, tabtitle As String) As XtraTabPage
         Try
             For Each tp As XtraTabPage In tabcontrol.TabPages
-                If tp.Text.ToUpper = tabtitle.ToUpper Then
+                If tp.Text.Trim.ToUpper = tabtitle.Trim.ToUpper Then
                     Return tp
                 End If
             Next
@@ -19412,7 +19466,11 @@ Public Class frmTechnology
 
     Private Function GetTabObject(techname As String) As DataTable
         Dim username As String = Chr(39) & Environment.UserName.ToString & Chr(39)
-        Dim sqlchart As String = "SELECT distinct ObjectTab FROM IOS_Chart_Configuration left outer join IOS_Object_Configuration on tech = techtab and [Object] = ObjectTab WHERE (((ChartSetName = " & Chr(39) & cmbChartSetNameStats.SelectedItem.ToString & Chr(39) & ") OR (ChartSetName = " & username & "))  AND TechTab = " & Chr(39) & techname & Chr(39) & ") GROUP BY techtab, Categorytab, categorytabindex, ObjectTab, loadorder"
+        Dim sqlchart As String = "SELECT distinct ObjectTab FROM IOS_Chart_Configuration 
+                                    left outer join IOS_Object_Configuration on tech = techtab and [Object] = ObjectTab 
+                                    INNER JOIN IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                                    WHERE (((IOS_Chart_Configuration.ChartSetName = " & Chr(39) & cmbChartSetNameStats.SelectedItem.ToString & Chr(39) & ") OR (IOS_Chart_Configuration.ChartSetName = " & username & "))  AND TechTab = " & Chr(39) & techname & Chr(39) & ")  and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "
+                                    GROUP BY techtab, Categorytab, categorytabindex, ObjectTab, loadorder"
         Return DataAccessorODBC.GetDataTable(connStrIOSServer, sqlchart)
     End Function
 
@@ -20103,7 +20161,7 @@ Public Class frmTechnology
                 ' Build and launch object time sql query and populate dataset for export 2 excel
                 ProcessStatsObjectTime(_strNetwork.ToUpper)
 
-                fileName = "CIOS_" & Network & "_" & cmbObjectTreeStats.SelectedItem.ToString() & "_" & Now.ToString("ddMMyyyyHHmmss") & ".csv"
+                fileName = "CIOS_" & Network & "_" & cmbObjectTreeStats.SelectedItem.ToString() & "_" & Now.ToString("yyyyMMddHHmmss") & ".csv"
                 folder = techExportFilePath 'Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CellSens\CIOS\" & IOS.Configuration.IOSAppConfigManage.DeploymentName
                 fp = folder & "\" & fileName
 
@@ -25024,52 +25082,6 @@ Public Class frmTechnology
         End If
     End Sub
 
-    'Private Sub dateRangeCtrlStart_RangeChanged(sender As Object, range As RangeControlRangeEventArgs)
-    '    Try
-    '        Me.Cursor = Cursors.WaitCursor
-    '        Application.DoEvents()
-
-    '        LoadThresholdGrid()
-    '        LoadCompareGrid()
-
-    '        'reset time based grid cell colors for new threshold range
-    '        dicCellClrTB.Clear()
-    '        Call gvEvalTimeBased_RowCellStyle(Nothing, Nothing)
-    '        tsmi_ShowHighlighted_Click(Nothing, Nothing)
-    '        gvEvalTimeBased.RefreshData()
-
-    '    Catch ex As Exception
-    '        _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
-    '        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-    '    Finally
-    '        Me.Cursor = Cursors.Default
-    '        Application.DoEvents()
-    '    End Try
-    'End Sub
-
-    'Private Sub dateRangeCtrlEnd_RangeChanged(sender As Object, range As RangeControlRangeEventArgs)
-    '    Try
-    '        Me.Cursor = Cursors.WaitCursor
-    '        Application.DoEvents()
-
-    '        LoadCompareGrid()
-    '        tcLowEvaluateTB.SelectedTabPageIndex = 3
-
-    '        'reset time based grid cell colors for new evaluation range
-    '        dicCellClrTB.Clear()
-    '        Call gvEvalTimeBased_RowCellStyle(Nothing, Nothing)
-    '        tsmi_ShowHighlighted_Click(Nothing, Nothing)
-    '        gvEvalTimeBased.RefreshData()
-
-    '    Catch ex As Exception
-    '        _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
-    '        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-    '    Finally
-    '        Me.Cursor = Cursors.Default
-    '        Application.DoEvents()
-    '    End Try
-    'End Sub
-
     Private Sub gvEvalCompare_RowCellStyle(sender As Object, e As RowCellStyleEventArgs)
         Try
             If Not dtEvalTBCompare Is Nothing Then
@@ -25451,13 +25463,37 @@ Public Class frmTechnology
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Invoked")
         Try
             If cmbChartSetNameEval.SelectedIndex > 0 Then
-                SelectComboByMatchingString(cmbKPISetEval, dtPMKpiSetList, "KPISetName", cmbChartSetNameEval.SelectedItem.ToString)
-                SelectComboByMatchingString(cmbThresholdSetEval, dtPMThresholdSetList, "ThresholdSetName", cmbChartSetNameEval.SelectedItem.ToString)
+                SelectComboByMatchingString(cmbKPISetEval, dtPMKpiSetList, "KPISetName", cmbChartSetNameEval.SelectedItem.ToString + "_KPISet")
+                SelectComboByMatchingString(cmbThresholdSetEval, dtPMThresholdSetList, "ThresholdSetName", cmbChartSetNameEval.SelectedItem.ToString + "_ThresholdSet")
             End If
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
         End Try
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
+    End Sub
+
+    Private Sub tvObjTreeFilterTempEval_NodeChanged(sender As Object, e As NodeChangedEventArgs)
+        RemoveHandler tvObjTreeFilterTempEval.NodeChanged, AddressOf tvObjTreeFilterTempEval_NodeChanged
+        If e.ChangeType = DevExpress.XtraTreeList.NodeChangeTypeEnum.CheckedState Then
+            If e.Node.CheckState = CheckState.Checked Then
+                If tvObjTreeFilterTempEval.FindFilterText <> "" Then
+                    tvObjTreeFilterTemp_FilterCheckVisible(e.Node.Nodes)
+                Else
+                    e.Node.CheckAll()
+                End If
+            Else
+                e.Node.UncheckAll()
+            End If
+
+            tvObjTreeFilterTempEval.CheckParentNode(e.Node)
+            Dim Count_Checked As Integer = tvObjTreeFilterTempEval.GetEndCheckedNodes(strTreeFilter).Count
+
+            If tvObjTreeFilterTempEval.FindFilterText <> "" Then
+                'Dim level As Integer = GetNodeLevelByObjectType(_strNetwork, cmbObjectTreeStats.Text.ToString)
+                Count_Checked = tvObjTreeFilterTempEval.GetAllCheckedNodes().Where(Function(nd) nd.Level = 2).ToList().Count
+            End If
+        End If
+        AddHandler tvObjTreeFilterTempEval.NodeChanged, AddressOf tvObjTreeFilterTempEval_NodeChanged
     End Sub
 
 #End Region
@@ -25600,14 +25636,14 @@ Public Class frmTechnology
             Dim selectedObjs As String = tvObjectsTreeEval.GetChecked2String(Me._strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
             selectedObjs = selectedObjs.Replace("'", "''").Trim
             Dim filterPeriodstring As String = GetFilterPeriodEval(cmbPredefinedFilterEval, dateNavigatorEval)
-            Dim filterParamString As String = Nothing
+            Dim filterParamString As String = ""
 
-            If gvParamFiltersEval.RowCount > 0 Then
-                filterParamString = GetParamFilterString("eval")
+            If tvObjTreeFilterTempEval.Nodes.Count > 0 Then
+                filterParamString = GetParamFilterStringTemplate("", "eval")
             End If
 
             'add param filter string with filter period string
-            filterPeriodstring = filterPeriodstring & filterParamString
+            'filterPeriodstring = filterPeriodstring & filterParamString
 
             Dim sqlParam As String = Nothing
             Dim parray()() As String = {
@@ -25618,7 +25654,8 @@ Public Class frmTechnology
                 New String() {"@PeriodEnd", Chr(39) & CDate(dtEditEndTimeEval.EditValue).ToString("yyyy-MM-dd") & Chr(39)},
                 New String() {"@EvalPeriodInterval", Chr(39) & GetEvalPeriodInterval() & Chr(39)},
                 New String() {"@Objects", Chr(39) & selectedObjs & Chr(39)},
-                New String() {"@FilterPeriod", Chr(39) & filterPeriodstring.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
+                New String() {"@FilterPeriod", Chr(39) & filterPeriodstring.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)},
+                New String() {"@ObjectFilter", Chr(39) & filterParamString.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
             }
             connectionString = GetSQL(7018, parray)(0)
             sqlParam = GetSQL(7018, parray)(1)
@@ -25641,7 +25678,8 @@ Public Class frmTechnology
                     New String() {"@ThresholdIntervalOverride", 0},
                     New String() {"@PeriodEvalStart", "NULL"},
                     New String() {"@PeriodEvalEnd", "NULL"},
-                    New String() {"@FilterPeriod", Chr(39) & filterPeriodstring.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
+                    New String() {"@FilterPeriod", Chr(39) & filterPeriodstring.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)},
+                    New String() {"@ObjectFilter", Chr(39) & filterParamString.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
                 }
                 connectionString = GetSQL(7019, parray)(0)
                 sqlParam = GetSQL(7019, parray)(1)
@@ -25718,7 +25756,7 @@ Public Class frmTechnology
         dtPMThresholdSetList = GetThresholdSetList(Me._strNetwork)
         RemoveHandler cmbThresholdSetEval.SelectedIndexChanged, AddressOf cmbThresholdSetEval_SelectedIndexChanged
         BindDevExComboBoxWithValueMember(cmbThresholdSetEval, dtPMThresholdSetList, "ThresholdSetID", "ThresholdSetName", "Select")
-        SelectComboByMatchingString(cmbThresholdSetEval, dtPMThresholdSetList, "ThresholdSetName", cmbChartSetNameEval.SelectedItem.ToString)
+        SelectComboByMatchingString(cmbThresholdSetEval, dtPMThresholdSetList, "ThresholdSetName", cmbChartSetNameEval.SelectedItem.ToString + "_ThresholdSet")
         AddHandler cmbThresholdSetEval.SelectedIndexChanged, AddressOf cmbThresholdSetEval_SelectedIndexChanged
         cmbThresholdSetEval_SelectedIndexChanged(Nothing, Nothing)
     End Sub
@@ -25727,7 +25765,7 @@ Public Class frmTechnology
         dtPMKpiSetList = GetKPISetList(Me._strNetwork)
         RemoveHandler cmbKPISetEval.SelectedIndexChanged, AddressOf cmbKPISetEval_SelectedIndexChanged
         BindDevExComboBoxWithValueMember(cmbKPISetEval, dtPMKpiSetList, "KPISetID", "KPISetName", "Select")
-        SelectComboByMatchingString(cmbKPISetEval, dtPMKpiSetList, "KPISetName", cmbChartSetNameEval.SelectedItem.ToString)
+        SelectComboByMatchingString(cmbKPISetEval, dtPMKpiSetList, "KPISetName", cmbChartSetNameEval.SelectedItem.ToString + "_KPISet")
         AddHandler cmbKPISetEval.SelectedIndexChanged, AddressOf cmbKPISetEval_SelectedIndexChanged
         cmbKPISetEval_SelectedIndexChanged(Nothing, Nothing)
     End Sub
@@ -25856,101 +25894,135 @@ Public Class frmTechnology
         RemoveHandler gvEvalCompare.TopRowChanged, AddressOf gvEvalCompare_TopRowChanged
         RemoveHandler gvEvalTimeBased.ColumnFilterChanged, AddressOf gvEvalTimeBased_ColumnFilterChanged
         RemoveHandler gvEvalCompare.ColumnFilterChanged, AddressOf gvEvalCompare_ColumnFilterChanged
+        RemoveHandler gvEvalCompare.EndSorting, AddressOf gvEvalCompare_EndSorting
 
-        Dim dtMerged As New DataTable("KpiMerged")
+        If (dtEvalTBCompare IsNot Nothing) AndAlso (dsEval.Tables.Count > 0) Then
 
-        dtMerged.Columns.Add("SQLKPIID", GetType(Integer))
-        dtMerged.Columns.Add("KPIName", GetType(String))
+            Dim dtMerged As New DataTable("KpiMerged")
 
-        Dim dtLeft As DataTable = Nothing
-        For Each dt As DataTable In dsEval.Tables
-            If dt.TableName.StartsWith("KPISetTimeBased") Then
-                dtLeft = dt
-            End If
-        Next
+            dtMerged.Columns.Add("SQLKPIID", GetType(Integer))
+            dtMerged.Columns.Add("KPIName", GetType(String))
 
-        For Each col As DataColumn In dtLeft.Columns
-            If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" Then
-                dtMerged.Columns.Add(col.ColumnName, col.DataType)
-            End If
-        Next
-
-        For Each col As DataColumn In dtEvalTBCompare.Columns
-            If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" Then
-                Dim columnName = col.ColumnName
-                If dtMerged.Columns.Contains(columnName) Then
-                    columnName = columnName
-                End If
-                dtMerged.Columns.Add(columnName, col.DataType)
-            End If
-        Next
-
-        For Each leftRow As DataRow In dtLeft.Rows
-
-            Dim key As Integer = CInt(leftRow("SQLKPIID"))
-            Dim rightRows = dtEvalTBCompare.Select("SQLKPIID = " & key)
-            If rightRows.Length = 0 Then Continue For
-            Dim newRow = dtMerged.NewRow()
-
-            ' Keys
-            newRow("SQLKPIID") = leftRow("SQLKPIID")
-            newRow("KPIName") = leftRow("KPIName")
-
-            ' Left values
-            For Each col As DataColumn In dtLeft.Columns
-                If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" Then
-                    newRow(col.ColumnName) = leftRow(col.ColumnName)
+            Dim dtLeft As DataTable = Nothing
+            For Each dt As DataTable In dsEval.Tables
+                If dt.TableName.StartsWith("KPISetTimeBased") Then
+                    dtLeft = dt
                 End If
             Next
 
-            ' Right values
-            Dim rightRow = rightRows(0)
+            For Each col As DataColumn In dtLeft.Columns
+                If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" Then
+                    dtMerged.Columns.Add(col.ColumnName, col.DataType)
+                End If
+            Next
 
             For Each col As DataColumn In dtEvalTBCompare.Columns
                 If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" Then
-                    Dim targetCol = If(dtMerged.Columns.Contains(col.ColumnName), col.ColumnName, col.ColumnName)
-                    newRow(targetCol) = rightRow(col.ColumnName)
+                    Dim columnName = col.ColumnName
+                    If dtMerged.Columns.Contains(columnName) Then
+                        columnName = columnName
+                    End If
+                    dtMerged.Columns.Add(columnName, col.DataType)
                 End If
             Next
 
-            dtMerged.Rows.Add(newRow)
-        Next
+            For Each leftRow As DataRow In dtLeft.Rows
 
-        '**********************************************************************************************
-        IOSDevExpressGrid.PopulateDataInGrid(gcEvalTimeBased, gvEvalTimeBased, dtMerged, "ALL", {"ColorNormal", "ColorWarning", "ColorFailure", "ColorSigma1", "ColorSigma2", "ColorSigma3", "ColorSigma4"})
-        gvEvalTimeBased.Columns("CategoryField").Group()
-        gvEvalTimeBased.Columns("Tech").Fixed = DevExpress.XtraGrid.Columns.FixedStyle.Left
-        gvEvalTimeBased.Columns("SQLKPIID").Fixed = DevExpress.XtraGrid.Columns.FixedStyle.Left
-        gvEvalTimeBased.Columns("KPIName").Fixed = DevExpress.XtraGrid.Columns.FixedStyle.Left
-        gvEvalTimeBased.Columns("Category").Fixed = DevExpress.XtraGrid.Columns.FixedStyle.Left
-        gvEvalTimeBased.ExpandAllGroups()
-        '*********************************************************************************************
-        IOSDevExpressGrid.PopulateDataInGrid(gcEvalCompare, gvEvalCompare, dtMerged, "ALL", {"ColorNormal", "ColorWarning", "ColorFailure", "ColorSigma1", "ColorSigma2", "ColorSigma3", "ColorSigma4"})
-        gvEvalCompare.Columns("CategoryField").Group()
-        gvEvalCompare.ExpandAllGroups()
+                Dim key As Integer = CInt(leftRow("SQLKPIID"))
+                Dim rightRows = dtEvalTBCompare.Select("SQLKPIID = " & key)
+                If rightRows.Length = 0 Then Continue For
+                Dim newRow = dtMerged.NewRow()
 
-        For Each col As DataColumn In dtLeft.Columns
-            If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" AndAlso col.ColumnName <> "CategoryField" Then
-                If gvEvalCompare.Columns(col.ColumnName) IsNot Nothing Then
-                    gvEvalCompare.Columns(col.ColumnName).Visible = False
+                ' Keys
+                newRow("SQLKPIID") = leftRow("SQLKPIID")
+                newRow("KPIName") = leftRow("KPIName")
+
+                ' Left values
+                For Each col As DataColumn In dtLeft.Columns
+                    If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" Then
+                        newRow(col.ColumnName) = leftRow(col.ColumnName)
+                    End If
+                Next
+
+                ' Right values
+                Dim rightRow = rightRows(0)
+
+                For Each col As DataColumn In dtEvalTBCompare.Columns
+                    If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" Then
+                        Dim targetCol = If(dtMerged.Columns.Contains(col.ColumnName), col.ColumnName, col.ColumnName)
+                        newRow(targetCol) = rightRow(col.ColumnName)
+                    End If
+                Next
+
+                dtMerged.Rows.Add(newRow)
+            Next
+
+            '**********************************************************************************************
+            IOSDevExpressGrid.PopulateDataInGrid(gcEvalTimeBased, gvEvalTimeBased, dtMerged, "ALL", {"ColorNormal", "ColorWarning", "ColorFailure", "ColorSigma1", "ColorSigma2", "ColorSigma3", "ColorSigma4"})
+            gvEvalTimeBased.Columns("CategoryField").Group()
+            gvEvalTimeBased.Columns("Tech").Fixed = DevExpress.XtraGrid.Columns.FixedStyle.Left
+            gvEvalTimeBased.Columns("SQLKPIID").Fixed = DevExpress.XtraGrid.Columns.FixedStyle.Left
+            gvEvalTimeBased.Columns("KPIName").Fixed = DevExpress.XtraGrid.Columns.FixedStyle.Left
+            gvEvalTimeBased.Columns("Category").Fixed = DevExpress.XtraGrid.Columns.FixedStyle.Left
+            gvEvalTimeBased.ExpandAllGroups()
+            '*********************************************************************************************
+            IOSDevExpressGrid.PopulateDataInGrid(gcEvalCompare, gvEvalCompare, dtMerged, "ALL", {"ColorNormal", "ColorWarning", "ColorFailure", "ColorSigma1", "ColorSigma2", "ColorSigma3", "ColorSigma4"})
+            gvEvalCompare.Columns("CategoryField").Group()
+            gvEvalCompare.ExpandAllGroups()
+
+            For Each col As DataColumn In dtLeft.Columns
+                If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" AndAlso col.ColumnName <> "CategoryField" Then
+                    If gvEvalCompare.Columns(col.ColumnName) IsNot Nothing Then
+                        gvEvalCompare.Columns(col.ColumnName).Visible = False
+                    End If
                 End If
-            End If
-        Next
+            Next
 
-        For Each col As DataColumn In dtEvalTBCompare.Columns
-            If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" Then
-                Dim rightColName = col.ColumnName
+            For Each col As DataColumn In dtEvalTBCompare.Columns
+                If col.ColumnName <> "SQLKPIID" AndAlso col.ColumnName <> "KPIName" Then
+                    Dim rightColName = col.ColumnName
 
-                If gvEvalTimeBased.Columns(rightColName) IsNot Nothing Then
-                    gvEvalTimeBased.Columns(rightColName).Visible = False
+                    If gvEvalTimeBased.Columns(rightColName) IsNot Nothing Then
+                        gvEvalTimeBased.Columns(rightColName).Visible = False
+                    End If
                 End If
-            End If
-        Next
+            Next
+
+        End If
 
         AddHandler gvEvalTimeBased.TopRowChanged, AddressOf gvEvalTimeBased_TopRowChanged
         AddHandler gvEvalCompare.TopRowChanged, AddressOf gvEvalCompare_TopRowChanged
         AddHandler gvEvalTimeBased.ColumnFilterChanged, AddressOf gvEvalTimeBased_ColumnFilterChanged
         AddHandler gvEvalCompare.ColumnFilterChanged, AddressOf gvEvalCompare_ColumnFilterChanged
+        AddHandler gvEvalCompare.EndSorting, AddressOf gvEvalCompare_EndSorting
+    End Sub
+
+    Private Sub gvEvalCompare_EndSorting(sender As Object, e As EventArgs)
+        Try
+            syncInProgress = True
+            gvEvalTimeBased.BeginSort()
+            gvEvalTimeBased.SortInfo.Clear()
+
+            Dim newSortInfo As New List(Of DevExpress.XtraGrid.Columns.GridColumnSortInfo)()
+
+            For Each info As DevExpress.XtraGrid.Columns.GridColumnSortInfo In gvEvalCompare.SortInfo
+                Dim leftCol = gvEvalTimeBased.Columns(info.Column.FieldName)
+                If leftCol IsNot Nothing Then
+                    newSortInfo.Add(New DevExpress.XtraGrid.Columns.GridColumnSortInfo(leftCol, info.SortOrder))
+                End If
+            Next
+
+            If newSortInfo.Count > 0 Then
+                gvEvalTimeBased.SortInfo.AddRange(newSortInfo.ToArray())
+            End If
+
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+        Finally
+            gvEvalTimeBased.EndSort()
+            gvEvalTimeBased.TopRowIndex = gvEvalCompare.TopRowIndex
+            syncInProgress = False
+        End Try
     End Sub
 
     Private Sub gvEvalTimeBased_TopRowChanged(sender As Object, e As EventArgs)
@@ -26003,21 +26075,6 @@ Public Class frmTechnology
         End Try
     End Sub
 
-    'Private Sub SyncKpiNameFilter(sourceView As DevExpress.XtraGrid.Views.Grid.GridView, targetView As DevExpress.XtraGrid.Views.Grid.GridView)
-    '    If filterSyncInProgress Then Return
-    '    Try
-    '        filterSyncInProgress = True
-    '        Dim sourceColumn = sourceView.Columns("KPIName")
-    '        Dim targetColumn = targetView.Columns("KPIName")
-    '        If sourceColumn Is Nothing OrElse targetColumn Is Nothing Then Return
-    '        targetColumn.FilterInfo = sourceColumn.FilterInfo
-    '    Catch ex As Exception
-    '        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
-    '    Finally
-    '        filterSyncInProgress = False
-    '    End Try
-    'End Sub
-
     Private Sub LoadThresholdGrid()
         If cmbThresholdSetEval.SelectedIndex > -1 Then
             Dim selectedObjs As String = tvObjectsTreeEval.GetChecked2String(Me._strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
@@ -26025,8 +26082,12 @@ Public Class frmTechnology
             Dim filterPeriodstring As String = GetFilterPeriodEval(cmbPredefinedFilterEval, dateNavigatorEval)
             Dim filterParamString As String = Nothing
 
-            If gvParamFiltersEval.RowCount > 0 Then
-                filterParamString = GetParamFilterString("eval")
+            'If gvParamFiltersEval.RowCount > 0 Then
+            '    filterParamString = GetParamFilterString("eval")
+            'End If
+
+            If tvObjTreeFilterTempEval.Nodes.Count > 0 Then
+                filterParamString = GetParamFilterStringTemplate("", "eval")
             End If
 
             'add param filter string with filter period string
@@ -26045,7 +26106,8 @@ Public Class frmTechnology
                 New String() {"@ThresholdIntervalOverride", 1},
                 New String() {"@PeriodEvalStart", "NULL"},
                 New String() {"@PeriodEvalEnd", "NULL"},
-                New String() {"@FilterPeriod", Chr(39) & (filterPeriodstring).Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
+                New String() {"@FilterPeriod", Chr(39) & (filterPeriodstring).Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)},
+                New String() {"@ObjectFilter", Chr(39) & filterParamString.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
             }
             connectionString = GetSQL(7019, parray)(0)
             sqlParam = GetSQL(7019, parray)(1)
@@ -26060,10 +26122,10 @@ Public Class frmTechnology
             Dim selectedObjs As String = tvObjectsTreeEval.GetChecked2String(Me._strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
             selectedObjs = selectedObjs.Replace("'", "''").Trim
             Dim filterPeriodstring As String = GetFilterPeriodEval(cmbPredefinedFilterEval, dateNavigatorEval)
-            Dim filterParamString As String = Nothing
+            Dim filterParamString As String = ""
 
-            If gvParamFiltersEval.RowCount > 0 Then
-                filterParamString = GetParamFilterString("eval")
+            If tvObjTreeFilterTempEval.Nodes.Count > 0 Then
+                filterParamString = GetParamFilterStringTemplate("", "eval")
             End If
 
             'add param filter string with filter period string
@@ -26083,7 +26145,8 @@ Public Class frmTechnology
                 New String() {"@ThresholdIntervalOverride", 1},
                 New String() {"@PeriodEvalStart", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodStart")).ToString("yyyy-MM-dd") & Chr(39)},
                 New String() {"@PeriodEvalEnd", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodEnd")).ToString("yyyy-MM-dd") & Chr(39)},
-                New String() {"@FilterPeriod", Chr(39) & (filterPeriodstring).Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
+                New String() {"@FilterPeriod", Chr(39) & (filterPeriodstring).Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)},
+                New String() {"@ObjectFilter", Chr(39) & filterParamString.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
             }
             connStr = GetSQL(7019, parray)(0)
             sqlParam = GetSQL(7019, parray)(1)
@@ -26933,7 +26996,7 @@ Public Class frmTechnology
                 targettype3 = "k." & cmbObjectTreeEval.Text
 
                 If gvParamFiltersEval.RowCount > 0 Then
-                    sql_where_paramfilter = GetParamFilterString("Eval")
+                    sql_where_paramfilter = GetParamFilterStringTemplate("", "eval")
                 End If
 
                 If Not sql_select.Contains(targettype2) And cmbObjectTreeEval.Text <> "PLMN" And cmbObjectTreeEval.Text <> "TAGS" Then
@@ -27768,7 +27831,7 @@ Public Class frmTechnology
         i = 0
 
         Try
-            For i = 3 To tcHighEvaluate.TabPages.Count - 1
+            For i = 2 To tcHighEvaluate.TabPages.Count - 1
                 tcHighEvaluate.TabPages(i).Width = tcHighEvaluate.Width
                 If tcHighEvaluate.TabPages(i).Controls.Count > 0 Then
                     If tcHighEvaluate.TabPages(i).Controls(0).GetType() = GetType(TableLayoutPanel) Then
@@ -27932,8 +27995,7 @@ Public Class frmTechnology
             lstTimeBasedKPIEval.Clear()
             evalHistogramChartCntr = 0
             RemoveHandler tsmi_EvalHistogramAggOrNoAgg.Click, AddressOf tsmi_EvalHistogramAggOrNoAgg_Click
-            'tsmi_EvalHistogramAggOrNoAgg.Checked = True
-            'tsmi_EvalHistogramAggOrNoAgg.CheckState = CheckState.Checked
+            tsmi_EvalHistogramAggOrNoAgg.Enabled = False
             tsmi_EvalHistogramAggOrNoAgg.Text = "Aggregate Results"
 
             tsmi_EvalHistogramOfCells.DropDownItems.Clear()
@@ -27942,8 +28004,7 @@ Public Class frmTechnology
             AddHandler tsmi_EvalHistogramAggOrNoAgg.Click, AddressOf tsmi_EvalHistogramAggOrNoAgg_Click
 
             RemoveHandler tsmi_EvalHistogramPeriodSelection.Click, AddressOf tsmi_EvalHistogramPeriodSelection_Click
-            'tsmi_EvalHistogramPeriodSelection.Checked = True
-            'tsmi_EvalHistogramPeriodSelection.CheckState = CheckState.Checked
+            tsmi_EvalHistogramPeriodSelection.Enabled = False
             tsmi_EvalHistogramPeriodSelection.Text = "Threshold/Eval Period"
 
             tsmi_EvalHistogramOfCells.DropDownItems.Add(tsmi_EvalHistogramPeriodSelection)
@@ -28466,6 +28527,70 @@ Public Class frmTechnology
             Application.DoEvents()
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", Network & " " & DateDiff(DateInterval.Second, timerEval, Now()) & "s")
         End Try
+    End Sub
+
+    Private Sub tsmi_EvalTBExportToExcel_Click(sender As Object, e As EventArgs) Handles tsmi_EvalTBExportToExcel.Click
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info")
+        Try
+            Dim savefiledialog1 As New SaveFileDialog()
+            savefiledialog1.FileName = ""
+            savefiledialog1.Filter = "Excel Workbook |*.xlsx"
+            If savefiledialog1.ShowDialog <> DialogResult.OK Then
+                Exit Sub
+            End If
+            Dim fp As String = savefiledialog1.FileName
+
+            Me.Cursor = Cursors.WaitCursor
+            WaitScreen.ShowWaitScreen("Exporting Data To Excel")
+            Application.DoEvents()
+
+            ExportGridsToMultipleSheetsWYSIWYG(gcEvalTimeBased, gcEvalCompare, fp)
+
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        Finally
+            WaitScreen.CloseWaitScreen()
+            Me.Cursor = Cursors.Default
+            Application.DoEvents()
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", Network & " " & DateDiff(DateInterval.Second, timerEval, Now()) & "s")
+        End Try
+    End Sub
+
+    Public Sub ExportGridsToMultipleSheetsWYSIWYG(grdLeft As GridControl, grdRight As GridControl, filePath As String)
+        Using ps As New DevExpress.XtraPrinting.PrintingSystem()
+            AddHandler ps.XlSheetCreated, Sub(sender, e)
+                                              If e.Index = 0 Then
+                                                  e.SheetName = "TimeBased"
+                                              ElseIf e.Index = 1 Then
+                                                  e.SheetName = "Result"
+                                              End If
+                                          End Sub
+
+            Using compositeLink As New DevExpress.XtraPrintingLinks.CompositeLink(ps)
+
+                Dim link1 As New DevExpress.XtraPrinting.PrintableComponentLink(ps) With {.Component = grdLeft}
+                Dim link2 As New DevExpress.XtraPrinting.PrintableComponentLink(ps) With {.Component = grdRight}
+
+                Dim view1 = TryCast(grdLeft.MainView, GridView)
+                Dim view2 = TryCast(grdRight.MainView, GridView)
+
+                If view1 IsNot Nothing Then view1.OptionsPrint.UsePrintStyles = False
+                If view2 IsNot Nothing Then view2.OptionsPrint.UsePrintStyles = False
+
+                compositeLink.Links.AddRange(New Object() {link1, link2})
+
+                Dim options As New DevExpress.XtraPrinting.XlsxExportOptionsEx()
+                options.ExportType = DevExpress.Export.ExportType.WYSIWYG
+                options.ExportMode = DevExpress.XtraPrinting.XlsxExportMode.SingleFilePageByPage
+
+                compositeLink.CreatePageForEachLink()
+                compositeLink.ExportToXlsx(filePath, options)
+            End Using
+        End Using
+
+        'open the file
+        Process.Start(filePath)
     End Sub
 
 #End Region

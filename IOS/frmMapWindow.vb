@@ -3169,8 +3169,9 @@ Public Class frmMapWindow
                         If CheckColumn_MapinfoTable(enumerator.Current.Table, "ANTENNATYPE") Then
                             antennatype = enumerator.Current("ANTENNATYPE").ToString
                         End If
-                        Cell_AntennaTiltCoverage(CDbl(enumerator.Current("RECORDID")), cellid, cellid_x, cellid_y, antennatype, cellid_az, cellid_rc, cellid_electilt, cellid_mechtilt, CDbl(enumerator.Current("ELECTRICALTILT").ToString), CDbl(enumerator.Current("CLUTTER").ToString), 1)
-
+                        If bInternetAvailable = True Then
+                            Cell_AntennaTiltCoverage(CDbl(enumerator.Current("RECORDID")), cellid, cellid_x, cellid_y, antennatype, cellid_az, cellid_rc, cellid_electilt, cellid_mechtilt, CDbl(enumerator.Current("ELECTRICALTILT").ToString), CDbl(enumerator.Current("CLUTTER").ToString), 1)
+                        End If
                     Loop
                     enumerator.Dispose()
                     '    MapInfo.Engine.Session.Current.Catalog.CloseTable(e.Features.BaseTable.Alias)
@@ -12450,6 +12451,14 @@ function toggleHeatmap() {
                 Else
                     DirectCast(objfrmTech.Controls.Find("xtcTechnology", True)(0), DevExpress.XtraTab.XtraTabControl).SelectedTabPage = DirectCast(objfrmTech.Controls.Find("xtcTechnology", True)(0), DevExpress.XtraTab.XtraTabControl).TabPages(0)
                     DirectCast(objfrmTech.Controls.Find("btnApplyStats", True)(0), DevExpress.XtraEditors.SimpleButton).PerformClick()
+
+                    Dim tabView = TryCast(frmMDI.DocumentManager1.View, DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView)
+                    If tabView IsNot Nothing Then
+                        Dim targetDoc = tabView.Documents.FirstOrDefault(Function(d) d.Caption = tech)
+                        If targetDoc IsNot Nothing Then
+                            tabView.ActivateDocument(targetDoc.Control)
+                        End If
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -12513,6 +12522,14 @@ function toggleHeatmap() {
                 Else
                     DirectCast(objfrmTech.Controls.Find("xtcTechnology", True)(0), XtraTabControl).SelectedTabPage = DirectCast(objfrmTech.Controls.Find("xtcTechnology", True)(0), XtraTabControl).TabPages(1)
                     DirectCast(objfrmTech.Controls.Find("btnApplyTopX", True)(0), SimpleButton).PerformClick()
+
+                    Dim tabView = TryCast(frmMDI.DocumentManager1.View, DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView)
+                    If tabView IsNot Nothing Then
+                        Dim targetDoc = tabView.Documents.FirstOrDefault(Function(d) d.Caption = tech)
+                        If targetDoc IsNot Nothing Then
+                            tabView.ActivateDocument(targetDoc.Control)
+                        End If
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -14141,7 +14158,9 @@ function toggleHeatmap() {
                                 antennatype = ftr("ANTENNATYPE").ToString
                             End If
                             'Me.tp_resolution = 6
-                            Cell_AntennaTiltCoverage(CDbl(ftr("RECORDID")), cellid, cellid_x, cellid_y, antennatype, cellid_az, cellid_rc, cellid_electilt, cellid_mechtilt)
+                            If bInternetAvailable = True Then
+                                Cell_AntennaTiltCoverage(CDbl(ftr("RECORDID")), cellid, cellid_x, cellid_y, antennatype, cellid_az, cellid_rc, cellid_electilt, cellid_mechtilt)
+                            End If
                             Application.DoEvents()
                         Next
                     End If

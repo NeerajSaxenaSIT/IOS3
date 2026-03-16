@@ -750,7 +750,6 @@ Partial Class frmTechnology
         Me.lbFilterParamListEval = New DevExpress.XtraEditors.ListBoxControl()
         Me.TableLayoutPanel31 = New System.Windows.Forms.TableLayoutPanel()
         Me.txtFilterSearchEval = New DevExpress.XtraEditors.ButtonEdit()
-        Me.LabelControl29 = New DevExpress.XtraEditors.LabelControl()
         Me.LabelControl30 = New DevExpress.XtraEditors.LabelControl()
         Me.cmbFilterTemplateEval = New DevExpress.XtraEditors.ComboBoxEdit()
         Me.gcParamFiltersEval = New DevExpress.XtraGrid.GridControl()
@@ -902,7 +901,9 @@ Partial Class frmTechnology
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmi_ShowHighlighted = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmi_EvalTBExportRawCSV = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmi_EvalTBExportToExcel = New System.Windows.Forms.ToolStripMenuItem()
         Me.gvEvalTimeBased = New DevExpress.XtraGrid.Views.Grid.GridView()
         Me.ToolTipCtrlEval = New DevExpress.Utils.ToolTipController(Me.components)
         Me.gcEvalCompare = New DevExpress.XtraGrid.GridControl()
@@ -953,6 +954,7 @@ Partial Class frmTechnology
         Me.tsmi_ExportToKML = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
         Me.cm_Topx_Hide = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmi_CopyURLClipboard = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemTopX3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmTopXChart = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.tsmi_Topx_Chart_SelectTopX = New System.Windows.Forms.ToolStripMenuItem()
@@ -979,7 +981,10 @@ Partial Class frmTechnology
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolTipCtrlParamFilters = New DevExpress.Utils.ToolTipController(Me.components)
-        Me.tsmi_CopyURLClipboard = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tlpObjTreeFilterEval = New System.Windows.Forms.TableLayoutPanel()
+        Me.TableLayoutPanel43 = New System.Windows.Forms.TableLayoutPanel()
+        Me.LabelControl14 = New DevExpress.XtraEditors.LabelControl()
+        Me.tvObjTreeFilterTempEval = New DevExpress.XtraTreeList.TreeList()
         CType(Me.xtcTechnology, System.ComponentModel.ISupportInitialize).BeginInit
         Me.xtcTechnology.SuspendLayout
         Me.xtpStats.SuspendLayout
@@ -1367,6 +1372,9 @@ Partial Class frmTechnology
         Me.cmTopX.SuspendLayout
         Me.cmTopXChart.SuspendLayout
         CType(Me.documentViewerRibbonController1, System.ComponentModel.ISupportInitialize).BeginInit
+        Me.tlpObjTreeFilterEval.SuspendLayout
+        Me.TableLayoutPanel43.SuspendLayout
+        CType(Me.tvObjTreeFilterTempEval, System.ComponentModel.ISupportInitialize).BeginInit
         Me.SuspendLayout
         '
         'xtcTechnology
@@ -1416,7 +1424,7 @@ Partial Class frmTechnology
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
-        Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 305.0!))
+        Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 306.0!))
         Me.tlpCounterTypeStats.Controls.Add(Me.btnApplyStats, 2, 0)
         Me.tlpCounterTypeStats.Controls.Add(Me.seChartsPerRowStats, 8, 0)
         Me.tlpCounterTypeStats.Controls.Add(Me.lblObjectsStats, 0, 0)
@@ -1451,7 +1459,7 @@ Partial Class frmTechnology
         '
         Me.seChartsPerRowStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.seChartsPerRowStats.EditValue = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.seChartsPerRowStats.Location = New System.Drawing.Point(776, 4)
+        Me.seChartsPerRowStats.Location = New System.Drawing.Point(775, 4)
         Me.seChartsPerRowStats.Name = "seChartsPerRowStats"
         Me.seChartsPerRowStats.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.seChartsPerRowStats.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
@@ -1494,7 +1502,7 @@ Partial Class frmTechnology
         Me.lblChartHeightStats.Appearance.Options.UseTextOptions = True
         Me.lblChartHeightStats.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.lblChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblChartHeightStats.Location = New System.Drawing.Point(817, 4)
+        Me.lblChartHeightStats.Location = New System.Drawing.Point(816, 4)
         Me.lblChartHeightStats.LookAndFeel.SkinName = "Office 2013"
         Me.lblChartHeightStats.LookAndFeel.UseDefaultLookAndFeel = False
         Me.lblChartHeightStats.Name = "lblChartHeightStats"
@@ -1525,7 +1533,7 @@ Partial Class frmTechnology
         Me.lblChartsPerRow.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.lblChartsPerRow.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
         Me.lblChartsPerRow.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblChartsPerRow.Location = New System.Drawing.Point(690, 4)
+        Me.lblChartsPerRow.Location = New System.Drawing.Point(689, 4)
         Me.lblChartsPerRow.LookAndFeel.SkinName = "Office 2013"
         Me.lblChartsPerRow.LookAndFeel.UseDefaultLookAndFeel = False
         Me.lblChartsPerRow.Name = "lblChartsPerRow"
@@ -1540,27 +1548,27 @@ Partial Class frmTechnology
         Me.flpCounterTypeStats.Location = New System.Drawing.Point(356, 1)
         Me.flpCounterTypeStats.Margin = New System.Windows.Forms.Padding(0)
         Me.flpCounterTypeStats.Name = "flpCounterTypeStats"
-        Me.flpCounterTypeStats.Size = New System.Drawing.Size(279, 28)
+        Me.flpCounterTypeStats.Size = New System.Drawing.Size(278, 28)
         Me.flpCounterTypeStats.TabIndex = 6
         '
         'tbChartHeightStats
         '
         Me.tbChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbChartHeightStats.EditValue = 480
-        Me.tbChartHeightStats.Location = New System.Drawing.Point(893, 4)
+        Me.tbChartHeightStats.Location = New System.Drawing.Point(892, 4)
         Me.tbChartHeightStats.Name = "tbChartHeightStats"
         Me.tbChartHeightStats.Properties.LabelAppearance.Options.UseTextOptions = True
         Me.tbChartHeightStats.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.tbChartHeightStats.Properties.Maximum = 1000
         Me.tbChartHeightStats.Properties.Minimum = 100
-        Me.tbChartHeightStats.Size = New System.Drawing.Size(299, 22)
+        Me.tbChartHeightStats.Size = New System.Drawing.Size(300, 22)
         Me.tbChartHeightStats.TabIndex = 7
         Me.tbChartHeightStats.Value = 480
         '
         'btnExportStats
         '
         Me.btnExportStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btnExportStats.Location = New System.Drawing.Point(638, 3)
+        Me.btnExportStats.Location = New System.Drawing.Point(637, 3)
         Me.btnExportStats.Margin = New System.Windows.Forms.Padding(2)
         Me.btnExportStats.Name = "btnExportStats"
         Me.btnExportStats.Size = New System.Drawing.Size(46, 24)
@@ -2805,7 +2813,7 @@ Partial Class frmTechnology
         'prdCalcChkCmbVisuals
         '
         Me.prdCalcChkCmbVisuals.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.prdCalcChkCmbVisuals.EditValue = "Period Calculation Legend"
+        Me.prdCalcChkCmbVisuals.EditValue = "Series Legend, Period Calculation Legend - Right, Show Band Label"
         Me.prdCalcChkCmbVisuals.Location = New System.Drawing.Point(68, 5)
         Me.prdCalcChkCmbVisuals.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
         Me.prdCalcChkCmbVisuals.MenuManager = Me.ribbonControl
@@ -2822,7 +2830,7 @@ Partial Class frmTechnology
         Me.accObjectTreeStats.Controls.Add(Me.tlpObjectTreeStats)
         Me.accObjectTreeStats.Name = "accObjectTreeStats"
         Me.accObjectTreeStats.Padding = New System.Windows.Forms.Padding(2)
-        Me.accObjectTreeStats.Size = New System.Drawing.Size(251, 534)
+        Me.accObjectTreeStats.Size = New System.Drawing.Size(251, 535)
         Me.accObjectTreeStats.TabIndex = 2
         '
         'tlpObjectTreeStats
@@ -2845,7 +2853,7 @@ Partial Class frmTechnology
         Me.tlpObjectTreeStats.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 400.0!))
         Me.tlpObjectTreeStats.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.tlpObjectTreeStats.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 400.0!))
-        Me.tlpObjectTreeStats.Size = New System.Drawing.Size(247, 530)
+        Me.tlpObjectTreeStats.Size = New System.Drawing.Size(247, 531)
         Me.tlpObjectTreeStats.TabIndex = 0
         '
         'accObjTreeFilterStats
@@ -2863,7 +2871,7 @@ Partial Class frmTechnology
         '
         Me.accObjFilterStats.Controls.Add(Me.tlpObjTreeFilterStats)
         Me.accObjFilterStats.Name = "accObjFilterStats"
-        Me.accObjFilterStats.Size = New System.Drawing.Size(222, 579)
+        Me.accObjFilterStats.Size = New System.Drawing.Size(222, 623)
         Me.accObjFilterStats.TabIndex = 1
         '
         'tlpObjTreeFilterStats
@@ -2878,7 +2886,7 @@ Partial Class frmTechnology
         Me.tlpObjTreeFilterStats.RowCount = 2
         Me.tlpObjTreeFilterStats.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 221.0!))
         Me.tlpObjTreeFilterStats.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 179.0!))
-        Me.tlpObjTreeFilterStats.Size = New System.Drawing.Size(222, 579)
+        Me.tlpObjTreeFilterStats.Size = New System.Drawing.Size(222, 623)
         Me.tlpObjTreeFilterStats.TabIndex = 2
         '
         'GroupControl4
@@ -2887,7 +2895,7 @@ Partial Class frmTechnology
         Me.GroupControl4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl4.Location = New System.Drawing.Point(3, 224)
         Me.GroupControl4.Name = "GroupControl4"
-        Me.GroupControl4.Size = New System.Drawing.Size(216, 352)
+        Me.GroupControl4.Size = New System.Drawing.Size(216, 396)
         Me.GroupControl4.TabIndex = 1
         Me.GroupControl4.Text = "Create Filter"
         '
@@ -2907,7 +2915,7 @@ Partial Class frmTechnology
         Me.TableLayoutPanel25.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel25.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel25.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TableLayoutPanel25.Size = New System.Drawing.Size(212, 327)
+        Me.TableLayoutPanel25.Size = New System.Drawing.Size(212, 371)
         Me.TableLayoutPanel25.TabIndex = 0
         '
         'TableLayoutPanel28
@@ -2920,7 +2928,7 @@ Partial Class frmTechnology
         Me.TableLayoutPanel28.Controls.Add(Me.btnDelTemplateStats, 0, 0)
         Me.TableLayoutPanel28.Controls.Add(Me.btnCreateTemplateStats, 2, 0)
         Me.TableLayoutPanel28.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel28.Location = New System.Drawing.Point(1, 293)
+        Me.TableLayoutPanel28.Location = New System.Drawing.Point(1, 337)
         Me.TableLayoutPanel28.Margin = New System.Windows.Forms.Padding(1)
         Me.TableLayoutPanel28.Name = "TableLayoutPanel28"
         Me.TableLayoutPanel28.RowCount = 1
@@ -2962,7 +2970,7 @@ Partial Class frmTechnology
         Me.lbFilterParamListStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbFilterParamListStats.Location = New System.Drawing.Point(3, 31)
         Me.lbFilterParamListStats.Name = "lbFilterParamListStats"
-        Me.lbFilterParamListStats.Size = New System.Drawing.Size(206, 126)
+        Me.lbFilterParamListStats.Size = New System.Drawing.Size(206, 148)
         Me.lbFilterParamListStats.TabIndex = 12
         '
         'TableLayoutPanel41
@@ -3005,11 +3013,11 @@ Partial Class frmTechnology
         Me.gcParamFiltersStats.AllowDrop = True
         Me.gcParamFiltersStats.ContextMenuStrip = Me.cmFilterParamGrid
         Me.gcParamFiltersStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gcParamFiltersStats.Location = New System.Drawing.Point(3, 163)
+        Me.gcParamFiltersStats.Location = New System.Drawing.Point(3, 185)
         Me.gcParamFiltersStats.MainView = Me.gvParamFiltersStats
         Me.gcParamFiltersStats.MenuManager = Me.ribbonControl
         Me.gcParamFiltersStats.Name = "gcParamFiltersStats"
-        Me.gcParamFiltersStats.Size = New System.Drawing.Size(206, 126)
+        Me.gcParamFiltersStats.Size = New System.Drawing.Size(206, 148)
         Me.gcParamFiltersStats.TabIndex = 17
         Me.gcParamFiltersStats.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.gvParamFiltersStats})
         '
@@ -3041,8 +3049,8 @@ Partial Class frmTechnology
         'TableLayoutPanel42
         '
         Me.TableLayoutPanel42.ColumnCount = 2
-        Me.TableLayoutPanel42.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.62661!))
-        Me.TableLayoutPanel42.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.37339!))
+        Me.TableLayoutPanel42.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
+        Me.TableLayoutPanel42.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel42.Controls.Add(Me.tvObjTreeFilterTempStats, 0, 1)
         Me.TableLayoutPanel42.Controls.Add(Me.cmbFilterTemplateStats, 1, 0)
         Me.TableLayoutPanel42.Controls.Add(Me.LabelControl25, 0, 0)
@@ -5569,7 +5577,7 @@ Partial Class frmTechnology
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
-        Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 305.0!))
+        Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 306.0!))
         Me.tlpCounterTypeTopX.Controls.Add(Me.tbChartHeightTopX, 8, 0)
         Me.tlpCounterTypeTopX.Controls.Add(Me.btnApplyTopX, 2, 0)
         Me.tlpCounterTypeTopX.Controls.Add(Me.LabelTopX1, 0, 0)
@@ -5592,13 +5600,13 @@ Partial Class frmTechnology
         '
         Me.tbChartHeightTopX.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbChartHeightTopX.EditValue = 480
-        Me.tbChartHeightTopX.Location = New System.Drawing.Point(893, 4)
+        Me.tbChartHeightTopX.Location = New System.Drawing.Point(892, 4)
         Me.tbChartHeightTopX.Name = "tbChartHeightTopX"
         Me.tbChartHeightTopX.Properties.LabelAppearance.Options.UseTextOptions = True
         Me.tbChartHeightTopX.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.tbChartHeightTopX.Properties.Maximum = 1000
         Me.tbChartHeightTopX.Properties.Minimum = 100
-        Me.tbChartHeightTopX.Size = New System.Drawing.Size(299, 22)
+        Me.tbChartHeightTopX.Size = New System.Drawing.Size(300, 22)
         Me.tbChartHeightTopX.TabIndex = 10
         Me.tbChartHeightTopX.Value = 480
         '
@@ -5657,7 +5665,7 @@ Partial Class frmTechnology
         Me.flpCounterTypeTopX.Location = New System.Drawing.Point(356, 1)
         Me.flpCounterTypeTopX.Margin = New System.Windows.Forms.Padding(0)
         Me.flpCounterTypeTopX.Name = "flpCounterTypeTopX"
-        Me.flpCounterTypeTopX.Size = New System.Drawing.Size(356, 28)
+        Me.flpCounterTypeTopX.Size = New System.Drawing.Size(355, 28)
         Me.flpCounterTypeTopX.TabIndex = 7
         '
         'ucProgPnlTopX
@@ -5673,7 +5681,7 @@ Partial Class frmTechnology
         'tglDataGridTopX
         '
         Me.tglDataGridTopX.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tglDataGridTopX.Location = New System.Drawing.Point(713, 1)
+        Me.tglDataGridTopX.Location = New System.Drawing.Point(712, 1)
         Me.tglDataGridTopX.LookAndFeel.SkinName = "McSkin"
         Me.tglDataGridTopX.LookAndFeel.UseDefaultLookAndFeel = False
         Me.tglDataGridTopX.Margin = New System.Windows.Forms.Padding(0)
@@ -5686,7 +5694,7 @@ Partial Class frmTechnology
         'LabelControl15
         '
         Me.LabelControl15.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LabelControl15.Location = New System.Drawing.Point(817, 4)
+        Me.LabelControl15.Location = New System.Drawing.Point(816, 4)
         Me.LabelControl15.Name = "LabelControl15"
         Me.LabelControl15.Padding = New System.Windows.Forms.Padding(4, 0, 0, 0)
         Me.LabelControl15.Size = New System.Drawing.Size(69, 22)
@@ -7942,7 +7950,7 @@ Partial Class frmTechnology
         Me.accObjectTreeEval.Controls.Add(Me.tlpObjectTreeEval)
         Me.accObjectTreeEval.Name = "accObjectTreeEval"
         Me.accObjectTreeEval.Padding = New System.Windows.Forms.Padding(2)
-        Me.accObjectTreeEval.Size = New System.Drawing.Size(251, 535)
+        Me.accObjectTreeEval.Size = New System.Drawing.Size(251, 536)
         Me.accObjectTreeEval.TabIndex = 2
         '
         'tlpObjectTreeEval
@@ -7965,7 +7973,7 @@ Partial Class frmTechnology
         Me.tlpObjectTreeEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 400.0!))
         Me.tlpObjectTreeEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.tlpObjectTreeEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300.0!))
-        Me.tlpObjectTreeEval.Size = New System.Drawing.Size(247, 531)
+        Me.tlpObjectTreeEval.Size = New System.Drawing.Size(247, 532)
         Me.tlpObjectTreeEval.TabIndex = 0
         '
         'accObjTreeFilterEval
@@ -7981,18 +7989,18 @@ Partial Class frmTechnology
         '
         'accObjFilterEval
         '
-        Me.accObjFilterEval.Controls.Add(Me.grpObjTreeFilterEval)
+        Me.accObjFilterEval.Controls.Add(Me.tlpObjTreeFilterEval)
         Me.accObjFilterEval.Name = "accObjFilterEval"
-        Me.accObjFilterEval.Size = New System.Drawing.Size(222, 296)
+        Me.accObjFilterEval.Size = New System.Drawing.Size(222, 605)
         Me.accObjFilterEval.TabIndex = 1
         '
         'grpObjTreeFilterEval
         '
         Me.grpObjTreeFilterEval.Controls.Add(Me.TableLayoutPanel29)
         Me.grpObjTreeFilterEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.grpObjTreeFilterEval.Location = New System.Drawing.Point(0, 0)
+        Me.grpObjTreeFilterEval.Location = New System.Drawing.Point(3, 245)
         Me.grpObjTreeFilterEval.Name = "grpObjTreeFilterEval"
-        Me.grpObjTreeFilterEval.Size = New System.Drawing.Size(222, 296)
+        Me.grpObjTreeFilterEval.Size = New System.Drawing.Size(216, 357)
         Me.grpObjTreeFilterEval.TabIndex = 1
         Me.grpObjTreeFilterEval.Text = "Create Filter"
         '
@@ -8008,11 +8016,11 @@ Partial Class frmTechnology
         Me.TableLayoutPanel29.Location = New System.Drawing.Point(2, 23)
         Me.TableLayoutPanel29.Name = "TableLayoutPanel29"
         Me.TableLayoutPanel29.RowCount = 4
-        Me.TableLayoutPanel29.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52.0!))
+        Me.TableLayoutPanel29.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
         Me.TableLayoutPanel29.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel29.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel29.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TableLayoutPanel29.Size = New System.Drawing.Size(218, 271)
+        Me.TableLayoutPanel29.Size = New System.Drawing.Size(212, 332)
         Me.TableLayoutPanel29.TabIndex = 0
         '
         'TableLayoutPanel30
@@ -8025,20 +8033,20 @@ Partial Class frmTechnology
         Me.TableLayoutPanel30.Controls.Add(Me.btnDelTemplateEval, 0, 0)
         Me.TableLayoutPanel30.Controls.Add(Me.btnCreateTemplateEval, 2, 0)
         Me.TableLayoutPanel30.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel30.Location = New System.Drawing.Point(1, 237)
+        Me.TableLayoutPanel30.Location = New System.Drawing.Point(1, 297)
         Me.TableLayoutPanel30.Margin = New System.Windows.Forms.Padding(1)
         Me.TableLayoutPanel30.Name = "TableLayoutPanel30"
         Me.TableLayoutPanel30.RowCount = 1
         Me.TableLayoutPanel30.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel30.Size = New System.Drawing.Size(216, 33)
+        Me.TableLayoutPanel30.Size = New System.Drawing.Size(210, 34)
         Me.TableLayoutPanel30.TabIndex = 16
         '
         'btnSaveTemplateEval
         '
         Me.btnSaveTemplateEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btnSaveTemplateEval.Location = New System.Drawing.Point(74, 3)
+        Me.btnSaveTemplateEval.Location = New System.Drawing.Point(72, 3)
         Me.btnSaveTemplateEval.Name = "btnSaveTemplateEval"
-        Me.btnSaveTemplateEval.Size = New System.Drawing.Size(67, 27)
+        Me.btnSaveTemplateEval.Size = New System.Drawing.Size(65, 28)
         Me.btnSaveTemplateEval.TabIndex = 12
         Me.btnSaveTemplateEval.Text = "Save"
         '
@@ -8047,16 +8055,16 @@ Partial Class frmTechnology
         Me.btnDelTemplateEval.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btnDelTemplateEval.Location = New System.Drawing.Point(3, 3)
         Me.btnDelTemplateEval.Name = "btnDelTemplateEval"
-        Me.btnDelTemplateEval.Size = New System.Drawing.Size(65, 27)
+        Me.btnDelTemplateEval.Size = New System.Drawing.Size(63, 28)
         Me.btnDelTemplateEval.TabIndex = 13
         Me.btnDelTemplateEval.Text = "Delete"
         '
         'btnCreateTemplateEval
         '
         Me.btnCreateTemplateEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btnCreateTemplateEval.Location = New System.Drawing.Point(147, 3)
+        Me.btnCreateTemplateEval.Location = New System.Drawing.Point(143, 3)
         Me.btnCreateTemplateEval.Name = "btnCreateTemplateEval"
-        Me.btnCreateTemplateEval.Size = New System.Drawing.Size(66, 27)
+        Me.btnCreateTemplateEval.Size = New System.Drawing.Size(64, 28)
         Me.btnCreateTemplateEval.TabIndex = 14
         Me.btnCreateTemplateEval.Text = "Create"
         '
@@ -8065,67 +8073,54 @@ Partial Class frmTechnology
         Me.lbFilterParamListEval.AllowDrop = True
         Me.lbFilterParamListEval.Cursor = System.Windows.Forms.Cursors.Default
         Me.lbFilterParamListEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbFilterParamListEval.Location = New System.Drawing.Point(3, 55)
+        Me.lbFilterParamListEval.Location = New System.Drawing.Point(3, 29)
         Me.lbFilterParamListEval.Name = "lbFilterParamListEval"
-        Me.lbFilterParamListEval.Size = New System.Drawing.Size(212, 86)
+        Me.lbFilterParamListEval.Size = New System.Drawing.Size(206, 129)
         Me.lbFilterParamListEval.TabIndex = 12
         '
         'TableLayoutPanel31
         '
         Me.TableLayoutPanel31.ColumnCount = 2
-        Me.TableLayoutPanel31.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86.0!))
+        Me.TableLayoutPanel31.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
         Me.TableLayoutPanel31.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel31.Controls.Add(Me.txtFilterSearchEval, 1, 1)
-        Me.TableLayoutPanel31.Controls.Add(Me.LabelControl29, 0, 0)
-        Me.TableLayoutPanel31.Controls.Add(Me.LabelControl30, 0, 1)
-        Me.TableLayoutPanel31.Controls.Add(Me.cmbFilterTemplateEval, 1, 0)
+        Me.TableLayoutPanel31.Controls.Add(Me.txtFilterSearchEval, 1, 0)
+        Me.TableLayoutPanel31.Controls.Add(Me.LabelControl30, 0, 0)
         Me.TableLayoutPanel31.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel31.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel31.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel31.Name = "TableLayoutPanel31"
-        Me.TableLayoutPanel31.RowCount = 2
-        Me.TableLayoutPanel31.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.02041!))
-        Me.TableLayoutPanel31.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 48.97959!))
-        Me.TableLayoutPanel31.Size = New System.Drawing.Size(218, 52)
+        Me.TableLayoutPanel31.RowCount = 1
+        Me.TableLayoutPanel31.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel31.Size = New System.Drawing.Size(212, 26)
         Me.TableLayoutPanel31.TabIndex = 0
         '
         'txtFilterSearchEval
         '
         Me.txtFilterSearchEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtFilterSearchEval.Location = New System.Drawing.Point(89, 29)
+        Me.txtFilterSearchEval.Location = New System.Drawing.Point(53, 3)
         Me.txtFilterSearchEval.Name = "txtFilterSearchEval"
         Me.txtFilterSearchEval.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Search)})
-        Me.txtFilterSearchEval.Size = New System.Drawing.Size(126, 20)
+        Me.txtFilterSearchEval.Size = New System.Drawing.Size(156, 20)
         Me.txtFilterSearchEval.TabIndex = 3
-        '
-        'LabelControl29
-        '
-        Me.LabelControl29.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LabelControl29.Location = New System.Drawing.Point(3, 3)
-        Me.LabelControl29.Name = "LabelControl29"
-        Me.LabelControl29.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.LabelControl29.Size = New System.Drawing.Size(80, 20)
-        Me.LabelControl29.TabIndex = 0
-        Me.LabelControl29.Text = "Select Template"
         '
         'LabelControl30
         '
         Me.LabelControl30.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LabelControl30.Location = New System.Drawing.Point(3, 29)
+        Me.LabelControl30.Location = New System.Drawing.Point(3, 3)
         Me.LabelControl30.Name = "LabelControl30"
         Me.LabelControl30.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.LabelControl30.Size = New System.Drawing.Size(80, 20)
+        Me.LabelControl30.Size = New System.Drawing.Size(44, 20)
         Me.LabelControl30.TabIndex = 1
         Me.LabelControl30.Text = "Search"
         '
         'cmbFilterTemplateEval
         '
         Me.cmbFilterTemplateEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.cmbFilterTemplateEval.Location = New System.Drawing.Point(89, 3)
+        Me.cmbFilterTemplateEval.Location = New System.Drawing.Point(88, 3)
         Me.cmbFilterTemplateEval.MenuManager = Me.ribbonControl
         Me.cmbFilterTemplateEval.Name = "cmbFilterTemplateEval"
         Me.cmbFilterTemplateEval.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
-        Me.cmbFilterTemplateEval.Size = New System.Drawing.Size(126, 20)
+        Me.cmbFilterTemplateEval.Size = New System.Drawing.Size(125, 20)
         Me.cmbFilterTemplateEval.TabIndex = 2
         '
         'gcParamFiltersEval
@@ -8133,11 +8128,11 @@ Partial Class frmTechnology
         Me.gcParamFiltersEval.AllowDrop = True
         Me.gcParamFiltersEval.ContextMenuStrip = Me.cmFilterParamGrid
         Me.gcParamFiltersEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gcParamFiltersEval.Location = New System.Drawing.Point(3, 147)
+        Me.gcParamFiltersEval.Location = New System.Drawing.Point(3, 164)
         Me.gcParamFiltersEval.MainView = Me.gvParamFiltersEval
         Me.gcParamFiltersEval.MenuManager = Me.ribbonControl
         Me.gcParamFiltersEval.Name = "gcParamFiltersEval"
-        Me.gcParamFiltersEval.Size = New System.Drawing.Size(212, 86)
+        Me.gcParamFiltersEval.Size = New System.Drawing.Size(206, 129)
         Me.gcParamFiltersEval.TabIndex = 17
         Me.gcParamFiltersEval.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.gvParamFiltersEval})
         '
@@ -9965,7 +9960,7 @@ Partial Class frmTechnology
         '
         'cmEvalTimeBased
         '
-        Me.cmEvalTimeBased.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_Send2ObjBasedTab, Me.tsmi_Send2TimeBasedStatsHrly, Me.tsmi_Send2TimeBasedStatsDaily, Me.tsmi_Send2TopXStats, Me.tsmi_Breakdown2Cell, Me.tsmi_EvalHistogramOfCells, Me.ToolStripSeparator2, Me.tsmi_ShowHighlighted, Me.ToolStripSeparator3, Me.tsmi_EvalTBExportRawCSV})
+        Me.cmEvalTimeBased.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_Send2ObjBasedTab, Me.tsmi_Send2TimeBasedStatsHrly, Me.tsmi_Send2TimeBasedStatsDaily, Me.tsmi_Send2TopXStats, Me.tsmi_Breakdown2Cell, Me.tsmi_EvalHistogramOfCells, Me.ToolStripSeparator2, Me.tsmi_ShowHighlighted, Me.ToolStripSeparator3, Me.tsmi_EvalTBExportRawCSV, Me.ToolStripSeparator15, Me.tsmi_EvalTBExportToExcel})
         Me.cmEvalTimeBased.Name = "cm_KPI_FilterTemplate"
         Me.cmEvalTimeBased.Size = New System.Drawing.Size(254, 192)
         '
@@ -10022,11 +10017,22 @@ Partial Class frmTechnology
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(250, 6)
         '
+        'ToolStripSeparator15
+        '
+        Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
+        Me.ToolStripSeparator15.Size = New System.Drawing.Size(250, 6)
+        '
         'tsmi_EvalTBExportRawCSV
         '
         Me.tsmi_EvalTBExportRawCSV.Name = "tsmi_EvalTBExportRawCSV"
         Me.tsmi_EvalTBExportRawCSV.Size = New System.Drawing.Size(253, 22)
         Me.tsmi_EvalTBExportRawCSV.Text = "Export Raw - CSV"
+        '
+        'tsmi_EvalTBExportToExcel
+        '
+        Me.tsmi_EvalTBExportToExcel.Name = "tsmi_EvalTBExportToExcel"
+        Me.tsmi_EvalTBExportToExcel.Size = New System.Drawing.Size(253, 22)
+        Me.tsmi_EvalTBExportToExcel.Text = "Export Result - Excel"
         '
         'gvEvalTimeBased
         '
@@ -10400,7 +10406,7 @@ Partial Class frmTechnology
         '
         Me.cmTopX.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cm_Topx_Text, Me.cm_Topx_sep1TopX, Me.tsmi_cmTopx_Stats, Me.cm_Topx_MapSel, Me.tsmi_TopxPolygonMapKPITopX, Me.tsmi_TopXGeoIDMapKPI, Me.ToolStripSeparator1TopX, Me.tsmi_TopX_AllowCellCopy, Me.tsmi_TopX_CopySelectionWOHeader, Me.tsmi_TopX_CopySelectionWithHeader, Me.ToolStripSeparator1, Me.tsmi_ExportToKML, Me.ToolStripMenuItem1, Me.cm_Topx_Hide, Me.tsmi_CopyURLClipboard, Me.ToolStripMenuItemTopX3})
         Me.cmTopX.Name = "cm_TopX"
-        Me.cmTopX.Size = New System.Drawing.Size(239, 314)
+        Me.cmTopX.Size = New System.Drawing.Size(239, 292)
         '
         'cm_Topx_Text
         '
@@ -10483,6 +10489,12 @@ Partial Class frmTechnology
         Me.cm_Topx_Hide.Name = "cm_Topx_Hide"
         Me.cm_Topx_Hide.Size = New System.Drawing.Size(238, 22)
         Me.cm_Topx_Hide.Text = "Unhide Objects"
+        '
+        'tsmi_CopyURLClipboard
+        '
+        Me.tsmi_CopyURLClipboard.Name = "tsmi_CopyURLClipboard"
+        Me.tsmi_CopyURLClipboard.Size = New System.Drawing.Size(238, 22)
+        Me.tsmi_CopyURLClipboard.Text = "Copy URL - Clipboard"
         '
         'ToolStripMenuItemTopX3
         '
@@ -10624,11 +10636,93 @@ Partial Class frmTechnology
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
         Me.ToolStripSeparator7.Size = New System.Drawing.Size(177, 6)
         '
-        'tsmi_CopyURLClipboard
+        'tlpObjTreeFilterEval
         '
-        Me.tsmi_CopyURLClipboard.Name = "tsmi_CopyURLClipboard"
-        Me.tsmi_CopyURLClipboard.Size = New System.Drawing.Size(238, 22)
-        Me.tsmi_CopyURLClipboard.Text = "Copy URL - Clipboard"
+        Me.tlpObjTreeFilterEval.ColumnCount = 1
+        Me.tlpObjTreeFilterEval.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.tlpObjTreeFilterEval.Controls.Add(Me.grpObjTreeFilterEval, 0, 1)
+        Me.tlpObjTreeFilterEval.Controls.Add(Me.TableLayoutPanel43, 0, 0)
+        Me.tlpObjTreeFilterEval.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tlpObjTreeFilterEval.Location = New System.Drawing.Point(0, 0)
+        Me.tlpObjTreeFilterEval.Name = "tlpObjTreeFilterEval"
+        Me.tlpObjTreeFilterEval.RowCount = 2
+        Me.tlpObjTreeFilterEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
+        Me.tlpObjTreeFilterEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
+        Me.tlpObjTreeFilterEval.Size = New System.Drawing.Size(222, 605)
+        Me.tlpObjTreeFilterEval.TabIndex = 2
+        '
+        'TableLayoutPanel43
+        '
+        Me.TableLayoutPanel43.ColumnCount = 2
+        Me.TableLayoutPanel43.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
+        Me.TableLayoutPanel43.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel43.Controls.Add(Me.tvObjTreeFilterTempEval, 0, 1)
+        Me.TableLayoutPanel43.Controls.Add(Me.LabelControl14, 0, 0)
+        Me.TableLayoutPanel43.Controls.Add(Me.cmbFilterTemplateEval, 1, 0)
+        Me.TableLayoutPanel43.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel43.Location = New System.Drawing.Point(3, 3)
+        Me.TableLayoutPanel43.Name = "TableLayoutPanel43"
+        Me.TableLayoutPanel43.RowCount = 2
+        Me.TableLayoutPanel43.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TableLayoutPanel43.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel43.Size = New System.Drawing.Size(216, 236)
+        Me.TableLayoutPanel43.TabIndex = 2
+        '
+        'LabelControl14
+        '
+        Me.LabelControl14.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LabelControl14.Location = New System.Drawing.Point(3, 3)
+        Me.LabelControl14.Name = "LabelControl14"
+        Me.LabelControl14.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
+        Me.LabelControl14.Size = New System.Drawing.Size(79, 21)
+        Me.LabelControl14.TabIndex = 1
+        Me.LabelControl14.Text = "Select Template"
+        '
+        'tvObjTreeFilterTempEval
+        '
+        Me.TableLayoutPanel43.SetColumnSpan(Me.tvObjTreeFilterTempEval, 2)
+        Me.tvObjTreeFilterTempEval.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tvObjTreeFilterTempEval.KeyFieldName = "ObjectID"
+        Me.tvObjTreeFilterTempEval.Location = New System.Drawing.Point(3, 30)
+        Me.tvObjTreeFilterTempEval.Name = "tvObjTreeFilterTempEval"
+        Me.tvObjTreeFilterTempEval.OptionsBehavior.Editable = False
+        Me.tvObjTreeFilterTempEval.OptionsBehavior.ReadOnly = True
+        Me.tvObjTreeFilterTempEval.OptionsBehavior.ResizeNodes = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowBandMoving = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowBandResizing = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowColumnMoving = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowColumnResizing = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowQuickHideColumns = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowSort = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.ShowBandsInCustomizationForm = False
+        Me.tvObjTreeFilterTempEval.OptionsFilter.AllowAutoFilterConditionChange = DevExpress.Utils.DefaultBoolean.[True]
+        Me.tvObjTreeFilterTempEval.OptionsFilter.ExpandNodesOnFiltering = True
+        Me.tvObjTreeFilterTempEval.OptionsFilter.FilterMode = DevExpress.XtraTreeList.FilterMode.EntireBranch
+        Me.tvObjTreeFilterTempEval.OptionsFilter.ShowAllValuesInFilterPopup = True
+        Me.tvObjTreeFilterTempEval.OptionsFind.AllowIncrementalSearch = True
+        Me.tvObjTreeFilterTempEval.OptionsFind.AlwaysVisible = True
+        Me.tvObjTreeFilterTempEval.OptionsFind.ExpandNodesOnIncrementalSearch = True
+        Me.tvObjTreeFilterTempEval.OptionsFind.FindFilterColumns = "ObjectName"
+        Me.tvObjTreeFilterTempEval.OptionsFind.FindMode = DevExpress.XtraTreeList.FindMode.Always
+        Me.tvObjTreeFilterTempEval.OptionsFind.ShowCloseButton = False
+        Me.tvObjTreeFilterTempEval.OptionsFind.ShowFindButton = False
+        Me.tvObjTreeFilterTempEval.OptionsLayout.AddNewColumns = False
+        Me.tvObjTreeFilterTempEval.OptionsMenu.EnableColumnMenu = False
+        Me.tvObjTreeFilterTempEval.OptionsMenu.EnableFooterMenu = False
+        Me.tvObjTreeFilterTempEval.OptionsMenu.EnableNodeMenu = False
+        Me.tvObjTreeFilterTempEval.OptionsMenu.ShowAutoFilterRowItem = False
+        Me.tvObjTreeFilterTempEval.OptionsNavigation.AutoFocusNewNode = True
+        Me.tvObjTreeFilterTempEval.OptionsNavigation.MoveOnEdit = False
+        Me.tvObjTreeFilterTempEval.OptionsSelection.EnableAppearanceFocusedCell = False
+        Me.tvObjTreeFilterTempEval.OptionsSelection.MultiSelectMode = DevExpress.XtraTreeList.TreeListMultiSelectMode.CellSelect
+        Me.tvObjTreeFilterTempEval.OptionsSelection.SelectNodesOnRightClick = True
+        Me.tvObjTreeFilterTempEval.OptionsView.AutoWidth = False
+        Me.tvObjTreeFilterTempEval.OptionsView.BestFitMode = DevExpress.XtraTreeList.TreeListBestFitMode.Fast
+        Me.tvObjTreeFilterTempEval.OptionsView.BestFitNodes = DevExpress.XtraTreeList.TreeListBestFitNodes.Visible
+        Me.tvObjTreeFilterTempEval.OptionsView.CheckBoxStyle = DevExpress.XtraTreeList.DefaultNodeCheckBoxStyle.Check
+        Me.tvObjTreeFilterTempEval.Size = New System.Drawing.Size(210, 203)
+        Me.tvObjTreeFilterTempEval.TabIndex = 14
+        Me.tvObjTreeFilterTempEval.ViewStyle = DevExpress.XtraTreeList.TreeListViewStyle.TreeView
         '
         'frmTechnology
         '
@@ -11085,6 +11179,10 @@ Partial Class frmTechnology
         Me.cmTopX.ResumeLayout(False)
         Me.cmTopXChart.ResumeLayout(False)
         CType(Me.documentViewerRibbonController1, System.ComponentModel.ISupportInitialize).EndInit
+        Me.tlpObjTreeFilterEval.ResumeLayout(False)
+        Me.TableLayoutPanel43.ResumeLayout(False)
+        Me.TableLayoutPanel43.PerformLayout
+        CType(Me.tvObjTreeFilterTempEval, System.ComponentModel.ISupportInitialize).EndInit
         Me.ResumeLayout(False)
 
     End Sub
@@ -11692,7 +11790,9 @@ Partial Class frmTechnology
     Private WithEvents documentViewerRibbonController1 As DevExpress.XtraPrinting.Preview.DocumentViewerRibbonController
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator15 As ToolStripSeparator
     Friend WithEvents tsmi_EvalTBExportRawCSV As ToolStripMenuItem
+    Friend WithEvents tsmi_EvalTBExportToExcel As ToolStripMenuItem
     Friend WithEvents xtpHistogram As DevExpress.XtraTab.XtraTabPage
     Friend WithEvents tsmi_EvalHistogramOfCells As ToolStripMenuItem
     Friend WithEvents btnEvalClearFilterDays As DevExpress.XtraEditors.SimpleButton
@@ -11746,7 +11846,6 @@ Partial Class frmTechnology
     Friend WithEvents lbFilterParamListEval As DevExpress.XtraEditors.ListBoxControl
     Friend WithEvents TableLayoutPanel31 As TableLayoutPanel
     Friend WithEvents txtFilterSearchEval As DevExpress.XtraEditors.ButtonEdit
-    Friend WithEvents LabelControl29 As DevExpress.XtraEditors.LabelControl
     Friend WithEvents LabelControl30 As DevExpress.XtraEditors.LabelControl
     Friend WithEvents cmbFilterTemplateEval As DevExpress.XtraEditors.ComboBoxEdit
     Friend WithEvents aceObjTreeFilterEval As DevExpress.XtraBars.Navigation.AccordionControlElement
@@ -11860,4 +11959,8 @@ Partial Class frmTechnology
     Friend WithEvents gcEvalCompare As DevExpress.XtraGrid.GridControl
     Friend WithEvents gvEvalCompare As DevExpress.XtraGrid.Views.Grid.GridView
     Friend WithEvents tsmi_CopyURLClipboard As ToolStripMenuItem
+    Friend WithEvents tlpObjTreeFilterEval As TableLayoutPanel
+    Friend WithEvents TableLayoutPanel43 As TableLayoutPanel
+    Friend WithEvents LabelControl14 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents tvObjTreeFilterTempEval As DevExpress.XtraTreeList.TreeList
 End Class

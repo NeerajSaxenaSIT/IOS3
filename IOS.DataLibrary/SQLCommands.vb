@@ -268,36 +268,49 @@ Public Class clsSQLCommands
 
     Public Shared Function Get_ObjectConfig_Data(ByVal sql_conn) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("SELECT DISTINCT InternalObjectName, loadorder FROM dbo.IOS_Object_Configuration where loadorder is not null order by loadorder asc")
+        sqlQuery.AppendLine("SELECT DISTINCT InternalObjectName, loadorder 
+                             FROM dbo.IOS_Object_Configuration 
+                             INNER JOIN IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                             Where loadorder is not null  and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "
+                             Order By loadorder asc")
         Return DataAccessorODBC.GetDataTable(sql_conn, sqlQuery.ToString)
     End Function
 
     Public Shared Function Get_ObjectConfig_Data_By_tech(ByVal sql_conn, ByVal tech) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("SELECT DISTINCT InternalObjectName, loadorder, tech FROM dbo.IOS_Object_Configuration ")
-        sqlQuery.AppendLine("where loadorder is not null and UPPER(tech) = '" & tech.ToUpper & "' order by loadorder asc")
+        sqlQuery.AppendLine("SELECT DISTINCT InternalObjectName, loadorder, tech 
+                            FROM dbo.IOS_Object_Configuration 
+                            INNER JOIN IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                            WHERE IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "
+                            ")
         Return DataAccessorODBC.GetDataTable(sql_conn, sqlQuery.ToString)
     End Function
 
     Public Shared Function Get_IOS_ObjectConfig_Active_Data(ByVal sql_conn) As DataTable
         sqlQuery = New StringBuilder()
         sqlQuery.AppendLine("SELECT distinct a.tech, a.Purpose, a.ObjectType, b.loadorder from  dbo.[IOS_SQL_Create] a")
-        sqlQuery.AppendLine("inner join dbo.[IOS_Object_Configuration] b on a.tech=b.tech and a.ObjectType = b.[Object] where a.purpose IN('Charts','TopX')")
+        sqlQuery.AppendLine("inner join dbo.[IOS_Object_Configuration] b on a.tech=b.tech and a.ObjectType = b.[Object] 
+                            INNER JOIN IOS_Licenses on b.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                            where a.purpose IN('Charts','TopX')  and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "")
         Return DataAccessorODBC.GetDataTable(sql_conn, sqlQuery.ToString)
     End Function
 
     Public Shared Function Get_ObjectConfig_New_Data(ByVal sql_conn) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("SELECT a.*,b.[object] AS ParentObject FROM dbo.[IOS_Object_Configuration] a LEFT OUTER JOIN")
-        sqlQuery.AppendLine("dbo.[IOS_Object_Configuration] b ON b.id = a.parentid where a.loadorder is not null order by a.loadorder")
+        sqlQuery.AppendLine("SELECT a.*,b.[object] AS ParentObject FROM dbo.[IOS_Object_Configuration] a ")
+        sqlQuery.AppendLine("LEFT OUTER JOIN dbo.[IOS_Object_Configuration] b ON b.id = a.parentid  and a.ObjectConfigProfile=b.ObjectConfigProfile
+                             INNER JOIN IOS_Licenses on a.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                             where a.loadorder is not null   and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "
+                             Order By a.loadorder")
         Return DataAccessorODBC.GetDataTable(sql_conn, sqlQuery.ToString)
     End Function
 
     Public Shared Function Get_ObjectConfig_New_Data_By_Tech(ByVal sql_conn, ByVal tech) As DataTable
         sqlQuery = New StringBuilder()
         sqlQuery.AppendLine("SELECT a.*,b.[object] AS ParentObject FROM dbo.[IOS_Object_Configuration] a LEFT OUTER JOIN")
-        sqlQuery.AppendLine("dbo.[IOS_Object_Configuration] b ON b.id = a.parentid where a.loadorder is not null and ")
-        sqlQuery.AppendLine("UPPER(a.tech) = '" & tech.ToUpper & "' order by a.loadorder")
+        sqlQuery.AppendLine("dbo.[IOS_Object_Configuration] b ON b.id = a.parentid and a.ObjectConfigProfile=b.ObjectConfigProfile
+                            INNER JOIN IOS_Licenses on a.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                            Where a.loadorder is not null and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & " and ")
         Return DataAccessorODBC.GetDataTable(sql_conn, sqlQuery.ToString)
     End Function
 
@@ -480,7 +493,15 @@ Public Class clsSQLCommands
 
     Public Shared Function GetCounterTypeForTopX(ByVal sql_conn As String, ByVal tech As String) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("Select tbl1.Objecttab,tbl1.ObjectCount,tbl2.ObjectTreeEnabled From (SELECT Objecttab, COUNT(*) As ObjectCount FROM IOS_Chart_Configuration WHERE techtab = '" & tech & "' GROUP BY ObjectTab) tbl1 INNER JOIN IOS_Object_Configuration tbl2 ON tbl1.Objecttab=tbl2.[Object] ORDER BY tbl1.ObjectCount DESC")
+        sqlQuery.AppendLine("Select tbl1.Objecttab,tbl1.ObjectCount,tbl2.ObjectTreeEnabled 
+                            From (SELECT Objecttab, COUNT(*) As ObjectCount 
+                            FROM IOS_Chart_Configuration 
+                            WHERE techtab = '" & tech & "' 
+                            GROUP BY ObjectTab) tbl1 
+                            INNER JOIN IOS_Object_Configuration tbl2 ON tbl1.Objecttab=tbl2.[Object] 
+                            INNER JOIN IOS_Licenses on tbl2.ObjectConfigProfile=IOS_Licenses.ObjectConfigProfile
+                            WHERE IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "
+                            ORDER BY tbl1.ObjectCount DESC")
         Return DataAccessorODBC.GetDataTable(sql_conn, sqlQuery.ToString)
     End Function
 
@@ -622,7 +643,13 @@ Public Class clsSQLCommands
 
     Public Shared Function GetObjectConfigurationByObject(ByVal sql_conn As String, ByVal _object As String) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("SELECT DISTINCT [Object] from IOS_Object_Configuration a inner join (select ID from IOS_Object_Configuration where [Object] = '" + _object + "') b on a.ParentID = b.ID and a.sqlID is not null")
+        sqlQuery.AppendLine("SELECT DISTINCT [Object] 
+                            from IOS_Object_Configuration a 
+                            inner join (
+                            select ID from IOS_Object_Configuration   
+                            INNER JOIN IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                            where [Object] = '" + _object + "' and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "
+                            ) b on a.ParentID = b.ID and a.sqlID is not null")
         Return DataAccessorODBC.GetDataTable(sql_conn, sqlQuery.ToString)
     End Function
 
@@ -787,19 +814,28 @@ Public Class clsSQLCommands
     Public Shared Function GetObjectConfigChanges(ByVal sql_conn As String, ByVal _tech As String) As DataTable
         sqlQuery = New StringBuilder()
         If _tech = "ALL" Then
-            sqlQuery.AppendLine("SELECT tech, Object, ChangesSQLID from dbo.[IOS_Object_Configuration] where ChangesSQLID is not null")
+            sqlQuery.AppendLine("SELECT tech, Object, ChangesSQLID 
+                                    from dbo.[IOS_Object_Configuration] 
+                                    INNER JOIN IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                                    where ChangesSQLID is not null and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39))
             'Updated dbo.[IOS_Object_Configuration] table to check Changes tab dynamic buttons appearance. The update queary is below.
             'update dbo.[IOS_Object_Configuration] set ChangesSQLID = 1 Where Tech = 'NSN 3G' and [Object] in ('RNC','WBTS','WCEL')
         Else
-            sqlQuery.AppendLine("SELECT tech, Object, ChangesSQLID from dbo.[IOS_Object_Configuration] where ChangesSQLID is not null and tech = " & Chr(39) & _tech & Chr(39))
+            sqlQuery.AppendLine("SELECT tech, Object, ChangesSQLID 
+                                    from dbo.[IOS_Object_Configuration] 
+                                    INNER JOIN IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                                    where ChangesSQLID is not null and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & " and  tech = " & Chr(39) & _tech & Chr(39))
         End If
         Return DataAccessorODBC.GetDataTable(sql_conn, sqlQuery.ToString)
     End Function
 
     Public Shared Function GetObjectConfigurationNewQuery(ByVal _chartSetName As String, _tech As String, _username As String) As String
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("SELECT techtab,  Categorytabindex, Categorytab, ObjectTab FROM IOS_Chart_Configuration left outer join IOS_Object_Configuration on tech=techtab and [Object]=ObjectTab ")
-        sqlQuery.AppendLine(" WHERE (((ChartSetName = " & Chr(39) & _chartSetName & Chr(39) & ") OR (ChartSetName = " & _username & "))  AND TechTab = " & Chr(39) & _tech & Chr(39) & ") ")
+        sqlQuery.AppendLine("SELECT techtab,  Categorytabindex, Categorytab, ObjectTab 
+                            FROM IOS_Chart_Configuration 
+                            left outer join IOS_Object_Configuration on tech=techtab and [Object]=ObjectTab
+                            INNER JOIN IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile")
+        sqlQuery.AppendLine(" WHERE (((IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _chartSetName & Chr(39) & ") OR (IOS_Chart_Configuration.ChartSetName = " & _username & "))  AND TechTab = " & Chr(39) & _tech & Chr(39) & ") and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39))
         sqlQuery.AppendLine(" GROUP BY techtab, Categorytab, categorytabindex, ObjectTab, loadorder ORDER BY techtab, loadorder desc, categorytabindex")
         Return sqlQuery.ToString
     End Function
@@ -935,7 +971,12 @@ Public Class clsSQLCommands
 
     Public Shared Function GetDistinctObject(ByVal connStr As String, tech As String) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("SELECT DISTINCT object FROM dbo.IOS_Object_Configuration a inner join IOS_SQL_Create on Object=Aggregate_From  where a.tech='" & tech & "' and SQLID is Not NULL  and Purpose = 'Charts'  order by object ")
+        sqlQuery.AppendLine("SELECT DISTINCT object 
+                                FROM dbo.IOS_Object_Configuration a 
+                                inner join IOS_SQL_Create on Object=Aggregate_From  
+                                 INNER JOIN IOS_Licenses on a.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                                where a.tech='" & tech & "' and SQLID is Not NULL  and Purpose = 'Charts'  and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & "
+                                order by object ")
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 
@@ -991,7 +1032,10 @@ Public Class clsSQLCommands
 
     Public Shared Function GetDistinctTechnology(ByVal connStr As String) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("SELECT DISTINCT tech FROM dbo.IOS_Object_Configuration where SQLID is Not NULL and tech<>'PLMN' and tech<>'Tags'")
+        sqlQuery.AppendLine("SELECT DISTINCT tech 
+                             FROM dbo.IOS_Object_Configuration 
+                             INNER JOIN IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                             Where SQLID is Not NULL and tech<>'PLMN' and tech<>'Tags' and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39))
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 
@@ -1737,14 +1781,20 @@ Public Class clsSQLCommands
 
     Public Shared Function GetTechOtherThanPLMN(ByVal connStr As String) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("SELECT DISTINCT Tech FROM IOS_Object_Configuration WHERE Tech != 'PLMN'")
+        sqlQuery.AppendLine("SELECT DISTINCT Tech 
+                             FROM IOS_Object_Configuration 
+                             INNER JOIN IOS_Licenses on IOS_Object_Configuration.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
+                             WHERE Tech != 'PLMN' and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39))
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 
     Public Shared Function GetObjectTypeFromTech(ByVal connStr As String, ByVal techName As String) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("SELECT DISTINCT a.ObjectType object FROM dbo.[IOS_SQL_Create] a INNER JOIN dbo.[IOS_Object_Configuration] b ON a.tech=b.tech AND a.ObjectType = b.[Object]")
-        sqlQuery.AppendLine("WHERE a.purpose IN('Charts','TopX') AND a.tech = '" & techName & "'")
+        sqlQuery.AppendLine("SELECT DISTINCT a.ObjectType object 
+                             FROM dbo.[IOS_SQL_Create] a 
+                             INNER JOIN dbo.[IOS_Object_Configuration] b ON a.tech=b.tech AND a.ObjectType = b.[Object]
+                             INNER JOIN IOS_Licenses on b.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile")
+        sqlQuery.AppendLine("WHERE a.purpose IN('Charts','TopX') and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & " AND a.tech = '" & techName & "'")
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 

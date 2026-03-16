@@ -466,7 +466,7 @@ Public Class frmTileMapping
 
         If bInternetAvailable = False Then
             frmMapWindow.SetStatus("No Internet connection available!")
-            Return 0 '-9999
+            Return -9999
         End If
 
         Try

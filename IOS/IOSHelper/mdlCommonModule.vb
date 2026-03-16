@@ -3072,7 +3072,7 @@ Module mdlCommonModule
             ' Handle exception if ping fails
         End Try
         bInternetAvailable = False
-        Return False
+        Return bInternetAvailable
     End Function
 
     Public Function GetStartOfWeek(inputDate As Date, culture As Globalization.CultureInfo) As Date

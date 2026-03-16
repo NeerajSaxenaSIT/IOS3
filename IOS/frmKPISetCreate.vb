@@ -113,9 +113,11 @@ Public Class frmKPISetCreate
                 If isPowerUser = True Then
                     tlKPISetKPIsList.Enabled = True
                     btnDelete.Enabled = True
+                    picDrag.Enabled = True
                 Else
                     tlKPISetKPIsList.Enabled = False
                     btnDelete.Enabled = False
+                    picDrag.Enabled = False
                 End If
             Else
                 tlKPISetKPIsList.Columns.Clear()
