@@ -446,15 +446,15 @@ Public Class frmSBMain
 
             If (cmbKPIGroup.SelectedItem.ToString.ToUpper = "ALL") Then
                 Dim selectTechnologyPackageKPI As String = SQLTechnologyKPIs.GetByTechAndCreator(TryCast(cmbReportTechnology.SelectedItem, clsComboBoxItem).Value, cmbKPIGroup.SelectedItem.ToString)
-                Dim dt As DataTable = DataAccessorODBC.GetDataTable(connStrSandBoxServer, selectTechnologyPackageKPI)
-                BindKPITree(dt)
+                dt_TechnologyPackageKPI = DataAccessorODBC.GetDataTable(connStrSandBoxServer, selectTechnologyPackageKPI)
+                BindKPITree(dt_TechnologyPackageKPI)
 
                 'btnAddCategory.Enabled = False
                 'btnAddKPI.Enabled = False
             Else
                 Dim selectTechnologyPackageKPI As String = SQLTechnologyKPIs.GetByTechAndCreator(TryCast(cmbReportTechnology.SelectedItem, clsComboBoxItem).Value, cmbKPIGroup.SelectedItem.ToString)
-                Dim dt As DataTable = DataAccessorODBC.GetDataTable(connStrSandBoxServer, selectTechnologyPackageKPI)
-                BindKPITree(dt)
+                dt_TechnologyPackageKPI = DataAccessorODBC.GetDataTable(connStrSandBoxServer, selectTechnologyPackageKPI)
+                BindKPITree(dt_TechnologyPackageKPI)
 
                 'btnAddCategory.Enabled = True
                 'btnAddKPI.Enabled = True
