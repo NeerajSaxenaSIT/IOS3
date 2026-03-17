@@ -311,6 +311,7 @@ Public Class clsSQLCommands
         sqlQuery.AppendLine("dbo.[IOS_Object_Configuration] b ON b.id = a.parentid and a.ObjectConfigProfile=b.ObjectConfigProfile
                             INNER JOIN IOS_Licenses on a.ObjectConfigProfile = IOS_Licenses.ObjectConfigProfile
                             Where a.loadorder is not null and IOS_Licenses.LicenseUser = " & Chr(39) & Environment.UserName.ToString & Chr(39) & " and ")
+        sqlQuery.AppendLine("UPPER(a.tech) = '" & tech.ToUpper & "' order by a.loadorder")
         Return DataAccessorODBC.GetDataTable(sql_conn, sqlQuery.ToString)
     End Function
 
