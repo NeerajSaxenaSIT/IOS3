@@ -2669,7 +2669,9 @@ Public Class frmChartCustomization
 
         stroutput = "XValue=" & xval ' a(0)
         For i = 0 To UBound(str)
-            stroutput = stroutput & "," & " Yvalue=" & str(i).Replace(",", "\,")
+            If str(i) IsNot Nothing Then
+                stroutput = stroutput & "," & " Yvalue=" & str(i).Replace(",", "\,")
+            End If
         Next
         String2DataFields = stroutput
     End Function
