@@ -1136,7 +1136,24 @@ Public Class frmChartCustomization
                     '+++++++++++++++++++++++++++++++++++++++
                     j = 0
 
-                    For Each col As DataColumn In dt.Columns
+                    'For Each col As DataColumn In dt.Columns
+                    '    ReDim Preserve chart_elements(j)
+                    '    If col.ColumnName.ToUpper <> "DATE" Then
+                    '        chart_elements(j) = col.ColumnName
+                    '        j = j + 1
+                    '    End If
+                    'Next
+
+                    ' Get the total count of columns
+                    Dim columnCount As Integer = dt.Columns.Count
+
+                    ' Start the loop from the last column (index = columnCount - 1)
+                    ' and go down to the first column (index = 0)
+                    For ix As Integer = columnCount - 1 To 0 Step -1
+                        ' Get the DataColumn object by its index
+                        Dim col As DataColumn = dt.Columns(ix)
+
+                        ' Your existing logic, now applied in reverse column order
                         ReDim Preserve chart_elements(j)
                         If col.ColumnName.ToUpper <> "DATE" Then
                             chart_elements(j) = col.ColumnName

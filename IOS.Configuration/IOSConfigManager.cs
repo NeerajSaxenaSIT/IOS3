@@ -94,7 +94,7 @@ namespace IOS.Configuration
         }
         public EntityModel.IOSForm FindFormByName(string Name)
         {
-            return _IOSForms.SingleOrDefault(w => w.Name.ToLower().Trim() == Name.ToLower().Trim());
+            return _IOSForms.FirstOrDefault(w => w.Name.ToLower().Trim() == Name.ToLower().Trim());
         }
         public EntityModel.IOSUser User 
         { 

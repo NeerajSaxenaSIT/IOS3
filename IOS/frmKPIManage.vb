@@ -895,6 +895,9 @@ Public Class frmKPIManage
         gvTableCounter.Columns.AddField("TableName").Visible = True
         gvTableCounter.Columns.AddField("CounterName").Visible = True
         gvTableCounter.Columns.AddField("VendorID").Visible = True
+        If data.Columns.Contains("Description") Then
+            gvTableCounter.Columns.AddField("Description").Visible = True
+        End If
         gvTableCounter.OptionsBehavior.AutoPopulateColumns = False
         dgvTableCounter.DataSource = data
         dgvTableCounter.RefreshDataSource()

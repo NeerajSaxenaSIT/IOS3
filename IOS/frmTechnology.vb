@@ -22050,502 +22050,516 @@ Public Class frmTechnology
                                     j = j + 1
                                 Next
 
-                                If seriesList.Length > 1 Then
 
-                                    Dim dgv As DataView = Nothing
-                                    If Not dsStats Is Nothing Then
-                                        dgv = GetMatchingTableViews(dsStats, seriesList)
-                                        If dgv Is Nothing Then
-                                            For k As Integer = 0 To dsStats.Tables.Count - 1
-                                                If dsStats.Tables(k).Columns.Contains(seriesList(1)) Then
-                                                    dgv = dsStats.Tables(k).DefaultView
-                                                    Exit For
-                                                End If
-                                            Next
-                                        End If
-                                    End If
+                                Try
 
-                                    If tsmi_ObjectAggregationOnOff.Checked = False Then
-                                        If dgv.Table.Columns.Contains(dgv.Table.TableName) Then
-                                            dgv.RowFilter = dgv.Table.TableName & "='" & ch.Title.Split("'")(1) & "'"
-                                        Else
-                                            dgv.RowFilter = cmbObjectTreeStats.SelectedItem.ToString & "='" & ch.Title.Split(":")(1).ToString.Replace("'", "").Trim & "'"
-                                        End If
-                                    End If
 
-                                    If dgv Is Nothing Then
-                                        Continue For
-                                    End If
+                                    If seriesList.Length > 1 Then
 
-                                    dtData = dgv.ToTable(True, seriesList)
-                                    chartElements = seriesList.Skip(1).ToArray()
-
-                                    Try
-                                        If Not dtPrdCalcStats Is Nothing AndAlso dtPrdCalcStats.Rows.Count > 0 Then
-                                            NumOfPeriods = dtPrdCalcStats.Rows.Count
-                                            dt_periodCalc = PeriodCalculation(dtData, dtPrdCalcStats, chartElements)
-                                            If Not dicPrdCalcData.ContainsKey(ch.Name) Then
-                                                dicPrdCalcData.Add(ch.Name, dt_periodCalc)
-                                            End If
-                                        End If
-                                    Catch
-                                    End Try
-
-                                    'show/hide chart series/kpi legend
-                                    If prdCalcChkCmbVisuals.Properties.Items.Item(0).CheckState = CheckState.Checked Then
-                                        ch.LegendBox.Visible = True
-                                    Else
-                                        ch.LegendBox.Visible = False
-                                    End If
-
-                                    If dt_periodCalc IsNot Nothing Then
-                                        'taking series with period calc enabled
-                                        Dim prdCalcEnabled As Boolean = False
-                                        If prdCalcChkCmbVisuals.Properties.Items.Item(3).CheckState = CheckState.Checked Then
-                                            showPrdCalcSeries = True
-                                            Dim s_selected As Series = Nothing
-                                            Dim ds As New DataSet()
-                                            ds.Tables.Add(dtData)
-
-                                            Dim lst_seriesToadd As New List(Of Series)
-                                            For Each s As Series In ch.SeriesCollection
-                                                Try
-                                                    Dim row As DataRow = chartConfigTable.AsEnumerable().FirstOrDefault(Function(r) String.Equals(r.Field(Of String)("ChartName"), ch.Name, StringComparison.Ordinal) AndAlso String.Equals(r.Field(Of String)("ChartElements"), s.Name, StringComparison.Ordinal))
-                                                    prdCalcEnabled = If(row IsNot Nothing, row.Field(Of Boolean?)("PeriodCalcEnabled").GetValueOrDefault(False), False)
-                                                    If prdCalcEnabled = True Then
-                                                        s_selected = s
-
-                                                        If Not s_selected Is Nothing Then
-
-                                                            Dim s_selected_originalname As String = s_selected.Name
-                                                            Dim cloned As Series = CType(s_selected.Clone(), Series)
-                                                            Dim cloned_stdUp As Series = CType(s_selected.Clone(), Series)
-                                                            Dim cloned_stdDown As Series = CType(s_selected.Clone(), Series)
-
-                                                            cloned.Name = "PeriodCalc_" & s_selected.Name & "_AVG"
-                                                            Dim dtCloned As New DataTable()
-                                                            dtCloned.TableName = "PeriodCalc_" & s_selected.Name & "_AVG"
-                                                            dtCloned.Columns.Add("Date", GetType(Date))
-                                                            dtCloned.Columns.Add("PeriodCalc_" & s_selected.Name & "_AVG", GetType(Double))
-
-                                                            cloned_stdUp.Name = "PeriodCalc_" & s_selected.Name & "_STDUP"
-                                                            Dim dtCloned_stdup As New DataTable()
-                                                            dtCloned_stdup.TableName = "PeriodCalc_" & s_selected.Name & "_STDUP"
-                                                            dtCloned_stdup.Columns.Add("Date", GetType(Date))
-                                                            dtCloned_stdup.Columns.Add("PeriodCalc_" & s_selected.Name & "_STDUP", GetType(Double))
-
-                                                            cloned_stdDown.Name = "PeriodCalc_" & s_selected.Name & "_STDDOWN"
-                                                            Dim dtCloned_stdDown As New DataTable()
-                                                            dtCloned_stdDown.TableName = "PeriodCalc_" & s_selected.Name & "_STDDOWN"
-                                                            dtCloned_stdDown.Columns.Add("Date", GetType(Date))
-                                                            dtCloned_stdDown.Columns.Add("PeriodCalc_" & s_selected.Name & "_STDDOWN", GetType(Double))
-
-                                                            Dim p1_avg As Double = Nothing
-                                                            Dim p1_std As Double = Nothing
-
-                                                            Dim p2_avg As Double = Nothing
-                                                            Dim p2_std As Double = Nothing
-
-                                                            Dim sp As DateTime = Nothing
-                                                            Dim ep As DateTime = Nothing
-
-                                                            Dim sp2 As DateTime = Nothing
-                                                            Dim ep2 As DateTime = Nothing
-
-                                                            Dim calc As String = cmbPrdCalcStats.Text.ToUpper.ToString
-
-                                                            If dtPrdCalcStats.Rows.Count = 1 Or dtPrdCalcStats.Rows.Count = 2 Then
-                                                                sp = dtPrdCalcStats(0)(1)
-                                                                ep = dtPrdCalcStats(0)(2)
-
-                                                                Dim dr() As DataRow = dt_periodCalc.Select("KPIName=" + "'" + s_selected_originalname + "'")
-                                                                If dr.Length > 0 Then
-                                                                    p1_avg = dr(0)(calc)
-                                                                    p1_std = dr(0)("STDEV")
-                                                                End If
-                                                            End If
-
-                                                            If dtPrdCalcStats.Rows.Count = 2 Then
-                                                                sp2 = dtPrdCalcStats(1)(1)
-                                                                ep2 = dtPrdCalcStats(1)(2)
-
-                                                                Dim dr() As DataRow = dt_periodCalc.Select("KPIName=" + "'" + s_selected_originalname + "'")
-                                                                If dr.Length > 0 Then
-                                                                    p2_avg = dr(1)(calc)
-                                                                    p2_std = dr(1)("STDEV")
-                                                                End If
-                                                            End If
-
-                                                            For Each el As Element In cloned.Elements
-                                                                If el.XDateTime >= sp And el.XDateTime <= ep Then
-                                                                    el.YValue = p1_avg
-                                                                Else
-                                                                    el.YValue = Double.NaN
-                                                                End If
-
-                                                                If dtPrdCalcStats.Rows.Count = 2 Then
-                                                                    If el.XDateTime >= sp2 And el.XDateTime <= ep2 Then
-                                                                        el.YValue = p2_avg
-                                                                    End If
-                                                                End If
-
-                                                                Dim drCloned As DataRow = dtCloned.NewRow()
-                                                                drCloned("Date") = el.XDateTime
-                                                                drCloned("PeriodCalc_" & s_selected.Name & "_AVG") = If(Double.IsNaN(el.YValue), DBNull.Value, el.YValue)
-                                                                dtCloned.Rows.Add(drCloned)
-                                                                dtCloned.AcceptChanges()
-                                                            Next
-
-                                                            For Each el As Element In cloned_stdUp.Elements
-                                                                If el.XDateTime >= sp And el.XDateTime <= ep Then
-                                                                    el.YValue = p1_avg + p1_std
-                                                                Else
-                                                                    el.YValue = Double.NaN
-                                                                End If
-
-                                                                If dtPrdCalcStats.Rows.Count = 2 Then
-                                                                    If el.XDateTime >= sp2 And el.XDateTime <= ep2 Then
-                                                                        el.YValue = p2_avg + p2_std
-                                                                    End If
-                                                                End If
-
-                                                                Dim drCloned_stdup As DataRow = dtCloned_stdup.NewRow()
-                                                                drCloned_stdup("Date") = el.XDateTime
-                                                                drCloned_stdup("PeriodCalc_" & s_selected.Name & "_STDUP") = If(Double.IsNaN(el.YValue), DBNull.Value, el.YValue)
-                                                                dtCloned_stdup.Rows.Add(drCloned_stdup)
-                                                                dtCloned_stdup.AcceptChanges()
-                                                            Next
-
-                                                            For Each el As Element In cloned_stdDown.Elements
-                                                                If el.XDateTime >= sp And el.XDateTime <= ep Then
-                                                                    el.YValue = p1_avg - p1_std
-                                                                Else
-                                                                    el.YValue = Double.NaN
-                                                                End If
-
-                                                                If dtPrdCalcStats.Rows.Count = 2 Then
-                                                                    If el.XDateTime >= sp2 And el.XDateTime <= ep2 Then
-                                                                        el.YValue = p2_avg - p2_std
-                                                                    End If
-                                                                End If
-
-                                                                Dim drCloned_stdDown As DataRow = dtCloned_stdDown.NewRow()
-                                                                drCloned_stdDown("Date") = el.XDateTime
-                                                                drCloned_stdDown("PeriodCalc_" & s_selected.Name & "_STDDOWN") = If(Double.IsNaN(el.YValue), DBNull.Value, el.YValue)
-                                                                dtCloned_stdDown.Rows.Add(drCloned_stdDown)
-                                                                dtCloned_stdDown.AcceptChanges()
-                                                            Next
-
-                                                            cloned.Type = SeriesType.Line
-                                                            cloned.Line.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
-                                                            cloned.Line.Width = 2
-                                                            cloned.DefaultElement.Color = s_selected.DefaultElement.Color 'Color.FromArgb(255, 0, 0, 0)
-                                                            cloned.EmptyElement.Mode = EmptyElementMode.Ignore
-                                                            'ch.SeriesCollection.Add(cloned)
-
-                                                            lst_seriesToadd.Add(cloned)
-
-                                                            cloned_stdUp.Type = SeriesType.Line
-                                                            cloned_stdUp.Line.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
-                                                            cloned_stdUp.Line.Width = 1
-                                                            cloned_stdUp.DefaultElement.Color = s_selected.DefaultElement.Color 'Color.FromArgb(255, 100, 50, 50)
-                                                            cloned_stdUp.EmptyElement.Mode = EmptyElementMode.Ignore
-                                                            'ch.SeriesCollection.Add(cloned_stdUp)
-
-                                                            lst_seriesToadd.Add(cloned_stdUp)
-
-                                                            cloned_stdDown.Type = SeriesType.Line
-                                                            cloned_stdDown.Line.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
-                                                            cloned_stdDown.Line.Width = 1
-                                                            cloned_stdDown.DefaultElement.Color = s_selected.DefaultElement.Color 'Color.FromArgb(255, 100, 50, 50)
-                                                            cloned_stdDown.EmptyElement.Mode = EmptyElementMode.Ignore
-                                                            'ch.SeriesCollection.Add(cloned_stdDown)
-
-                                                            lst_seriesToadd.Add(cloned_stdDown)
-                                                            ds.Tables.Add(dtCloned)
-                                                            ds.Tables.Add(dtCloned_stdup)
-                                                            ds.Tables.Add(dtCloned_stdDown)
-
-                                                            Dim dtMerged As DataTable = MergePrdCalcSeriesDataTables(ds)
-                                                            If Not dicPrdCalcSeriesData.ContainsKey(ch.Name) Then
-                                                                dicPrdCalcSeriesData.Add(ch.Name, dtMerged)
-                                                            End If
-
-                                                        End If
+                                        Dim dgv As DataView = Nothing
+                                        If Not dsStats Is Nothing Then
+                                            dgv = GetMatchingTableViews(dsStats, seriesList)
+                                            If dgv Is Nothing Then
+                                                For k As Integer = 0 To dsStats.Tables.Count - 1
+                                                    If dsStats.Tables(k).Columns.Contains(seriesList(1)) Then
+                                                        dgv = dsStats.Tables(k).DefaultView
+                                                        Exit For
                                                     End If
-                                                Catch ex As Exception
-                                                    UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-                                                End Try
-                                            Next
-
-                                            For Each s As Series In lst_seriesToadd
-                                                Try
-                                                    If s.YAxis.Label.Text.Contains("Thousand") Then
-                                                        s = Series.Divide(s, 1000)
-                                                    ElseIf s.YAxis.Label.Text.Contains("Million") Then
-                                                        s = Series.Divide(s, 1000000)
-                                                    End If
-                                                    ch.SeriesCollection.Add(s)
-                                                Catch
-                                                End Try
-                                            Next
-
-                                        End If
-
-                                        If Not dtPrdCalcStats Is Nothing AndAlso dtPrdCalcStats.Rows.Count > 0 Then
-                                            'adding period calc legend
-                                            If (prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked) Or
-                                                (prdCalcChkCmbVisuals.Properties.Items.Item(2).CheckState = CheckState.Checked) Then
-
-                                                Dim distinctPeriods = dt_periodCalc.AsEnumerable().
-                                                                    Select(Function(r) r.Field(Of String)("PeriodName")).
-                                                                    Distinct().ToList()
-
-                                                Dim distinctKPI = dt_periodCalc.AsEnumerable().
-                                                                    Select(Function(r) r.Field(Of String)("KPIName")).
-                                                                    Distinct().ToList()
-
-                                                Dim newLegend As LegendBox = New LegendBox()
-                                                Dim header1 As LegendEntry
-
-                                                If prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked Then
-
-                                                    If NumOfPeriods = 1 Then
-                                                        newLegend.Template = "%Icon %Name  %Value"
-                                                    ElseIf NumOfPeriods = 2 Then
-                                                        newLegend.Template = "%Icon %Name  %Value %ValueP2 %ValueDelta %ValueDeltaP"
-                                                        header1 = New LegendEntry("KPI", distinctPeriods(0), "   ")
-                                                        header1.CustomAttributes = "Icon=   "
-                                                        header1.CustomAttributes.Add("ValueP2", distinctPeriods(1))
-                                                        header1.CustomAttributes.Add("ValueDelta", "Delta")
-                                                        header1.CustomAttributes.Add("ValueDeltaP", "Delta%")
-                                                        header1.SortOrder = -1
-                                                        header1.LabelStyle.Font = New Font("Arial", 8, FontStyle.Bold)
-                                                        newLegend.ExtraEntries.Add(header1)
-                                                    End If
-
-                                                    For Each kpi As String In distinctKPI
-                                                        Try
-                                                            If NumOfPeriods = 1 Then
-                                                                Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
-                                                                Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
-                                                                le.SortOrder = 2
-
-                                                                newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
-
-                                                                newLegend.ExtraEntries.Add(le)
-
-                                                            ElseIf NumOfPeriods = 2 Then
-                                                                Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
-                                                                Dim ValP2 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(1) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
-
-                                                                Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
-
-                                                                le.CustomAttributes.Add("ValueP2", Math.Round(CDbl(ValP2), 2))
-                                                                le.CustomAttributes.Add("ValueDelta", Math.Round(CDbl(ValP2) - CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
-                                                                le.CustomAttributes.Add("ValueDeltaP", Math.Round(100 * (CDbl(ValP2) - CDbl(ValP1)) / CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
-                                                                le.SortOrder = 2
-
-                                                                newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
-                                                                newLegend.ExtraEntries.Add(le)
-                                                            End If
-                                                        Catch ex As Exception
-                                                            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-                                                        End Try
-                                                    Next
-
-                                                    ' Set orientation for the custom legend
-                                                    newLegend.Orientation = Orientation.Right
-
-                                                ElseIf prdCalcChkCmbVisuals.Properties.Items.Item(2).CheckState = CheckState.Checked Then
-
-                                                    If NumOfPeriods = 1 Then
-                                                        newLegend.Template = "%Icon %Name %Value"
-                                                    ElseIf NumOfPeriods = 2 Then
-                                                        newLegend.Template = "%Icon %Name %Value %ValueP2 %ValueDelta %ValueDeltaP"
-                                                        header1 = New LegendEntry("KPI", distinctPeriods(0), "   ")
-                                                        header1.CustomAttributes = "Icon=   "
-                                                        header1.CustomAttributes.Add("ValueP2", distinctPeriods(1))
-                                                        header1.CustomAttributes.Add("ValueDelta", "Delta")
-                                                        header1.CustomAttributes.Add("ValueDeltaP", "Delta%")
-                                                        header1.SortOrder = 99
-                                                        header1.LabelStyle.Font = New Font("Arial", 8, FontStyle.Bold)
-                                                        header1.HeaderMode = LegendEntryHeaderMode.RepeatOnEachColumn
-                                                        newLegend.ExtraEntries.Add(header1)
-                                                    End If
-
-                                                    Try
-                                                        For Each kpi As String In distinctKPI
-                                                            If NumOfPeriods = 1 Then
-                                                                Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
-                                                                Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
-                                                                le.SortOrder = 2
-
-                                                                newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
-
-                                                                newLegend.ExtraEntries.Add(le)
-
-                                                            ElseIf NumOfPeriods = 2 Then
-                                                                Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
-                                                                Dim ValP2 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(1) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
-
-                                                                Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
-
-                                                                le.CustomAttributes.Add("ValueP2", Math.Round(CDbl(ValP2), 2))
-                                                                le.CustomAttributes.Add("ValueDelta", Math.Round(CDbl(ValP2) - CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
-                                                                le.CustomAttributes.Add("ValueDeltaP", Math.Round(100 * (CDbl(ValP2) - CDbl(ValP1)) / CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
-                                                                le.SortOrder = 1
-
-                                                                newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
-
-                                                                newLegend.ExtraEntries.Add(le)
-
-                                                            End If
-                                                        Next
-                                                    Catch ex As Exception
-                                                        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-                                                    End Try
-
-                                                    ' Set orientation for the custom legend
-                                                    newLegend.ListTopToBottom = True
-                                                    newLegend.Orientation = Orientation.Bottom
-
-                                                End If
-
-                                                ' The the new legend to the chart.
-                                                ch.ExtraLegendBoxes.Add(newLegend)
-                                                ch.RefreshChart()
-
-                                            End If
-                                        End If
-                                    End If
-
-                                    If Not dtPrdCalcStats Is Nothing AndAlso dtPrdCalcStats.Rows.Count > 0 Then
-                                        Dim iPrdCalcBandCntr As Integer = 0
-                                        Dim rnd As Random = New Random(10)
-                                        'adding period calculation bands
-                                        If prdCalcChkCmbVisuals.Properties.Items.Item(4).CheckState = CheckState.Checked Then
-                                            For Each dr As DataRow In dtPrdCalcStats.Rows
-
-                                                If iPrdCalcBandCntr = 0 Then
-
-                                                    Dim shadeThreshold As AxisMarker = Nothing
-                                                    If GetFromTech_RadioButton(tech, "Raw").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
-                                                    End If
-
-                                                    shadeThreshold.LegendEntry.Visible = False
-                                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
-                                                    shadeThreshold.Label.Alignment = StringAlignment.Near
-                                                    shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
-                                                    shadeThreshold.LegendEntry.Value = ""
-                                                    shadeThreshold.BringToFront = True
-                                                    If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
-                                                        ch.XAxis.Markers.Add(shadeThreshold)
-                                                    End If
-
-                                                    If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
-                                                        prdCalcAxisMarkerColl.Add(shadeThreshold)
-                                                    End If
-
-                                                ElseIf iPrdCalcBandCntr = 1 Then
-
-                                                    Dim shadeThreshold As AxisMarker = Nothing
-                                                    If GetFromTech_RadioButton(tech, "Raw").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
-                                                    End If
-
-                                                    shadeThreshold.LegendEntry.Visible = False
-                                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
-                                                    shadeThreshold.Label.Alignment = StringAlignment.Near
-                                                    shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
-                                                    shadeThreshold.LegendEntry.Value = ""
-                                                    shadeThreshold.BringToFront = True
-                                                    If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
-                                                        ch.XAxis.Markers.Add(shadeThreshold)
-                                                    End If
-
-                                                    If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
-                                                        prdCalcAxisMarkerColl.Add(shadeThreshold)
-                                                    End If
-
-                                                Else
-
-                                                    Dim shadeThreshold As AxisMarker = Nothing
-                                                    If GetFromTech_RadioButton(tech, "Raw").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
-                                                    ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                        shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
-                                                    End If
-
-                                                    shadeThreshold.LegendEntry.Visible = False
-                                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
-                                                    shadeThreshold.Label.Alignment = StringAlignment.Near
-                                                    shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
-                                                    shadeThreshold.LegendEntry.Value = ""
-                                                    shadeThreshold.BringToFront = True
-                                                    If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
-                                                        ch.XAxis.Markers.Add(shadeThreshold)
-                                                    End If
-
-                                                    If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
-                                                        prdCalcAxisMarkerColl.Add(shadeThreshold)
-                                                    End If
-
-                                                End If
-
-                                                iPrdCalcBandCntr = iPrdCalcBandCntr + 1
-                                            Next
-                                        Else
-                                            If dtPrdCalcStats.Rows.Count > 0 Then
-                                                Dim prdName As String = ""
-                                                For Each dr As DataRow In dtPrdCalcStats.Rows
-                                                    prdName = dr("PeriodName").ToString()
-
-                                                    For m As Integer = ch.XAxis.Markers.Count - 1 To 0 Step -1
-                                                        Dim am As AxisMarker = ch.XAxis.Markers(m)
-                                                        If am.Label.Text = prdName Then
-                                                            ch.XAxis.Markers.RemoveAt(m)
-                                                        End If
-                                                    Next
-
-                                                    For i As Integer = prdCalcAxisMarkerColl.Count - 1 To 0 Step -1
-                                                        Dim am As AxisMarker = prdCalcAxisMarkerColl(i)
-                                                        If am.Label.Text = prdName Then
-                                                            prdCalcAxisMarkerColl.RemoveAt(i)
-                                                        End If
-                                                    Next
                                                 Next
                                             End If
                                         End If
+
+                                        If tsmi_ObjectAggregationOnOff.Checked = False Then
+                                            If dgv.Table.Columns.Contains(dgv.Table.TableName) Then
+                                                dgv.RowFilter = dgv.Table.TableName & "='" & ch.Title.Split("'")(1) & "'"
+                                            Else
+                                                dgv.RowFilter = cmbObjectTreeStats.SelectedItem.ToString & "='" & ch.Title.Split(":")(1).ToString.Replace("'", "").Trim & "'"
+                                            End If
+                                        End If
+
+                                        If dgv Is Nothing Then
+                                            Continue For
+                                        End If
+
+                                        dtData = dgv.ToTable(True, seriesList)
+                                        chartElements = seriesList.Skip(1).ToArray()
+
+                                        Try
+                                            If Not dtPrdCalcStats Is Nothing AndAlso dtPrdCalcStats.Rows.Count > 0 Then
+                                                NumOfPeriods = dtPrdCalcStats.Rows.Count
+                                                dt_periodCalc = PeriodCalculation(dtData, dtPrdCalcStats, chartElements)
+                                                If Not dicPrdCalcData.ContainsKey(ch.Name) Then
+                                                    dicPrdCalcData.Add(ch.Name, dt_periodCalc)
+                                                End If
+                                            End If
+                                        Catch
+                                        End Try
+
+                                        'show/hide chart series/kpi legend
+                                        If prdCalcChkCmbVisuals.Properties.Items.Item(0).CheckState = CheckState.Checked Then
+                                            ch.LegendBox.Visible = True
+                                        Else
+                                            ch.LegendBox.Visible = False
+                                        End If
+
+
+
+                                        If dt_periodCalc IsNot Nothing Then
+                                            'taking series with period calc enabled
+                                            Dim prdCalcEnabled As Boolean = False
+                                            If prdCalcChkCmbVisuals.Properties.Items.Item(3).CheckState = CheckState.Checked Then
+                                                showPrdCalcSeries = True
+                                                Dim s_selected As Series = Nothing
+                                                Dim ds As New DataSet()
+                                                ds.Tables.Add(dtData)
+
+                                                Dim lst_seriesToadd As New List(Of Series)
+                                                For Each s As Series In ch.SeriesCollection
+                                                    Try
+                                                        Dim row As DataRow = chartConfigTable.AsEnumerable().FirstOrDefault(Function(r) String.Equals(r.Field(Of String)("ChartName"), ch.Name, StringComparison.Ordinal) AndAlso String.Equals(r.Field(Of String)("ChartElements"), s.Name, StringComparison.Ordinal))
+                                                        prdCalcEnabled = If(row IsNot Nothing, row.Field(Of Boolean?)("PeriodCalcEnabled").GetValueOrDefault(False), False)
+                                                        If prdCalcEnabled = True Then
+                                                            s_selected = s
+
+                                                            If Not s_selected Is Nothing Then
+
+                                                                Dim s_selected_originalname As String = s_selected.Name
+                                                                Dim cloned As Series = CType(s_selected.Clone(), Series)
+                                                                Dim cloned_stdUp As Series = CType(s_selected.Clone(), Series)
+                                                                Dim cloned_stdDown As Series = CType(s_selected.Clone(), Series)
+
+                                                                cloned.Name = "PeriodCalc_" & s_selected.Name & "_AVG"
+                                                                Dim dtCloned As New DataTable()
+                                                                dtCloned.TableName = "PeriodCalc_" & s_selected.Name & "_AVG"
+                                                                dtCloned.Columns.Add("Date", GetType(Date))
+                                                                dtCloned.Columns.Add("PeriodCalc_" & s_selected.Name & "_AVG", GetType(Double))
+
+                                                                cloned_stdUp.Name = "PeriodCalc_" & s_selected.Name & "_STDUP"
+                                                                Dim dtCloned_stdup As New DataTable()
+                                                                dtCloned_stdup.TableName = "PeriodCalc_" & s_selected.Name & "_STDUP"
+                                                                dtCloned_stdup.Columns.Add("Date", GetType(Date))
+                                                                dtCloned_stdup.Columns.Add("PeriodCalc_" & s_selected.Name & "_STDUP", GetType(Double))
+
+                                                                cloned_stdDown.Name = "PeriodCalc_" & s_selected.Name & "_STDDOWN"
+                                                                Dim dtCloned_stdDown As New DataTable()
+                                                                dtCloned_stdDown.TableName = "PeriodCalc_" & s_selected.Name & "_STDDOWN"
+                                                                dtCloned_stdDown.Columns.Add("Date", GetType(Date))
+                                                                dtCloned_stdDown.Columns.Add("PeriodCalc_" & s_selected.Name & "_STDDOWN", GetType(Double))
+
+                                                                Dim p1_avg As Double = Nothing
+                                                                Dim p1_std As Double = Nothing
+
+                                                                Dim p2_avg As Double = Nothing
+                                                                Dim p2_std As Double = Nothing
+
+                                                                Dim sp As DateTime = Nothing
+                                                                Dim ep As DateTime = Nothing
+
+                                                                Dim sp2 As DateTime = Nothing
+                                                                Dim ep2 As DateTime = Nothing
+
+                                                                Dim calc As String = cmbPrdCalcStats.Text.ToUpper.ToString
+
+                                                                If dtPrdCalcStats.Rows.Count = 1 Or dtPrdCalcStats.Rows.Count = 2 Then
+                                                                    sp = dtPrdCalcStats(0)(1)
+                                                                    ep = dtPrdCalcStats(0)(2)
+
+                                                                    Dim dr() As DataRow = dt_periodCalc.Select("KPIName=" + "'" + s_selected_originalname + "'")
+                                                                    If dr.Length > 0 Then
+                                                                        p1_avg = dr(0)(calc)
+                                                                        p1_std = dr(0)("STDEV")
+                                                                    End If
+                                                                End If
+
+                                                                If dtPrdCalcStats.Rows.Count = 2 Then
+                                                                    sp2 = dtPrdCalcStats(1)(1)
+                                                                    ep2 = dtPrdCalcStats(1)(2)
+
+                                                                    Dim dr() As DataRow = dt_periodCalc.Select("KPIName=" + "'" + s_selected_originalname + "'")
+                                                                    If dr.Length > 0 Then
+                                                                        p2_avg = dr(1)(calc)
+                                                                        p2_std = dr(1)("STDEV")
+                                                                    End If
+                                                                End If
+
+                                                                For Each el As Element In cloned.Elements
+                                                                    If el.XDateTime >= sp And el.XDateTime <= ep Then
+                                                                        el.YValue = p1_avg
+                                                                    Else
+                                                                        el.YValue = Double.NaN
+                                                                    End If
+
+                                                                    If dtPrdCalcStats.Rows.Count = 2 Then
+                                                                        If el.XDateTime >= sp2 And el.XDateTime <= ep2 Then
+                                                                            el.YValue = p2_avg
+                                                                        End If
+                                                                    End If
+
+                                                                    Dim drCloned As DataRow = dtCloned.NewRow()
+                                                                    drCloned("Date") = el.XDateTime
+                                                                    drCloned("PeriodCalc_" & s_selected.Name & "_AVG") = If(Double.IsNaN(el.YValue), DBNull.Value, el.YValue)
+                                                                    dtCloned.Rows.Add(drCloned)
+                                                                    dtCloned.AcceptChanges()
+                                                                Next
+
+                                                                For Each el As Element In cloned_stdUp.Elements
+                                                                    If el.XDateTime >= sp And el.XDateTime <= ep Then
+                                                                        el.YValue = p1_avg + p1_std
+                                                                    Else
+                                                                        el.YValue = Double.NaN
+                                                                    End If
+
+                                                                    If dtPrdCalcStats.Rows.Count = 2 Then
+                                                                        If el.XDateTime >= sp2 And el.XDateTime <= ep2 Then
+                                                                            el.YValue = p2_avg + p2_std
+                                                                        End If
+                                                                    End If
+
+                                                                    Dim drCloned_stdup As DataRow = dtCloned_stdup.NewRow()
+                                                                    drCloned_stdup("Date") = el.XDateTime
+                                                                    drCloned_stdup("PeriodCalc_" & s_selected.Name & "_STDUP") = If(Double.IsNaN(el.YValue), DBNull.Value, el.YValue)
+                                                                    dtCloned_stdup.Rows.Add(drCloned_stdup)
+                                                                    dtCloned_stdup.AcceptChanges()
+                                                                Next
+
+                                                                For Each el As Element In cloned_stdDown.Elements
+                                                                    If el.XDateTime >= sp And el.XDateTime <= ep Then
+                                                                        el.YValue = p1_avg - p1_std
+                                                                    Else
+                                                                        el.YValue = Double.NaN
+                                                                    End If
+
+                                                                    If dtPrdCalcStats.Rows.Count = 2 Then
+                                                                        If el.XDateTime >= sp2 And el.XDateTime <= ep2 Then
+                                                                            el.YValue = p2_avg - p2_std
+                                                                        End If
+                                                                    End If
+
+                                                                    Dim drCloned_stdDown As DataRow = dtCloned_stdDown.NewRow()
+                                                                    drCloned_stdDown("Date") = el.XDateTime
+                                                                    drCloned_stdDown("PeriodCalc_" & s_selected.Name & "_STDDOWN") = If(Double.IsNaN(el.YValue), DBNull.Value, el.YValue)
+                                                                    dtCloned_stdDown.Rows.Add(drCloned_stdDown)
+                                                                    dtCloned_stdDown.AcceptChanges()
+                                                                Next
+
+                                                                cloned.Type = SeriesType.Line
+                                                                cloned.Line.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
+                                                                cloned.Line.Width = 2
+                                                                cloned.DefaultElement.Color = s_selected.DefaultElement.Color 'Color.FromArgb(255, 0, 0, 0)
+                                                                cloned.EmptyElement.Mode = EmptyElementMode.Ignore
+                                                                'ch.SeriesCollection.Add(cloned)
+
+                                                                lst_seriesToadd.Add(cloned)
+
+                                                                cloned_stdUp.Type = SeriesType.Line
+                                                                cloned_stdUp.Line.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
+                                                                cloned_stdUp.Line.Width = 1
+                                                                cloned_stdUp.DefaultElement.Color = s_selected.DefaultElement.Color 'Color.FromArgb(255, 100, 50, 50)
+                                                                cloned_stdUp.EmptyElement.Mode = EmptyElementMode.Ignore
+                                                                'ch.SeriesCollection.Add(cloned_stdUp)
+
+                                                                lst_seriesToadd.Add(cloned_stdUp)
+
+                                                                cloned_stdDown.Type = SeriesType.Line
+                                                                cloned_stdDown.Line.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
+                                                                cloned_stdDown.Line.Width = 1
+                                                                cloned_stdDown.DefaultElement.Color = s_selected.DefaultElement.Color 'Color.FromArgb(255, 100, 50, 50)
+                                                                cloned_stdDown.EmptyElement.Mode = EmptyElementMode.Ignore
+                                                                'ch.SeriesCollection.Add(cloned_stdDown)
+
+                                                                lst_seriesToadd.Add(cloned_stdDown)
+                                                                ds.Tables.Add(dtCloned)
+                                                                ds.Tables.Add(dtCloned_stdup)
+                                                                ds.Tables.Add(dtCloned_stdDown)
+
+                                                                Dim dtMerged As DataTable = MergePrdCalcSeriesDataTables(ds)
+                                                                If Not dicPrdCalcSeriesData.ContainsKey(ch.Name) Then
+                                                                    dicPrdCalcSeriesData.Add(ch.Name, dtMerged)
+                                                                End If
+
+                                                            End If
+                                                        End If
+                                                    Catch ex As Exception
+                                                        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                                                    End Try
+                                                Next
+
+                                                For Each s As Series In lst_seriesToadd
+                                                    Try
+                                                        If s.YAxis.Label.Text.Contains("Thousand") Then
+                                                            s = Series.Divide(s, 1000)
+                                                        ElseIf s.YAxis.Label.Text.Contains("Million") Then
+                                                            s = Series.Divide(s, 1000000)
+                                                        End If
+                                                        ch.SeriesCollection.Add(s)
+                                                    Catch
+                                                    End Try
+                                                Next
+
+                                            End If
+
+                                            If Not dtPrdCalcStats Is Nothing AndAlso dtPrdCalcStats.Rows.Count > 0 Then
+                                                'adding period calc legend
+                                                If (prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked) Or
+                                                    (prdCalcChkCmbVisuals.Properties.Items.Item(2).CheckState = CheckState.Checked) Then
+
+                                                    Dim distinctPeriods = dt_periodCalc.AsEnumerable().
+                                                                        Select(Function(r) r.Field(Of String)("PeriodName")).
+                                                                        Distinct().ToList()
+
+                                                    Dim distinctKPI = dt_periodCalc.AsEnumerable().
+                                                                        Select(Function(r) r.Field(Of String)("KPIName")).
+                                                                        Distinct().ToList()
+
+                                                    Dim newLegend As LegendBox = New LegendBox()
+                                                    Dim header1 As LegendEntry
+
+                                                    If prdCalcChkCmbVisuals.Properties.Items.Item(1).CheckState = CheckState.Checked Then
+
+                                                        If NumOfPeriods = 1 Then
+                                                            newLegend.Template = "%Icon %Name  %Value"
+                                                        ElseIf NumOfPeriods = 2 Then
+                                                            newLegend.Template = "%Icon %Name  %Value %ValueP2 %ValueDelta %ValueDeltaP"
+                                                            header1 = New LegendEntry("KPI", distinctPeriods(0), "   ")
+                                                            header1.CustomAttributes = "Icon=   "
+                                                            header1.CustomAttributes.Add("ValueP2", distinctPeriods(1))
+                                                            header1.CustomAttributes.Add("ValueDelta", "Delta")
+                                                            header1.CustomAttributes.Add("ValueDeltaP", "Delta%")
+                                                            header1.SortOrder = -1
+                                                            header1.LabelStyle.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                            newLegend.ExtraEntries.Add(header1)
+                                                        End If
+
+                                                        For Each kpi As String In distinctKPI
+                                                            Try
+                                                                If NumOfPeriods = 1 Then
+                                                                    Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                                                    Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+                                                                    le.SortOrder = 2
+
+                                                                    newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+
+                                                                    newLegend.ExtraEntries.Add(le)
+
+                                                                ElseIf NumOfPeriods = 2 Then
+                                                                    Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                                                    Dim ValP2 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(1) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+
+                                                                    Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+
+                                                                    le.CustomAttributes.Add("ValueP2", Math.Round(CDbl(ValP2), 2))
+                                                                    le.CustomAttributes.Add("ValueDelta", Math.Round(CDbl(ValP2) - CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                                                    le.CustomAttributes.Add("ValueDeltaP", Math.Round(100 * (CDbl(ValP2) - CDbl(ValP1)) / CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                                                    le.SortOrder = 2
+
+                                                                    newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+                                                                    newLegend.ExtraEntries.Add(le)
+                                                                End If
+                                                            Catch ex As Exception
+                                                                UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                                                            End Try
+                                                        Next
+
+                                                        ' Set orientation for the custom legend
+                                                        newLegend.Orientation = Orientation.Right
+
+                                                    ElseIf prdCalcChkCmbVisuals.Properties.Items.Item(2).CheckState = CheckState.Checked Then
+
+                                                        If NumOfPeriods = 1 Then
+                                                            newLegend.Template = "%Icon %Name %Value"
+                                                        ElseIf NumOfPeriods = 2 Then
+                                                            newLegend.Template = "%Icon %Name %Value %ValueP2 %ValueDelta %ValueDeltaP"
+                                                            header1 = New LegendEntry("KPI", distinctPeriods(0), "   ")
+                                                            header1.CustomAttributes = "Icon=   "
+                                                            header1.CustomAttributes.Add("ValueP2", distinctPeriods(1))
+                                                            header1.CustomAttributes.Add("ValueDelta", "Delta")
+                                                            header1.CustomAttributes.Add("ValueDeltaP", "Delta%")
+                                                            header1.SortOrder = 99
+                                                            header1.LabelStyle.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                            header1.HeaderMode = LegendEntryHeaderMode.RepeatOnEachColumn
+                                                            newLegend.ExtraEntries.Add(header1)
+                                                        End If
+
+                                                        Try
+                                                            For Each kpi As String In distinctKPI
+                                                                If NumOfPeriods = 1 Then
+                                                                    Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                                                    Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+                                                                    le.SortOrder = 2
+
+                                                                    newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+
+                                                                    newLegend.ExtraEntries.Add(le)
+
+                                                                ElseIf NumOfPeriods = 2 Then
+                                                                    Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                                                    Dim ValP2 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(1) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+
+                                                                    Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+
+                                                                    le.CustomAttributes.Add("ValueP2", Math.Round(CDbl(ValP2), 2))
+                                                                    le.CustomAttributes.Add("ValueDelta", Math.Round(CDbl(ValP2) - CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                                                    le.CustomAttributes.Add("ValueDeltaP", Math.Round(100 * (CDbl(ValP2) - CDbl(ValP1)) / CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                                                    le.SortOrder = 1
+
+                                                                    newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+
+                                                                    newLegend.ExtraEntries.Add(le)
+
+                                                                End If
+                                                            Next
+                                                        Catch ex As Exception
+                                                            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                                                        End Try
+
+                                                        ' Set orientation for the custom legend
+                                                        newLegend.ListTopToBottom = True
+                                                        newLegend.Orientation = Orientation.Bottom
+
+                                                    End If
+
+                                                    ' The the new legend to the chart.
+                                                    ch.ExtraLegendBoxes.Add(newLegend)
+                                                    ch.RefreshChart()
+
+                                                End If
+                                            End If
+                                        End If
+
+                                        If Not dtPrdCalcStats Is Nothing AndAlso dtPrdCalcStats.Rows.Count > 0 Then
+                                            Dim iPrdCalcBandCntr As Integer = 0
+                                            Dim rnd As Random = New Random(10)
+                                            'adding period calculation bands
+                                            If prdCalcChkCmbVisuals.Properties.Items.Item(4).CheckState = CheckState.Checked Then
+                                                For Each dr As DataRow In dtPrdCalcStats.Rows
+
+                                                    If iPrdCalcBandCntr = 0 Then
+
+                                                        Dim shadeThreshold As AxisMarker = Nothing
+                                                        If GetFromTech_RadioButton(tech, "Raw").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                                        End If
+
+                                                        shadeThreshold.LegendEntry.Visible = False
+                                                        shadeThreshold.Label.LineAlignment = StringAlignment.Center
+                                                        shadeThreshold.Label.Alignment = StringAlignment.Near
+                                                        shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                        shadeThreshold.LegendEntry.Value = ""
+                                                        shadeThreshold.BringToFront = True
+                                                        If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
+                                                            ch.XAxis.Markers.Add(shadeThreshold)
+                                                        End If
+
+                                                        If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
+                                                            prdCalcAxisMarkerColl.Add(shadeThreshold)
+                                                        End If
+
+                                                    ElseIf iPrdCalcBandCntr = 1 Then
+
+                                                        Dim shadeThreshold As AxisMarker = Nothing
+                                                        If GetFromTech_RadioButton(tech, "Raw").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                                        End If
+
+                                                        shadeThreshold.LegendEntry.Visible = False
+                                                        shadeThreshold.Label.LineAlignment = StringAlignment.Center
+                                                        shadeThreshold.Label.Alignment = StringAlignment.Near
+                                                        shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                        shadeThreshold.LegendEntry.Value = ""
+                                                        shadeThreshold.BringToFront = True
+                                                        If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
+                                                            ch.XAxis.Markers.Add(shadeThreshold)
+                                                        End If
+
+                                                        If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
+                                                            prdCalcAxisMarkerColl.Add(shadeThreshold)
+                                                        End If
+
+                                                    Else
+
+                                                        Dim shadeThreshold As AxisMarker = Nothing
+                                                        If GetFromTech_RadioButton(tech, "Raw").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                                        ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                                        End If
+
+                                                        shadeThreshold.LegendEntry.Visible = False
+                                                        shadeThreshold.Label.LineAlignment = StringAlignment.Center
+                                                        shadeThreshold.Label.Alignment = StringAlignment.Near
+                                                        shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
+                                                        shadeThreshold.LegendEntry.Value = ""
+                                                        shadeThreshold.BringToFront = True
+                                                        If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, shadeThreshold) Then
+                                                            ch.XAxis.Markers.Add(shadeThreshold)
+                                                        End If
+
+                                                        If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, shadeThreshold) Then
+                                                            prdCalcAxisMarkerColl.Add(shadeThreshold)
+                                                        End If
+
+                                                    End If
+
+                                                    iPrdCalcBandCntr = iPrdCalcBandCntr + 1
+                                                Next
+                                            Else
+                                                If dtPrdCalcStats.Rows.Count > 0 Then
+                                                    Dim prdName As String = ""
+                                                    For Each dr As DataRow In dtPrdCalcStats.Rows
+                                                        prdName = dr("PeriodName").ToString()
+
+                                                        For m As Integer = ch.XAxis.Markers.Count - 1 To 0 Step -1
+                                                            Dim am As AxisMarker = ch.XAxis.Markers(m)
+                                                            If am.Label.Text = prdName Then
+                                                                ch.XAxis.Markers.RemoveAt(m)
+                                                            End If
+                                                        Next
+
+                                                        For i As Integer = prdCalcAxisMarkerColl.Count - 1 To 0 Step -1
+                                                            Dim am As AxisMarker = prdCalcAxisMarkerColl(i)
+                                                            If am.Label.Text = prdName Then
+                                                                prdCalcAxisMarkerColl.RemoveAt(i)
+                                                            End If
+                                                        Next
+                                                    Next
+                                                End If
+                                            End If
+
+                                        End If
+
                                     End If
 
-                                End If
+                                Catch ex As Exception
+                                    _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+                                    UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                                End Try
 
                                 'adding weekend bands
-                                If prdCalcChkCmbVisuals.Properties.Items.Item(5).CheckState = CheckState.Checked Then
+                                Try
+
+                                    If prdCalcChkCmbVisuals.Properties.Items.Item(5).CheckState = CheckState.Checked Then
                                         prdCalcWeekendAM = True
                                         Dim cp As New CalendarPattern(TimeInterval.Day, TimeInterval.Week, "1000001")
                                         cp.AdjustmentUnit = TimeInterval.Day
@@ -22578,64 +22592,77 @@ Public Class frmTechnology
                                         Next
                                     End If
 
+
+                                Catch ex As Exception
+                                    _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+                                    UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                                End Try
+
                                 'adding holiday bands
                                 Dim dtHolidayMkr As DataTable = Nothing
-                                If prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked Or
+                                Try
+
+
+                                    If prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked Or
                                        prdCalcChkCmbVisuals.Properties.Items.Item(8).CheckState = CheckState.Checked Then
 
-                                    Dim HolidaySet As String = IIf(prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked, prdCalcChkCmbVisuals.Properties.Items.Item(7).Value, prdCalcChkCmbVisuals.Properties.Items.Item(8).Value)
-                                    Dim sqlParam As String = Nothing
-                                    Dim connstring As String = Nothing
-                                    Dim parray()() As String = {
+                                        Dim HolidaySet As String = IIf(prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked, prdCalcChkCmbVisuals.Properties.Items.Item(7).Value, prdCalcChkCmbVisuals.Properties.Items.Item(8).Value)
+                                        Dim sqlParam As String = Nothing
+                                        Dim connstring As String = Nothing
+                                        Dim parray()() As String = {
                                             New String() {"@PeriodStart", Chr(39) & CDate(dtEditStartTimeStats.EditValue).ToString("yyyy-MM-dd") & Chr(39)},
                                             New String() {"@PeriodEnd", Chr(39) & CDate(dtEditEndTimeStats.EditValue).ToString("yyyy-MM-dd") & Chr(39)},
                                             New String() {"@HolidaySet", Chr(39) & HolidaySet & Chr(39)}
                                         }
 
-                                    sqlParam = GetSQL(8823, parray)(1)
-                                    connstring = GetSQL(8823, parray)(0)
-                                    dtHolidayMkr = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+                                        sqlParam = GetSQL(8823, parray)(1)
+                                        connstring = GetSQL(8823, parray)(0)
+                                        dtHolidayMkr = DataAccessorODBC.GetDataTable(connstring, sqlParam)
 
-                                    prdCalcHolidayAM = True
-                                    If dtHolidayMkr IsNot Nothing Then
-                                        If dtHolidayMkr.Rows.Count > 0 Then
-                                            For Each dr As DataRow In dtHolidayMkr.Rows
-                                                Dim holidayAM As AxisMarker = Nothing
-                                                holidayAM = New AxisMarker(IIf(showBandLabel, dr("HolidayName"), ""), New Background(Color.FromArgb(100, Color.LightYellow)), CDate(dr("StartDate")), CDate(dr("EndDate")))
-
-                                                holidayAM.LegendEntry.Visible = False
-                                                holidayAM.Label.LineAlignment = StringAlignment.Center
-                                                holidayAM.Label.Alignment = StringAlignment.Near
-                                                holidayAM.Label.Font = New Font("Arial", 8, FontStyle.Regular)
-                                                holidayAM.LegendEntry.Value = ""
-                                                holidayAM.BringToFront = True
-                                                If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, holidayAM) Then
-                                                    ch.XAxis.Markers.Add(holidayAM)
-                                                End If
-
-                                                If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, holidayAM) Then
-                                                    prdCalcAxisMarkerColl.Add(holidayAM)
-                                                End If
-                                            Next
-                                        End If
-                                    End If
-                                Else
-                                    prdCalcHolidayAM = False
-                                            If (dtHolidayMkr IsNot Nothing) AndAlso (dtHolidayMkr.Rows.Count > 0) Then
+                                        prdCalcHolidayAM = True
+                                        If dtHolidayMkr IsNot Nothing Then
+                                            If dtHolidayMkr.Rows.Count > 0 Then
                                                 For Each dr As DataRow In dtHolidayMkr.Rows
-                                                    For i As Integer = 0 To prdCalcAxisMarkerColl.Count - 1
-                                                        Dim am As AxisMarker = prdCalcAxisMarkerColl(i)
-                                                        If am.Label.Text = dr("HolidayName").ToString Then
-                                                            prdCalcAxisMarkerColl.RemoveAt(i)
-                                                        End If
-                                                    Next
+                                                    Dim holidayAM As AxisMarker = Nothing
+                                                    holidayAM = New AxisMarker(IIf(showBandLabel, dr("HolidayName"), ""), New Background(Color.FromArgb(100, Color.LightYellow)), CDate(dr("StartDate")), CDate(dr("EndDate")))
+
+                                                    holidayAM.LegendEntry.Visible = False
+                                                    holidayAM.Label.LineAlignment = StringAlignment.Center
+                                                    holidayAM.Label.Alignment = StringAlignment.Near
+                                                    holidayAM.Label.Font = New Font("Arial", 8, FontStyle.Regular)
+                                                    holidayAM.LegendEntry.Value = ""
+                                                    holidayAM.BringToFront = True
+                                                    If Not PeriodCalcChartMarkerExists(ch.XAxis.Markers, holidayAM) Then
+                                                        ch.XAxis.Markers.Add(holidayAM)
+                                                    End If
+
+                                                    If Not PeriodCalcChartMarkerExists(prdCalcAxisMarkerColl, holidayAM) Then
+                                                        prdCalcAxisMarkerColl.Add(holidayAM)
+                                                    End If
                                                 Next
                                             End If
                                         End If
+                                    Else
+                                        prdCalcHolidayAM = False
+                                        If (dtHolidayMkr IsNot Nothing) AndAlso (dtHolidayMkr.Rows.Count > 0) Then
+                                            For Each dr As DataRow In dtHolidayMkr.Rows
+                                                For i As Integer = 0 To prdCalcAxisMarkerColl.Count - 1
+                                                    Dim am As AxisMarker = prdCalcAxisMarkerColl(i)
+                                                    If am.Label.Text = dr("HolidayName").ToString Then
+                                                        prdCalcAxisMarkerColl.RemoveAt(i)
+                                                    End If
+                                                Next
+                                            Next
+                                        End If
+                                    End If
 
-                                If Not dicPrdCalcAxisMarkers.ContainsKey(ch.Name) Then
-                                    dicPrdCalcAxisMarkers.Add(ch.Name, prdCalcAxisMarkerColl)
-                                End If
+                                    If Not dicPrdCalcAxisMarkers.ContainsKey(ch.Name) Then
+                                        dicPrdCalcAxisMarkers.Add(ch.Name, prdCalcAxisMarkerColl)
+                                    End If
+                                Catch ex As Exception
+                                    _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+                                    UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                                End Try
 
                             Catch ex As Exception
                                 _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)

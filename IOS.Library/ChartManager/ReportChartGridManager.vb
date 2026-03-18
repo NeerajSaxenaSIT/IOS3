@@ -4,6 +4,7 @@ Imports dotnetCHARTING.WinForms
 Imports IOS.DataLibrary
 
 Public Class ReportChartGridManager
+
     Public Shared Sub SetChartProperty(isByTime As Boolean, chartName As String, ByRef nc As dotnetCHARTING.WinForms.Chart)
         Try
             If Not isByTime Then
@@ -47,7 +48,7 @@ Public Class ReportChartGridManager
             nc.TitleBox.CornerTopRight = BoxCorner.Round
             nc.TitleBox.Label.AutoWrap = True
         Catch ex As Exception
-
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
         Finally
         End Try
 
@@ -364,7 +365,7 @@ Public Class ReportChartGridManager
                     j = 0
                 End If
             Catch ex As Exception
-                Console.WriteLine(ex.Message.ToString())
+                Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
             End Try
         Next
         'dt_chart.Dispose()
@@ -676,7 +677,7 @@ Public Class ReportChartGridManager
                 End If
 
             Catch ex As Exception
-                Console.WriteLine(ex.Message.ToString)
+                Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
             End Try
         Next
 
@@ -732,6 +733,7 @@ Public Class ReportChartGridManager
         If (drThresholdSeries.Count > 0) Then
 
             Dim seriesName As String = drThresholdSeries(0)(ReportChartSeriesFields.SeriesName).ToString
+            '  Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - Seriesname " & seriesName)
 
             If (seriesName.Contains("_Max-Line")) Then
                 If (dt.IsValid) Then
@@ -769,6 +771,8 @@ Public Class ReportChartGridManager
                 End If
             End If
         End If
+
+        '   Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - Start DtChart " & dt_chart.Rows.Count.ToString)
 
         For rownum = 0 To dt_chart.Rows.Count - 1
             Dim drow As DataRow = dt_chart.Rows(rownum)
@@ -946,8 +950,15 @@ Public Class ReportChartGridManager
                     '}
 
                     'ch.XAxis.ScaleRange.ValueHigh = xaxis_valuehigh;
+
+                    '           Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - Config Done ")
+
                     Dim xaxis As String = ""
                     Dim SplitBy As String = ""
+
+                    Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - ReportAxisData  " & ReportAxisData.Rows.Count)
+
+
                     If ReportAxisData.Rows.Count = 1 Then
                         If ReportAxisData(0)("sandBoxFieldType") = 4 Then
                             xaxis = "XValue=PERIOD_START_TIME"
@@ -966,187 +977,226 @@ Public Class ReportChartGridManager
                                     xaxis = "xAxis=PERIOD_START_TIME" & ","
                                 ElseIf dimension("sandBoxFieldType") = 3 Then
                                     SplitBy = "SplitBy=" & dimension("DimensionName").ToString
+
+
+                                    If dt.Columns.Contains(dimension("DimensionName")) Then
+                                        Dim count As Integer = 0
+                                        count =
+                                            dt.AsEnumerable().
+                                               Select(Function(r) r.Field(Of String)(dimension("DimensionName").ToString)).
+                                               Distinct().
+                                               Count()
+                                        If count < 2 Then
+                                            SplitBy = ""
+                                        End If
+                                    End If
+
                                 End If
                             Next
                         End If
 
 
                     End If
-                    xaxis = xaxis.TrimEnd(",")
-
-                    If chart_elsort(0) <> "0" Then
-                        dt.DefaultView.Sort = chart_elsort(0) + " " + chart_elsort(1)
-                        dt = dt.DefaultView.ToTable
-                    End If
-
-                    Dim de As New DataEngine(dt)
-                    de.DataFields = String2DataFields(chart_elements, xaxis, SplitBy)
-                    '   de.DataGridFormatString = "N2"
-
-                    If xaxis.Contains("PERIOD_START_TIME") Then
-                        de.FormatString = sDateFormat
-                    End If
 
 
-                    Dim sc As New SeriesCollection()
-                    sc = de.GetSeries()
 
-                    'find maxValue per axis
+                    Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - SplitBy  " & SplitBy)
 
-                    Dim LeftAxisDivisor As Int32 = 1
-                    Dim RightAxisDivisor As Int32 = 1
-                    Dim LeftAxisLabelAddition As String = ""
-                    Dim RightAxisLabelAddition As String = ""
 
-                    For i = 0 To sc.Count - 1
-                        Dim MaxValueOfSeries As Double = sc(i).Calculate("test", Calculation.Maximum).YValue
-                        If MaxValueOfSeries > 1000000000 Then
-                            If MaxValueOfSeries > 1000000000000 Then
-                                Select Case chart_elementsYAxis(i).ToString().Trim().ToUpper()
-                                    Case "LEFT"
-                                        LeftAxisDivisor = 1000000
-                                        LeftAxisLabelAddition = " Million"
-                                        Exit Select
-                                    Case "RIGHT"
-                                        RightAxisDivisor = 1000000
-                                        RightAxisLabelAddition = " Million"
-                                        Exit Select
-                                End Select
-                            Else
-                                Select Case chart_elementsYAxis(i).ToString().Trim().ToUpper()
-                                    Case "LEFT"
-                                        If LeftAxisDivisor < 1000 Then
-                                            LeftAxisDivisor = 1000
-                                            LeftAxisLabelAddition = " Thousand"
-                                        End If
-                                        Exit Select
-                                    Case "RIGHT"
-                                        If RightAxisDivisor < 1000 Then
-                                            RightAxisDivisor = 1000
-                                            RightAxisLabelAddition = " Thousand"
-                                        End If
-                                        Exit Select
-                                End Select
+
+                        xaxis = xaxis.TrimEnd(",")
+
+                        If chart_elsort(0) <> "0" Then
+                            dt.DefaultView.Sort = chart_elsort(0) + " " + chart_elsort(1)
+                            dt = dt.DefaultView.ToTable
+                        End If
+
+                        Dim de As New DataEngine(dt)
+                        de.DataFields = String2DataFields(chart_elements, xaxis, SplitBy)
+                        '   de.DataGridFormatString = "N2"
+                        Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - DataFields  Done" & String2DataFields(chart_elements, xaxis, SplitBy))
+
+
+                        If xaxis.Contains("PERIOD_START_TIME") Then
+                            de.FormatString = sDateFormat
+                        End If
+
+
+                        Dim sc As New SeriesCollection()
+                        sc = de.GetSeries()
+
+                        Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - DataEngine  Done" & sc.Count.ToString)
+
+
+
+                        'find maxValue per axis
+
+                        Dim LeftAxisDivisor As Int32 = 1
+                        Dim RightAxisDivisor As Int32 = 1
+                        Dim LeftAxisLabelAddition As String = ""
+                        Dim RightAxisLabelAddition As String = ""
+
+                        For i = 0 To sc.Count - 1
+                            Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - Axis Scale " & sc(i).Name)
+
+                            Dim k As Int16 = 0
+                            If SplitBy = "" Then
+                                k = i
                             End If
 
-                        End If
-                    Next
+                            Dim MaxValueOfSeries As Double = sc(i).Calculate("test", Calculation.Maximum).YValue
+                            If MaxValueOfSeries > 1000000000 Then
+                                If MaxValueOfSeries > 1000000000000 Then
+                                    Select Case chart_elementsYAxis(k).ToString().Trim().ToUpper()
+                                        Case "LEFT"
+                                            LeftAxisDivisor = 1000000
+                                            LeftAxisLabelAddition = " Million"
+                                            Exit Select
+                                        Case "RIGHT"
+                                            RightAxisDivisor = 1000000
+                                            RightAxisLabelAddition = " Million"
+                                            Exit Select
+                                    End Select
+                                Else
+                                    Select Case chart_elementsYAxis(k).ToString().Trim().ToUpper()
+                                        Case "LEFT"
+                                            If LeftAxisDivisor < 1000 Then
+                                                LeftAxisDivisor = 1000
+                                                LeftAxisLabelAddition = " Thousand"
+                                            End If
+                                            Exit Select
+                                        Case "RIGHT"
+                                            If RightAxisDivisor < 1000 Then
+                                                RightAxisDivisor = 1000
+                                                RightAxisLabelAddition = " Thousand"
+                                            End If
+                                            Exit Select
+                                    End Select
+                                End If
 
-                    If SplitBy = "" Then
-                        For i = 0 To sc.Count - 1
-
-                            Select Case chart_Eltype(i).ToString().Trim().ToUpper()
-                                Case "LINE"
-                                    sc(i).Type = SeriesType.Line
-                                    sc(i).Line.Width = axis_LineThickness(i)
-                                    Exit Select
-                                Case "BAR"
-                                    sc(i).Type = SeriesType.Bar
-                                    Exit Select
-                                Case "AREALINE"
-                                    sc(i).Type = SeriesType.AreaLine
-                                    Exit Select
-                            End Select
-                            Select Case chart_elementsYAxis(i).ToString().Trim().ToUpper()
-                                Case "LEFT"
-
-                                    If LeftAxisDivisor > 1 Then
-                                        sc(i) = Series.Divide(sc(i), LeftAxisDivisor)
-                                    End If
-                                    If Not yaxis1.Label.Text.Contains(LeftAxisLabelAddition) Then
-                                        yaxis1.Label.Text = yaxis1.Label.Text + LeftAxisLabelAddition
-                                    End If
-
-                                    sc(i).YAxis = yaxis1
-                                    Exit Select
-                                Case "RIGHT"
-                                    If RightAxisDivisor > 1 Then
-                                        sc(i) = Series.Divide(sc(i), RightAxisDivisor)
-                                    End If
-
-                                    If Not yaxis2.Label.Text.Contains(RightAxisLabelAddition) Then
-                                        yaxis2.Label.Text = yaxis2.Label.Text + RightAxisLabelAddition
-                                    End If
-                                    sc(i).YAxis = yaxis2
-                                    Exit Select
-                            End Select
-
-                            color_R = Convert.ToInt32(chart_ElColor(i)) Mod 256
-                            color_G = (Convert.ToInt32(chart_ElColor(i)) / 256) Mod 256
-                            color_B = ((Convert.ToInt32(chart_ElColor(i)) / 256) \ 256) Mod 256
-                            color_R = IIf(color_R > 255, color_R - (color_R - 255), color_R)
-                            color_G = IIf(color_G > 255, color_G - (color_G - 255), color_G)
-                            color_B = IIf(color_B > 255, color_B - (color_B - 255), color_B)
-                            sc(i).DefaultElement.Color = Color.FromArgb(255, color_R, color_G, color_B)
-
-                            sc(i).DefaultElement.Marker.Type = DirectCast(i, ElementMarkerType)
-
+                            End If
                         Next
 
-                        If (drCalculatedSeries.Count > 0) Then
-                            SetCalculatedSeries(drCalculatedSeries.CopyToDataTable, sc)
+                        If SplitBy = "" Then
+                            For i = 0 To sc.Count - 1
+
+                                Select Case chart_Eltype(i).ToString().Trim().ToUpper()
+                                    Case "LINE"
+                                        sc(i).Type = SeriesType.Line
+                                        sc(i).Line.Width = axis_LineThickness(i)
+                                        Exit Select
+                                    Case "BAR"
+                                        sc(i).Type = SeriesType.Bar
+                                        Exit Select
+                                    Case "AREALINE"
+                                        sc(i).Type = SeriesType.AreaLine
+                                        Exit Select
+                                End Select
+                                Select Case chart_elementsYAxis(i).ToString().Trim().ToUpper()
+                                    Case "LEFT"
+
+                                        If LeftAxisDivisor > 1 Then
+                                            sc(i) = Series.Divide(sc(i), LeftAxisDivisor)
+                                        End If
+                                        If Not yaxis1.Label.Text.Contains(LeftAxisLabelAddition) Then
+                                            yaxis1.Label.Text = yaxis1.Label.Text + LeftAxisLabelAddition
+                                        End If
+
+                                        sc(i).YAxis = yaxis1
+                                        Exit Select
+                                    Case "RIGHT"
+                                        If RightAxisDivisor > 1 Then
+                                            sc(i) = Series.Divide(sc(i), RightAxisDivisor)
+                                        End If
+
+                                        If Not yaxis2.Label.Text.Contains(RightAxisLabelAddition) Then
+                                            yaxis2.Label.Text = yaxis2.Label.Text + RightAxisLabelAddition
+                                        End If
+                                        sc(i).YAxis = yaxis2
+                                        Exit Select
+                                End Select
+
+                                color_R = Convert.ToInt32(chart_ElColor(i)) Mod 256
+                                color_G = (Convert.ToInt32(chart_ElColor(i)) / 256) Mod 256
+                                color_B = ((Convert.ToInt32(chart_ElColor(i)) / 256) \ 256) Mod 256
+                                color_R = IIf(color_R > 255, color_R - (color_R - 255), color_R)
+                                color_G = IIf(color_G > 255, color_G - (color_G - 255), color_G)
+                                color_B = IIf(color_B > 255, color_B - (color_B - 255), color_B)
+                                sc(i).DefaultElement.Color = Color.FromArgb(255, color_R, color_G, color_B)
+
+                                sc(i).DefaultElement.Marker.Type = DirectCast(i, ElementMarkerType)
+
+                            Next
+
+                            If (drCalculatedSeries.Count > 0) Then
+                                SetCalculatedSeries(drCalculatedSeries.CopyToDataTable, sc)
+                            End If
+
+                            If (drThresholdSeries.Count > 0) Then
+                                CreateYAxisMarker(sc, drThresholdSeries)
+                            End If
+                        Else
+                            For i = 0 To sc.Count - 1
+                                Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - Assigning Axis " & sc(i).Name)
+
+                                Select Case chart_Eltype(0).ToString().Trim().ToUpper()
+                                    Case "LINE"
+                                        sc(i).Type = SeriesType.Line
+                                        sc(i).Line.Width = axis_LineThickness(0)
+                                        Exit Select
+                                    Case "BAR"
+                                        sc(i).Type = SeriesType.Bar
+                                        Exit Select
+                                    Case "AREALINE"
+                                        sc(i).Type = SeriesType.AreaLine
+                                        Exit Select
+                                End Select
+                                Select Case chart_elementsYAxis(0).ToString().Trim().ToUpper()
+                                    Case "LEFT"
+                                        sc(i).YAxis = yaxis1
+                                        Exit Select
+                                    Case "RIGHT"
+                                        sc(i).YAxis = yaxis2
+                                        Exit Select
+                                End Select
+                            Next
                         End If
 
-                        If (drThresholdSeries.Count > 0) Then
-                            CreateYAxisMarker(sc, drThresholdSeries)
+                        '             Logger.WriteString_Log("Info - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - Axis Assigned  ")
+
+
+                        'Label Truncation for TopX
+                        If Not xaxis.Contains("PERIOD_START_TIME") Then
+                            ch.XAxis.TickLabelAngle = 45
+                            ch.XAxis.TickLabelMode = TickLabelMode.Angled
+                            ch.XAxis.DefaultTick.Label.AutoWrap = False
+                            ch.XAxis.DefaultTick.Label.Truncation.Mode = TruncationMode.Middle
+                            ch.XAxis.DefaultTick.Label.Truncation.Length = 25
+                            'Else
+                            '    ch.XAxis.TickLabelMode = TickLabelMode.Angled
+                            '    ch.XAxis.TickLabelAngle = 45
+                            '    ch.XAxis.Maximum = 0
+                            '    ch.XAxis.Minimum = 0
                         End If
-                    Else
-                        For i = 0 To sc.Count - 1
-                            Select Case chart_Eltype(0).ToString().Trim().ToUpper()
-                                Case "LINE"
-                                    sc(i).Type = SeriesType.Line
-                                    sc(i).Line.Width = axis_LineThickness(0)
-                                    Exit Select
-                                Case "BAR"
-                                    sc(i).Type = SeriesType.Bar
-                                    Exit Select
-                                Case "AREALINE"
-                                    sc(i).Type = SeriesType.AreaLine
-                                    Exit Select
-                            End Select
-                            Select Case chart_elementsYAxis(0).ToString().Trim().ToUpper()
-                                Case "LEFT"
-                                    sc(i).YAxis = yaxis1
-                                    Exit Select
-                                Case "RIGHT"
-                                    sc(i).YAxis = yaxis2
-                                    Exit Select
-                            End Select
-                        Next
+
+                        ch.SeriesCollection.Clear()
+                        ch.SeriesCollection.Add(sc)
+                        ch.Series.Data = dt.Copy()
+
+                        sc = Nothing
+                        de = Nothing
+                        ''ch.XAxis.Markers.Clear()
+                        ch.RefreshChart()
+                        ch.ResumeLayout()
+                        chart_elements = New String(0) {}
+                        chart_elementsYAxis = New String(0) {}
+                        chart_Eltype = New String(0) {}
+                        chart_ElColor = New Integer(0) {}
+                        chart_YaxisScale = New String(1) {}
+                        j = 0
                     End If
-
-                    'Label Truncation for TopX
-                    If Not xaxis.Contains("PERIOD_START_TIME") Then
-                        ch.XAxis.TickLabelAngle = 45
-                        ch.XAxis.TickLabelMode = TickLabelMode.Angled
-                        ch.XAxis.DefaultTick.Label.AutoWrap = False
-                        ch.XAxis.DefaultTick.Label.Truncation.Mode = TruncationMode.Middle
-                        ch.XAxis.DefaultTick.Label.Truncation.Length = 25
-                        'Else
-                        '    ch.XAxis.TickLabelMode = TickLabelMode.Angled
-                        '    ch.XAxis.TickLabelAngle = 45
-                        '    ch.XAxis.Maximum = 0
-                        '    ch.XAxis.Minimum = 0
-                    End If
-
-                    ch.SeriesCollection.Clear()
-                    ch.SeriesCollection.Add(sc)
-                    ch.Series.Data = dt.Copy()
-
-                    sc = Nothing
-                    de = Nothing
-                    ''ch.XAxis.Markers.Clear()
-                    ch.RefreshChart()
-                    ch.ResumeLayout()
-                    chart_elements = New String(0) {}
-                    chart_elementsYAxis = New String(0) {}
-                    chart_Eltype = New String(0) {}
-                    chart_ElColor = New Integer(0) {}
-                    chart_YaxisScale = New String(1) {}
-                    j = 0
-                End If
             Catch ex As Exception
-                Console.WriteLine(ex.Message.ToString())
+                Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " " & ex.StackTrace.ToString)
             End Try
         Next
         'dt_chart.Dispose()
@@ -1438,8 +1488,7 @@ Public Class ReportChartGridManager
                     j = 0
                 End If
             Catch ex As Exception
-                'logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name + " - " + ex.Message);
-                Console.WriteLine(ex.Message.ToString())
+                Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
             End Try
         Next
         dt_chart.Dispose()
@@ -1567,6 +1616,7 @@ Public Class ReportChartGridManager
         Catch ex As Exception
             ' KeepConnectionOpen = false;
             ' Interaction.MsgBox("Problem getting data from server using: " + connstring.Split(";uid")[0] + Strings.Chr(13) + ex.Message.ToString());
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
             Return Nothing
         Finally
             If (daOSS IsNot Nothing) Then
@@ -1590,6 +1640,29 @@ Public Class ReportChartGridManager
             'RefrashingGrid(vDGV_ReportChartGrid, true);
             vDGV_ReportChartGrid.DataSource = dtReportChart
         End If
+    End Sub
+
+End Class
+
+Public Class Logger
+    Public Shared Function GetUserDataPath() As String
+        Dim basePath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
+        Dim dataPath As String = String.Format("{0}\{1}\{2}\{3}", basePath, Application.CompanyName, Application.ProductName, IOS.Configuration.IOSAppConfigManage.DeploymentName)
+        If Not IO.Directory.Exists(dataPath) Then
+            IO.Directory.CreateDirectory(dataPath)
+        End If
+        Return dataPath
+    End Function
+
+    Public Shared Sub WriteString_Log(ByVal text2append As String)
+        Try
+            Dim FILE_NAME As String = GetUserDataPath() & "\session.log"
+            Static LogFileLock As New Object()
+            SyncLock LogFileLock
+                IO.File.AppendAllText(FILE_NAME, text2append & vbCrLf)
+            End SyncLock
+        Catch ex As Exception
+        End Try
     End Sub
 
 End Class

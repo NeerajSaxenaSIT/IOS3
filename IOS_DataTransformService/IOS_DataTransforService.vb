@@ -1062,6 +1062,7 @@ Module IOS_DataTransforService
                 JobLog(conn_ios, ex.Message, JobID)
                 WriteString_Log(Now() & "    " & "JobLog ExecuteFinalError:  " & ex.Message & vbCrLf)
                 success = False
+                Return success
             End Try
 
             Try
@@ -2093,6 +2094,9 @@ Module IOS_DataTransforService
                                                         writer.Write(String.Format("{0}", CDbl(v)))
                                                     Case "float"
                                                         writer.Write(String.Format("{0}", CDbl(v)))
+                                                    Case "datetime"
+                                                        'writer.Write(String.Format("{0}", v))
+                                                        writer.Write(DirectCast(v, DateTime).ToString("yyyy-MM-dd HH:mm:ss"))
                                                     Case Else
                                                         writer.Write(String.Format("{0}", v))
                                                 End Select
@@ -2111,6 +2115,9 @@ Module IOS_DataTransforService
                                                     writer.Write(String.Format("{0}", CDbl(v_end)))
                                                 Case "float"
                                                     writer.Write(String.Format("{0}", CDbl(v_end)))
+                                                Case "datetime"
+                                                    'writer.Write(String.Format("{0}", v))
+                                                    writer.Write(DirectCast(v_end, DateTime).ToString("yyyy-MM-dd HH:mm:ss"))
                                                 Case Else
                                                     writer.Write(String.Format("{0}", v_end))
                                             End Select
@@ -3306,8 +3313,18 @@ Module IOS_DataTransforService
             Dim j As Int32 = 0
             For Each dr As DataRow In dt.Rows
 
+
                 For i = 0 To dt.Columns.Count - 1
-                    sb.Append(dr(i).ToString)
+                    Dim val = dr(i)
+                    If IsDBNull(val) Then
+                        ' Handle NULLs: Append nothing or a placeholder like ""
+                        sb.Append("")
+                    ElseIf dt.Columns(i).DataType = GetType(System.DateTime) Then
+                        sb.Append(DirectCast(val, DateTime).ToString("yyyy-MM-dd HH:mm:ss"))
+                    Else
+                        sb.Append(val.ToString)
+                    End If
+
                     If i < dt.Columns.Count - 1 Then
                         sb.Append(separator)
                     End If

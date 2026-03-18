@@ -31,7 +31,7 @@ Public NotInheritable Class SplashScreen
         IosServerOdbc = connStrIOSServer.Split(";")(0).Split("=")(1)
 
         Version.Text = System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.Minor, My.Application.Info.Version.Build, My.Application.Info.Version.Revision)
-        Copyright.Text = "Copyright © 2025 CellSens B.V."
+        Copyright.Text = "Copyright © 2026 CellSens B.V."
 
         Dim CompanyName As String = System.Configuration.ConfigurationManager.AppSettings("Company").ToString
         If CompanyName.Contains("Omnitele") Then
@@ -420,7 +420,7 @@ Public NotInheritable Class SplashScreen
 		Dim lastaccess As String = Nothing
 
         'Copyright inf
-        Copyright.Text = "Copyright © 2025 CellSens B.V."
+        Copyright.Text = "Copyright © 2026 CellSens B.V."
         Application.DoEvents()
         WriteString_Log(Now() & "    " & "Start LicenseCheck Process:")
         Dim IOS_License_Result As String = Check_IOS_License_Local()

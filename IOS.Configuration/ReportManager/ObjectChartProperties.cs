@@ -206,12 +206,12 @@ namespace IOS.Configuration.ReportManager
         {
             get { return _purpose; }
             set { _purpose = value; }
-        }        
+        }
     }
 
     internal class objPredefinedTime
     {
-        internal static string[] _oPredefTime = { "Yesterday", "Last Week", "Last Month", "Last 7 days", "Last 30 days", "Last 60 days" , "Last 365 Days", "Current Year" }; 
+        internal static string[] _oPredefTime = { "Yesterday", "Last Week", "Last Month", "Last 7 days", "Last 30 days", "Last 60 days", "Last 90 days", "Last 365 Days", "Current Year" }; 
     }
     public class PredefinedTimeConverter : StringConverter
     {

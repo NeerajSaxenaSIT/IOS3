@@ -7490,7 +7490,7 @@ Public Class frmSBMain
             For Each st In lst_sourcetables
                 Dim dr() As DataRow = dt_TechPackCounter.Select("SQL_SourceTable = '" + st.Split(",")(0) + "'")
                 If Not dr Is Nothing Then
-                    If dr.Count > 1 Then
+                    If dr.Count >= 1 Then
                         connstring.Add(dr(0)("SQL_ConnString"))
                     End If
                 End If
@@ -7509,7 +7509,7 @@ Public Class frmSBMain
             For Each st In lst_sourcetables
                 Dim dr() As DataRow = dt_TechPackCounter.Select("SQL_SourceTable = '" + st.Split(",")(0) + "'")
                 If Not dr Is Nothing Then
-                    If dr.Count > 1 Then
+                    If dr.Count >= 1 Then
                         connstring.Add(dr(0)("SQL_DatabaseName"))
                     End If
                 End If

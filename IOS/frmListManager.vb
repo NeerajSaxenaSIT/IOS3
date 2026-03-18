@@ -258,7 +258,10 @@ Public Class frmListManager
                     cmbObjectType.SelectedIndex = 0
                 Else
                     dtObjectTypes = New DataTable
-                    Dim parray()() As String = {New String() {"@tech", Chr(39) & cmbTechnology.SelectedItem.ToString().ToUpper() & Chr(39)}}
+                    Dim parray()() As String = {
+                        New String() {"@tech", Chr(39) & cmbTechnology.SelectedItem.ToString().ToUpper() & Chr(39)},
+                        New String() {"@UserName", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)}
+                    }
                     strConnection = GetSQL(4528, parray)(0)
                     sqlParam = GetSQL(4528, parray)(1)
                     dtObjectTypes = IOS.DataLibrary.DataAccessorODBC.GetDataTable(strConnection, sqlParam, iQryTimeOut)

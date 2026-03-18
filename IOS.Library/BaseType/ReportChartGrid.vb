@@ -187,6 +187,7 @@ Partial Public Class ReportChartGrid
             End If
             Process_ReportChartGridAppend(sDateFormat, queryTimeOut)
         Catch ex As Exception
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
         Finally
         End Try
     End Sub
@@ -354,6 +355,7 @@ Partial Public Class ReportChartGrid
             seriesDateFormat = sDateFormat
             Me.BeginInvoke(Me.CallProcessChartGenerateInvoked)
         Catch ex As Exception
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
         Finally
         End Try
     End Sub
@@ -413,8 +415,10 @@ Partial Public Class ReportChartGrid
 
                             If GridorChart.ToUpper = "CHART" Then
                                 Dim CompareTime As Int16 = dtChartConfig.Rows(0)("CompareTime").ToString()
+
                                 If dtData.Rows.Count <= 2000 And CompareTime = "0" Then
                                     ReportChartGridManager.AssignDataToChart(dtChartConfig, dtData, chart_ReportChartGrid, _reportAxisData, seriesDateFormat, showFilterString)
+
                                     If (ChartObjectsData = "") Then
                                         chart_ReportChartGrid.Title = "Objects : PLMN"
                                     Else
@@ -550,6 +554,7 @@ Partial Public Class ReportChartGrid
             End If
 
         Catch ex As Exception
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
         Finally
             If (dsCurrentChartData IsNot Nothing) Then
                 dsCurrentChartData.Dispose()
@@ -695,6 +700,7 @@ Partial Public Class ReportChartGrid
                 .ResumeLayout()
             End With
         Catch ex As Exception
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
         End Try
     End Sub
 
@@ -712,6 +718,7 @@ Partial Public Class ReportChartGrid
             Dim strPoint As String = p.X.ToString() + "," + p.Y.ToString()
             Dim mousePoint As System.Drawing.Point = New Point(MousePosition.X, MousePosition.Y)
         Catch ex As Exception
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
         Finally
         End Try
     End Sub
@@ -759,6 +766,7 @@ Partial Public Class ReportChartGrid
                 Return Nothing
             End If
         Catch ex As Exception
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
             Return Nothing
         End Try
     End Function
@@ -813,6 +821,7 @@ Public Class ThreadReportChartGrid
 
             End If
         Catch ex As Exception
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
         Finally
             If (cnQODBC IsNot Nothing) Then
                 cnQODBC.Close()
@@ -848,6 +857,7 @@ Public Class ThreadReportChartGrid
                 End If
             Next
         Catch ex As Exception
+            Logger.WriteString_Log("Error - " & System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
         End Try
         Return ds_result
     End Function

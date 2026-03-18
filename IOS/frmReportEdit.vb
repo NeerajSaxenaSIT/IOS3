@@ -404,7 +404,7 @@ Public Class frmReportEdit
             Dim formControls As List(Of Object) = New List(Of Object) From {
                 tsmi_ReportSlideAdd, tsmi_ReportRename, tsmi_ReportDelete, tsmi_ReportRunConfigured, tsmi_ReportRunCurrent, tsmi_ReportLock, tsmi_ObjectRename, tsmi_ObjectChartDelete,
                 tsmt_SlideRename, tsmt_SlideDelete, tsmi_SlideMoveUp, tsmi_SlideMoveDown, tsmi_SlideObjectAdd, ObjectAddToolStripMenuItem, ObjectRemoveToolStripMenuItem, ObjectMoveUpToolStripMenuItem,
-                ObjectMoveDownToolStripMenuItem, ToolStripMenuItem1, ToolStripMenuItem2, tsmi_ObjectChartMoveUp, tsmi_ObjectChartMoveDown
+                ObjectMoveDownToolStripMenuItem, ToolStripMenuItem1, ToolStripMenuItem2, tsmi_ObjectChartMoveUp, tsmi_ObjectChartMoveDown, btnReportAdd
             }
 
             For Each frmControl As Object In formControls
@@ -1156,7 +1156,7 @@ Public Class frmReportEdit
         }
         Dim sql As String = GetSQL(8551, parray)(1)
         Dim connstring As String = GetSQL(8551, parray)(0)
-        Dim dt = DataAccessorODBC.GetDataTable(connstring, sql, iQryTimeOut)
+        Dim dt = DataAccessorODBC.GetDataTable(connstring, sql)
         LoadGridWithHyperlink(gcReportHistory, gvReportHistory, dt, "WebLink")
     End Sub
 

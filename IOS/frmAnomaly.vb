@@ -94,7 +94,7 @@ Public Class frmAnomaly
 
             Dim winCtrl As IOS.Configuration.EntityModel.Control = Nothing
             Dim formControls As List(Of Object) = New List(Of Object) From {
-                 tsmiModifyAlert, tsmiSuppressAlertAllObjects, tsmiSuppressAlertSelectedObject, tsmiSendObjectToPM, tsmiAddNote, tsmiDeleteSuppression, tsmiExtentSuppression
+                 tsmiModifyAlert, tsmiSuppressAlertAllObjects, tsmiSuppressAlertSelectedObject, tsmiSendObjectToPM, tsmiAddNote, tsmiDeleteSuppression, tsmiExtentSuppression, btnAlertManager
             }
 
             For Each frmControl As Object In formControls
