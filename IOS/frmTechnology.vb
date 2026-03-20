@@ -5315,16 +5315,16 @@ Public Class frmTechnology
                         ch.LegendBox.Visible = False
                     End If
 
-                    If Not ch.Annotations Is Nothing Then
+                    If (Not ch Is Nothing) AndAlso (Not ch.Annotations Is Nothing) Then
                         ch.Annotations.Clear()
-                    End If
 
-                    ch.Annotations.Add(New Annotation(tech))
-                    ch.Annotations(0).Position = New System.Drawing.Point(ch.Width - 70, 2)
-                    ch.Annotations(0).DefaultCorner = BoxCorner.Square
-                    ch.Annotations(0).Size = New Size(60, 25)
-                    Dim fnt As Font = New Font("Arial", 6, FontStyle.Regular)
-                    ch.Annotations(0).Label.Font = fnt
+                        ch.Annotations.Add(New Annotation(tech))
+                        ch.Annotations(0).Position = New System.Drawing.Point(ch.Width - 70, 2)
+                        ch.Annotations(0).DefaultCorner = BoxCorner.Square
+                        ch.Annotations(0).Size = New Size(60, 25)
+                        Dim fnt As Font = New Font("Arial", 6, FontStyle.Regular)
+                        ch.Annotations(0).Label.Font = fnt
+                    End If
 
                     Dim strParamFilter As String = GetParamFilterStringTemplate(tech, "topx")
                     If strParamFilter <> " " Then
@@ -19924,17 +19924,17 @@ Public Class frmTechnology
                 dtEditStartTimeStats.EditValue = DateAdd(DateInterval.Day, -1, New DateTime(Now().Year, Now().Month, Now.Day, 0, 0, 0))
                 dtEditEndTimeStats.EditValue = New DateTime(Now().Year, Now().Month, Now.Day, Now().Hour + 1, 0, 0)
 
-                'dtEditStartTimeStats.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
-                'dtEditStartTimeStats.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
-                'dtEditStartTimeStats.Properties.EditMask = "dd/MM/yyyy HH:mm"
-
                 ConfigureDatePickerTimeEditing(dtEditStartTimeStats)
 
-                'dtEditEndTimeStats.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
-                'dtEditEndTimeStats.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
-                'dtEditEndTimeStats.Properties.EditMask = "dd/MM/yyyy HH:mm"
+                dtEditStartTimeStats.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
+                dtEditStartTimeStats.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
+                dtEditStartTimeStats.Properties.EditMask = "dd/MM/yyyy HH:mm"
 
                 ConfigureDatePickerTimeEditing(dtEditEndTimeStats)
+
+                dtEditEndTimeStats.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
+                dtEditEndTimeStats.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
+                dtEditEndTimeStats.Properties.EditMask = "dd/MM/yyyy HH:mm"
 
                 cmbPredefTimeStats.SelectedIndex = 0
                 cmbPredefTimeStats.Update()
@@ -19954,13 +19954,13 @@ Public Class frmTechnology
         de.Properties.UseMaskAsDisplayFormat = True
 
         de.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
-        de.Properties.Mask.EditMask = "yyyy-MM-dd HH:mm"
+        de.Properties.Mask.EditMask = "dd/MM/yyyy HH:mm"
 
         de.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
-        de.Properties.DisplayFormat.FormatString = "yyyy-MM-dd HH:mm"
+        de.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
 
         de.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime
-        de.Properties.EditFormat.FormatString = "yyyy-MM-dd HH:mm"
+        de.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
 
         de.Properties.CalendarTimeEditing = DevExpress.Utils.DefaultBoolean.True
         de.Properties.CalendarView = DevExpress.XtraEditors.Repository.CalendarView.Vista

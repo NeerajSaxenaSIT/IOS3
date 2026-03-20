@@ -3913,7 +3913,11 @@ Module mdlCommonModule
                     objfrmTech.txtSelectXTopX.Text = xeTechNode.Descendants("property").Where(Function(x) x.Attribute("name").Value = "NoOfTopX")(0).Value
                     Dim tagsExcListID As String = xeTechNode.Descendants("property").Where(Function(x) x.Attribute("name").Value = "TagsExcListTopXID")(0).Value.TrimEnd(",")
                     Dim tagsExcListName As String = xeTechNode.Descendants("property").Where(Function(x) x.Attribute("name").Value = "TagsExcListTopXName")(0).Value.TrimEnd(",")
-                    objfrmTech.chkTagsExcListEnable.Checked = CBool(xeTechNode.Descendants("property").Where(Function(x) x.Attribute("name").Value = "TagsExcListEnable")(0).Value)
+                    If tagsExcListID = "" Or tagsExcListName = "" Then
+                        objfrmTech.chkTagsExcListEnable.Checked = False
+                    Else
+                        objfrmTech.chkTagsExcListEnable.Checked = CBool(xeTechNode.Descendants("property").Where(Function(x) x.Attribute("name").Value = "TagsExcListEnable")(0).Value)
+                    End If
 
                     Dim strTempID() As String = tagsExcListID.Split(",")
                     Dim strTempName() As String = tagsExcListName.Split(",")
@@ -3923,16 +3927,18 @@ Module mdlCommonModule
                     objfrmTech.dtTagsExcListTopX.Columns.Add("ListID", GetType(String))
                     objfrmTech.dtTagsExcListTopX.Columns.Add("ListName", GetType(String))
 
-                    Dim i As Integer = 0
-                    For Each s As String In strTempID
-                        Dim dr As DataRow = objfrmTech.dtTagsExcListTopX.NewRow()
-                        dr("Select") = True
-                        dr("ListID") = s.ToString
-                        dr("ListName") = strTempName(i).ToString
-                        objfrmTech.dtTagsExcListTopX.Rows.Add(dr)
-                        objfrmTech.dtTagsExcListTopX.AcceptChanges()
-                        i = i + 1
-                    Next
+                    If (tagsExcListID <> "") Or (tagsExcListName <> "") Then
+                        Dim i As Integer = 0
+                        For Each s As String In strTempID
+                            Dim dr As DataRow = objfrmTech.dtTagsExcListTopX.NewRow()
+                            dr("Select") = True
+                            dr("ListID") = s.ToString
+                            dr("ListName") = strTempName(i).ToString
+                            objfrmTech.dtTagsExcListTopX.Rows.Add(dr)
+                            objfrmTech.dtTagsExcListTopX.AcceptChanges()
+                            i = i + 1
+                        Next
+                    End If
 
                     IOSDevExpressGrid.PopulateDataInGrid(objfrmTech.gcTagsExcListTopX, objfrmTech.gvTagsExcListTopX, objfrmTech.dtTagsExcListTopX, "ALL", {"ListID"}, "ListName")
                     Dim riChkSelect As RepositoryItemCheckEdit = TryCast(objfrmTech.gcTagsExcListTopX.RepositoryItems.Add("CheckEdit"), RepositoryItemCheckEdit)
