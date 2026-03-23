@@ -21908,8 +21908,8 @@ Public Class frmTechnology
 
                 Dim dr As DataRow = dtPrdCalcStats.NewRow()
                 dr("PeriodName") = objTechPrdCalc.periodName
-                dr("PeriodStart") = CDate(objTechPrdCalc.dtRange.Split("-")(0).Trim).ToString("yyyy-MM-dd")
-                dr("PeriodEnd") = CDate(objTechPrdCalc.dtRange.Split("-")(1).Trim).AddDays(-1).ToString("yyyy-MM-dd")
+                dr("PeriodStart") = objTechPrdCalc.dtRange.StartDate.ToString("yyyy-MM-dd")
+                dr("PeriodEnd") = objTechPrdCalc.dtRange.EndDate.ToString("yyyy-MM-dd")
                 dtPrdCalcStats.Rows.Add(dr)
                 dtPrdCalcStats.AcceptChanges()
 
@@ -28663,8 +28663,8 @@ Public Class frmTechnology
 
                     Dim dr As DataRow = dtPrdCalcEval.NewRow()
                     dr("PeriodName") = objTechPrdCalc.periodName
-                    dr("PeriodStart") = CDate(objTechPrdCalc.dtRange.Split("-")(0).Trim).ToString("yyyy-MM-dd")
-                    dr("PeriodEnd") = CDate(objTechPrdCalc.dtRange.Split("-")(1).Trim).AddDays(-1).ToString("yyyy-MM-dd")
+                    dr("PeriodStart") = objTechPrdCalc.dtRange.StartDate.ToString("yyyy-MM-dd")
+                    dr("PeriodEnd") = objTechPrdCalc.dtRange.EndDate.ToString("yyyy-MM-dd")
                     dtPrdCalcEval.Rows.Add(dr)
                     dtPrdCalcEval.AcceptChanges()
 

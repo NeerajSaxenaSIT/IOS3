@@ -10,7 +10,7 @@ Public Class dlgTechPeriodCalculation
     Public periodName As String = Nothing
     Public dateStart As Date = Nothing
     Public dateEnd As Date = Nothing
-    Public dtRange As String = Nothing
+    Public dtRange As DateRange = Nothing
 
 #End Region
 
@@ -44,7 +44,7 @@ Public Class dlgTechPeriodCalculation
             End If
 
             periodName = txtPeriodName.Text.Trim
-            dtRange = dateNavigator.SelectedRanges(0).ToString
+            dtRange = dateNavigator.SelectedRanges(0)
             DialogResult = DialogResult.OK
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
