@@ -3503,27 +3503,30 @@ Module mdlCommonModule
     End Sub
 
     Public Sub SetComboBox(ByRef cmb As ComboBoxEdit, ByVal textOrValueBased As ComboSelectBased, ByVal targetValue As String)
-        If textOrValueBased = ComboSelectBased.ValueBased Then
-            If targetValue = cmb.SelectedItem.ToString Then
-                Exit Sub
-            End If
-            For Each cbItem As clsComboBoxItem In cmb.Properties.Items
-                If cbItem.Value = targetValue Then
-                    cmb.SelectedItem = cbItem
-                    Exit For
+        Try
+            If textOrValueBased = ComboSelectBased.ValueBased Then
+                If targetValue = cmb.SelectedItem.ToString Then
+                    Exit Sub
                 End If
-            Next
-        ElseIf textOrValueBased = ComboSelectBased.TextBased Then
-            If targetValue = cmb.SelectedItem.ToString Then
-                Exit Sub
-            End If
-            For Each cbItem As clsComboBoxItem In cmb.Properties.Items
-                If cbItem.Text = targetValue Then
-                    cmb.SelectedItem = cbItem
-                    Exit For
+                For Each cbItem As clsComboBoxItem In cmb.Properties.Items
+                    If cbItem.Value = targetValue Then
+                        cmb.SelectedItem = cbItem
+                        Exit For
+                    End If
+                Next
+            ElseIf textOrValueBased = ComboSelectBased.TextBased Then
+                If targetValue = cmb.SelectedItem.ToString Then
+                    Exit Sub
                 End If
-            Next
-        End If
+                For Each cbItem As clsComboBoxItem In cmb.Properties.Items
+                    If cbItem.Text = targetValue Then
+                        cmb.SelectedItem = cbItem
+                        Exit For
+                    End If
+                Next
+            End If
+        Catch
+        End Try
     End Sub
 
     Public Sub BindDevExLookUpEdit(ByRef ctrlCmb As LookUpEdit, ByVal dtData As DataTable, ByVal valueField As String, ByVal displayField As String, Optional ByVal defaultText As String = Nothing)

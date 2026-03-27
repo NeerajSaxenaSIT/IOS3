@@ -597,8 +597,8 @@ Public Class frmTechnology
         End If
 
         Try
-            BindComboWithKPISet()
             BindComboWithThresholdSet()
+            BindComboWithKPISet()
             LoadModuleReports()
             CollapseColorLegendTLP()
         Catch ex As Exception
@@ -21908,8 +21908,8 @@ Public Class frmTechnology
 
                 Dim dr As DataRow = dtPrdCalcStats.NewRow()
                 dr("PeriodName") = objTechPrdCalc.periodName
-                dr("PeriodStart") = objTechPrdCalc.dtRange.StartDate.ToString("yyyy-MM-dd")
-                dr("PeriodEnd") = objTechPrdCalc.dtRange.EndDate.ToString("yyyy-MM-dd")
+                dr("PeriodStart") = objTechPrdCalc.dtRange.StartDate    '.ToString("yyyy-MM-dd")
+                dr("PeriodEnd") = objTechPrdCalc.dtRange.EndDate        '.ToString("yyyy-MM-dd")
                 dtPrdCalcStats.Rows.Add(dr)
                 dtPrdCalcStats.AcceptChanges()
 
@@ -22103,7 +22103,6 @@ Public Class frmTechnology
                                         End If
 
 
-
                                         If dt_periodCalc IsNot Nothing Then
                                             'taking series with period calc enabled
                                             Dim prdCalcEnabled As Boolean = False
@@ -22161,8 +22160,8 @@ Public Class frmTechnology
                                                                 Dim calc As String = cmbPrdCalcStats.Text.ToUpper.ToString
 
                                                                 If dtPrdCalcStats.Rows.Count = 1 Or dtPrdCalcStats.Rows.Count = 2 Then
-                                                                    sp = dtPrdCalcStats(0)(1)
-                                                                    ep = dtPrdCalcStats(0)(2)
+                                                                    sp = DirectCast(dtPrdCalcStats(0)(1), DateTime)
+                                                                    ep = DirectCast(dtPrdCalcStats(0)(2), DateTime)
 
                                                                     Dim dr() As DataRow = dt_periodCalc.Select("KPIName=" + "'" + s_selected_originalname + "'")
                                                                     If dr.Length > 0 Then
@@ -22172,8 +22171,8 @@ Public Class frmTechnology
                                                                 End If
 
                                                                 If dtPrdCalcStats.Rows.Count = 2 Then
-                                                                    sp2 = dtPrdCalcStats(1)(1)
-                                                                    ep2 = dtPrdCalcStats(1)(2)
+                                                                    sp2 = DirectCast(dtPrdCalcStats(1)(1), DateTime)
+                                                                    ep2 = DirectCast(dtPrdCalcStats(1)(2), DateTime)
 
                                                                     Dim dr() As DataRow = dt_periodCalc.Select("KPIName=" + "'" + s_selected_originalname + "'")
                                                                     If dr.Length > 0 Then
@@ -22601,12 +22600,25 @@ Public Class frmTechnology
                                 'adding holiday bands
                                 Dim dtHolidayMkr As DataTable = Nothing
                                 Try
+                                    Dim HolidaySet As String = ""
+                                    Dim HolidayBandChecked As Boolean = False
 
+                                    'checking if one or more holiday band sets are added in the list (6 items as default)
+                                    For i As Integer = 7 To prdCalcChkCmbVisuals.Properties.Items.Count - 1
+                                        If prdCalcChkCmbVisuals.Properties.Items.Item(i).CheckState = CheckState.Checked Then
+                                            If HolidayBandChecked = False Then
+                                                HolidaySet = prdCalcChkCmbVisuals.Properties.Items.Item(i).Value
+                                                HolidayBandChecked = True
+                                            End If
+                                        End If
+                                    Next
 
-                                    If prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked Or
-                                       prdCalcChkCmbVisuals.Properties.Items.Item(8).CheckState = CheckState.Checked Then
+                                    If HolidayBandChecked = False Then
+                                        HolidaySet = ""
+                                    End If
 
-                                        Dim HolidaySet As String = IIf(prdCalcChkCmbVisuals.Properties.Items.Item(7).CheckState = CheckState.Checked, prdCalcChkCmbVisuals.Properties.Items.Item(7).Value, prdCalcChkCmbVisuals.Properties.Items.Item(8).Value)
+                                    If HolidaySet <> "" Then
+
                                         Dim sqlParam As String = Nothing
                                         Dim connstring As String = Nothing
                                         Dim parray()() As String = {
@@ -24708,6 +24720,7 @@ Public Class frmTechnology
             lblKPISetCounter.Text = String.Empty
             If cmbKPISetEval.SelectedIndex > 0 Then
                 lblKPISetCounter.Text = dtPMKpiSetList.AsEnumerable().Where(Function(x) x.Field(Of Integer)("KPISetID") = CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)).ToArray()(0)("CounterType")
+                SetComboBox(cmbThresholdSetEval, ComboSelectBased.TextBased, Replace(cmbKPISetEval.SelectedItem.ToString, "KPISet", "ThresholdSet"))
             End If
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
@@ -25519,7 +25532,7 @@ Public Class frmTechnology
         Try
             If cmbChartSetNameEval.SelectedIndex > 0 Then
                 SelectComboByMatchingString(cmbKPISetEval, dtPMKpiSetList, "KPISetName", cmbChartSetNameEval.SelectedItem.ToString + "_KPISet")
-                SelectComboByMatchingString(cmbThresholdSetEval, dtPMThresholdSetList, "ThresholdSetName", cmbChartSetNameEval.SelectedItem.ToString + "_ThresholdSet")
+                'SelectComboByMatchingString(cmbThresholdSetEval, dtPMThresholdSetList, "ThresholdSetName", cmbChartSetNameEval.SelectedItem.ToString + "_ThresholdSet")
             End If
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
@@ -28251,6 +28264,7 @@ Public Class frmTechnology
 
                     'Set focus on Stats tab
                     xtcTechnology.SelectedTabPageIndex = 0
+                    SetComboBox(cmbChartSetNameStats, ComboSelectBased.TextBased, cmbChartSetNameEval.Text)
                     SetComboBox(cmbObjectTreeStats, ComboSelectBased.TextBased, cmbObjectTreeEval.Text)
 
                     Dim aggr_to As String = cmbObjectTreeEval.SelectedItem.ToString
@@ -28336,6 +28350,7 @@ Public Class frmTechnology
 
                     'Set focus on TopX tab
                     xtcTechnology.SelectedTabPageIndex = 1
+                    SetComboBox(cmbChartSetNameTopX, ComboSelectBased.TextBased, cmbChartSetNameEval.Text)
                     SetComboBox(cmbObjectTreeTopX, ComboSelectBased.TextBased, cmbObjectTreeEval.Text)
 
                     Dim aggr_to As String = cmbObjectTreeEval.SelectedItem.ToString
@@ -28663,8 +28678,8 @@ Public Class frmTechnology
 
                     Dim dr As DataRow = dtPrdCalcEval.NewRow()
                     dr("PeriodName") = objTechPrdCalc.periodName
-                    dr("PeriodStart") = objTechPrdCalc.dtRange.StartDate.ToString("yyyy-MM-dd")
-                    dr("PeriodEnd") = objTechPrdCalc.dtRange.EndDate.ToString("yyyy-MM-dd")
+                    dr("PeriodStart") = objTechPrdCalc.dtRange.StartDate    '.ToString("yyyy-MM-dd")
+                    dr("PeriodEnd") = objTechPrdCalc.dtRange.EndDate        '.ToString("yyyy-MM-dd")
                     dtPrdCalcEval.Rows.Add(dr)
                     dtPrdCalcEval.AcceptChanges()
 
