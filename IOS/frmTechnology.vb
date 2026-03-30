@@ -22846,9 +22846,13 @@ Public Class frmTechnology
 
                         If dt.Columns(KPIName).DataType <> GetType(String) Then
 
-                            Dim prevStr As String = CDate(cur("PeriodStart")).ToString("MM\/dd\/yyyy HH:mm:ss", Globalization.CultureInfo.InvariantCulture)
-                            Dim curStr As String = CDate(CDate(cur("PeriodEnd")).AddDays(1)).ToString("MM\/dd\/yyyy HH:mm:ss", Globalization.CultureInfo.InvariantCulture)
-                            Dim filter As String = String.Format(Globalization.CultureInfo.InvariantCulture, "[{0}] >= #{1}# AND [{0}] < #{2}#", dateColumnName, prevStr, curStr)
+                            Dim prevDate As DateTime = CDate(cur("PeriodStart"))
+                            Dim curDate As DateTime = CDate(cur("PeriodEnd")).AddDays(1)
+
+                            Dim prevStrForFilter As String = prevDate.ToString("MM\/dd\/yyyy HH:mm:ss", Globalization.CultureInfo.InvariantCulture)
+                            Dim curStrForFilter As String = curDate.ToString("MM\/dd\/yyyy HH:mm:ss", Globalization.CultureInfo.InvariantCulture)
+
+                            Dim filter As String = String.Format(Globalization.CultureInfo.InvariantCulture, "[{0}] >= #{1}# AND [{0}] < #{2}#", dateColumnName, prevStrForFilter, curStrForFilter)
 
                             ' Average ignores DBNulls
                             Dim avgObj As Object = dt.Compute($"AVG([{KPIName}])", filter)
@@ -22861,7 +22865,7 @@ Public Class frmTechnology
                             Dim medianObj As Object
                             Dim dr() As DataRow = dt.AsEnumerable().Where(Function(n)
                                                                               Dim rowDate = n.Field(Of DateTime)("Date")
-                                                                              Return rowDate >= prevStr AndAlso rowDate < curStr
+                                                                              Return rowDate >= prevDate AndAlso rowDate < curDate
                                                                           End Function).OrderBy(Function(n) n.Field(Of Object)(KPIName)).ToArray()
 
                             If dr.Length > 0 Then
