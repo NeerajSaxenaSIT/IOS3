@@ -22436,15 +22436,15 @@ Public Class frmTechnology
 
                                                         Dim shadeThreshold As AxisMarker = Nothing
                                                         If GetFromTech_RadioButton(tech, "Raw").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
                                                         End If
 
                                                         shadeThreshold.LegendEntry.Visible = False
@@ -22465,15 +22465,15 @@ Public Class frmTechnology
 
                                                         Dim shadeThreshold As AxisMarker = Nothing
                                                         If GetFromTech_RadioButton(tech, "Raw").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
                                                         End If
 
                                                         shadeThreshold.LegendEntry.Visible = False
@@ -22494,15 +22494,15 @@ Public Class frmTechnology
 
                                                         Dim shadeThreshold As AxisMarker = Nothing
                                                         If GetFromTech_RadioButton(tech, "Raw").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
                                                         ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
-                                                            shadeThreshold = New AxisMarker(IIf(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, Rnd.Next(255), Rnd.Next(255), Rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                                            shadeThreshold = New AxisMarker(If(showBandLabel, dr("PeriodName").ToString, ""), New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
                                                         End If
 
                                                         shadeThreshold.LegendEntry.Visible = False
@@ -22636,7 +22636,7 @@ Public Class frmTechnology
                                             If dtHolidayMkr.Rows.Count > 0 Then
                                                 For Each dr As DataRow In dtHolidayMkr.Rows
                                                     Dim holidayAM As AxisMarker = Nothing
-                                                    holidayAM = New AxisMarker(IIf(showBandLabel, dr("HolidayName"), ""), New Background(Color.FromArgb(100, Color.LightYellow)), CDate(dr("StartDate")), CDate(dr("EndDate")))
+                                                    holidayAM = New AxisMarker(If(showBandLabel, dr("HolidayName"), ""), New Background(Color.FromArgb(100, Color.LightYellow)), CDate(dr("StartDate")), CDate(dr("EndDate")))
 
                                                     holidayAM.LegendEntry.Visible = False
                                                     holidayAM.Label.LineAlignment = StringAlignment.Center
