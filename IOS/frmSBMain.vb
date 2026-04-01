@@ -3410,7 +3410,7 @@ Public Class frmSBMain
         Dim dtExport As New DataTable
         Try
             Dim objFileDlg As New SaveFileDialog()
-            objFileDlg.Filter = "Excel Workbook |*.xls"
+            objFileDlg.Filter = "Excel Workbook |*.xlsx"
             objFileDlg.Title = "Save an excel File"
 
             If objFileDlg.ShowDialog() = DialogResult.OK Then
@@ -3418,7 +3418,8 @@ Public Class frmSBMain
                     WaitScreen.ShowWaitScreen("Exporting to excel...")
                     Application.DoEvents()
                     dtExport = reportChartGrid_SendBox.gcReportChartGrid.DataSource
-                    IOS.Library.IOSDevExpressGrid.DataTable2Excel(dtExport, objFileDlg.FileName)
+                    'IOS.Library.IOSDevExpressGrid.DataTable2Excel(dtExport, objFileDlg.FileName)
+                    ExportDataTableToExcel_Stream(dtExport, objFileDlg.FileName)
                 End If
             End If
         Catch ex As Exception

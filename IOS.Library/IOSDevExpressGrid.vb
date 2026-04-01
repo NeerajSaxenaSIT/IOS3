@@ -310,37 +310,53 @@ Public Class IOSDevExpressGrid
     End Sub
 
     Public Shared Sub DataTable2CSV(ByRef dt As DataTable, ByVal fileName As String, Optional ByVal delim As String = ",")
-        Dim writer As New System.IO.StreamWriter(fileName)
-        Try
-            ' first write a line with the columns name
+        ' Standardize the delimiter
+        Dim separator As String = If(delim.ToUpper() = "TAB", vbTab, delim)
 
-            If delim = "TAB" Then
-                delim = vbTab
-            End If
-
-            Dim sep As String = ""
-            Dim builder As New System.Text.StringBuilder
-            For Each col As DataColumn In dt.Columns
-                builder.Append(sep).Append(col.ColumnName)
-                sep = delim
-            Next
-            writer.WriteLine(builder.ToString())
-
-            ' then write all the rows
-            For Each row As DataRow In dt.Rows
-                sep = ""
-                builder = New System.Text.StringBuilder
-
-                For Each col As DataColumn In dt.Columns
-                    builder.Append(sep).Append(row(col.ColumnName))
-                    sep = delim
+        ' Use a Using block to ensure the file is closed correctly even if an error occurs
+        Using writer As New System.IO.StreamWriter(fileName, False, System.Text.Encoding.UTF8)
+            Try
+                ' 1. Write Header Row
+                Dim headerLine As New System.Text.StringBuilder()
+                For i As Integer = 0 To dt.Columns.Count - 1
+                    headerLine.Append(dt.Columns(i).ColumnName)
+                    If i < dt.Columns.Count - 1 Then headerLine.Append(separator)
                 Next
-                writer.WriteLine(builder.ToString())
-            Next
-        Finally
-            If Not writer Is Nothing Then writer.Close()
-            MsgBox("Export Completed !", MsgBoxStyle.Information)
-        End Try
+                writer.WriteLine(headerLine.ToString())
+
+                ' 2. Write Data Rows
+                For Each row As DataRow In dt.Rows
+                    Dim rowLine As New System.Text.StringBuilder()
+
+                    For i As Integer = 0 To dt.Columns.Count - 1
+                        Dim cellValue As Object = row(i)
+                        Dim formattedValue As String = ""
+
+                        If cellValue IsNot DBNull.Value AndAlso cellValue IsNot Nothing Then
+                            ' CHECK FOR DATETIME HERE
+                            If TypeOf cellValue Is DateTime Then
+                                formattedValue = DirectCast(cellValue, DateTime).ToString("yyyy-MM-dd HH:mm:ss")
+                            Else
+                                ' Handle commas in text (wrap in quotes) to avoid breaking CSV structure
+                                formattedValue = cellValue.ToString()
+                                If formattedValue.Contains(separator) Then
+                                    formattedValue = String.Format("""{0}""", formattedValue.Replace("""", """"""))
+                                End If
+                            End If
+                        End If
+
+                        rowLine.Append(formattedValue)
+                        If i < dt.Columns.Count - 1 Then rowLine.Append(separator)
+                    Next
+                    writer.WriteLine(rowLine.ToString())
+                Next
+
+                MsgBox("Export Completed!", MsgBoxStyle.Information)
+
+            Catch ex As Exception
+                MsgBox("Error during export: " & ex.Message, MsgBoxStyle.Critical)
+            End Try
+        End Using
     End Sub
 
     'Public Shared Sub DataTable2CLF(ByRef dt As DataTable, ByVal fileName As String)

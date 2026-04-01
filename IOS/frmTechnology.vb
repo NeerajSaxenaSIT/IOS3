@@ -5126,13 +5126,15 @@ Public Class frmTechnology
 
                     If chkEnableComparisonTopX.Checked = False Then
                         AssignDataToTopX(dsTopX.Tables(0), "TopX_" & _strNetwork)
-                        IOSDevExpressGrid.PopulateDataInGrid(DataGrid_TopX, gvDataGridTopX, dsTopX.Tables(0), "ALL")
+                        'IOSDevExpressGrid.PopulateDataInGrid(DataGrid_TopX, gvDataGridTopX, dsTopX.Tables(0), "ALL")
+                        LoadGridWithHyperlink(DataGrid_TopX, gvDataGridTopX, dsTopX.Tables(0), "TicketURL")
                     Else
                         ' calculate delta
                         DeltaCalculation(dsTopX)
                         ' assign delta to charts
                         AssignDataToTopX_Delta(dsTopX, "TopX_" & _strNetwork)
-                        IOSDevExpressGrid.PopulateDataInGrid(DataGrid_TopX, gvDataGridTopX, dsTopX.Tables(2), "ALL")
+                        'IOSDevExpressGrid.PopulateDataInGrid(DataGrid_TopX, gvDataGridTopX, dsTopX.Tables(2), "ALL")
+                        LoadGridWithHyperlink(DataGrid_TopX, gvDataGridTopX, dsTopX.Tables(2), "TicketURL")
                     End If
 
                     lblObjectTreeStatusTopX.Text = "Query Success: " & DateDiff(DateInterval.Second, timerTopX, Now()) & "s"
@@ -7666,8 +7668,13 @@ Public Class frmTechnology
         Try
             Dim dgv As GridControl = CType(sender.sourcecontrol, GridControl)
             tracegrid_clicked = dgv
-            tsmi_dgv_ToStats.Enabled = False
-            tsmi_dgv_ToTopX.Enabled = False
+            If dgv.Name.ToLower.Contains("stats") Then
+                tsmi_dgv_ToStats.Enabled = False
+                tsmi_dgv_ToTopX.Enabled = True
+            ElseIf dgv.Name.ToLower.Contains("topx") Then
+                tsmi_dgv_ToStats.Enabled = True
+                tsmi_dgv_ToTopX.Enabled = False
+            End If
             tsmi_RecordCount.Text = "Record Count: " & dgv.DefaultView.RowCount
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
@@ -24494,7 +24501,7 @@ Public Class frmTechnology
             If dt IsNot Nothing Then
                 If dt.Rows.Count > 0 Then
                     For Each dr As DataRow In dt.Rows
-                        prdCalcChkCmbVisuals.Properties.Items.Add(dr("HolidaySet"), IIf(FirstItemChecked, CheckState.Unchecked, CheckState.Checked))
+                        prdCalcChkCmbVisuals.Properties.Items.Add(dr("HolidaySet"), If(FirstItemChecked, CheckState.Unchecked, CheckState.Checked))
                         FirstItemChecked = True
                     Next
                 End If
