@@ -571,6 +571,7 @@ Public Class frmTerrainProfile
 
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
         Finally
             If Not ch_TerrainProfile Is Nothing Then
                 '-----------

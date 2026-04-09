@@ -44,7 +44,8 @@ Public Class dlgTechPeriodCalculation
             End If
 
             periodName = txtPeriodName.Text.Trim
-            dtRange = dateNavigator.SelectedRanges(0)
+            Dim rawRange As DateRange = dateNavigator.SelectedRanges(0)
+            dtRange = New DateRange(rawRange.StartDate, rawRange.EndDate.AddDays(-1))
             DialogResult = DialogResult.OK
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)

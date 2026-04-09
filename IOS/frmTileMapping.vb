@@ -518,7 +518,8 @@ Public Class frmTileMapping
                 End If
             Next
         Catch ex As Exception
-
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
         End Try
         Return 0
     End Function

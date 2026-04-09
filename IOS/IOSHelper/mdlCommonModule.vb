@@ -2969,7 +2969,7 @@ Module mdlCommonModule
         Return encryptedString
     End Function
 
-    Public Function IsInternetAvailable() As Boolean
+    Public Function InternetCheck() As Boolean
         Try
             Dim ping As New Ping()
             Dim reply As PingReply = ping.Send("8.8.8.8") ' Google's public DNS server
@@ -2982,6 +2982,29 @@ Module mdlCommonModule
             ' Handle exception if ping fails
         End Try
         bInternetAvailable = False
+        Return bInternetAvailable
+    End Function
+
+    Public Function IsInternetAvailable() As Boolean
+        Try
+            Dim request As HttpWebRequest = WebRequest.Create("http://google.com")
+
+            request.Proxy = WebRequest.GetSystemWebProxy()
+            request.Proxy.Credentials = CredentialCache.DefaultCredentials
+
+            request.Method = "HEAD"
+            request.Timeout = 2000 ' 2 second timeout to prevent hanging
+
+            Using response As HttpWebResponse = request.GetResponse()
+                If response.StatusCode = HttpStatusCode.NoContent OrElse response.StatusCode = HttpStatusCode.OK Then
+                    bInternetAvailable = True
+                    Return bInternetAvailable
+                End If
+            End Using
+        Catch ex As Exception
+            bInternetAvailable = False
+            Return bInternetAvailable
+        End Try
         Return bInternetAvailable
     End Function
 

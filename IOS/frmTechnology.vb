@@ -21915,8 +21915,8 @@ Public Class frmTechnology
 
                 Dim dr As DataRow = dtPrdCalcStats.NewRow()
                 dr("PeriodName") = objTechPrdCalc.periodName
-                dr("PeriodStart") = objTechPrdCalc.dtRange.StartDate    '.ToString("yyyy-MM-dd")
-                dr("PeriodEnd") = objTechPrdCalc.dtRange.EndDate        '.ToString("yyyy-MM-dd")
+                dr("PeriodStart") = objTechPrdCalc.dtRange.StartDate
+                dr("PeriodEnd") = objTechPrdCalc.dtRange.EndDate
                 dtPrdCalcStats.Rows.Add(dr)
                 dtPrdCalcStats.AcceptChanges()
 
