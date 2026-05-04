@@ -310,6 +310,8 @@ Public Class frmThresholdSetCreate
                 e.Cancel = False
             ElseIf (gvThreshold.FocusedColumn().FieldName = "StdDev") Then
                 e.Cancel = False
+            ElseIf (gvThreshold.FocusedColumn().FieldName = "WarningValue") Or (gvThreshold.FocusedColumn().FieldName = "WarningPercentage") Then
+                e.Cancel = False
             Else
                 e.Cancel = True
             End If
@@ -635,7 +637,7 @@ Public Class frmThresholdSetCreate
         Dim sqlParam As String = GetSQL(7014, parray)(1)
         Dim dt As DataTable = DataAccessorODBC.GetDataTable(strConnection, sqlParam, iQryTimeOut)
         Dim cols2Hide() As String = Nothing
-        cols2Hide = {"KPISetID", "ThresholdSetFixedID", "ThresholdSetID", "WarningValue", "WarningPercentage"}
+        cols2Hide = {"KPISetID", "ThresholdSetFixedID", "ThresholdSetID"}   ', "WarningValue", "WarningPercentage"
         IOSDevExpressGrid.PopulateDataInGrid(gcThreshold, gvThreshold, dt, "ALL", cols2Hide, "KPI_Name")
 
         riCmbOperator = TryCast(gcThreshold.RepositoryItems.Add("ComboBoxEdit"), RepositoryItemComboBox)
@@ -792,7 +794,7 @@ Public Class frmThresholdSetCreate
             Dim sqlParam As String = GetSQL(7016, parray)(1)
             Dim dt As DataTable = DataAccessorODBC.GetDataTable(strConnection, sqlParam, iQryTimeOut)
             Dim cols2Hide() As String = Nothing
-            cols2Hide = {"KPISetID", "ThresholdSetFixedID", "ThresholdSetID", "WarningValue", "WarningPercentage"}
+            cols2Hide = {"KPISetID", "ThresholdSetFixedID", "ThresholdSetID"}   ', "WarningValue", "WarningPercentage"
             IOSDevExpressGrid.PopulateDataInGrid(gcThreshold, gvThreshold, dt, "ALL", cols2Hide, "KPI_Name")
         End If
     End Sub

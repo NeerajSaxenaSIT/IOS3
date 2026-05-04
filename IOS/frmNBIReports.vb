@@ -917,7 +917,11 @@ Public Class frmNBIReports
                                                     writer.Write(String.Format("{0}", CDbl(v)))
                                                 Case "datetime"
                                                     'writer.Write(String.Format("{0}", v))
-                                                    writer.Write(DirectCast(v, DateTime).ToString("yyyy-MM-dd HH:mm:ss"))
+                                                    If regionalSettings = False Then
+                                                        writer.Write(DirectCast(v, DateTime).ToString("yyyy-MM-dd HH:mm:ss"))
+                                                    Else
+                                                        writer.Write(DirectCast(v, DateTime).ToString("g", CultureInfoDefault))
+                                                    End If
                                                 Case Else
                                                     writer.Write(String.Format("{0}", v))
                                             End Select
@@ -938,7 +942,11 @@ Public Class frmNBIReports
                                                 writer.Write(String.Format("{0}", CDbl(v_end)))
                                             Case "datetime"
                                                 'writer.Write(String.Format("{0}", v))
-                                                writer.Write(DirectCast(v_end, DateTime).ToString("yyyy-MM-dd HH:mm:ss"))
+                                                If regionalSettings = False Then
+                                                    writer.Write(DirectCast(v_end, DateTime).ToString("yyyy-MM-dd HH:mm:ss"))
+                                                Else
+                                                    writer.Write(DirectCast(v_end, DateTime).ToString("g", CultureInfoDefault))
+                                                End If
                                             Case Else
                                                 writer.Write(String.Format("{0}", v_end))
                                         End Select

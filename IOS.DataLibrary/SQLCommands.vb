@@ -1352,7 +1352,7 @@ Public Class clsSQLCommands
         sqlQuery.AppendLine("SELECT rpt.ReportName,rpt.ReportID, rptobj.ObjectName,rptobj.ObjectNameGUI,SlideName,SL.SlideID,ObjectType,rpt.ReportType From (Select ReportID,ReportName,ReportType From IOS_Reports Where (ReportOwner = '" & Environment.UserName & "' or ReportLocked = 0)) rpt")
         sqlQuery.AppendLine("LEFT JOIN IOS_Reports_Slides SL ON rpt.ReportID = SL.ReportID")
         sqlQuery.AppendLine("LEFT JOIN IOS_Reports_Objects rptobj ON SL.SlideID = rptobj.SlideID")
-        sqlQuery.AppendLine("LEFT JOIN IOS_Reports_ObjectStyles objstyle ON rptobj.ObjectStyleId = objstyle.ObjectStyleID;")
+        sqlQuery.AppendLine("LEFT JOIN IOS_Reports_ObjectStyles objstyle ON rptobj.ObjectStyleId = objstyle.ObjectStyleID Where rpt.ReportType <> 'DashboardPDF';")
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 
@@ -1740,10 +1740,10 @@ Public Class clsSQLCommands
         Return DataAccessorODBC.ExecuteNonQuery(connStr, sqlQuery.ToString)
     End Function
 
-    Public Shared Function GetSqlQueryToAddNewKpi(ByVal techName As String, ByVal newKPIName As String, objectName As String, userName As String, technology As String, objectItem As String) As String
+    Public Shared Function GetSqlQueryToAddNewKpi(ByVal techName As String, ByVal newKPIName As String, objectName As String, userName As String, technology As String, objectItem As String, kpiDesc As String) As String
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("INSERT INTO IOS_SQL_KPI (tech,sourcetable,tablealias,supportcode,KPI_Name,KPI_SQL,JoinObjects,Object,Creator,Active)")
-        sqlQuery.AppendLine("VALUES ('" & techName & "','','',0,'" & newKPIName & "','','','" & objectName & "','" & userName & "',1);")
+        sqlQuery.AppendLine("INSERT INTO IOS_SQL_KPI (tech,sourcetable,tablealias,supportcode,KPI_Name,KPI_SQL,JoinObjects,Object,Creator,Active,Description)")
+        sqlQuery.AppendLine("VALUES ('" & techName & "','','',0,'" & newKPIName & "','','','" & objectName & "','" & userName & "',1,'" & Replace(kpiDesc, "'", "`") & "');")
         sqlQuery.AppendLine("SELECT DISTINCT KPI_Name,SQLKPI_ID,Creator FROM IOS_SQL_KPI WHERE Tech ='" & technology & "' AND Object='" & objectItem & "'")
         Return sqlQuery.ToString
     End Function
@@ -1766,16 +1766,16 @@ Public Class clsSQLCommands
 
     Public Shared Function UpdateSqlKpiAsCommitted(ByVal connStr As String, ByVal tableCount As String, ByVal technology As String, ByVal tableNamesOriginal As String, ByVal tableAlias As String,
                                                    ByVal kpiName As String, ByVal KpiSQL As String, ByVal JoinObject As String, ByVal objectItem As String, ByVal userName As String,
-                                                   ByVal kpiID As String) As Integer
+                                                   ByVal kpiID As String, ByVal kpiDesc As String) As Integer
         sqlQuery = New StringBuilder()
         If (tableCount > 1) Then
             sqlQuery.AppendLine("UPDATE [dbo].[IOS_SQL_KPI] SET [tech]='" & technology & "',[sourcetable]='" & tableNamesOriginal & "',[tablealias]='" & tableAlias.TrimEnd(",") & "',[supportcode]=1,")
             sqlQuery.AppendLine("[KPI_Name]='" & kpiName & "',[KPI_SQL]='" & Replace(KpiSQL, "'", "''") & "',[JoinObjects]='" & JoinObject & "',[Object]='" & objectItem & "',")
-            sqlQuery.AppendLine("[Creator]='" & userName & "',[Active]=1 WHERE [tech]='" & technology & "' AND [SQLKPI_ID]='" & kpiID & "'")
+            sqlQuery.AppendLine("[Creator]='" & userName & "',[Active]=1,[Description]='" & Replace(kpiDesc, "'", "`") & "' WHERE [tech]='" & technology & "' AND [SQLKPI_ID]='" & kpiID & "'")
         Else
             sqlQuery.AppendLine("UPDATE [dbo].[IOS_SQL_KPI] SET [tech]='" & technology & "',[sourcetable]='" & tableNamesOriginal & "',[tablealias]='" & tableAlias.TrimEnd(",") & "',[supportcode]=1,")
             sqlQuery.AppendLine("[KPI_Name]='" & kpiName & "',[KPI_SQL]='" & Replace(KpiSQL, "'", "''") & "',[JoinObjects]='',[Object]='" & objectItem & "',")
-            sqlQuery.AppendLine("[Creator]='" & userName & "',[Active]=1 WHERE [tech]='" & technology & "' AND [SQLKPI_ID]='" & kpiID & "'")
+            sqlQuery.AppendLine("[Creator]='" & userName & "',[Active]=1,[Description]='" & Replace(kpiDesc, "'", "`") & "' WHERE [tech]='" & technology & "' AND [SQLKPI_ID]='" & kpiID & "'")
         End If
         Return DataAccessorODBC.ExecuteNonQuery(connStr, sqlQuery.ToString)
     End Function

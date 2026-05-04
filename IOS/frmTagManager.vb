@@ -1061,11 +1061,13 @@ Public Class frmTagManager
                     flg = True
                 End If
 
-                dt_tags = clsSQLCommands.GetTagList(connStrIOSServer, flg, cmbTechnology.SelectedItem.ToString, cmbObjectType.SelectedItem.ToString, cmbTagType.Properties.Items.First(Function(x) x.CheckState = CheckState.Checked).Value.ToString) 'DataAccessorODBC.GetDataTable(connStrIOSServer, sqlCommand)
-                dtTags = dt_tags
+                If (cmbTechnology.SelectedIndex > 0) AndAlso (cmbObjectType.SelectedIndex > 0) Then
+                    dt_tags = clsSQLCommands.GetTagList(connStrIOSServer, flg, cmbTechnology.SelectedItem.ToString, cmbObjectType.SelectedItem.ToString, cmbTagType.Properties.Items.First(Function(x) x.CheckState = CheckState.Checked).Value.ToString) 'DataAccessorODBC.GetDataTable(connStrIOSServer, sqlCommand)
+                    dtTags = dt_tags
 
-                Dim columnsToHide() As String = {"TagID", "TagOwner", "TagType"}
-                IOSDevExpressGrid.PopulateDataInGrid(gcTagsList, gvTagsList, dt_tags, "ALL", columnsToHide, "TagName")
+                    Dim columnsToHide() As String = {"TagID", "TagOwner", "TagType"}
+                    IOSDevExpressGrid.PopulateDataInGrid(gcTagsList, gvTagsList, dt_tags, "ALL", columnsToHide, "TagName")
+                End If
 
                 UpdateTagsGridPreAggregateColumn()
 

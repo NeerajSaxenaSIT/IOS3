@@ -15534,7 +15534,7 @@ function toggleHeatmap() {
                     For Each drow As DataRow In dt_Map_Configuration.Rows
                         If drow("LayerActive").ToString = True Then
                             Dim lyr As FeatureLayer = CType(MapControl1.Map.Layers(drow("LayerName").ToString.Trim), FeatureLayer)
-                            If lyr.Enabled = True Then
+                            If (lyr IsNot Nothing) AndAlso (lyr.Enabled = True) Then
                                 Layer_View(drow("LayerName").ToString.Trim & "_Status", Not item.Checked)
                                 Layer_View(drow("LayerName").ToString.Trim & "_Tickets", Not item.Checked)
                             End If
@@ -17356,7 +17356,12 @@ function toggleHeatmap() {
 
                 startDate = CDate(vdtp_networkstatus_start.EditValue).ToString("yyyy-MM-dd")
                 endDate = CDate(vdtp_networkstatus_end.EditValue).ToString("yyyy-MM-dd")
+
+                'If configMgr.User.LicenseCompany = "TDC" Then
+                '    actualUrl = apiBaseUrl & methodType & "?" & methodParams(0) & "=" & location & "&" & methodParams(1) & "=" & startDate & "&" & methodParams(2) & "=" & endDate & "&" & methodParams(3) & "=" & priority
+                'Else
                 actualUrl = apiBaseUrl & methodType & "?" & methodParams(0) & "=" & location & "&" & methodParams(1) & "=" & startDate & "&" & methodParams(2) & "=" & endDate & "&" & methodParams(3) & "=" & priority
+                'End If
 
                 'GET request to get access tickets data
                 client.BaseAddress = New Uri(apiBaseUrl)

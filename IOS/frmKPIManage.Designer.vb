@@ -20,9 +20,9 @@ Partial Class frmKPIManage
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeListViewColumn1 As LidorSystems.IntegralUI.Lists.TreeListViewColumn = New LidorSystems.IntegralUI.Lists.TreeListViewColumn()
+        Dim TreeListViewColumn3 As LidorSystems.IntegralUI.Lists.TreeListViewColumn = New LidorSystems.IntegralUI.Lists.TreeListViewColumn()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmKPIManage))
-        Dim TreeListViewColumn2 As LidorSystems.IntegralUI.Lists.TreeListViewColumn = New LidorSystems.IntegralUI.Lists.TreeListViewColumn()
+        Dim TreeListViewColumn4 As LidorSystems.IntegralUI.Lists.TreeListViewColumn = New LidorSystems.IntegralUI.Lists.TreeListViewColumn()
         Me.cmKPIManagerStripMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmKPIDelete = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmKPIRename = New System.Windows.Forms.ToolStripMenuItem()
@@ -602,15 +602,15 @@ Partial Class frmKPIManage
         '
         Me.tlvUsingTableName.AllowDrag = True
         Me.tlvUsingTableName.AllowDrop = True
-        TreeListViewColumn1.FooterRect = CType(resources.GetObject("TreeListViewColumn1.FooterRect"), System.Drawing.RectangleF)
-        TreeListViewColumn1.HeaderRect = CType(resources.GetObject("TreeListViewColumn1.HeaderRect"), System.Drawing.RectangleF)
-        TreeListViewColumn1.HeaderText = "Table Name"
-        TreeListViewColumn1.Width = 310
-        TreeListViewColumn2.FooterRect = CType(resources.GetObject("TreeListViewColumn2.FooterRect"), System.Drawing.RectangleF)
-        TreeListViewColumn2.HeaderRect = CType(resources.GetObject("TreeListViewColumn2.HeaderRect"), System.Drawing.RectangleF)
-        TreeListViewColumn2.HeaderText = "TableAlias"
-        TreeListViewColumn2.Width = 120
-        Me.tlvUsingTableName.Columns.AddRange(New Object() {TreeListViewColumn1, TreeListViewColumn2})
+        TreeListViewColumn3.FooterRect = CType(resources.GetObject("TreeListViewColumn3.FooterRect"), System.Drawing.RectangleF)
+        TreeListViewColumn3.HeaderRect = CType(resources.GetObject("TreeListViewColumn3.HeaderRect"), System.Drawing.RectangleF)
+        TreeListViewColumn3.HeaderText = "Table Name"
+        TreeListViewColumn3.Width = 310
+        TreeListViewColumn4.FooterRect = CType(resources.GetObject("TreeListViewColumn4.FooterRect"), System.Drawing.RectangleF)
+        TreeListViewColumn4.HeaderRect = CType(resources.GetObject("TreeListViewColumn4.HeaderRect"), System.Drawing.RectangleF)
+        TreeListViewColumn4.HeaderText = "TableAlias"
+        TreeListViewColumn4.Width = 120
+        Me.tlvUsingTableName.Columns.AddRange(New Object() {TreeListViewColumn3, TreeListViewColumn4})
         '
         '
         '
@@ -624,7 +624,7 @@ Partial Class frmKPIManage
         Me.tlvUsingTableName.Cursor = System.Windows.Forms.Cursors.Default
         Me.tlvUsingTableName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tlvUsingTableName.DragDropMode = LidorSystems.IntegralUI.DragDropMode.Custom
-        Me.tlvUsingTableName.ExpandingColumn = TreeListViewColumn1
+        Me.tlvUsingTableName.ExpandingColumn = TreeListViewColumn3
         Me.tlvUsingTableName.Location = New System.Drawing.Point(2, 23)
         Me.tlvUsingTableName.Name = "tlvUsingTableName"
         Me.tlvUsingTableName.ShowWholeHeader = False

@@ -166,7 +166,7 @@ Public Class frmTechnology
                 tsmi_ReportAddChart, tsmi_ChartDataCSV, tsmi_ChartDataGrid, tsmi_cmTopx_Stats, cm_Topx_MapSel, tsmi_TopxPolygonMapKPITopX, tsmi_TopXGeoIDMapKPI, cm_Topx_Hide, ToolStripMenuItemTopX3, tsmi_Topx_Chart_SelectTopX,
                 tsmi_Topx_Chart_Launch, tsmi_Topx_Chart_Map, tsmi_TopX_Chart_DrillDown, tsmi_topx_KPIInfo, tsmi_Topx_Chart_Copy, tsmi_Topx_Chart_Print, tsmi_Chart_TopX_SQL, tsmi_TopX_Chart_Custom, tsmi_Report_AddChart,
                 tsmi_RecordCount, tsmi_dgv_ToStats, tsmi_dgv_ToTopX, tsmi_dgv_CopyClipboardWOHeader, tsmi_dgv_CopyClipboardWithHeader, tsmi_dgv_CopyAll, tsmi_ExportToExcel, tsmi_KPIFilterTemplate_Add, tsmi_KPIFilterTemplate_Del,
-                tsmi_KPIFilterTemplate_Rename, tsmi_Send2ObjBasedTab, btnCreateReport, btnReportDesigner, acePeriodCalculationStats, prdCalcChkCmbVisuals, tsmi_CopyURLClipboard
+                tsmi_KPIFilterTemplate_Rename, tsmi_Send2ObjBasedTab, btnCreateReport, btnReportDesigner, acePeriodCalculationStats, prdCalcChkCmbVisuals, tsmi_CopyURLClipboard, tsmi_TopX_CopyToTag, btnEvalReport
             }
 
             For Each frmControl As Object In formControls
@@ -6749,14 +6749,16 @@ Public Class frmTechnology
                                     tsmi_SlideName = New ToolStripMenuItem(drSlide("SlideName").ToString.Trim.Replace("Slide", "WS"))
                                     tsmi_SlideName.ToolTipText = "Charts in Worksheet: " & vbCrLf & GetObjectsName(dtSlideAndObjects, drSlide("SlideID").ToString.Trim)
                                 End If
-                                tsmi_SlideName.Tag = drSlide("SlideID").ToString.Trim
-                                tsmi_group.DropDownItems.Add(tsmi_SlideName)
-                                AddHandler tsmi_SlideName.Click, AddressOf cmsSlideName_Click
+
+                                If tsmi_SlideName IsNot Nothing Then
+                                    tsmi_SlideName.Tag = drSlide("SlideID").ToString.Trim
+                                    tsmi_group.DropDownItems.Add(tsmi_SlideName)
+                                    AddHandler tsmi_SlideName.Click, AddressOf cmsSlideName_Click
+                                End If
 
                                 If drSlide("SlideName").ToString.Contains(tcTabControlHighTopX.SelectedTabPage.Name) Then
                                     tsmi_NewSlide.Enabled = False
                                 End If
-
                             Next
                         End If
                         tsmi_Report_AddChart.DropDownItems.Add(tsmi_group)
@@ -7217,7 +7219,124 @@ Public Class frmTechnology
             Else
                 tscmb_TabField.SelectedIndex = 0
             End If
+
+            Try
+                Dim dt As DataTable = clsSQLCommands.GetIOSTags(connStrIOSServer, _strNetwork, System.Environment.UserName, cmbObjectTreeTopX.SelectedItem.ToString)
+
+                tsmi_TopX_CopyToTag.DropDownItems.Clear()
+                tsmi_TopX_CopyToTag.Enabled = True
+                Dim tsmi_CreateTag As ToolStripMenuItem = New ToolStripMenuItem("Create Tag")
+                AddHandler tsmi_CreateTag.Click, AddressOf TopX_CreateTagFromGridContextMenu
+                tsmi_TopX_CopyToTag.DropDownItems.Add(tsmi_CreateTag)
+
+                If Not dt Is Nothing Then
+                    If dt.Rows.Count > 0 Then
+                        For Each dr As DataRow In dt.Rows
+                            Dim tsmi_image As Image = Nothing
+                            If dr("EnablePreAggregation").ToString.ToUpper = "TRUE" Then
+                                tsmi_image = EmbeddedImage("square_green.bmp")
+                            Else
+                                tsmi_image = EmbeddedImage("square_red.bmp")
+                            End If
+                            Dim tsmi_CopyToTag As ToolStripMenuItem = New ToolStripMenuItem(dr("TagName").ToString, tsmi_image)
+                            tsmi_CopyToTag.Tag = dr("TagID").ToString
+                            AddHandler tsmi_CopyToTag.Click, AddressOf TopX_Grid_CopyToTag
+                            tsmi_TopX_CopyToTag.DropDownItems.Add(tsmi_CopyToTag)
+                        Next
+                    End If
+                End If
+            Catch ex As Exception
+                _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+                UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+            End Try
+
+            Dim showObjects = flpSourceBtn_GetChecked("topx_" & _strNetwork, flpCounterTypeTopX)(0).SourceButtonText
+            If showObjects.Contains("CELL") Or showObjects.Contains("SITE") Or showObjects.Contains("BTS") Or showObjects.Contains("NODE") Or showObjects.Contains("RBS") Then
+                tsmi_TopX_CopyToTag.Enabled = True
+            Else
+                tsmi_TopX_CopyToTag.Enabled = False
+            End If
         Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub TopX_Grid_CopyToTag(sender As Object, e As EventArgs)
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info")
+        Try
+            Dim tagid As Integer = CInt(CType(sender, ToolStripMenuItem).Tag)
+            Dim aggr_to As String = cmbObjectTreeTopX.SelectedItem.ToString
+            Dim showObjects = flpSourceBtn_GetChecked("topx_" & _strNetwork, flpCounterTypeTopX)(0).SourceButtonText
+            Dim gv As GridView = CType(cmTopX.SourceControl, GridControl).MainView
+            Dim rowIndex() = gv.GetSelectedRows
+
+            Dim str_ObjectNames() As String = rowIndex.Select(Function(n) gv.GetRowCellValue(n, showObjects)?.ToString()).ToArray()
+            Dim str_ObjectIDs() As String = rowIndex.Select(Function(n) gv.GetRowCellValue(n, showObjects)?.ToString()).ToArray()
+
+            'create datatable
+            Using cnQODBC As Odbc.OdbcConnection = New Odbc.OdbcConnection(connStrIOSServer)
+                cnQODBC.ConnectionTimeout = 5
+                cnQODBC.Open()
+                Dim ds As New DataSet()
+                Dim daQODBC As Odbc.OdbcDataAdapter = New Odbc.OdbcDataAdapter(clsSQLCommands.GetObjectSQLByTag(tagid.ToString), cnQODBC)
+                Dim builder As Odbc.OdbcCommandBuilder = New Odbc.OdbcCommandBuilder(daQODBC)
+
+                daQODBC.Fill(ds)
+                For i As Integer = 0 To str_ObjectIDs.Length - 1
+                    Dim rw As DataRow = ds.Tables(0).NewRow
+                    rw(0) = tagid
+                    rw(1) = Replace(str_ObjectIDs(i), "'", "")
+                    rw(2) = Replace(str_ObjectNames(i), "'", "")
+                    ds.Tables(0).Rows.Add(rw)
+                Next
+                daQODBC.ContinueUpdateOnError = True
+                daQODBC.Update(ds)
+
+                ' close...
+                daQODBC.Dispose()
+                cnQODBC.Close()
+            End Using
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        End Try
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", Network & " " & DateDiff(DateInterval.Second, timer, Now()) & "s")
+    End Sub
+
+    Public Sub TopX_CreateTagFromGridContextMenu(sender As Object, e As System.EventArgs)
+        Try
+            Dim aggr_to As String = Nothing
+            Dim tech As String = "topx_" & _strNetwork
+            aggr_to = cmbObjectTreeTopX.SelectedItem.ToString
+            Dim showObjects = flpSourceBtn_GetChecked("topx_" & _strNetwork, flpCounterTypeTopX)(0).SourceButtonText
+
+            Dim tagInsertDialog As New dlgTagInsert()
+            tagInsertDialog.ShowDialog()
+            If (tagInsertDialog.IsValid) Then
+
+                'check if the tag name already exits, else insert the new tag
+                Dim TagID As Integer = clsSQLCommands.InsertTag(connStrIOSServer, tagInsertDialog.TagName, Network, "Static List", tagInsertDialog.TagDescription, aggr_to, tagInsertDialog.TagIsPrivate)
+
+                If TagID <> 0 Then
+                    Dim gv As GridView = CType(cmTopX.SourceControl, GridControl).MainView
+                    Dim rowIndex() = gv.GetSelectedRows
+
+                    Dim str_ObjectNames() As String = rowIndex.Select(Function(n) gv.GetRowCellValue(n, showObjects)?.ToString()).ToArray()
+                    Dim str_ObjectIDs() As String = rowIndex.Select(Function(n) gv.GetRowCellValue(n, showObjects)?.ToString()).ToArray()
+
+                    'insert selected objects with the new tag
+                    For iCntr As Integer = 0 To str_ObjectIDs.Length - 1
+                        clsSQLCommands.InsertTagsDetailsList(connStrIOSServer, TagID, Replace(str_ObjectIDs(iCntr), "'", ""), Replace(str_ObjectNames(iCntr), "'", ""))
+                    Next
+
+                    frmTagManager.BindTagsGrid()
+                Else
+                    MsgBox("Tag Not Inserted " & vbCrLf & "TagName " & tagInsertDialog.TagName & " already exists In " & Network & "!", MsgBoxStyle.Exclamation)
+                End If
+
+            End If
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
         End Try
     End Sub
 
@@ -7668,6 +7787,8 @@ Public Class frmTechnology
         Try
             Dim dgv As GridControl = CType(sender.sourcecontrol, GridControl)
             tracegrid_clicked = dgv
+            RemoveHandler tsmi_dgv_ToStats.Click, AddressOf tsmi_dgv_ToStats_Click
+            RemoveHandler tsmi_dgv_ToTopX.Click, AddressOf tsmi_dgv_ToTopX_Click
             If dgv.Name.ToLower.Contains("stats") Then
                 tsmi_dgv_ToStats.Enabled = False
                 tsmi_dgv_ToTopX.Enabled = True
@@ -7676,8 +7797,26 @@ Public Class frmTechnology
                 tsmi_dgv_ToTopX.Enabled = False
             End If
             tsmi_RecordCount.Text = "Record Count: " & dgv.DefaultView.RowCount
+            AddHandler tsmi_dgv_ToStats.Click, AddressOf tsmi_dgv_ToStats_Click
+            AddHandler tsmi_dgv_ToTopX.Click, AddressOf tsmi_dgv_ToTopX_Click
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub tsmi_dgv_ToStats_Click(sender As Object, e As EventArgs)
+        Try
+            'TODO
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+        End Try
+    End Sub
+
+    Private Sub tsmi_dgv_ToTopX_Click(sender As Object, e As EventArgs)
+        Try
+            'TODO
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
         End Try
     End Sub
 
@@ -10521,6 +10660,46 @@ Public Class frmTechnology
                     de.DataFields = String2DataFields(chart_elements, "Date")
                     sc = de.GetSeries()
 
+                    'find maxValue per axis
+
+                    Dim LeftAxisDivisor As Int32 = 1
+                    Dim RightAxisDivisor As Int32 = 1
+                    Dim LeftAxisLabelAddition As String = ""
+                    Dim RightAxisLabelAddition As String = ""
+
+                    For i = 0 To sc.Count - 1
+                        Dim MaxValueOfSeries As Double = sc(i).Calculate("test", Calculation.Maximum).YValue
+                        If MaxValueOfSeries > 1000000000 Then
+                            If MaxValueOfSeries > 1000000000000 Then
+                                Select Case chart_elementsYAxis(0).ToString().Trim().ToUpper()
+                                    Case "LEFT"
+                                        LeftAxisDivisor = 1000000
+                                        LeftAxisLabelAddition = " Million"
+                                        Exit Select
+                                    Case "RIGHT"
+                                        RightAxisDivisor = 1000000
+                                        RightAxisLabelAddition = " Million"
+                                        Exit Select
+                                End Select
+                            Else
+                                Select Case chart_elementsYAxis(0).ToString().Trim().ToUpper()
+                                    Case "LEFT"
+                                        If LeftAxisDivisor < 1000 Then
+                                            LeftAxisDivisor = 1000
+                                            LeftAxisLabelAddition = " Thousand"
+                                        End If
+                                        Exit Select
+                                    Case "RIGHT"
+                                        If RightAxisDivisor < 1000 Then
+                                            RightAxisDivisor = 1000
+                                            RightAxisLabelAddition = " Thousand"
+                                        End If
+                                        Exit Select
+                                End Select
+                            End If
+                        End If
+                    Next
+
                     Dim rnd As Random = New Random(10)
 
                     For i = 0 To sc.Count() - 1
@@ -10531,6 +10710,40 @@ Public Class frmTechnology
                         Else
                             sc(i).YAxis = yaxis2
                         End If
+
+                        Select Case chart_elementsYAxis(0).ToString().Trim().ToUpper()
+                            Case "LEFT"
+                                If LeftAxisDivisor > 1 Then
+                                    sc(i) = Series.Divide(sc(i), LeftAxisDivisor)
+                                End If
+                                If Not yaxis1.Label.Text.Contains(LeftAxisLabelAddition) Then
+                                    yaxis1.Label.Text = yaxis1.Label.Text + LeftAxisLabelAddition
+                                End If
+
+                                sc(i).YAxis = yaxis1
+
+                                'If chartSeriesAutoScale(i) = False Then
+                                '    yaxis1.Minimum = 0
+                                'End If
+
+                                Exit Select
+                            Case "RIGHT"
+                                If RightAxisDivisor > 1 Then
+                                    sc(i) = Series.Divide(sc(i), RightAxisDivisor)
+                                End If
+
+                                If Not yaxis2.Label.Text.Contains(RightAxisLabelAddition) Then
+                                    yaxis2.Label.Text = yaxis2.Label.Text + RightAxisLabelAddition
+                                End If
+                                sc(i).YAxis = yaxis2
+
+                                'If chartSeriesAutoScale(i) = False Then
+                                '    yaxis2.Minimum = 0
+                                'End If
+
+                                Exit Select
+                        End Select
+
                         sc(i).DefaultElement.Color = Color.FromArgb(255, rnd.Next(255), rnd.Next(255), rnd.Next(255))
                         sc(i).DefaultElement.Marker.Type = i
                     Next
@@ -17414,11 +17627,12 @@ Public Class frmTechnology
                                     ElseIf dicReportIDType(drow("ReportID")) = "Excel" Then
                                         tsmi_SlideName = New ToolStripMenuItem(drSlide("SlideName").ToString.Trim.Replace("Slide", "WS"))
                                     End If
-                                    tsmi_SlideName.Tag = drSlide("SlideID").ToString.Trim
-                                    tsmi_SlideName.ToolTipText = GetObjectsName(dtSlideAndObjects, drSlide("SlideID").ToString.Trim)
-                                    tsmi_group.DropDownItems.Add(tsmi_SlideName)
-                                    AddHandler tsmi_SlideName.Click, AddressOf cmsSlideName_Click
-
+                                    If tsmi_SlideName IsNot Nothing Then
+                                        tsmi_SlideName.Tag = drSlide("SlideID").ToString.Trim
+                                        tsmi_SlideName.ToolTipText = GetObjectsName(dtSlideAndObjects, drSlide("SlideID").ToString.Trim)
+                                        tsmi_group.DropDownItems.Add(tsmi_SlideName)
+                                        AddHandler tsmi_SlideName.Click, AddressOf cmsSlideName_Click
+                                    End If
                                     If drSlide("SlideName").ToString.Contains(CType(tcTabControlHighStats.SelectedTabPage.Controls(0), XtraTabControl).SelectedTabPage.Name) Then
                                         If drow("ReportType").ToString.ToLower = "excel" Then
                                             tsmi_NewSlide.Enabled = False
@@ -20180,7 +20394,7 @@ Public Class frmTechnology
 
                 If Not dsExport2Excel Is Nothing AndAlso dsExport2Excel.Tables.Count > 0 Then
                     MergeTablesByPrefix_MergeMethod(dsExport2Excel)
-                    '       Dim mergedDS As DataSet = MergeTablesByPrefix(dsExport2Excel)
+                    'Dim mergedDS As DataSet = MergeTablesByPrefix(dsExport2Excel)
                     ' For Each dt As DataTable In mergedDS.Tables
                     For Each dt As DataTable In dsExport2Excel.Tables
                         If dt.IsValid() Then
@@ -24576,6 +24790,10 @@ Public Class frmTechnology
     Public dtPrdCalcEval As DataTable = Nothing
     Private syncInProgress As Boolean = False
     Private filterSyncInProgress As Boolean = False
+    Private EvaluateReport As Boolean = False
+    Private lstEvalRptImgStream As List(Of MemoryStream)
+    Private dicEvalRptGridImages As Dictionary(Of String, MemoryStream)
+    Private dicEvalRptChartImages As Dictionary(Of String, Bitmap)
 
     Structure Cell
         Public rowHandle As Integer
@@ -24750,6 +24968,17 @@ Public Class frmTechnology
 
     Private Sub btnApplyEval_Click(sender As Object, e As EventArgs) Handles btnApplyEval.Click
         'If tcHighEvaluate.SelectedTabPage.Text.ToLower = "time based" Then
+
+        EvaluateReport = False
+        If lstEvalRptImgStream IsNot Nothing Then
+            lstEvalRptImgStream.Clear()
+        End If
+        If dicEvalRptGridImages IsNot Nothing Then
+            dicEvalRptGridImages.Clear()
+        End If
+        If dicEvalRptChartImages IsNot Nothing Then
+            dicEvalRptChartImages.Clear()
+        End If
 
         If gvPrdCalcEval.RowCount < 2 Then
             XtraMessageBox.Show("At least two periods are required in the grid", "Period Calcuation", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -26395,6 +26624,7 @@ Public Class frmTechnology
     Private Sub cm_Chart_LaunchObjTimeKPI_Eval(sender As System.Object, e As System.EventArgs)
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info")
         Try
+            EvaluateReport = False
             Dim tech As String = _strNetwork
             Dim tsmi As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
             Dim kpi As String = tsmi.Tag
@@ -27324,7 +27554,7 @@ Public Class frmTechnology
         End Try
     End Sub
 
-    Private Sub AssignDataToHistogram_Eval(ByRef dt As DataTable, tech As String)
+    Private Sub AssignDataToHistogram_Eval(ByRef dt As DataTable, tech As String, Optional ByRef nc As Chart = Nothing)
         'get original timebased data as first chart
 
         Dim ds As DataSet = TechToDataSet(tech, "EvalTime")
@@ -27381,6 +27611,10 @@ Public Class frmTechnology
 
         'Assign data to all charts
         Dim ch As Chart = Nothing
+        If nc IsNot Nothing Then
+            ch = nc
+        End If
+
         Dim i As Integer
         Dim Y1axislabel As String
         Dim Y2axislabel As String
@@ -27443,12 +27677,13 @@ Public Class frmTechnology
                     chart_Eltype(0) = drow("chartElementsType").trim
                     chart_ElLineSize(0) = nZ(drow("LineSize").ToString.Trim, 3)
 
-                    Dim tc As XtraTabControl = tcHighEvaluate
-
-                    Dim tlpEvalHist As TableLayoutPanel = CType(tc.TabPages(GetTabPageIndex(tc, "Histogram")).Controls(0), TableLayoutPanel)
-                    Dim sccEvalHist As SplitContainerControl = CType(tlpEvalHist.Controls(0), SplitContainerControl)
-                    Dim flpCount As Integer = sccEvalHist.Panel1.Controls.Count
-                    ch = sccEvalHist.Panel1.Controls(flpCount - 1).Controls(cm_Chart_kpiname & "Histogram")
+                    If nc Is Nothing Then
+                        Dim tc As XtraTabControl = tcHighEvaluate
+                        Dim tlpEvalHist As TableLayoutPanel = CType(tc.TabPages(GetTabPageIndex(tc, "Histogram")).Controls(0), TableLayoutPanel)
+                        Dim sccEvalHist As SplitContainerControl = CType(tlpEvalHist.Controls(0), SplitContainerControl)
+                        Dim flpCount As Integer = sccEvalHist.Panel1.Controls.Count
+                        ch = sccEvalHist.Panel1.Controls(flpCount - 1).Controls(cm_Chart_kpiname & "Histogram")
+                    End If
 
                     SetChartXAxis(tech, objectscharted, ch)
 
@@ -27841,9 +28076,12 @@ Public Class frmTechnology
                     ReDim chart_YaxisScale(1)
                     j = 0
 
-                    Dim scc As SplitContainerControl = CType(ch.Parent.Parent.Parent, SplitContainerControl)
-                    'CType(tp.Parent, XtraTabControl).SelectedTabPage = tp
-                    scc.Panel1.Controls(scc.Panel1.Controls.Count - 1).Controls(ch.Name).Focus()
+                    If nc Is Nothing Then
+                        Dim scc As SplitContainerControl = CType(ch.Parent.Parent.Parent, SplitContainerControl)
+                        'CType(tp.Parent, XtraTabControl).SelectedTabPage = tp
+                        scc.Panel1.Controls(scc.Panel1.Controls.Count - 1).Controls(ch.Name).Focus()
+                    End If
+
                 End If
 
                 Charts_ResizeWidth_Eval()
@@ -27880,6 +28118,13 @@ Public Class frmTechnology
         ch.XAxis.Markers.Add(shadeEvaluation)
 
         ch.RefreshChart()
+
+        'Store chart bitmap image stream to directory
+        If EvaluateReport = True Then
+            If Not dicEvalRptChartImages.ContainsKey(cm_Chart_kpiname & "_Hist") Then
+                dicEvalRptChartImages.Add(cm_Chart_kpiname & "_Hist", ch.GetChartBitmap)
+            End If
+        End If
     End Sub
 
     Public Sub HideChartScaleIfNoDataEval(ByRef ch As Chart, ByRef dtData As DataTable)
@@ -28738,6 +28983,325 @@ Public Class frmTechnology
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
         End Try
     End Sub
+
+#End Region
+
+#Region "Evaluate Report"
+
+    Private Sub btnEvalReport_Click(sender As Object, e As EventArgs) Handles btnEvalReport.Click
+        Try
+            EvaluateReport = True
+            evalHistogramChartCntr = 0
+            lstTimeBasedKPIEval.Clear()
+
+            lstEvalRptImgStream = New List(Of MemoryStream)
+            dicEvalRptGridImages = New Dictionary(Of String, MemoryStream)
+            dicEvalRptChartImages = New Dictionary(Of String, Bitmap)
+            Dim objEvalRptMtd As New clsEvalReportMethods()
+
+            Dim tempFileFolder As String = GetUserDataPath() & "\Data\EvalReport"
+            Dim templateFilePath As String = GetUserDataPath() & "\Data\template.pptx"
+            Dim reportFilePath As String = GetUserDataPath() & "\Data\EvalReport" & "_" & Format(Now(), "yyyyMMdd_HHmmss") & ".pptx"
+
+            Me.Cursor = Cursors.WaitCursor
+            Application.DoEvents()
+
+            Dim selectedObjs As String = tvObjectsTreeEval.GetChecked2String(Me._strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
+            selectedObjs = selectedObjs.Replace("'", "''").Trim
+            Dim filterPeriodstring As String = GetFilterPeriodEval(cmbPredefinedFilterEval, dateNavigatorEval)
+            Dim filterParamString As String = ""
+
+            If tvObjTreeFilterTempEval.Nodes.Count > 0 Then
+                filterParamString = GetParamFilterStringTemplate("", "eval")
+            End If
+
+            Dim sqlParam As String = Nothing
+            Dim connstring As String = Nothing
+            Dim parray()() As String = {
+                New String() {"@username", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)},
+                New String() {"@kpiset", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
+                New String() {"@Objects", Chr(39) & selectedObjs & Chr(39)},
+                New String() {"@TargetType", Chr(39) & cmbObjectTreeEval.SelectedItem.ToString & Chr(39)},
+                New String() {"@ObjectFilter", Chr(39) & filterParamString.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
+            }
+
+            sqlParam = GetSQL(8826, parray)(1)
+            connstring = GetSQL(8826, parray)(0)
+            Dim dt = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+
+            If dt IsNot Nothing Then
+                If dt.Rows.Count > 0 Then
+
+                    sqlParam = Nothing
+                    connstring = Nothing
+                    parray = Nothing
+                    parray = {
+                        New String() {"@UserName", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)}
+                    }
+
+                    sqlParam = GetSQL(8827, parray)(1)
+                    connstring = GetSQL(8827, parray)(0)
+                    Dim dtGrid = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+
+                    'load banded grid into a separate window
+                    '****************************************
+                    WaitScreen.ShowWaitScreen("Loading Change KPI Data")
+
+                    Dim obj As New frmEvalRptChangeKPI()
+                    Dim gc = obj.LoadChangeKpiGridData(dtGrid)
+                    'Dim gc = LoadChangeKpiGridData(dtGrid)
+                    Dim ms As MemoryStream = objEvalRptMtd.ExportGridToImage(gc)
+                    dicEvalRptGridImages.Add("ChangeKPITable", ms)
+
+                    For Each drKPI As DataRow In dtGrid.Rows
+
+                        WaitScreen.ShowWaitScreen("Loading Per KPI Change Data")
+
+                        '******* Load Per KPI Calc Data *******
+                        Dim dtKPI As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of String)("KPIName") = drKPI("KPIName").ToString).CopyToDataTable
+                        'Dim gcKPI = obj.LoadSingleKpiGridData(dtKPI)
+                        Dim gcKPI = obj.LoadSingleKpiGridData(dtKPI)
+                        Dim msKPI As MemoryStream = objEvalRptMtd.ExportGridToImage(gcKPI)
+                        dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_Trend", msKPI)
+
+                        WaitScreen.ShowWaitScreen("Loading Top X Rows Per KPI Change")
+
+                        '******* Load Top 20 Kpi Rows *******
+                        sqlParam = Nothing
+                        connstring = Nothing
+                        parray = Nothing
+                        parray = {
+                            New String() {"@KPISetId", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
+                            New String() {"@UserName", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)},
+                            New String() {"@KPIName", Chr(39) & drKPI("KPIName").ToString & Chr(39)}
+                        }
+
+                        sqlParam = GetSQL(8828, parray)(1)
+                        connstring = GetSQL(8828, parray)(0)
+                        Dim dtKPITopX = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+                        Dim gcTopX = obj.LoadSingleKpiTopXGridData(dtKPITopX)
+
+                        Dim msKpiTopX As MemoryStream = objEvalRptMtd.ExportGridToImage(gcTopX)
+                        dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_TopX", msKpiTopX)
+                    Next
+
+                    objEvalRptMtd.dicEvalRptGridImages = dicEvalRptGridImages
+
+                    'Loading Histogram Charts For KPIs
+                    '****************************************
+                    For Each drKPI As DataRow In dtGrid.Rows
+                        WaitScreen.ShowWaitScreen("Loading Histogram Chart Per KPI Change")
+
+                        Dim chName As String = "Histogram" & drKPI("KPIName").ToString
+                        LaunchHistogramChart_EvalReport(chName, drKPI("KPIName").ToString)
+                    Next
+
+                    WaitScreen.ShowWaitScreen("Loading Chart/Grid Images On Slides")
+
+                    objEvalRptMtd.dicEvalRptChartImages = dicEvalRptChartImages
+                    objEvalRptMtd.CreateEvaluateReportFromTemplate(templateFilePath, reportFilePath)
+
+                End If
+            End If
+
+            WaitScreen.ShowWaitScreen("PPT File Created Successfully")
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        Finally
+            Me.Cursor = Cursors.Default
+            WaitScreen.CloseWaitScreen()
+            Application.DoEvents()
+        End Try
+    End Sub
+
+    Public Function ConvertGridToBitmap(ByRef grid As DevExpress.XtraGrid.GridControl) As Bitmap
+        ' Create a bitmap with the same width and height as the grid
+        Dim bmp As New Bitmap(grid.Width, grid.Height)
+
+        ' Draw the grid control into the bitmap
+        ' Note: This only captures the visible area of the grid
+        grid.DrawToBitmap(bmp, New Rectangle(0, 0, grid.Width, grid.Height))
+
+        Return bmp
+    End Function
+
+    Private Function CropBitmap(source As Bitmap, cropRect As Rectangle) As Bitmap
+        ' Create a new target bitmap with the crop dimensions
+        Dim target As New Bitmap(cropRect.Width, cropRect.Height)
+
+        Using g As Graphics = Graphics.FromImage(target)
+            ' Set high quality settings to keep text clear
+            g.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBicubic
+            g.SmoothingMode = Drawing2D.SmoothingMode.HighQuality
+            g.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighQuality
+
+            ' Draw only the specified area (cropRect) from the source to the target (0, 0)
+            g.DrawImage(source, New Rectangle(0, 0, target.Width, target.Height), cropRect, GraphicsUnit.Pixel)
+        End Using
+
+        Return target
+    End Function
+
+    Private Sub LaunchHistogramChart_EvalReport(chName As String, kpiName As String)
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info")
+        Try
+            If Not dsEval_Histogram Is Nothing Then
+                dsEval_Histogram.Dispose()
+                dsEval_Histogram = Nothing
+            End If
+
+            Dim nc = New Chart
+            nc.Name = chName
+            nc.Width = 1000
+            nc.Height = 480
+
+            'Chart Default Properties
+            nc.DefaultElement.Marker.Visible = False
+            nc.LegendBox.Orientation = dotnetCHARTING.WinForms.Orientation.Bottom
+            nc.LegendBox.DefaultEntry.Value = ""
+            nc.LegendBox.DefaultEntry.Hotspot.ToolTip = "%Name"
+            nc.LegendBox.Visible = Not tsmi_ChartHideLegend.Checked
+            nc.LegendBox.DefaultCorner = BoxCorner.Round
+
+            nc.XAxis.TickLabelMode = TickLabelMode.Angled
+            nc.XAxis.TickLabelAngle = 45
+            nc.XAxis.Minimum = 0
+            nc.XAxis.Maximum = 0
+
+            nc.XAxis.Scale = dotnetCHARTING.WinForms.Scale.Time
+            nc.XAxis.TimeScaleLabels.Mode = TimeScaleLabelMode.Smart
+
+            nc.ToolTip.InitialDelay = 1
+            nc.ChartAreaLayout.Mode = ChartAreaLayoutMode.Horizontal
+            nc.DefaultSeries.EmptyElement.Mode = EmptyElementMode.None
+            nc.CleanupPeriod = 1
+
+            nc.TitleBox.Position = TitleBoxPosition.Full
+            nc.TitleBox.CornerTopLeft = BoxCorner.Round
+            nc.TitleBox.CornerTopRight = BoxCorner.Round
+            nc.TitleBox.Label.AutoWrap = True
+            If Not nc Is Nothing Then
+                nc.Tag = _strNetwork
+                nc.Application = "DY4Zd/25XLMFNDYTc7eMQ7RCQfp58yVWNbgx/x0cDkruA0S6d3O/f2qh0jotTM3L"
+            End If
+
+            cm_Chart_ObjectCompareOrMapKPI = "tsmi_EvalHistogramOfCells"
+            ProcessStatsObjectTime_EvalReport(_strNetwork.ToUpper, kpiName, nc)
+
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        End Try
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", Network & " " & DateDiff(DateInterval.Second, timer, Now()) & "s")
+    End Sub
+
+    Private Sub ProcessStatsObjectTime_EvalReport(tech As String, kpiName As String, ByRef nc As Chart)
+        Try
+            Dim connstring As String = Nothing
+            Dim aggr_from As String = ""
+            'aggr_from = tcTabControlHighStats.SelectedTabPage.Text
+
+            Dim sql_all As Specialized.StringCollection = New Specialized.StringCollection()
+            Dim sql_crosstabobj As New List(Of String)
+            Dim sql_obj As New List(Of String)
+            Dim sql_tables As String
+            'get list of tables
+
+            'get KPI sql
+            Using conn_el As New Odbc.OdbcConnection(connStrIOSServer)
+                conn_el.ConnectionTimeout = 5
+                conn_el.Open()
+
+                'For Each ChartKpi As String In lstTimeBasedKPIEval
+
+                cm_Chart_kpiname = kpiName
+
+                sql_tables = clsSQLCommands.GetProcessStatsQuery(tech, kpiName)
+
+                Using comm_Element As New Odbc.OdbcCommand(sql_tables, conn_el)
+                    'Dim dr As Odbc.OdbcDataReader = comm_Element.ExecuteReader
+                    Dim sourcetable As String = ""
+                    Dim aliastable As String = ""
+                    Dim joinobjects As String = ""
+                    Dim lst_sqlCounterTypes As New List(Of String)
+
+                    Dim lstOfSelectedCounterTypes As New List(Of String)
+                    For Each srcbtn As SourceButton In flpSourceBtn_GetChecked(_strNetwork, flpCounterTypeStats)
+                        lstOfSelectedCounterTypes.Add(srcbtn.SourceButtonText)
+                    Next
+
+                    Using dr As Odbc.OdbcDataReader = comm_Element.ExecuteReader
+                        While dr.Read
+                            If lstOfSelectedCounterTypes.Contains(dr("Object").ToString.ToUpper) Then
+                                'getting threshold and evaluation period sql
+                                sourcetable = nZ(dr.GetValue(0).ToString.Trim, "")
+                                joinobjects = nZ(dr.GetValue(1).ToString.Trim, "")
+                                sql_crosstabobj.Add(nZ(dr.Item("CrossTabObj"), "").ToString.Trim)
+                                sql_obj.Add(kpiName)
+                                aggr_from = nZ(dr.GetValue(3).ToString.Trim, "")
+                                sql_all.Add(SQL_Construct_ObjectTime_Eval(aggr_from, sourcetable, kpiName, "Threshold") & ";" & SQL_Construct_ObjectTime_Eval(aggr_from, sourcetable, kpiName, "Evaluation"))
+                                lst_sqlCounterTypes.Add(dr("Object").ToString)
+                            End If
+                        End While
+                    End Using
+                End Using
+                'Next
+            End Using
+            'loop through all tables
+
+            If sql_all.Count = 0 Then
+                Exit Sub
+            End If
+
+            connstring = connectionString
+
+            dsEval_Histogram = New DataSet()
+            ds_eval_hist_list.Clear()
+
+            '*****************************
+            For Each sql_to_fire As String In sql_all
+                Dim ds As DataSet = GetData(sql_to_fire, cm_Chart_kpiname)
+
+                Dim dtEvalHistChart = New DataTable
+                Dim dt_merge As DataTable = Nothing
+
+                'For Each ds As DataSet In ds_eval_hist_list
+                If ds.DataSetName.Contains(cm_Chart_kpiname) Then
+                    dt_merge = ds.Tables(0).Copy
+                    dtEvalHistChart.Merge(dt_merge)
+
+                    dt_merge = ds.Tables(1).Copy
+                    dtEvalHistChart.Merge(dt_merge)
+
+                    dtEvalHistChart.TableName = cm_Chart_kpiname
+                End If
+                'Next
+
+                AssignDataToHistogram_Eval(dtEvalHistChart, tech, nc)
+            Next
+
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & "-" & ex.StackTrace)
+        End Try
+    End Sub
+
+    Public Function GetData(sql, kpiName) As DataSet
+        Try
+            Dim ds As New System.Data.DataSet
+            Using cnQODBC As New System.Data.Odbc.OdbcConnection(connStrIOSServer)
+                cnQODBC.ConnectionTimeout = 300
+                cnQODBC.Open()
+                Using daQODBC As New System.Data.Odbc.OdbcDataAdapter(sql, cnQODBC)
+                    daQODBC.SelectCommand.CommandTimeout = 3600
+                    daQODBC.Fill(ds)
+                    ds.DataSetName = kpiName
+                End Using
+            End Using
+            Return ds
+        Catch
+        End Try
+        Return Nothing
+    End Function
 
 #End Region
 

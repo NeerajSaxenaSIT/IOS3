@@ -729,18 +729,21 @@ Partial Class frmTechnology
         Me.xtpEvaluate = New DevExpress.XtraTab.XtraTabPage()
         Me.TableLayoutPanel22 = New System.Windows.Forms.TableLayoutPanel()
         Me.tlpCounterTypeEval = New System.Windows.Forms.TableLayoutPanel()
-        Me.flpCounterTypeEval = New System.Windows.Forms.FlowLayoutPanel()
         Me.btnApplyEval = New DevExpress.XtraEditors.SimpleButton()
         Me.LabelControl9 = New DevExpress.XtraEditors.LabelControl()
         Me.lblObjTreeStatusEval = New DevExpress.XtraEditors.LabelControl()
         Me.ucProgPnlEval = New IOS.Library.ucProgressPanel()
         Me.LabelControl10 = New DevExpress.XtraEditors.LabelControl()
+        Me.tlpEvalShowObjects = New System.Windows.Forms.TableLayoutPanel()
+        Me.flpCounterTypeEval = New System.Windows.Forms.FlowLayoutPanel()
+        Me.btnEvalReport = New DevExpress.XtraEditors.SimpleButton()
         Me.splitCCEval = New DevExpress.XtraEditors.SplitContainerControl()
         Me.AccCtrlEval = New DevExpress.XtraBars.Navigation.AccordionControl()
         Me.accObjectTreeEval = New DevExpress.XtraBars.Navigation.AccordionContentContainer()
         Me.tlpObjectTreeEval = New System.Windows.Forms.TableLayoutPanel()
         Me.accObjTreeFilterEval = New DevExpress.XtraBars.Navigation.AccordionControl()
         Me.accObjFilterEval = New DevExpress.XtraBars.Navigation.AccordionContentContainer()
+        Me.tlpObjTreeFilterEval = New System.Windows.Forms.TableLayoutPanel()
         Me.grpObjTreeFilterEval = New DevExpress.XtraEditors.GroupControl()
         Me.TableLayoutPanel29 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel30 = New System.Windows.Forms.TableLayoutPanel()
@@ -751,9 +754,12 @@ Partial Class frmTechnology
         Me.TableLayoutPanel31 = New System.Windows.Forms.TableLayoutPanel()
         Me.txtFilterSearchEval = New DevExpress.XtraEditors.ButtonEdit()
         Me.LabelControl30 = New DevExpress.XtraEditors.LabelControl()
-        Me.cmbFilterTemplateEval = New DevExpress.XtraEditors.ComboBoxEdit()
         Me.gcParamFiltersEval = New DevExpress.XtraGrid.GridControl()
         Me.gvParamFiltersEval = New DevExpress.XtraGrid.Views.Grid.GridView()
+        Me.TableLayoutPanel43 = New System.Windows.Forms.TableLayoutPanel()
+        Me.tvObjTreeFilterTempEval = New DevExpress.XtraTreeList.TreeList()
+        Me.LabelControl14 = New DevExpress.XtraEditors.LabelControl()
+        Me.cmbFilterTemplateEval = New DevExpress.XtraEditors.ComboBoxEdit()
         Me.aceObjTreeFilterEval = New DevExpress.XtraBars.Navigation.AccordionControlElement()
         Me.tlpFilterTreeEval = New System.Windows.Forms.TableLayoutPanel()
         Me.LabelControl16 = New DevExpress.XtraEditors.LabelControl()
@@ -901,8 +907,8 @@ Partial Class frmTechnology
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmi_ShowHighlighted = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmi_EvalTBExportRawCSV = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmi_EvalTBExportToExcel = New System.Windows.Forms.ToolStripMenuItem()
         Me.gvEvalTimeBased = New DevExpress.XtraGrid.Views.Grid.GridView()
         Me.ToolTipCtrlEval = New DevExpress.Utils.ToolTipController(Me.components)
@@ -950,6 +956,7 @@ Partial Class frmTechnology
         Me.tsmi_TopX_AllowCellCopy = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmi_TopX_CopySelectionWOHeader = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmi_TopX_CopySelectionWithHeader = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmi_TopX_CopyToTag = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmi_ExportToKML = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripSeparator()
@@ -981,10 +988,6 @@ Partial Class frmTechnology
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolTipCtrlParamFilters = New DevExpress.Utils.ToolTipController(Me.components)
-        Me.tlpObjTreeFilterEval = New System.Windows.Forms.TableLayoutPanel()
-        Me.TableLayoutPanel43 = New System.Windows.Forms.TableLayoutPanel()
-        Me.LabelControl14 = New DevExpress.XtraEditors.LabelControl()
-        Me.tvObjTreeFilterTempEval = New DevExpress.XtraTreeList.TreeList()
         CType(Me.xtcTechnology, System.ComponentModel.ISupportInitialize).BeginInit
         Me.xtcTechnology.SuspendLayout
         Me.xtpStats.SuspendLayout
@@ -1233,6 +1236,7 @@ Partial Class frmTechnology
         Me.xtpEvaluate.SuspendLayout
         Me.TableLayoutPanel22.SuspendLayout
         Me.tlpCounterTypeEval.SuspendLayout
+        Me.tlpEvalShowObjects.SuspendLayout
         CType(Me.splitCCEval, System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.splitCCEval.Panel1, System.ComponentModel.ISupportInitialize).BeginInit
         Me.splitCCEval.Panel1.SuspendLayout
@@ -1246,6 +1250,7 @@ Partial Class frmTechnology
         CType(Me.accObjTreeFilterEval, System.ComponentModel.ISupportInitialize).BeginInit
         Me.accObjTreeFilterEval.SuspendLayout
         Me.accObjFilterEval.SuspendLayout
+        Me.tlpObjTreeFilterEval.SuspendLayout
         CType(Me.grpObjTreeFilterEval, System.ComponentModel.ISupportInitialize).BeginInit
         Me.grpObjTreeFilterEval.SuspendLayout
         Me.TableLayoutPanel29.SuspendLayout
@@ -1253,9 +1258,11 @@ Partial Class frmTechnology
         CType(Me.lbFilterParamListEval, System.ComponentModel.ISupportInitialize).BeginInit
         Me.TableLayoutPanel31.SuspendLayout
         CType(Me.txtFilterSearchEval.Properties, System.ComponentModel.ISupportInitialize).BeginInit
-        CType(Me.cmbFilterTemplateEval.Properties, System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.gcParamFiltersEval, System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.gvParamFiltersEval, System.ComponentModel.ISupportInitialize).BeginInit
+        Me.TableLayoutPanel43.SuspendLayout
+        CType(Me.tvObjTreeFilterTempEval, System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.cmbFilterTemplateEval.Properties, System.ComponentModel.ISupportInitialize).BeginInit
         Me.tlpFilterTreeEval.SuspendLayout
         CType(Me.txtFilterTreeEval.Properties, System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.tvObjectsTreeEval, System.ComponentModel.ISupportInitialize).BeginInit
@@ -1372,9 +1379,6 @@ Partial Class frmTechnology
         Me.cmTopX.SuspendLayout
         Me.cmTopXChart.SuspendLayout
         CType(Me.documentViewerRibbonController1, System.ComponentModel.ISupportInitialize).BeginInit
-        Me.tlpObjTreeFilterEval.SuspendLayout
-        Me.TableLayoutPanel43.SuspendLayout
-        CType(Me.tvObjTreeFilterTempEval, System.ComponentModel.ISupportInitialize).BeginInit
         Me.SuspendLayout
         '
         'xtcTechnology
@@ -1424,7 +1428,7 @@ Partial Class frmTechnology
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
-        Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 306.0!))
+        Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 312.0!))
         Me.tlpCounterTypeStats.Controls.Add(Me.btnApplyStats, 2, 0)
         Me.tlpCounterTypeStats.Controls.Add(Me.seChartsPerRowStats, 8, 0)
         Me.tlpCounterTypeStats.Controls.Add(Me.lblObjectsStats, 0, 0)
@@ -1459,7 +1463,7 @@ Partial Class frmTechnology
         '
         Me.seChartsPerRowStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.seChartsPerRowStats.EditValue = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.seChartsPerRowStats.Location = New System.Drawing.Point(775, 4)
+        Me.seChartsPerRowStats.Location = New System.Drawing.Point(769, 4)
         Me.seChartsPerRowStats.Name = "seChartsPerRowStats"
         Me.seChartsPerRowStats.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.seChartsPerRowStats.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
@@ -1502,7 +1506,7 @@ Partial Class frmTechnology
         Me.lblChartHeightStats.Appearance.Options.UseTextOptions = True
         Me.lblChartHeightStats.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.lblChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblChartHeightStats.Location = New System.Drawing.Point(816, 4)
+        Me.lblChartHeightStats.Location = New System.Drawing.Point(810, 4)
         Me.lblChartHeightStats.LookAndFeel.SkinName = "Office 2013"
         Me.lblChartHeightStats.LookAndFeel.UseDefaultLookAndFeel = False
         Me.lblChartHeightStats.Name = "lblChartHeightStats"
@@ -1533,7 +1537,7 @@ Partial Class frmTechnology
         Me.lblChartsPerRow.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.lblChartsPerRow.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
         Me.lblChartsPerRow.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblChartsPerRow.Location = New System.Drawing.Point(689, 4)
+        Me.lblChartsPerRow.Location = New System.Drawing.Point(683, 4)
         Me.lblChartsPerRow.LookAndFeel.SkinName = "Office 2013"
         Me.lblChartsPerRow.LookAndFeel.UseDefaultLookAndFeel = False
         Me.lblChartsPerRow.Name = "lblChartsPerRow"
@@ -1548,27 +1552,27 @@ Partial Class frmTechnology
         Me.flpCounterTypeStats.Location = New System.Drawing.Point(356, 1)
         Me.flpCounterTypeStats.Margin = New System.Windows.Forms.Padding(0)
         Me.flpCounterTypeStats.Name = "flpCounterTypeStats"
-        Me.flpCounterTypeStats.Size = New System.Drawing.Size(278, 28)
+        Me.flpCounterTypeStats.Size = New System.Drawing.Size(272, 28)
         Me.flpCounterTypeStats.TabIndex = 6
         '
         'tbChartHeightStats
         '
         Me.tbChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbChartHeightStats.EditValue = 480
-        Me.tbChartHeightStats.Location = New System.Drawing.Point(892, 4)
+        Me.tbChartHeightStats.Location = New System.Drawing.Point(886, 4)
         Me.tbChartHeightStats.Name = "tbChartHeightStats"
         Me.tbChartHeightStats.Properties.LabelAppearance.Options.UseTextOptions = True
         Me.tbChartHeightStats.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.tbChartHeightStats.Properties.Maximum = 1000
         Me.tbChartHeightStats.Properties.Minimum = 100
-        Me.tbChartHeightStats.Size = New System.Drawing.Size(300, 22)
+        Me.tbChartHeightStats.Size = New System.Drawing.Size(306, 22)
         Me.tbChartHeightStats.TabIndex = 7
         Me.tbChartHeightStats.Value = 480
         '
         'btnExportStats
         '
         Me.btnExportStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btnExportStats.Location = New System.Drawing.Point(637, 3)
+        Me.btnExportStats.Location = New System.Drawing.Point(631, 3)
         Me.btnExportStats.Margin = New System.Windows.Forms.Padding(2)
         Me.btnExportStats.Name = "btnExportStats"
         Me.btnExportStats.Size = New System.Drawing.Size(46, 24)
@@ -3112,11 +3116,11 @@ Partial Class frmTechnology
         'cmbFilterTemplateStats
         '
         Me.cmbFilterTemplateStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.cmbFilterTemplateStats.Location = New System.Drawing.Point(86, 3)
+        Me.cmbFilterTemplateStats.Location = New System.Drawing.Point(88, 3)
         Me.cmbFilterTemplateStats.MenuManager = Me.ribbonControl
         Me.cmbFilterTemplateStats.Name = "cmbFilterTemplateStats"
         Me.cmbFilterTemplateStats.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
-        Me.cmbFilterTemplateStats.Size = New System.Drawing.Size(127, 20)
+        Me.cmbFilterTemplateStats.Size = New System.Drawing.Size(125, 20)
         Me.cmbFilterTemplateStats.TabIndex = 2
         '
         'LabelControl25
@@ -3125,7 +3129,7 @@ Partial Class frmTechnology
         Me.LabelControl25.Location = New System.Drawing.Point(3, 3)
         Me.LabelControl25.Name = "LabelControl25"
         Me.LabelControl25.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.LabelControl25.Size = New System.Drawing.Size(77, 21)
+        Me.LabelControl25.Size = New System.Drawing.Size(79, 21)
         Me.LabelControl25.TabIndex = 0
         Me.LabelControl25.Text = "Select Template"
         '
@@ -5577,7 +5581,7 @@ Partial Class frmTechnology
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
-        Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 306.0!))
+        Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 312.0!))
         Me.tlpCounterTypeTopX.Controls.Add(Me.tbChartHeightTopX, 8, 0)
         Me.tlpCounterTypeTopX.Controls.Add(Me.btnApplyTopX, 2, 0)
         Me.tlpCounterTypeTopX.Controls.Add(Me.LabelTopX1, 0, 0)
@@ -5600,13 +5604,13 @@ Partial Class frmTechnology
         '
         Me.tbChartHeightTopX.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbChartHeightTopX.EditValue = 480
-        Me.tbChartHeightTopX.Location = New System.Drawing.Point(892, 4)
+        Me.tbChartHeightTopX.Location = New System.Drawing.Point(886, 4)
         Me.tbChartHeightTopX.Name = "tbChartHeightTopX"
         Me.tbChartHeightTopX.Properties.LabelAppearance.Options.UseTextOptions = True
         Me.tbChartHeightTopX.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.tbChartHeightTopX.Properties.Maximum = 1000
         Me.tbChartHeightTopX.Properties.Minimum = 100
-        Me.tbChartHeightTopX.Size = New System.Drawing.Size(300, 22)
+        Me.tbChartHeightTopX.Size = New System.Drawing.Size(306, 22)
         Me.tbChartHeightTopX.TabIndex = 10
         Me.tbChartHeightTopX.Value = 480
         '
@@ -5665,7 +5669,7 @@ Partial Class frmTechnology
         Me.flpCounterTypeTopX.Location = New System.Drawing.Point(356, 1)
         Me.flpCounterTypeTopX.Margin = New System.Windows.Forms.Padding(0)
         Me.flpCounterTypeTopX.Name = "flpCounterTypeTopX"
-        Me.flpCounterTypeTopX.Size = New System.Drawing.Size(355, 28)
+        Me.flpCounterTypeTopX.Size = New System.Drawing.Size(349, 28)
         Me.flpCounterTypeTopX.TabIndex = 7
         '
         'ucProgPnlTopX
@@ -5681,7 +5685,7 @@ Partial Class frmTechnology
         'tglDataGridTopX
         '
         Me.tglDataGridTopX.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tglDataGridTopX.Location = New System.Drawing.Point(712, 1)
+        Me.tglDataGridTopX.Location = New System.Drawing.Point(706, 1)
         Me.tglDataGridTopX.LookAndFeel.SkinName = "McSkin"
         Me.tglDataGridTopX.LookAndFeel.UseDefaultLookAndFeel = False
         Me.tglDataGridTopX.Margin = New System.Windows.Forms.Padding(0)
@@ -5694,7 +5698,7 @@ Partial Class frmTechnology
         'LabelControl15
         '
         Me.LabelControl15.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LabelControl15.Location = New System.Drawing.Point(816, 4)
+        Me.LabelControl15.Location = New System.Drawing.Point(810, 4)
         Me.LabelControl15.Name = "LabelControl15"
         Me.LabelControl15.Padding = New System.Windows.Forms.Padding(4, 0, 0, 0)
         Me.LabelControl15.Size = New System.Drawing.Size(69, 22)
@@ -7814,12 +7818,12 @@ Partial Class frmTechnology
         Me.tlpCounterTypeEval.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.tlpCounterTypeEval.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
         Me.tlpCounterTypeEval.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tlpCounterTypeEval.Controls.Add(Me.flpCounterTypeEval, 5, 0)
         Me.tlpCounterTypeEval.Controls.Add(Me.btnApplyEval, 2, 0)
         Me.tlpCounterTypeEval.Controls.Add(Me.LabelControl9, 0, 0)
         Me.tlpCounterTypeEval.Controls.Add(Me.lblObjTreeStatusEval, 1, 0)
         Me.tlpCounterTypeEval.Controls.Add(Me.ucProgPnlEval, 3, 0)
         Me.tlpCounterTypeEval.Controls.Add(Me.LabelControl10, 4, 0)
+        Me.tlpCounterTypeEval.Controls.Add(Me.tlpEvalShowObjects, 5, 0)
         Me.tlpCounterTypeEval.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tlpCounterTypeEval.Location = New System.Drawing.Point(0, 0)
         Me.tlpCounterTypeEval.Margin = New System.Windows.Forms.Padding(0)
@@ -7828,17 +7832,6 @@ Partial Class frmTechnology
         Me.tlpCounterTypeEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.tlpCounterTypeEval.Size = New System.Drawing.Size(1196, 30)
         Me.tlpCounterTypeEval.TabIndex = 1
-        '
-        'flpCounterTypeEval
-        '
-        Me.flpCounterTypeEval.AutoScroll = True
-        Me.flpCounterTypeEval.BackColor = System.Drawing.Color.Transparent
-        Me.flpCounterTypeEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.flpCounterTypeEval.Location = New System.Drawing.Point(356, 1)
-        Me.flpCounterTypeEval.Margin = New System.Windows.Forms.Padding(0)
-        Me.flpCounterTypeEval.Name = "flpCounterTypeEval"
-        Me.flpCounterTypeEval.Size = New System.Drawing.Size(839, 28)
-        Me.flpCounterTypeEval.TabIndex = 8
         '
         'btnApplyEval
         '
@@ -7898,6 +7891,43 @@ Partial Class frmTechnology
         Me.LabelControl10.Size = New System.Drawing.Size(74, 22)
         Me.LabelControl10.TabIndex = 4
         Me.LabelControl10.Text = "Show Objects"
+        '
+        'tlpEvalShowObjects
+        '
+        Me.tlpEvalShowObjects.ColumnCount = 2
+        Me.tlpEvalShowObjects.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.tlpEvalShowObjects.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
+        Me.tlpEvalShowObjects.Controls.Add(Me.flpCounterTypeEval, 0, 0)
+        Me.tlpEvalShowObjects.Controls.Add(Me.btnEvalReport, 1, 0)
+        Me.tlpEvalShowObjects.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tlpEvalShowObjects.Location = New System.Drawing.Point(356, 1)
+        Me.tlpEvalShowObjects.Margin = New System.Windows.Forms.Padding(0)
+        Me.tlpEvalShowObjects.Name = "tlpEvalShowObjects"
+        Me.tlpEvalShowObjects.RowCount = 1
+        Me.tlpEvalShowObjects.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.tlpEvalShowObjects.Size = New System.Drawing.Size(839, 28)
+        Me.tlpEvalShowObjects.TabIndex = 5
+        '
+        'flpCounterTypeEval
+        '
+        Me.flpCounterTypeEval.AutoScroll = True
+        Me.flpCounterTypeEval.BackColor = System.Drawing.Color.Transparent
+        Me.flpCounterTypeEval.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.flpCounterTypeEval.Location = New System.Drawing.Point(0, 0)
+        Me.flpCounterTypeEval.Margin = New System.Windows.Forms.Padding(0)
+        Me.flpCounterTypeEval.Name = "flpCounterTypeEval"
+        Me.flpCounterTypeEval.Size = New System.Drawing.Size(739, 28)
+        Me.flpCounterTypeEval.TabIndex = 8
+        '
+        'btnEvalReport
+        '
+        Me.btnEvalReport.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btnEvalReport.Location = New System.Drawing.Point(741, 2)
+        Me.btnEvalReport.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnEvalReport.Name = "btnEvalReport"
+        Me.btnEvalReport.Size = New System.Drawing.Size(96, 24)
+        Me.btnEvalReport.TabIndex = 9
+        Me.btnEvalReport.Text = "Report"
         '
         'splitCCEval
         '
@@ -7993,6 +8023,21 @@ Partial Class frmTechnology
         Me.accObjFilterEval.Name = "accObjFilterEval"
         Me.accObjFilterEval.Size = New System.Drawing.Size(222, 605)
         Me.accObjFilterEval.TabIndex = 1
+        '
+        'tlpObjTreeFilterEval
+        '
+        Me.tlpObjTreeFilterEval.ColumnCount = 1
+        Me.tlpObjTreeFilterEval.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.tlpObjTreeFilterEval.Controls.Add(Me.grpObjTreeFilterEval, 0, 1)
+        Me.tlpObjTreeFilterEval.Controls.Add(Me.TableLayoutPanel43, 0, 0)
+        Me.tlpObjTreeFilterEval.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tlpObjTreeFilterEval.Location = New System.Drawing.Point(0, 0)
+        Me.tlpObjTreeFilterEval.Name = "tlpObjTreeFilterEval"
+        Me.tlpObjTreeFilterEval.RowCount = 2
+        Me.tlpObjTreeFilterEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
+        Me.tlpObjTreeFilterEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
+        Me.tlpObjTreeFilterEval.Size = New System.Drawing.Size(222, 605)
+        Me.tlpObjTreeFilterEval.TabIndex = 2
         '
         'grpObjTreeFilterEval
         '
@@ -8113,16 +8158,6 @@ Partial Class frmTechnology
         Me.LabelControl30.TabIndex = 1
         Me.LabelControl30.Text = "Search"
         '
-        'cmbFilterTemplateEval
-        '
-        Me.cmbFilterTemplateEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.cmbFilterTemplateEval.Location = New System.Drawing.Point(88, 3)
-        Me.cmbFilterTemplateEval.MenuManager = Me.ribbonControl
-        Me.cmbFilterTemplateEval.Name = "cmbFilterTemplateEval"
-        Me.cmbFilterTemplateEval.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
-        Me.cmbFilterTemplateEval.Size = New System.Drawing.Size(125, 20)
-        Me.cmbFilterTemplateEval.TabIndex = 2
-        '
         'gcParamFiltersEval
         '
         Me.gcParamFiltersEval.AllowDrop = True
@@ -8148,6 +8183,89 @@ Partial Class frmTechnology
         Me.gvParamFiltersEval.OptionsSelection.MultiSelect = True
         Me.gvParamFiltersEval.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CellSelect
         Me.gvParamFiltersEval.OptionsView.ShowGroupPanel = False
+        '
+        'TableLayoutPanel43
+        '
+        Me.TableLayoutPanel43.ColumnCount = 2
+        Me.TableLayoutPanel43.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
+        Me.TableLayoutPanel43.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel43.Controls.Add(Me.tvObjTreeFilterTempEval, 0, 1)
+        Me.TableLayoutPanel43.Controls.Add(Me.LabelControl14, 0, 0)
+        Me.TableLayoutPanel43.Controls.Add(Me.cmbFilterTemplateEval, 1, 0)
+        Me.TableLayoutPanel43.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel43.Location = New System.Drawing.Point(3, 3)
+        Me.TableLayoutPanel43.Name = "TableLayoutPanel43"
+        Me.TableLayoutPanel43.RowCount = 2
+        Me.TableLayoutPanel43.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+        Me.TableLayoutPanel43.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel43.Size = New System.Drawing.Size(216, 236)
+        Me.TableLayoutPanel43.TabIndex = 2
+        '
+        'tvObjTreeFilterTempEval
+        '
+        Me.TableLayoutPanel43.SetColumnSpan(Me.tvObjTreeFilterTempEval, 2)
+        Me.tvObjTreeFilterTempEval.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tvObjTreeFilterTempEval.KeyFieldName = "ObjectID"
+        Me.tvObjTreeFilterTempEval.Location = New System.Drawing.Point(3, 30)
+        Me.tvObjTreeFilterTempEval.Name = "tvObjTreeFilterTempEval"
+        Me.tvObjTreeFilterTempEval.OptionsBehavior.Editable = False
+        Me.tvObjTreeFilterTempEval.OptionsBehavior.ReadOnly = True
+        Me.tvObjTreeFilterTempEval.OptionsBehavior.ResizeNodes = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowBandMoving = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowBandResizing = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowColumnMoving = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowColumnResizing = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowQuickHideColumns = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowSort = False
+        Me.tvObjTreeFilterTempEval.OptionsCustomization.ShowBandsInCustomizationForm = False
+        Me.tvObjTreeFilterTempEval.OptionsFilter.AllowAutoFilterConditionChange = DevExpress.Utils.DefaultBoolean.[True]
+        Me.tvObjTreeFilterTempEval.OptionsFilter.ExpandNodesOnFiltering = True
+        Me.tvObjTreeFilterTempEval.OptionsFilter.FilterMode = DevExpress.XtraTreeList.FilterMode.EntireBranch
+        Me.tvObjTreeFilterTempEval.OptionsFilter.ShowAllValuesInFilterPopup = True
+        Me.tvObjTreeFilterTempEval.OptionsFind.AllowIncrementalSearch = True
+        Me.tvObjTreeFilterTempEval.OptionsFind.AlwaysVisible = True
+        Me.tvObjTreeFilterTempEval.OptionsFind.ExpandNodesOnIncrementalSearch = True
+        Me.tvObjTreeFilterTempEval.OptionsFind.FindFilterColumns = "ObjectName"
+        Me.tvObjTreeFilterTempEval.OptionsFind.FindMode = DevExpress.XtraTreeList.FindMode.Always
+        Me.tvObjTreeFilterTempEval.OptionsFind.ShowCloseButton = False
+        Me.tvObjTreeFilterTempEval.OptionsFind.ShowFindButton = False
+        Me.tvObjTreeFilterTempEval.OptionsLayout.AddNewColumns = False
+        Me.tvObjTreeFilterTempEval.OptionsMenu.EnableColumnMenu = False
+        Me.tvObjTreeFilterTempEval.OptionsMenu.EnableFooterMenu = False
+        Me.tvObjTreeFilterTempEval.OptionsMenu.EnableNodeMenu = False
+        Me.tvObjTreeFilterTempEval.OptionsMenu.ShowAutoFilterRowItem = False
+        Me.tvObjTreeFilterTempEval.OptionsNavigation.AutoFocusNewNode = True
+        Me.tvObjTreeFilterTempEval.OptionsNavigation.MoveOnEdit = False
+        Me.tvObjTreeFilterTempEval.OptionsSelection.EnableAppearanceFocusedCell = False
+        Me.tvObjTreeFilterTempEval.OptionsSelection.MultiSelectMode = DevExpress.XtraTreeList.TreeListMultiSelectMode.CellSelect
+        Me.tvObjTreeFilterTempEval.OptionsSelection.SelectNodesOnRightClick = True
+        Me.tvObjTreeFilterTempEval.OptionsView.AutoWidth = False
+        Me.tvObjTreeFilterTempEval.OptionsView.BestFitMode = DevExpress.XtraTreeList.TreeListBestFitMode.Fast
+        Me.tvObjTreeFilterTempEval.OptionsView.BestFitNodes = DevExpress.XtraTreeList.TreeListBestFitNodes.Visible
+        Me.tvObjTreeFilterTempEval.OptionsView.CheckBoxStyle = DevExpress.XtraTreeList.DefaultNodeCheckBoxStyle.Check
+        Me.tvObjTreeFilterTempEval.Size = New System.Drawing.Size(210, 203)
+        Me.tvObjTreeFilterTempEval.TabIndex = 14
+        Me.tvObjTreeFilterTempEval.ViewStyle = DevExpress.XtraTreeList.TreeListViewStyle.TreeView
+        '
+        'LabelControl14
+        '
+        Me.LabelControl14.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LabelControl14.Location = New System.Drawing.Point(3, 3)
+        Me.LabelControl14.Name = "LabelControl14"
+        Me.LabelControl14.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
+        Me.LabelControl14.Size = New System.Drawing.Size(79, 21)
+        Me.LabelControl14.TabIndex = 1
+        Me.LabelControl14.Text = "Select Template"
+        '
+        'cmbFilterTemplateEval
+        '
+        Me.cmbFilterTemplateEval.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cmbFilterTemplateEval.Location = New System.Drawing.Point(88, 3)
+        Me.cmbFilterTemplateEval.MenuManager = Me.ribbonControl
+        Me.cmbFilterTemplateEval.Name = "cmbFilterTemplateEval"
+        Me.cmbFilterTemplateEval.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.cmbFilterTemplateEval.Size = New System.Drawing.Size(125, 20)
+        Me.cmbFilterTemplateEval.TabIndex = 2
         '
         'aceObjTreeFilterEval
         '
@@ -9962,7 +10080,7 @@ Partial Class frmTechnology
         '
         Me.cmEvalTimeBased.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_Send2ObjBasedTab, Me.tsmi_Send2TimeBasedStatsHrly, Me.tsmi_Send2TimeBasedStatsDaily, Me.tsmi_Send2TopXStats, Me.tsmi_Breakdown2Cell, Me.tsmi_EvalHistogramOfCells, Me.ToolStripSeparator2, Me.tsmi_ShowHighlighted, Me.ToolStripSeparator3, Me.tsmi_EvalTBExportRawCSV, Me.ToolStripSeparator15, Me.tsmi_EvalTBExportToExcel})
         Me.cmEvalTimeBased.Name = "cm_KPI_FilterTemplate"
-        Me.cmEvalTimeBased.Size = New System.Drawing.Size(254, 192)
+        Me.cmEvalTimeBased.Size = New System.Drawing.Size(254, 220)
         '
         'tsmi_Send2ObjBasedTab
         '
@@ -10017,16 +10135,16 @@ Partial Class frmTechnology
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(250, 6)
         '
-        'ToolStripSeparator15
-        '
-        Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
-        Me.ToolStripSeparator15.Size = New System.Drawing.Size(250, 6)
-        '
         'tsmi_EvalTBExportRawCSV
         '
         Me.tsmi_EvalTBExportRawCSV.Name = "tsmi_EvalTBExportRawCSV"
         Me.tsmi_EvalTBExportRawCSV.Size = New System.Drawing.Size(253, 22)
         Me.tsmi_EvalTBExportRawCSV.Text = "Export Raw - CSV"
+        '
+        'ToolStripSeparator15
+        '
+        Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
+        Me.ToolStripSeparator15.Size = New System.Drawing.Size(250, 6)
         '
         'tsmi_EvalTBExportToExcel
         '
@@ -10404,9 +10522,9 @@ Partial Class frmTechnology
         '
         'cmTopX
         '
-        Me.cmTopX.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cm_Topx_Text, Me.cm_Topx_sep1TopX, Me.tsmi_cmTopx_Stats, Me.cm_Topx_MapSel, Me.tsmi_TopxPolygonMapKPITopX, Me.tsmi_TopXGeoIDMapKPI, Me.ToolStripSeparator1TopX, Me.tsmi_TopX_AllowCellCopy, Me.tsmi_TopX_CopySelectionWOHeader, Me.tsmi_TopX_CopySelectionWithHeader, Me.ToolStripSeparator1, Me.tsmi_ExportToKML, Me.ToolStripMenuItem1, Me.cm_Topx_Hide, Me.tsmi_CopyURLClipboard, Me.ToolStripMenuItemTopX3})
+        Me.cmTopX.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cm_Topx_Text, Me.cm_Topx_sep1TopX, Me.tsmi_cmTopx_Stats, Me.cm_Topx_MapSel, Me.tsmi_TopxPolygonMapKPITopX, Me.tsmi_TopXGeoIDMapKPI, Me.ToolStripSeparator1TopX, Me.tsmi_TopX_AllowCellCopy, Me.tsmi_TopX_CopySelectionWOHeader, Me.tsmi_TopX_CopySelectionWithHeader, Me.tsmi_TopX_CopyToTag, Me.ToolStripSeparator1, Me.tsmi_ExportToKML, Me.ToolStripMenuItem1, Me.cm_Topx_Hide, Me.tsmi_CopyURLClipboard, Me.ToolStripMenuItemTopX3})
         Me.cmTopX.Name = "cm_TopX"
-        Me.cmTopX.Size = New System.Drawing.Size(239, 292)
+        Me.cmTopX.Size = New System.Drawing.Size(239, 314)
         '
         'cm_Topx_Text
         '
@@ -10467,6 +10585,12 @@ Partial Class frmTechnology
         Me.tsmi_TopX_CopySelectionWithHeader.Name = "tsmi_TopX_CopySelectionWithHeader"
         Me.tsmi_TopX_CopySelectionWithHeader.Size = New System.Drawing.Size(238, 22)
         Me.tsmi_TopX_CopySelectionWithHeader.Text = "Copy Selection With Header"
+        '
+        'tsmi_TopX_CopyToTag
+        '
+        Me.tsmi_TopX_CopyToTag.Name = "tsmi_TopX_CopyToTag"
+        Me.tsmi_TopX_CopyToTag.Size = New System.Drawing.Size(238, 22)
+        Me.tsmi_TopX_CopyToTag.Text = "Copy To Tag"
         '
         'ToolStripSeparator1
         '
@@ -10635,94 +10759,6 @@ Partial Class frmTechnology
         '
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
         Me.ToolStripSeparator7.Size = New System.Drawing.Size(177, 6)
-        '
-        'tlpObjTreeFilterEval
-        '
-        Me.tlpObjTreeFilterEval.ColumnCount = 1
-        Me.tlpObjTreeFilterEval.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tlpObjTreeFilterEval.Controls.Add(Me.grpObjTreeFilterEval, 0, 1)
-        Me.tlpObjTreeFilterEval.Controls.Add(Me.TableLayoutPanel43, 0, 0)
-        Me.tlpObjTreeFilterEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tlpObjTreeFilterEval.Location = New System.Drawing.Point(0, 0)
-        Me.tlpObjTreeFilterEval.Name = "tlpObjTreeFilterEval"
-        Me.tlpObjTreeFilterEval.RowCount = 2
-        Me.tlpObjTreeFilterEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
-        Me.tlpObjTreeFilterEval.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
-        Me.tlpObjTreeFilterEval.Size = New System.Drawing.Size(222, 605)
-        Me.tlpObjTreeFilterEval.TabIndex = 2
-        '
-        'TableLayoutPanel43
-        '
-        Me.TableLayoutPanel43.ColumnCount = 2
-        Me.TableLayoutPanel43.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
-        Me.TableLayoutPanel43.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel43.Controls.Add(Me.tvObjTreeFilterTempEval, 0, 1)
-        Me.TableLayoutPanel43.Controls.Add(Me.LabelControl14, 0, 0)
-        Me.TableLayoutPanel43.Controls.Add(Me.cmbFilterTemplateEval, 1, 0)
-        Me.TableLayoutPanel43.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel43.Location = New System.Drawing.Point(3, 3)
-        Me.TableLayoutPanel43.Name = "TableLayoutPanel43"
-        Me.TableLayoutPanel43.RowCount = 2
-        Me.TableLayoutPanel43.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel43.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel43.Size = New System.Drawing.Size(216, 236)
-        Me.TableLayoutPanel43.TabIndex = 2
-        '
-        'LabelControl14
-        '
-        Me.LabelControl14.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LabelControl14.Location = New System.Drawing.Point(3, 3)
-        Me.LabelControl14.Name = "LabelControl14"
-        Me.LabelControl14.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.LabelControl14.Size = New System.Drawing.Size(79, 21)
-        Me.LabelControl14.TabIndex = 1
-        Me.LabelControl14.Text = "Select Template"
-        '
-        'tvObjTreeFilterTempEval
-        '
-        Me.TableLayoutPanel43.SetColumnSpan(Me.tvObjTreeFilterTempEval, 2)
-        Me.tvObjTreeFilterTempEval.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tvObjTreeFilterTempEval.KeyFieldName = "ObjectID"
-        Me.tvObjTreeFilterTempEval.Location = New System.Drawing.Point(3, 30)
-        Me.tvObjTreeFilterTempEval.Name = "tvObjTreeFilterTempEval"
-        Me.tvObjTreeFilterTempEval.OptionsBehavior.Editable = False
-        Me.tvObjTreeFilterTempEval.OptionsBehavior.ReadOnly = True
-        Me.tvObjTreeFilterTempEval.OptionsBehavior.ResizeNodes = False
-        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowBandMoving = False
-        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowBandResizing = False
-        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowColumnMoving = False
-        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowColumnResizing = False
-        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowQuickHideColumns = False
-        Me.tvObjTreeFilterTempEval.OptionsCustomization.AllowSort = False
-        Me.tvObjTreeFilterTempEval.OptionsCustomization.ShowBandsInCustomizationForm = False
-        Me.tvObjTreeFilterTempEval.OptionsFilter.AllowAutoFilterConditionChange = DevExpress.Utils.DefaultBoolean.[True]
-        Me.tvObjTreeFilterTempEval.OptionsFilter.ExpandNodesOnFiltering = True
-        Me.tvObjTreeFilterTempEval.OptionsFilter.FilterMode = DevExpress.XtraTreeList.FilterMode.EntireBranch
-        Me.tvObjTreeFilterTempEval.OptionsFilter.ShowAllValuesInFilterPopup = True
-        Me.tvObjTreeFilterTempEval.OptionsFind.AllowIncrementalSearch = True
-        Me.tvObjTreeFilterTempEval.OptionsFind.AlwaysVisible = True
-        Me.tvObjTreeFilterTempEval.OptionsFind.ExpandNodesOnIncrementalSearch = True
-        Me.tvObjTreeFilterTempEval.OptionsFind.FindFilterColumns = "ObjectName"
-        Me.tvObjTreeFilterTempEval.OptionsFind.FindMode = DevExpress.XtraTreeList.FindMode.Always
-        Me.tvObjTreeFilterTempEval.OptionsFind.ShowCloseButton = False
-        Me.tvObjTreeFilterTempEval.OptionsFind.ShowFindButton = False
-        Me.tvObjTreeFilterTempEval.OptionsLayout.AddNewColumns = False
-        Me.tvObjTreeFilterTempEval.OptionsMenu.EnableColumnMenu = False
-        Me.tvObjTreeFilterTempEval.OptionsMenu.EnableFooterMenu = False
-        Me.tvObjTreeFilterTempEval.OptionsMenu.EnableNodeMenu = False
-        Me.tvObjTreeFilterTempEval.OptionsMenu.ShowAutoFilterRowItem = False
-        Me.tvObjTreeFilterTempEval.OptionsNavigation.AutoFocusNewNode = True
-        Me.tvObjTreeFilterTempEval.OptionsNavigation.MoveOnEdit = False
-        Me.tvObjTreeFilterTempEval.OptionsSelection.EnableAppearanceFocusedCell = False
-        Me.tvObjTreeFilterTempEval.OptionsSelection.MultiSelectMode = DevExpress.XtraTreeList.TreeListMultiSelectMode.CellSelect
-        Me.tvObjTreeFilterTempEval.OptionsSelection.SelectNodesOnRightClick = True
-        Me.tvObjTreeFilterTempEval.OptionsView.AutoWidth = False
-        Me.tvObjTreeFilterTempEval.OptionsView.BestFitMode = DevExpress.XtraTreeList.TreeListBestFitMode.Fast
-        Me.tvObjTreeFilterTempEval.OptionsView.BestFitNodes = DevExpress.XtraTreeList.TreeListBestFitNodes.Visible
-        Me.tvObjTreeFilterTempEval.OptionsView.CheckBoxStyle = DevExpress.XtraTreeList.DefaultNodeCheckBoxStyle.Check
-        Me.tvObjTreeFilterTempEval.Size = New System.Drawing.Size(210, 203)
-        Me.tvObjTreeFilterTempEval.TabIndex = 14
-        Me.tvObjTreeFilterTempEval.ViewStyle = DevExpress.XtraTreeList.TreeListViewStyle.TreeView
         '
         'frmTechnology
         '
@@ -11024,6 +11060,7 @@ Partial Class frmTechnology
         Me.TableLayoutPanel22.ResumeLayout(False)
         Me.tlpCounterTypeEval.ResumeLayout(False)
         Me.tlpCounterTypeEval.PerformLayout
+        Me.tlpEvalShowObjects.ResumeLayout(False)
         CType(Me.splitCCEval.Panel1, System.ComponentModel.ISupportInitialize).EndInit
         Me.splitCCEval.Panel1.ResumeLayout(False)
         CType(Me.splitCCEval.Panel2, System.ComponentModel.ISupportInitialize).EndInit
@@ -11037,6 +11074,7 @@ Partial Class frmTechnology
         CType(Me.accObjTreeFilterEval, System.ComponentModel.ISupportInitialize).EndInit
         Me.accObjTreeFilterEval.ResumeLayout(False)
         Me.accObjFilterEval.ResumeLayout(False)
+        Me.tlpObjTreeFilterEval.ResumeLayout(False)
         CType(Me.grpObjTreeFilterEval, System.ComponentModel.ISupportInitialize).EndInit
         Me.grpObjTreeFilterEval.ResumeLayout(False)
         Me.TableLayoutPanel29.ResumeLayout(False)
@@ -11045,9 +11083,12 @@ Partial Class frmTechnology
         Me.TableLayoutPanel31.ResumeLayout(False)
         Me.TableLayoutPanel31.PerformLayout
         CType(Me.txtFilterSearchEval.Properties, System.ComponentModel.ISupportInitialize).EndInit
-        CType(Me.cmbFilterTemplateEval.Properties, System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.gcParamFiltersEval, System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.gvParamFiltersEval, System.ComponentModel.ISupportInitialize).EndInit
+        Me.TableLayoutPanel43.ResumeLayout(False)
+        Me.TableLayoutPanel43.PerformLayout
+        CType(Me.tvObjTreeFilterTempEval, System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.cmbFilterTemplateEval.Properties, System.ComponentModel.ISupportInitialize).EndInit
         Me.tlpFilterTreeEval.ResumeLayout(False)
         Me.tlpFilterTreeEval.PerformLayout
         CType(Me.txtFilterTreeEval.Properties, System.ComponentModel.ISupportInitialize).EndInit
@@ -11179,10 +11220,6 @@ Partial Class frmTechnology
         Me.cmTopX.ResumeLayout(False)
         Me.cmTopXChart.ResumeLayout(False)
         CType(Me.documentViewerRibbonController1, System.ComponentModel.ISupportInitialize).EndInit
-        Me.tlpObjTreeFilterEval.ResumeLayout(False)
-        Me.TableLayoutPanel43.ResumeLayout(False)
-        Me.TableLayoutPanel43.PerformLayout
-        CType(Me.tvObjTreeFilterTempEval, System.ComponentModel.ISupportInitialize).EndInit
         Me.ResumeLayout(False)
 
     End Sub
@@ -11963,4 +12000,7 @@ Partial Class frmTechnology
     Friend WithEvents TableLayoutPanel43 As TableLayoutPanel
     Friend WithEvents LabelControl14 As DevExpress.XtraEditors.LabelControl
     Friend WithEvents tvObjTreeFilterTempEval As DevExpress.XtraTreeList.TreeList
+    Friend WithEvents tsmi_TopX_CopyToTag As ToolStripMenuItem
+    Friend WithEvents tlpEvalShowObjects As TableLayoutPanel
+    Friend WithEvents btnEvalReport As DevExpress.XtraEditors.SimpleButton
 End Class

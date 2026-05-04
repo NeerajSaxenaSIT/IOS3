@@ -171,7 +171,7 @@ Public Class frmKPIManage
             End If
 
             If Not (CheckItemExistance(newKPIName, gvKpiList)) Then
-                Dim sqlQuery As String = IOS.DataLibrary.clsSQLCommands.GetSqlQueryToAddNewKpi(techName, newKPIName, objectName, Environment.UserName, cmbTechnology.SelectedItem.ToString, cmbObjectList.SelectedItem.ToString)
+                Dim sqlQuery As String = IOS.DataLibrary.clsSQLCommands.GetSqlQueryToAddNewKpi(techName, newKPIName, objectName, Environment.UserName, cmbTechnology.SelectedItem.ToString, cmbObjectList.SelectedItem.ToString, txtKPIDescription.Text.Trim)
                 RefreshKPI_GridList(sqlQuery, newKPIName)
                 gvKPIList_FocusedRowChanged(Nothing, Nothing)
                 kpiDataBaseName = IOS.Library.KPIDataBaseName.None
@@ -528,7 +528,7 @@ Public Class frmKPIManage
                                             End If
 
                                             iresult = IOS.DataLibrary.clsSQLCommands.UpdateSqlKpiAsCommitted(connStrIOSServer, tableCount, cmbTechnology.SelectedItem.ToString, tablenames_original, tableAlias,
-                                                                                                            kpiName, KpiSQL, JoinObject, cmbObjectList.SelectedItem.ToString, Environment.UserName, kpiId)
+                                                                                                            kpiName, KpiSQL, JoinObject, cmbObjectList.SelectedItem.ToString, Environment.UserName, kpiId, txtKPIDescription.Text.Trim)
                                         End If
                                         If (iresult > 0) Then
                                             SetMessage("KPI Successfully Updated")

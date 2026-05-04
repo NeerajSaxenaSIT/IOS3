@@ -3097,7 +3097,7 @@ Module mdlCommonModule
             'identify primkeys
             For Each t In tables
                 Try
-                    Dim primkeys() As DataColumn
+                    Dim primkeys() As DataColumn = Nothing
                     Dim i As Int16 = 0
 
                     For Each col As DataColumn In t.Columns
@@ -3129,10 +3129,37 @@ Module mdlCommonModule
                 End Try
                 lst_table2remove.Add(tables(i).TableName)
             Next
+
+            'RemoveDuplicateRows(tables(0))
+
             For Each str As String In lst_table2remove
                 src.Tables.Remove(str)
             Next
         Next
+    End Sub
+
+    Public Sub RemoveDuplicateRows(ByRef dt As DataTable)
+        Try
+            ' If no primary key → nothing reliable to do
+            If dt.PrimaryKey Is Nothing OrElse dt.PrimaryKey.Length = 0 Then Exit Sub
+
+            Dim tempTable As DataTable = dt.Clone()
+            tempTable.PrimaryKey = dt.PrimaryKey
+
+            For Each row As DataRow In dt.Rows
+                Try
+                    tempTable.Rows.Add(row.ItemArray)
+                Catch ex As ConstraintException
+                    ' Duplicate → ignore
+                End Try
+            Next
+
+            dt.Clear()
+            dt.Merge(tempTable)
+
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        End Try
     End Sub
 
     Private Function GetPrefix(tableName As String) As String
