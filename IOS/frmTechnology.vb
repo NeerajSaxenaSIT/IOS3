@@ -14359,7 +14359,6 @@ Public Class frmTechnology
                                     If exists = True Then Exit For
                                 Next
 
-
                                 If exists = True Then
                                     For j = 0 To objsel.Count - 1
                                         dt.DefaultView.RowFilter = cmbObjectTreeStats.Text + "=" + objsel(j)
@@ -29003,6 +29002,7 @@ Public Class frmTechnology
             Dim templateFilePath As String = GetUserDataPath() & "\Data\template.pptx"
             Dim reportFilePath As String = GetUserDataPath() & "\Data\EvalReport" & "_" & Format(Now(), "yyyyMMdd_HHmmss") & ".pptx"
 
+            WaitScreen.ShowWaitScreen("Report Creation Started")
             Me.Cursor = Cursors.WaitCursor
             Application.DoEvents()
 
@@ -29064,7 +29064,7 @@ Public Class frmTechnology
                         Dim msKPI As MemoryStream = objEvalRptMtd.ExportGridToImage(gcKPI)
                         dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_Trend", msKPI)
 
-                        WaitScreen.ShowWaitScreen("Loading Top X Rows Per KPI Change")
+                        WaitScreen.ShowWaitScreen("Loading Top X Rows Per KPI")
 
                         '******* Load Top 20 Kpi Rows *******
                         sqlParam = Nothing
@@ -29083,6 +29083,7 @@ Public Class frmTechnology
 
                         Dim msKpiTopX As MemoryStream = objEvalRptMtd.ExportGridToImage(gcTopX)
                         dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_TopX", msKpiTopX)
+
                     Next
 
                     objEvalRptMtd.dicEvalRptGridImages = dicEvalRptGridImages
@@ -29090,14 +29091,56 @@ Public Class frmTechnology
                     'Loading Histogram Charts For KPIs
                     '****************************************
                     For Each drKPI As DataRow In dtGrid.Rows
-                        WaitScreen.ShowWaitScreen("Loading Histogram Chart Per KPI Change")
+                        WaitScreen.ShowWaitScreen("Loading Histogram Chart Per KPI")
 
                         Dim chName As String = "Histogram" & drKPI("KPIName").ToString
                         LaunchHistogramChart_EvalReport(chName, drKPI("KPIName").ToString)
                     Next
 
-                    WaitScreen.ShowWaitScreen("Loading Chart/Grid Images On Slides")
+                    'Loading Normal Tend Charts For KPIs
+                    '****************************************
+                    SetComboBox(cmbChartSetNameStats, ComboSelectBased.TextBased, cmbChartSetNameEval.SelectedItem.ToString)
+                    SetComboBox(cmbObjectTreeStats, ComboSelectBased.TextBased, cmbObjectTreeEval.SelectedItem.ToString)
+                    Dim objectsel As String = tvObjectsTreeEval.GetChecked2String(_strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
 
+                    objectsel = Replace(Replace(Replace(objectsel, "IN ('", ""), ")", ""), "'", "")
+                    Dim objs() As String = objectsel.Split(",")
+
+                    'Select objects in the Stats objects tree
+                    Dim tvlastNodeLevelStats As Integer = tvObjectsTreeStats.GetMaxNodeLevel()
+                    For Each strObj In objs
+                        Dim tv_result As TreeListNode = tvObjectsTreeStats.FindNodeByFieldValue("ObjectID", strObj)
+                        If Not tv_result Is Nothing Then
+                            If tv_result.Checked = False And tv_result.Level = tvlastNodeLevelStats Then
+                                tv_result.Checked = True
+                                tvObjectsTreeStats.CheckParentNode(tv_result)
+                            End If
+                        End If
+                    Next
+
+                    'Select Period in the Stats period start/end date controls
+                    dtEditStartTimeStats.EditValue = dtEditStartTimeEval.EditValue
+                    dtEditEndTimeStats.EditValue = dtEditEndTimeEval.EditValue
+
+                    For Each drKPI As DataRow In dtGrid.Rows
+                        tvKPIStats.UncheckAll()
+
+                        'Select KPIs of interest in the Stats KPI tree
+                        Dim tv_kpi As TreeListNode = tvKPIStats.FindNodeByFieldValue("ObjectName", drKPI("KPIName").ToString)
+                        If Not tv_kpi Is Nothing Then
+                            tv_kpi.Checked = True
+                            tvKPIStats.CheckParentNode(tv_kpi)
+                        End If
+
+                        Dim categoryTab As String = tvKPIStats.GetKPIChecked2String(2, "ObjectName")
+                        Dim selectedChart As String = tvKPIStats.GetKPIChecked2String(3, "ObjectName")
+
+                        WaitScreen.ShowWaitScreen("Loading Normal KPI Trend Charts")
+                        CreateStatsChart(categoryTab, selectedChart, drKPI("KPIName").ToString)
+
+                    Next
+
+                    WaitScreen.ShowWaitScreen("Loading Chart/Grid Images On Slides")
                     objEvalRptMtd.dicEvalRptChartImages = dicEvalRptChartImages
                     objEvalRptMtd.CreateEvaluateReportFromTemplate(templateFilePath, reportFilePath)
 
@@ -29112,6 +29155,547 @@ Public Class frmTechnology
             WaitScreen.CloseWaitScreen()
             Application.DoEvents()
         End Try
+    End Sub
+
+    Private Sub CreateStatsChart(category As String, chartTitle As String, kpiName As String)
+        Dim nc As New dotnetCHARTING.WinForms.Chart
+        'nc.Name = objectName
+        nc.Width = 1000
+        nc.Height = 480
+        'Chart Default Properties
+        nc.DefaultElement.Marker.Visible = False
+        nc.LegendBox.Orientation = dotnetCHARTING.WinForms.Orientation.Bottom
+        nc.LegendBox.DefaultEntry.Value = ""
+        nc.LegendBox.DefaultEntry.Hotspot.ToolTip = "%Name"
+        nc.LegendBox.Visible = True
+        nc.LegendBox.DefaultCorner = BoxCorner.Round
+
+        nc.XAxis.TickLabelMode = TickLabelMode.Angled
+        nc.XAxis.TickLabelAngle = 45
+        nc.XAxis.Minimum = 0
+        nc.XAxis.Maximum = 0
+
+        nc.XAxis.Scale = dotnetCHARTING.WinForms.Scale.Time
+        nc.XAxis.TimeScaleLabels.Mode = TimeScaleLabelMode.Smart
+
+        nc.ToolTip.InitialDelay = 1
+        nc.ChartAreaLayout.Mode = ChartAreaLayoutMode.Horizontal
+        nc.DefaultSeries.EmptyElement.Mode = EmptyElementMode.None
+        nc.CleanupPeriod = 1
+
+        nc.TitleBox.Position = TitleBoxPosition.Full
+        nc.TitleBox.CornerTopLeft = BoxCorner.Round
+        nc.TitleBox.CornerTopRight = BoxCorner.Round
+        nc.TitleBox.Label.AutoWrap = True
+        nc.Application = "DY4Zd/25XLMFNDYTc7eMQ7RCQfp58yVWNbgx/x0cDkruA0S6d3O/f2qh0jotTM3L"
+
+        SetChartConfigData(_strNetwork, nc, chartTitle, category)
+
+        ProcessStatsChart(nc, kpiName)
+
+        'copy chart image to ppt slide
+        'Console.WriteLine("Copying image for chart: " & objectName)
+
+    End Sub
+
+    Private ChartConfig As ChartConfigDataTables
+
+    Private Sub SetChartConfigData(tech As String, ch As Chart, chartTitle As String, category As String)
+        Dim sql As String = Nothing
+        ChartConfig = New ChartConfigDataTables
+        'WHERE (((ChartSetName = " & Chr(39) & chartSetName & Chr(39) & ") OR (ChartSetName = " & Chr(39) & Environment.UserName.ToString & Chr(39) & ")) AND
+        sql = "SELECT * FROM IOS_Chart_Configuration WHERE TechTab = " & Chr(39) & tech & Chr(39) & " AND ChartTitle " & chartTitle & "
+               And ChartSetName = " & Chr(39) & cmbChartSetNameStats.Text.Trim & Chr(39) & " And CategoryTab " & category & "
+               ORDER BY techtab, objecttab, objecttabindex, categorytabindex, chartindex,ChartTitle ASC"
+        Dim dt_charts As DataTable = DataAccessorODBC.GetDataTable(connStrIOSServer, sql)
+        Dim dtChartGeneration As New DataTable
+        dtChartGeneration = dt_charts.DefaultView.ToTable(True, {"techtab", "categorytabindex", "categorytab", "chartindex", "chartname", "objecttab", "objecttabindex", "ChartTitle"})
+        ChartConfig.ChartFillingDataTable = dt_charts
+        ChartConfig.ChartGenerationDataTable = dtChartGeneration
+        ch.Name = dtChartGeneration.Rows(0)("ChartNAme").ToString
+    End Sub
+
+    Private Sub ProcessStatsChart(ByRef ch As Chart, kpiName As String)
+        Dim chartSql As String = Nothing
+        Dim tblName As String = Nothing
+
+        Using conn_el As New Odbc.OdbcConnection(connStrIOSServer)
+            conn_el.ConnectionTimeout = 5
+            conn_el.Open()
+
+            For Each srcbtn As SourceButton In flpSourceBtn_GetChecked(_strNetwork, flpCounterTypeStats)
+
+                Using comm_Element As New Odbc.OdbcCommand("SELECT DISTINCT COALESCE(IOS_SQL_KPI.sourcetable,'') AS sourcetable,COALESCE(IOS_SQL_KPI.JoinObjects,'') AS JoinObjects,COALESCE(IOS_Chart_Configuration.CrossTabObj,'') AS CrossTabObj
+                                                        FROM IOS_Chart_Configuration INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID  
+                                                        WHERE (IOS_Chart_Configuration.TechTab = " & Chr(39) & _strNetwork & Chr(39) & ")
+                                                        AND ChartName = '" & ch.Name & "' AND (IOS_SQL_KPI.Object = " & Chr(39) & srcbtn.SourceButtonText & Chr(39) & ")
+                                                        AND (ChartSetName = " & Chr(39) & cmbChartSetNameStats.Text.Trim & Chr(39) & ") AND (sourcetable Is Not null)", conn_el)
+
+                    Using dr As Odbc.OdbcDataReader = comm_Element.ExecuteReader
+                        While dr.Read
+                            tblName = srcbtn.SourceButtonText
+                            chartSql = SQL_Construct(srcbtn.SourceButtonText, nZ(dr.Item("sourcetable").ToString.Trim, ""), Nothing, nZ(dr.Item("CrossTabObj"), ""))
+                        End While
+                    End Using
+                End Using
+            Next
+
+        End Using
+
+        dsStats = New DataSet
+        dsStats = GetData(chartSql, tblName)
+        dsStats.Tables(0).TableName = tblName
+        'Console.WriteLine("Assigning data to chart: " & chartName)
+        AssignDataToCharts_EvalReport(ch, dsStats.Tables(0), kpiName)
+    End Sub
+
+    Private Sub AssignDataToCharts_EvalReport(ByRef ch As Chart, ByRef dtData As DataTable, kpiName As String)
+        Dim dtChartConfig As New DataTable
+        'If dtChartSubset Is Nothing Then
+        'Dim selected_obj As String = tvKPIStats.GetKPIChecked2String(1, "ObjectName")
+        'Dim selected_charts As String = tvKPIStats.GetKPIChecked2String(3, "ObjectName")
+        Dim username As String = Chr(39) & Environment.UserName.ToString & Chr(39)
+        'Dim ChartConfig As ChartConfigDataTables = TabControl.Tag
+
+        '(((ChartSetName = " & Chr(39) & chartSetName & Chr(39) & "))  AND TechTab = " & Chr(39) & objChartProp.Technology & Chr(39) & " AND CrossTabObj IS NULL
+        '                                                            And ObjectTab='" & dtChartStyleProperties.Rows(0)("CounterType").ToString & "' AND 
+
+        ChartConfig.ChartFillingDataTable.DefaultView.RowFilter = "ChartName ='" & ch.Name & "' AND TechTab = " & Chr(39) & _strNetwork & Chr(39) & " "
+        ChartConfig.ChartFillingDataTable.DefaultView.Sort = "techtab ASC, objecttabindex ASC, categorytabindex ASC, chartindex ASC, chartelementid ASC"
+        dtChartConfig = ChartConfig.ChartFillingDataTable.DefaultView.ToTable()
+        ChartConfig.ChartFillingDataTable.DefaultView.RowFilter = ""
+        'Else
+        '    dtChartSubset.DefaultView.RowFilter = "CrossTabObj IS NULL"
+        '    dtChartSubset.DefaultView.Sort = "techtab ASC, objecttabindex ASC, categorytabindex ASC, chartindex ASC, chartelementid ASC"
+        '    dtChartConfig = dtChartSubset.DefaultView.ToTable
+        '    dtChartSubset.DefaultView.RowFilter = ""
+        'End If
+
+        Try
+            'Assign data to all charts
+            'Dim ch As Chart
+            Dim objectscharted As String = ""
+            Dim X1AxisLabel As String = "Date"
+            Dim Y1axislabel As String = "", Y2axislabel As String = ""
+            Dim Y1axisAbsorPerc As String = "", Y2axisAbsOrPerc As String = ""
+            Dim Y1axisPrecision As Integer = 0, Y2axisPrecision As Integer = 0
+            Dim yaxis1 As Axis = Nothing
+            Dim yaxis2 As Axis = Nothing
+            Dim color_R As Integer = 0, color_B As Integer = 0, color_G As Integer = 0
+            Dim tabIndexNew As Integer = 0
+            'Dim chartIndex As Integer = 0
+
+            Dim chartElements() As String = {"0"}
+            Dim chartElementsYAxis() As String = {"0"}
+            Dim chartEltype() As String = {"Bar"}
+            Dim chartElColor() As Integer = {0}
+            Dim chartYAxisScale() As String = {"0", "0"}
+
+            dtChartConfig.DefaultView.RowFilter = "ObjectTab='" & dtData.TableName & "'"
+            Using dtObjectTab = dtChartConfig.DefaultView.ToTable(True, {"ObjectTab", "ObjectTabIndex"})
+                For Each drObjectTab As DataRow In dtObjectTab.Select("", "ObjectTabIndex ASC")
+
+                    'tabcontrol = GetTabControlFromTech(tech).TabPages(GetTabPageIndex(tcTabControlHighStats, drObjectTab("ObjectTab").ToString.Trim)).Controls(0)
+                    dtChartConfig.DefaultView.RowFilter = "ObjectTabIndex=" & drObjectTab("ObjectTabIndex")
+                    Using dtChartList = dtChartConfig.DefaultView.ToTable(True, {"TechTab", "CategoryTabIndex", "CategoryTab", "ChartIndex", "ChartName", "ChartTitle", "ChartType"})
+                        For Each drChart As DataRow In dtChartList.Select("", "CategoryTabIndex, ChartIndex ASC")
+                            'chartIndex = CInt(drChart("ChartIndex").ToString) * NumOfObjects + IndexOfObject
+                            'If CInt(drChart("CategoryTabIndex").ToString) = 99 Then
+                            '    tabIndexNew = GetTabPageIndex(tabcontrol, "Custom")
+                            'Else
+                            '    tabIndexNew = drChart("CategoryTabIndex")
+                            'End If
+
+                            'If tabIndexNew = 10 And chartIndex = 1 Then
+                            'Console.WriteLine("")
+                            'End If
+
+                            'ch = tabcontrol.TabPages(tabIndexNew).Controls(0).Controls(chartIndex)
+
+                            If drChart("ChartType") = IOSChartType.AlignInterval Then
+                                'If tsmi_ObjectAggregationOnOff.Checked = False Then
+                                '    Dim dsTemp As New DataSet
+                                '    dsTemp.Tables.Add(dtData)
+                                '    ProcessStatsCompareTime_Custom(tech, dsTemp, connStr, drChart("ChartName"), chartSetName, drObjectTab("ObjectTab").ToString.Trim, ch, ObjectName)
+                                'Else
+                                'ProcessStatsCompareTime_Custom(tech, dsStats, connStr, drChart("ChartName"), chartSetName, drObjectTab("ObjectTab").ToString.Trim, ch)
+                                'End If
+                            Else
+                                X1AxisLabel = "Date"
+                                Y1axislabel = ""
+                                Y2axislabel = ""
+                                Y1axisAbsorPerc = ""
+                                Y2axisAbsOrPerc = ""
+                                Y1axisPrecision = 0
+                                Y2axisPrecision = 0
+                                yaxis1 = Nothing
+                                yaxis2 = Nothing
+                                color_R = 0
+                                color_B = 0
+                                color_G = 0
+
+                                'Default chart settings
+                                DefaultChartSettings(ch, drChart("TechTab"))
+
+                                'Settings For Chart Type
+                                ChartTypeSettings(ch, drChart, objectscharted)
+
+                                'If ObjectName <> "" Then
+                                'objectscharted = ObjectName
+                                'End If
+
+                                ch.TitleBox.HeaderLabel.Text = drChart("ChartTitle").Trim
+                                ch.TitleBox.Label.Text = "Objects: " & objectscharted
+
+                                Dim colList As String() = {
+                                    "ChartElementID", "ChartElements", "chartElementsType", "chartElementsYAxis", "chartYaxisScaleProp", "chartY1axisLabels",
+                                    "chartY2axisLabels", "chartY1AbsPerc", "chartY2AbsPerc", "chartY1axisPrecision", "chartY2axisPrecision",
+                                    "ChartElementsColor", "SQLKPI_ID", "Sort_dir", "ElmntDisplay", "ChartSetName", "CrossTabObj", "ElementAxis", "ChartType"
+                                }
+
+                                'configures individual chart when new chartline is detected
+                                dtChartConfig.DefaultView.RowFilter = "ChartName='" & drChart("ChartName") & "'"
+                                Using dtKpi = dtChartConfig.DefaultView.ToTable(True, colList)
+                                    Dim j As Integer = 0
+                                    For Each drKpi As DataRow In dtKpi.Rows
+                                        Y1axisAbsorPerc = nZ(drKpi("chartY1AbsPerc"), "Abs")
+                                        Y2axisAbsOrPerc = nZ(drKpi("chartY2AbsPerc"), "Abs")
+
+                                        Y1axisPrecision = CInt(nZ(drKpi("chartY1axisPrecision"), 0))
+                                        Y2axisPrecision = CInt(nZ(drKpi("chartY2axisPrecision"), 0))
+
+                                        If nZ(drKpi("chartY1axisLabels"), "").Length > 0 Then
+                                            Y1axislabel = drKpi("chartY1axisLabels").ToString.Trim
+                                        End If
+                                        If nZ(drKpi("chartY2axisLabels"), "").Length > 0 Then
+                                            Y2axislabel = drKpi("chartY2axisLabels").ToString.Trim
+                                        End If
+
+                                        If ch.Type = ChartType.Scatter Then
+                                            If dtKpi.Select("ChartType=" & IOSChartType.Scatter)(0)("ElementAxis") = "Y" Then
+                                                Y1axislabel = dtKpi.Select("ChartType=" & IOSChartType.Scatter)(0)("ChartElements").ToString
+                                            Else
+                                                X1AxisLabel = dtKpi.Select("ChartType=" & IOSChartType.Scatter)(0)("ChartElements").ToString
+                                            End If
+                                            If dtKpi.Select("ChartType=" & IOSChartType.Scatter)(1)("ElementAxis") = "X" Then
+                                                X1AxisLabel = dtKpi.Select("ChartType=" & IOSChartType.Scatter)(1)("ChartElements").ToString
+                                            Else
+                                                Y1axislabel = dtKpi.Select("ChartType=" & IOSChartType.Scatter)(1)("ChartElements").ToString
+                                            End If
+                                            ch.DefaultElement.Hotspot.ToolTip = X1AxisLabel & ": %XValue" & Chr(13) & Y1axislabel & ": %Value "
+                                            ch.XAxis.Label.Text = X1AxisLabel
+                                        End If
+
+                                        'Y-Axis Settings  
+                                        If yaxis1 Is Nothing Then
+                                            yaxis1 = New Axis()
+                                            yaxis1.Orientation = dotnetCHARTING.WinForms.Orientation.Left
+                                        End If
+                                        yaxis1.Label.Text = Y1axislabel
+
+                                        yaxis1.NumberPrecision = Y1axisPrecision
+
+                                        If UCase(Y1axisAbsorPerc) = "PERC" Then
+                                            yaxis1.Percent = True
+                                        End If
+
+                                        If yaxis1.NumberPrecision < 2 And Not yaxis1.Percent = True Then
+                                            yaxis1.MinimumInterval = 1
+                                        End If
+
+                                        If yaxis2 Is Nothing Then
+                                            yaxis2 = New Axis()
+                                            yaxis2.Orientation = dotnetCHARTING.WinForms.Orientation.Right
+                                        End If
+                                        yaxis2.Label.Text = Y2axislabel
+
+                                        yaxis2.NumberPrecision = Y2axisPrecision
+
+                                        If UCase(Y2axisAbsOrPerc) = "PERC" Then
+                                            yaxis2.Percent = True
+                                        End If
+
+                                        If yaxis2.NumberPrecision < 2 And Not yaxis2.Percent = True And drKpi("chartElementsYAxis").trim = "Right" Then
+                                            yaxis2.MinimumInterval = 1
+                                        End If
+
+                                        ReDim Preserve chartElements(j)
+                                        ReDim Preserve chartElementsYAxis(j)
+                                        ReDim Preserve chartEltype(j)
+                                        ReDim Preserve chartElColor(j)
+
+                                        chartElements(j) = drKpi("ChartElements").ToString.Trim
+                                        chartElementsYAxis(j) = drKpi("chartElementsYAxis").trim
+                                        chartEltype(j) = drKpi("chartElementsType").trim
+                                        chartElColor(j) = CInt(drKpi("ChartElementsColor"))
+
+                                        If UCase(chartElementsYAxis(j)) = "LEFT" Then
+                                            chartYAxisScale(0) = drKpi("chartYaxisScaleProp").trim
+                                        ElseIf UCase(chartElementsYAxis(j)) = "RIGHT" Then
+                                            chartYAxisScale(1) = drKpi("chartYaxisScaleProp").trim
+                                        End If
+                                        j = j + 1
+                                    Next
+                                End Using
+
+                                If UCase(chartYAxisScale(0)) = "STACKED" Then
+                                    yaxis1.Scale = dotnetCHARTING.WinForms.Scale.Stacked
+                                ElseIf UCase(chartYAxisScale(0)) = "FULLSTACKED" Then
+                                    yaxis1.Scale = dotnetCHARTING.WinForms.Scale.FullStacked
+                                Else
+                                    yaxis1.Scale = dotnetCHARTING.WinForms.Scale.Range
+                                End If
+
+                                If UCase(chartYAxisScale(1)) = "STACKED" Then
+                                    yaxis2.Scale = dotnetCHARTING.WinForms.Scale.Stacked
+                                ElseIf UCase(chartYAxisScale(1)) = "FULLSTACKED" Then
+                                    yaxis2.Scale = dotnetCHARTING.WinForms.Scale.FullStacked
+                                Else
+                                    yaxis2.Scale = dotnetCHARTING.WinForms.Scale.Range
+                                End If
+
+                                ch.XAxis.Scale = dotnetCHARTING.WinForms.Scale.Normal
+
+                                If ch.Type = ChartType.Combo Then
+                                    Dim xaxis_valuehigh As DateTime = CDate(GetFromTech_DateTimePicker(2).EditValue) 'Add 1 day to insert a extra x-axis scale.
+
+                                    Select Case True
+                                        Case rdoRawStats.Text = "Raw", rdoHourlyStats.Text = "Hourly"
+                                            xaxis_valuehigh = xaxis_valuehigh.AddHours(1)
+                                        Case Else
+                                            xaxis_valuehigh = xaxis_valuehigh.AddDays(1)
+                                    End Select
+
+                                    If xaxis_valuehigh.Date = Now.Date Then
+                                        Select Case True
+                                            Case rdoDailyStats.Checked
+                                                xaxis_valuehigh = DateAdd(DateInterval.Day, -1, DateAdd(DateInterval.Hour, 12, xaxis_valuehigh.Date))
+                                            Case rdoDailyBHStats.Checked
+                                                xaxis_valuehigh = DateAdd(DateInterval.Day, -1, DateAdd(DateInterval.Hour, 12, xaxis_valuehigh.Date))
+                                            Case rdoWeeklyStats.Checked
+                                                xaxis_valuehigh = DateAdd(DateInterval.WeekOfYear, -1, xaxis_valuehigh.Date)
+                                            'Case rdoWeeklyBHStats.checked
+                                            '    xaxis_valuehigh = DateAdd(DateInterval.WeekOfYear, -1, xaxis_valuehigh.Date)
+                                            Case rdoMonthlyStats.Checked
+                                                xaxis_valuehigh = DateAdd(DateInterval.Month, -1, xaxis_valuehigh.Date)
+                                        End Select
+                                    End If
+
+                                    ch.XAxis.ScaleRange.ValueHigh = xaxis_valuehigh
+                                ElseIf ch.Type = ChartType.Scatter Then
+                                    Try
+                                        ch.XAxis.Scale = dotnetCHARTING.WinForms.Scale.Normal
+                                        Dim minValue As Double = dtData.Compute("Min(" & X1AxisLabel & ")", "")
+                                        Dim maxValue As Double = dtData.Compute("Max(" & X1AxisLabel & ")", "")
+                                        ch.XAxis.ScaleRange.ValueLow = IIf(minValue < 0, System.Math.Floor(minValue), System.Math.Ceiling(minValue))
+                                        ch.XAxis.ScaleRange.ValueHigh = IIf(maxValue < 0, System.Math.Floor(maxValue), System.Math.Ceiling(maxValue))
+                                    Catch
+                                    End Try
+                                End If
+
+                                Dim de As DataEngine = New DataEngine(dtData)
+                                If ch.Type = ChartType.Scatter Then
+                                    de.DataFields = "XValue=" & X1AxisLabel & ",YValue=" & Y1axislabel
+                                Else
+                                    de.DataFields = String2DataFields(chartElements, X1AxisLabel)
+                                End If
+                                de.DataGridFormatString = "N2"
+
+                                If ch.Type = ChartType.Combo Then
+                                    If rdoHourlyStats.Checked Or rdoRawStats.Checked Then
+                                        de.FormatString = "dd/MM/yy HH:mm"
+                                    ElseIf rdoDailyStats.Checked Then
+                                        de.FormatString = "dd/MM/yy"
+                                    ElseIf rdoMonthlyStats.Checked Then
+                                        de.FormatString = "MMMM"
+                                    End If
+                                ElseIf ch.Type = ChartType.Scatter Then
+                                    de.FormatString = ""
+                                End If
+
+                                Dim sc As New SeriesCollection
+                                sc = de.GetSeries()
+
+                                Dim LeftAxisDivisor As Int32 = 1
+                                Dim RightAxisDivisor As Int32 = 1
+                                Dim LeftAxisLabelAddition As String = ""
+                                Dim RightAxisLabelAddition As String = ""
+
+                                For i = 0 To sc.Count - 1
+                                    Dim MaxValueOfSeries As Double = sc(i).Calculate("test", Calculation.Maximum).YValue
+                                    If MaxValueOfSeries > 1000000000 Then
+                                        If MaxValueOfSeries > 1000000000000 Then
+                                            Select Case chartElementsYAxis(i).ToString().Trim().ToUpper()
+                                                Case "LEFT"
+                                                    LeftAxisDivisor = 1000000
+                                                    LeftAxisLabelAddition = " Million"
+                                                    Exit Select
+                                                Case "RIGHT"
+                                                    RightAxisDivisor = 1000000
+                                                    RightAxisLabelAddition = " Million"
+                                                    Exit Select
+                                            End Select
+                                        Else
+                                            Select Case chartElementsYAxis(i).ToString().Trim().ToUpper()
+                                                Case "LEFT"
+                                                    If LeftAxisDivisor < 1000 Then
+                                                        LeftAxisDivisor = 1000
+                                                        LeftAxisLabelAddition = " Thousand"
+                                                    End If
+                                                    Exit Select
+                                                Case "RIGHT"
+                                                    If RightAxisDivisor < 1000 Then
+                                                        RightAxisDivisor = 1000
+                                                        RightAxisLabelAddition = " Thousand"
+                                                    End If
+                                                    Exit Select
+                                            End Select
+                                        End If
+
+                                    End If
+                                Next
+
+                                Dim boundaries As String = Nothing
+                                Dim dtHistogramData As DataTable = Nothing
+                                For i = 0 To sc.Count() - 1
+                                    If ch.Type = ChartType.Combo Then
+                                        Select Case UCase(chartEltype(i).Trim)
+                                            Case "LINE"
+                                                sc(i).Type = SeriesType.Line
+                                                sc(i).Line.Width = 3
+                                            Case "BAR"
+                                                sc(i).Type = SeriesType.Bar
+                                            Case "AREALINE"
+                                                sc(i).Type = SeriesType.AreaLine
+                                        End Select
+                                    ElseIf ch.Type = ChartType.Scatter Then
+                                        yaxis1.Label.Text = Y1axislabel
+                                        sc(i).Type = SeriesType.Marker
+                                    End If
+
+                                    Select Case UCase(chartElementsYAxis(i).Trim)
+                                        Case "LEFT"
+                                            sc(i).YAxis = yaxis1
+                                        Case "RIGHT"
+                                            sc(i).YAxis = yaxis2
+                                    End Select
+
+
+                                    Select Case chartElementsYAxis(i).ToString().Trim().ToUpper()
+                                        Case "LEFT"
+
+                                            If LeftAxisDivisor > 1 Then
+                                                sc(i) = Series.Divide(sc(i), LeftAxisDivisor)
+                                            End If
+                                            If Not yaxis1.Label.Text.Contains(LeftAxisLabelAddition) Then
+                                                yaxis1.Label.Text = yaxis1.Label.Text + LeftAxisLabelAddition
+                                            End If
+
+                                            sc(i).YAxis = yaxis1
+                                            Exit Select
+                                        Case "RIGHT"
+                                            If RightAxisDivisor > 1 Then
+                                                sc(i) = Series.Divide(sc(i), RightAxisDivisor)
+                                            End If
+
+                                            If Not yaxis2.Label.Text.Contains(RightAxisLabelAddition) Then
+                                                yaxis2.Label.Text = yaxis2.Label.Text + RightAxisLabelAddition
+                                            End If
+                                            sc(i).YAxis = yaxis2
+                                            Exit Select
+                                    End Select
+
+                                    color_R = CLng(chartElColor(i)) Mod 256
+                                    color_G = (CLng(chartElColor(i)) \ 256) Mod 256
+                                    color_B = ((CLng(chartElColor(i)) \ 256) \ 256) Mod 256
+
+                                    sc(i).DefaultElement.Color = Color.FromArgb(255, color_R, color_G, color_B)
+                                    sc(i).DefaultElement.Marker.Type = i + 1
+
+                                    'Y-Axis boundaries for all series
+                                    Try
+                                        If drChart("ChartType") = IOSChartType.Histogram Then
+                                            If boundaries IsNot Nothing Then
+                                                boundaries = boundaries & "," & sc(i).GetYValueList()
+                                            Else
+                                                boundaries = sc(i).GetYValueList()
+                                            End If
+                                            If dtHistogramData Is Nothing Then
+                                                dtHistogramData = New DataTable()
+                                                dtHistogramData.TableName = ch.Name
+                                                dtHistogramData.Columns.Add(New DataColumn("Bins", GetType(Double)))
+                                            End If
+                                            dtHistogramData.Columns.Add(New DataColumn("Freq_" & sc(i).Name, GetType(Integer)))
+                                        End If
+                                    Catch
+                                    End Try
+                                Next
+
+                                'Configure histogram chart area
+                                Try
+                                    If drChart("ChartType") = IOSChartType.Histogram Then
+                                        Dim boundariesArr As Double() = StringToDoubleArray(boundaries, New String() {","})
+                                        Dim minValue As Double = boundariesArr.Min()
+                                        Dim maxValue As Double = boundariesArr.Max()
+                                        Dim binsGap As Double = System.Math.Ceiling((maxValue - minValue) / 30)
+
+                                        Dim bins(29) As Double
+                                        For index As Integer = 0 To bins.Length - 1
+                                            bins(index) = minValue + (binsGap * (index + 1))
+                                            Dim drHistogram As DataRow
+                                            drHistogram = dtHistogramData.NewRow
+                                            drHistogram.Item("Bins") = Convert.ToDouble(bins(index))
+                                            dtHistogramData.Rows.Add(drHistogram)
+                                        Next
+                                        ch.ExtraChartAreas.Item(0).XAxis.Minimum = minValue
+                                        ch.ExtraChartAreas.Item(0).XAxis.Interval = binsGap
+
+                                        dsHistogramData.Tables.Add(dtHistogramData)
+
+                                        For i = 0 To sc.Count() - 1
+                                            Dim freqTable As Series = StatisticalEngine.FrequencyTableOL(sc(i), bins)
+                                            freqTable.Name = "Freq_" & sc(i).Name
+                                            freqTable.Type = SeriesType.Bar
+                                            ch.ExtraChartAreas.Item(0).SeriesCollection.Add(freqTable)
+                                        Next
+                                    End If
+                                Catch
+                                End Try
+
+                                ch.SeriesCollection.Clear()
+                                ch.SeriesCollection.Add(sc)
+
+                                sc = Nothing
+                                de = Nothing
+                                ch.XAxis.Markers.Clear()
+
+                                ch.RefreshChart()
+                                ch.ResumeLayout()
+                                ReDim chartElements(0)
+                                ReDim chartElementsYAxis(0)
+                                ReDim chartEltype(0)
+                                ReDim chartElColor(0)
+                                ReDim chartYAxisScale(1)
+
+                                'Store chart bitmap image to directory
+                                If EvaluateReport = True Then
+                                    If Not dicEvalRptChartImages.ContainsKey(kpiName & "_NormalTrend") Then
+                                        dicEvalRptChartImages.Add(kpiName & "_NormalTrend", ch.GetChartBitmap)
+                                    End If
+                                End If
+
+                            End If
+                        Next
+                    End Using
+                Next
+            End Using
+
+        Catch ex As Exception
+            'Console.WriteLine(ex.Message.ToString)
+            'clsSQLCommands.WriteReportLog(connStr, reportID, "Error: " & ex.Message & vbCrLf & ex.InnerException.ToString)
+        End Try
+        dtChartConfig.Dispose()
+        dtChartConfig = Nothing
     End Sub
 
     Public Function ConvertGridToBitmap(ByRef grid As DevExpress.XtraGrid.GridControl) As Bitmap

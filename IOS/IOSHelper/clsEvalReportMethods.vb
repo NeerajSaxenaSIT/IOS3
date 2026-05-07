@@ -1,5 +1,5 @@
 ﻿Imports System.IO
-Imports System.Drawing ' For Image operations
+Imports System.Drawing
 Imports DevExpress.XtraPrinting
 Imports DevExpress.XtraGrid
 Imports DevExpress.XtraGrid.Views.Grid
@@ -610,6 +610,12 @@ Public Class clsEvalReportMethods
                     End If
                 Next
 
+                'NORMAL KPI TREND TITLE SLIDE
+                InsertTitleSlide(presPart, templateSlidePart, "Normal KPI Trend")
+
+                'Adding Normal Trend Chart Slides
+                CreateNormalTrendChartSlides(presDoc)
+
             End Using
 
             Return True
@@ -618,6 +624,190 @@ Public Class clsEvalReportMethods
             Return False
         End Try
     End Function
+
+#Region "Normal Teend KPI"
+
+    Private Sub CreateNormalTrendChartSlides(ByRef presDoc As PresentationDocument)
+
+        Dim presPart = presDoc.PresentationPart
+
+        Dim templateSlidePart As SlidePart = presPart.SlideParts.First()
+
+        Dim slidePart As SlidePart = Nothing
+        Dim slide As Slide = Nothing
+
+        Dim chartPosition As Integer = 0
+
+        For Each kvp In dicEvalRptChartImages
+            If kvp.Key.Contains("_NormalTrend") Then
+
+                ' Create new slide every 4 charts
+                If chartPosition Mod 4 = 0 Then
+
+                    slidePart = CreateNewNormalTrendSlide(presPart, templateSlidePart)
+                    slide = slidePart.Slide
+
+                End If
+
+                AddNormalTrendChartToSlide(slide, slidePart, kvp.Value, chartPosition Mod 4)
+                chartPosition += 1
+
+            End If
+
+        Next
+
+        presPart.Presentation.Save()
+
+    End Sub
+
+    Private Function CreateNewNormalTrendSlide(ByRef presPart As PresentationPart, ByRef templateSlidePart As SlidePart) As SlidePart
+
+        Dim newSlidePart As SlidePart = presPart.AddNewPart(Of SlidePart)()
+
+        newSlidePart.Slide = CType(templateSlidePart.Slide.CloneNode(True), Slide)
+
+        ' Preserve layout relationship
+        newSlidePart.AddPart(templateSlidePart.SlideLayoutPart)
+
+        Dim shapeTree = newSlidePart.Slide.CommonSlideData.ShapeTree
+
+        Dim shapesToRemove = shapeTree.Elements().Where(Function(s) TypeOf s Is Shape OrElse TypeOf s Is Picture).ToList()
+
+        For Each shp In shapesToRemove
+            shp.Remove()
+        Next
+
+        ' ---------------------------------------------------
+        ' ADD SLIDE TO PRESENTATION
+        ' ---------------------------------------------------
+
+        Dim slideIdList = presPart.Presentation.SlideIdList
+
+        Dim maxId As UInt32 = 1UI
+
+        If slideIdList.ChildElements.Count > 0 Then
+
+            maxId =
+            slideIdList.ChildElements.
+            OfType(Of SlideId)().
+            Max(Function(s) s.Id.Value)
+
+        End If
+
+        Dim slideId As New SlideId() With {
+        .Id = maxId + 1UI,
+        .RelationshipId = presPart.GetIdOfPart(newSlidePart)
+    }
+
+        slideIdList.Append(slideId)
+
+        newSlidePart.Slide.Save()
+
+        Return newSlidePart
+
+    End Function
+
+    Private Sub AddNormalTrendChartToSlide(ByRef slide As Slide, ByRef slidePart As SlidePart, bmp As Bitmap, position As Integer)
+
+        Dim slideWidth As Long = 9144000
+        Dim slideHeight As Long = 6858000
+
+        Dim gap As Long = 10000
+
+        Dim chartWidth As Long = 6.6 * 914400   '(slideWidth - gap) \ 2
+        Dim chartHeight As Long = 3.5 * 914400  '(slideHeight - gap) \ 2
+
+        Dim x As Long = 0
+        Dim y As Long = 0
+
+        Select Case position
+
+            Case 0 ' TOP LEFT
+
+                x = 0
+                y = 0
+
+            Case 1 ' TOP RIGHT
+
+                x = chartWidth + gap
+                y = 0
+
+            Case 2 ' BOTTOM LEFT
+
+                x = 0
+                y = chartHeight + gap
+
+            Case 3 ' BOTTOM RIGHT
+
+                x = chartWidth + gap
+                y = chartHeight + gap
+
+        End Select
+
+        InsertNormalTrendBitmap(slide, slidePart, bmp, x, y, chartWidth, chartHeight)
+
+    End Sub
+
+    Private Sub InsertNormalTrendBitmap(ByRef slide As Slide, ByRef slidePart As SlidePart, bmp As Bitmap, x As Long, y As Long, width As Long, height As Long)
+
+        Dim imagePart = slidePart.AddImagePart(ImagePartType.Png)
+
+        Using ms As New MemoryStream()
+            bmp.Save(ms, Imaging.ImageFormat.Png)
+            ms.Position = 0
+            imagePart.FeedData(ms)
+        End Using
+
+        Dim relId = slidePart.GetIdOfPart(imagePart)
+
+        Dim shapeTree = slide.CommonSlideData.ShapeTree
+
+        Dim picId As UInt32 = CType(shapeTree.ChildElements.Count + 1, UInt32)
+
+        Dim pic As New Picture(
+        New NonVisualPictureProperties(
+            New NonVisualDrawingProperties() With {
+                .Id = picId,
+                .Name = "NormalTrendChart"
+            },
+            New NonVisualPictureDrawingProperties(
+                New Drawing.PictureLocks() With {
+                    .NoChangeAspect = True
+                }),
+            New ApplicationNonVisualDrawingProperties()
+        ),
+        New BlipFill(
+            New Drawing.Blip() With {
+                .Embed = relId
+            },
+            New Drawing.Stretch(
+                New Drawing.FillRectangle()
+            )
+        ),
+        New ShapeProperties(
+            New Drawing.Transform2D(
+                New Drawing.Offset() With {
+                    .X = x,
+                    .Y = y
+                },
+                New Drawing.Extents() With {
+                    .Cx = 6.6 * 914400,
+                    .Cy = 3.5 * 914400
+                }
+            ),
+            New Drawing.PresetGeometry(
+                New Drawing.AdjustValueList()
+            ) With {
+                .Preset = Drawing.ShapeTypeValues.Rectangle
+            }
+        )
+    )
+
+        shapeTree.Append(pic)
+
+    End Sub
+
+#End Region
 
     Private Sub InsertChangeKPITableGrid(ByRef presDoc As PresentationDocument)
         Dim presPart = presDoc.PresentationPart
