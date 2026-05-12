@@ -81,17 +81,17 @@ Public Class frmEvalRptChangeKPI
 
             BandedGridView1.Bands.Clear()
 
-            Dim gcBandPrdComp As New DevExpress.XtraGrid.Views.BandedGrid.GridBand()
-            gcBandPrdComp.Caption = "Period Comparison"
-            gcBandPrdComp.AppearanceHeader.Options.UseTextOptions = True
-            gcBandPrdComp.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
-            gcBandPrdComp.AppearanceHeader.TextOptions.VAlignment = DevExpress.Utils.HorzAlignment.Center
+            'Dim gcBandPrdComp As New DevExpress.XtraGrid.Views.BandedGrid.GridBand()
+            'gcBandPrdComp.Caption = "Period Comparison"
+            'gcBandPrdComp.AppearanceHeader.Options.UseTextOptions = True
+            'gcBandPrdComp.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
+            'gcBandPrdComp.AppearanceHeader.TextOptions.VAlignment = DevExpress.Utils.HorzAlignment.Center
 
-            Dim gcBandPrdCalc As New DevExpress.XtraGrid.Views.BandedGrid.GridBand()
-            gcBandPrdCalc.Caption = "Period Calculation"
-            gcBandPrdCalc.AppearanceHeader.Options.UseTextOptions = True
-            gcBandPrdCalc.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
-            gcBandPrdCalc.AppearanceHeader.TextOptions.VAlignment = DevExpress.Utils.HorzAlignment.Center
+            'Dim gcBandPrdCalc As New DevExpress.XtraGrid.Views.BandedGrid.GridBand()
+            'gcBandPrdCalc.Caption = "Period Calculation"
+            'gcBandPrdCalc.AppearanceHeader.Options.UseTextOptions = True
+            'gcBandPrdCalc.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
+            'gcBandPrdCalc.AppearanceHeader.TextOptions.VAlignment = DevExpress.Utils.HorzAlignment.Center
 
             Dim gcBandAvg As New DevExpress.XtraGrid.Views.BandedGrid.GridBand()
             gcBandAvg.Caption = "AVG"
@@ -115,7 +115,7 @@ Public Class frmEvalRptChangeKPI
                 If col.AbsoluteIndex > -1 AndAlso col.AbsoluteIndex <= 1 Then
                     'gcBandPrdComp.Columns.Add(col)
                 ElseIf col.AbsoluteIndex = 2 Then
-                    gcBandPrdCalc.Columns.Add(col)
+                    'gcBandPrdCalc.Columns.Add(col)
                 ElseIf col.AbsoluteIndex > 2 AndAlso col.AbsoluteIndex <= 6 Then
                     gcBandAvg.Columns.Add(col)
                 ElseIf col.AbsoluteIndex > 6 AndAlso col.AbsoluteIndex <= 10 Then
@@ -130,7 +130,7 @@ Public Class frmEvalRptChangeKPI
             End If
             BandedGridView1.OptionsView.ColumnAutoWidth = True
             'BandedGridView1.Bands.Add(gcBandPrdComp)
-            BandedGridView1.Bands.Add(gcBandPrdCalc)
+            'BandedGridView1.Bands.Add(gcBandPrdCalc)
             BandedGridView1.Bands.Add(gcBandAvg)
             BandedGridView1.Bands.Add(gcBandP10)
             BandedGridView1.Bands.Add(gcBandP90)
@@ -144,11 +144,12 @@ Public Class frmEvalRptChangeKPI
 
     Public Function LoadSingleKpiTopXGridData(ByRef dtGrid As DataTable) As DevExpress.XtraGrid.GridControl
         Try
-            GridControl2.DataSource = Nothing
-            GridControl2.MainView = GridView2
-            GridView2.Columns.Clear()
-            GridView2.OptionsBehavior.AutoPopulateColumns = True
-            GridControl2.DataSource = dtGrid
+            'GridControl2.DataSource = Nothing
+            'GridControl2.MainView = GridView2
+            'GridView2.Columns.Clear()
+            'GridView2.OptionsBehavior.AutoPopulateColumns = True
+            'GridControl2.DataSource = dtGrid
+            IOS.Library.IOSDevExpressGrid.PopulateDataInGrid(GridControl2, GridView2, dtGrid, "ALL")
             Return GridControl2
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)

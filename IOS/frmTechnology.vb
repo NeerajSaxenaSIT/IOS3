@@ -9281,7 +9281,7 @@ Public Class frmTechnology
             conn_el.Open()
 
             If Export2Excel = True Then
-                sql_tables = clsSQLCommands.GetProcessStatsQueryExport2Excel(tech, cmbChartSetNameStats.SelectedItem.ToString)
+                sql_tables = clsSQLCommands.GetProcessStatsQueryExport2Excel(tech, cmbChartSetNameStats.SelectedItem.ToString, Environment.UserName.ToString)
             Else
                 If (cm_Chart_ObjectCompareOrMapKPI = "tsmi_Chart_LaunchObj") Or (cm_Chart_ObjectCompareOrMapKPI = "tsmi_ChartCompareElementsGroupBy") Then
                     If CType(cm_Chart_Sourcecontrol, Chart).Parent IsNot Nothing Then
@@ -24792,6 +24792,7 @@ Public Class frmTechnology
     Private EvaluateReport As Boolean = False
     Private lstEvalRptImgStream As List(Of MemoryStream)
     Private dicEvalRptGridImages As Dictionary(Of String, MemoryStream)
+    Private dicEvalRptGridDataTables As Dictionary(Of String, DataTable)
     Private dicEvalRptChartImages As Dictionary(Of String, Bitmap)
 
     Structure Cell
@@ -24974,6 +24975,9 @@ Public Class frmTechnology
         End If
         If dicEvalRptGridImages IsNot Nothing Then
             dicEvalRptGridImages.Clear()
+        End If
+        If dicEvalRptGridDataTables IsNot Nothing Then
+            dicEvalRptGridDataTables.Clear()
         End If
         If dicEvalRptChartImages IsNot Nothing Then
             dicEvalRptChartImages.Clear()
@@ -27694,7 +27698,11 @@ Public Class frmTechnology
                         ch.TitleBox.Label.Text = " "
                         tsmi_ChartHideTitle.Text = "Chart - Show Title"
                     Else
-                        ch.TitleBox.Label.Text = "Objects: " & objectscharted
+                        If nc IsNot Nothing Then
+                            ch.TitleBox.Label.Text = " "
+                        Else
+                            ch.TitleBox.Label.Text = "Objects: " & objectscharted
+                        End If
                         tsmi_ChartHideTitle.Text = "Chart - Hide Title"
                     End If
                     ch.TitleBox.Label.Alignment = StringAlignment.Near
@@ -28987,6 +28995,8 @@ Public Class frmTechnology
 
 #Region "Evaluate Report"
 
+    Private ChartConfig As ChartConfigDataTables
+
     Private Sub btnEvalReport_Click(sender As Object, e As EventArgs) Handles btnEvalReport.Click
         Try
             EvaluateReport = True
@@ -28995,6 +29005,7 @@ Public Class frmTechnology
 
             lstEvalRptImgStream = New List(Of MemoryStream)
             dicEvalRptGridImages = New Dictionary(Of String, MemoryStream)
+            dicEvalRptGridDataTables = New Dictionary(Of String, DataTable)
             dicEvalRptChartImages = New Dictionary(Of String, Bitmap)
             Dim objEvalRptMtd As New clsEvalReportMethods()
 
@@ -29059,10 +29070,10 @@ Public Class frmTechnology
 
                         '******* Load Per KPI Calc Data *******
                         Dim dtKPI As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of String)("KPIName") = drKPI("KPIName").ToString).CopyToDataTable
-                        'Dim gcKPI = obj.LoadSingleKpiGridData(dtKPI)
                         Dim gcKPI = obj.LoadSingleKpiGridData(dtKPI)
                         Dim msKPI As MemoryStream = objEvalRptMtd.ExportGridToImage(gcKPI)
                         dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_Trend", msKPI)
+                        dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_Trend", dtKPI)
 
                         WaitScreen.ShowWaitScreen("Loading Top X Rows Per KPI")
 
@@ -29083,10 +29094,12 @@ Public Class frmTechnology
 
                         Dim msKpiTopX As MemoryStream = objEvalRptMtd.ExportGridToImage(gcTopX)
                         dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_TopX", msKpiTopX)
+                        dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_TopX", dtKPITopX)
 
                     Next
 
                     objEvalRptMtd.dicEvalRptGridImages = dicEvalRptGridImages
+                    objEvalRptMtd.dicEvalRptGridDataTables = dicEvalRptGridDataTables
 
                     'Loading Histogram Charts For KPIs
                     '****************************************
@@ -29142,6 +29155,22 @@ Public Class frmTechnology
 
                     WaitScreen.ShowWaitScreen("Loading Chart/Grid Images On Slides")
                     objEvalRptMtd.dicEvalRptChartImages = dicEvalRptChartImages
+
+                    'Set Class Variables
+                    objEvalRptMtd.Technology = _strNetwork
+                    objEvalRptMtd.TargetType = cmbObjectTreeEval.SelectedItem.ToString
+                    objEvalRptMtd.ChartSetName = cmbChartSetNameEval.SelectedItem.ToString
+                    objEvalRptMtd.Area = cmbObjectTreeEval.SelectedItem.ToString
+                    objEvalRptMtd.SiteCount = tvObjectsTreeEval.GetEndCheckedNodes().Count.ToString
+                    objEvalRptMtd.SelectedArea = ""
+                    objEvalRptMtd.StartTime = CDate(dtEditStartTimeEval.EditValue).ToString("dd-MM-yyyy")
+                    objEvalRptMtd.EndTime = CDate(dtEditEndTimeEval.EditValue).ToString("dd-MM-yyyy")
+                    objEvalRptMtd.Resolution = GetResolutionEval()
+                    objEvalRptMtd.Filter = "Weekdays"
+                    objEvalRptMtd.PrdCompBeforeTime = CDate(dtPrdCalcEval.Rows(0)("PeriodStart")).ToString("dd-MM-yyyy") & " to " & CDate(dtPrdCalcEval.Rows(0)("PeriodEnd")).ToString("dd-MM-yyyy")
+                    objEvalRptMtd.PrdCompAfterTime = CDate(dtPrdCalcEval.Rows(1)("PeriodStart")).ToString("dd-MM-yyyy") & " to " & CDate(dtPrdCalcEval.Rows(1)("PeriodEnd")).ToString("dd-MM-yyyy")
+                    objEvalRptMtd.TopX = 20
+
                     objEvalRptMtd.CreateEvaluateReportFromTemplate(templateFilePath, reportFilePath)
 
                 End If
@@ -29157,11 +29186,31 @@ Public Class frmTechnology
         End Try
     End Sub
 
+    Private Function GetResolutionEval() As String
+        Dim resolution As String = Nothing
+        If rdoRawEval.Checked Then
+            resolution = "Raw"
+        ElseIf rdoHourlyEval.Checked Then
+            resolution = "Hourly"
+        ElseIf rdoDailyEval.Checked Then
+            resolution = "Daily"
+        ElseIf rdoDailyBHEval.Checked Then
+            resolution = "BH"
+        ElseIf rdoWeeklyEval.Checked Then
+            resolution = "Weekly"
+        ElseIf rdoDailyBH2Eval.Checked Then
+            resolution = "BHPS"
+        ElseIf rdoMonthlyeval.Checked Then
+            resolution = "Monthly"
+        End If
+        Return resolution
+    End Function
+
     Private Sub CreateStatsChart(category As String, chartTitle As String, kpiName As String)
         Dim nc As New dotnetCHARTING.WinForms.Chart
         'nc.Name = objectName
         nc.Width = 1000
-        nc.Height = 480
+        nc.Height = 500
         'Chart Default Properties
         nc.DefaultElement.Marker.Visible = False
         nc.LegendBox.Orientation = dotnetCHARTING.WinForms.Orientation.Bottom
@@ -29192,13 +29241,7 @@ Public Class frmTechnology
         SetChartConfigData(_strNetwork, nc, chartTitle, category)
 
         ProcessStatsChart(nc, kpiName)
-
-        'copy chart image to ppt slide
-        'Console.WriteLine("Copying image for chart: " & objectName)
-
     End Sub
-
-    Private ChartConfig As ChartConfigDataTables
 
     Private Sub SetChartConfigData(tech As String, ch As Chart, chartTitle As String, category As String)
         Dim sql As String = Nothing
@@ -29245,7 +29288,6 @@ Public Class frmTechnology
         dsStats = New DataSet
         dsStats = GetData(chartSql, tblName)
         dsStats.Tables(0).TableName = tblName
-        'Console.WriteLine("Assigning data to chart: " & chartName)
         AssignDataToCharts_EvalReport(ch, dsStats.Tables(0), kpiName)
     End Sub
 
@@ -29580,7 +29622,6 @@ Public Class frmTechnology
                                             sc(i).YAxis = yaxis2
                                     End Select
 
-
                                     Select Case chartElementsYAxis(i).ToString().Trim().ToUpper()
                                         Case "LEFT"
 
@@ -29736,7 +29777,7 @@ Public Class frmTechnology
 
             Dim nc = New Chart
             nc.Name = chName
-            nc.Width = 1000
+            nc.Width = 1500
             nc.Height = 480
 
             'Chart Default Properties

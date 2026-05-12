@@ -161,7 +161,7 @@ Public Class frmNBIReports
         DataAccessorODBC.ExecuteNonQuery(ConnStringAndSqlParam(0), ConnStringAndSqlParam(1))
     End Sub
 
-    Private Function LoadNBIReportData() As DataTable
+    Private Function LoadNBIReportData(connStr As String) As DataTable
         Dim reportID As Integer = CInt(gvReportsList.GetFocusedRowCellValue("ReportID"))
         parray = Nothing
         ConnStringAndSqlParam = Nothing
@@ -171,7 +171,7 @@ Public Class frmNBIReports
             New String() {"@ToNBI", 2}
         }
         ConnStringAndSqlParam = GetSQL(8535, parray)
-        Return DataAccessorODBC.GetDataTable(ConnStringAndSqlParam(0), ConnStringAndSqlParam(1), CInt(IIf(txtTimeout.Text.Trim = "", 300, txtTimeout.Text.Trim)))
+        Return DataAccessorODBC.GetDataTable(connStr, ConnStringAndSqlParam(1), CInt(IIf(txtTimeout.Text.Trim = "", 300, txtTimeout.Text.Trim)))
     End Function
 
     Private Sub LoadCountersList()
@@ -306,6 +306,22 @@ Public Class frmNBIReports
                 End If
             Next
         End If
+    End Sub
+
+    Private Sub ExecuteReadoNlyUserAction()
+        Try
+            Dim connArr() As String = GetIOSConnection(10000)
+            'get connection string for datareader operation
+
+            If connArr(1) = "" Then
+                SetMessage("Connection String (ID = 10000) Is Unavailable")
+                Exit Sub
+            End If
+
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+        End Try
     End Sub
 
 #End Region
@@ -781,9 +797,12 @@ Public Class frmNBIReports
             Me.Cursor = Cursors.WaitCursor
             Application.DoEvents()
 
+            'Get connection string for readonly user
+            Dim ReadOnlyConnStr = GetIOSConnection(10000)(1)
+
             Dim sw As Stopwatch = Stopwatch.StartNew()
 
-            Dim dt As DataTable = LoadNBIReportData()
+            Dim dt As DataTable = LoadNBIReportData(ReadOnlyConnStr)
             IOSDevExpressGrid.PopulateDataInGrid(gcViewReport, gvViewReport, dt, "ALL")
 
             sw.Stop()
@@ -839,7 +858,7 @@ Public Class frmNBIReports
                     End If
 
                     'get connection string for datareader operation
-                    Dim connArr() As String = GetIOSConnection(1000)
+                    Dim connArr() As String = GetIOSConnection(10000)
 
                     If connArr(1) = "" Then
                         SetMessage("Connection String (ID = 1000) Is Unavailable")
@@ -1068,6 +1087,7 @@ Public Class frmNBIReports
             Dim sqlTestToFire As String = Me.txtManualSQL.Text
             If txtManualSQL.Text <> String.Empty Then
                 Dim objNBIReportManualSQL As New dlgNBIReportManualSQL()
+                objNBIReportManualSQL.ReadOnlyConnStr = GetIOSConnection(10000)(1)
 
                 If txtManualSQL.Text.Contains("@starttime") Or txtManualSQL.Text.Contains("@endtime") Then
                     If Not dePeriodStartTime.EditValue Is Nothing AndAlso dePeriodStartTime.EditValue.ToString <> "" Then

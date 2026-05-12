@@ -4,6 +4,7 @@ Imports IOS.DataLibrary
 Public Class dlgNBIReportManualSQL
 
     Public sqlQuery As String = Nothing
+    Public ReadOnlyConnStr As String = Nothing
 
     Private Sub dlgNBIReportManualSQL_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
@@ -11,7 +12,7 @@ Public Class dlgNBIReportManualSQL
             Application.DoEvents()
 
             If Me.sqlQuery IsNot Nothing Then
-                Dim dt As DataTable = DataAccessorODBC.GetDataTableForNBIReportManualSQL(connStrIOSServer, sqlQuery)
+                Dim dt As DataTable = DataAccessorODBC.GetDataTableForNBIReportManualSQL(ReadOnlyConnStr, sqlQuery)
                 IOSDevExpressGrid.PopulateDataInGrid(gcManualSQLQry, gvManualSQLQry, dt, "ALL")
             End If
 
