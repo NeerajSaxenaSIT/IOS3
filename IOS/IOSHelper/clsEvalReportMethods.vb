@@ -10,6 +10,8 @@ Imports DevExpress.XtraGrid.Views.BandedGrid
 
 Public Class clsEvalReportMethods
 
+#Region "Public Variables"
+
     Public dicEvalRptGridImages As Dictionary(Of String, MemoryStream)
     Public dicEvalRptGridBmp As Dictionary(Of String, Bitmap)
     Public dicEvalRptGridDataTables As Dictionary(Of String, DataTable)
@@ -18,11 +20,6 @@ Public Class clsEvalReportMethods
     Private slidePosition As Integer = 1
     Private chartsPerSlide As Integer = 0
     Private drawingObjectId As UInteger = 0
-    Private reportFileName As String = Nothing
-
-    'OpenXML presentation parts
-    Dim slide As Slide = Nothing
-    Dim slidePart As SlidePart = Nothing
 
     'Pilot Introduction Slide Variables
     Public Technology As String = ""
@@ -39,7 +36,9 @@ Public Class clsEvalReportMethods
     Public PrdCompAfterTime As String = ""
     Public TopX As String = ""
 
-#Region "Open XML Old Methods"
+#End Region
+
+#Region "Open XML Methods"
 
     Private Sub InsertTitleSlide(presPart As PresentationPart, templateSlidePart As SlidePart, titleText As String)
 
@@ -241,10 +240,6 @@ Public Class clsEvalReportMethods
         shapeTree.Append(pic)
         slidePart.Slide.Save()
     End Sub
-
-#End Region
-
-#Region "Open XML Methods"
 
     Public Function CreateEvaluateReportFromTemplate(templatePath As String, reportFileName As String)
         Try

@@ -29015,7 +29015,7 @@ Public Class frmTechnology
             Dim objEvalRptMtd As New clsEvalReportMethods()
 
             Dim tempFileFolder As String = GetUserDataPath() & "\Data\EvalReport"
-            Dim templateFilePath As String = GetUserDataPath() & "\Data\template.pptx"
+            Dim templateFilePath As String = GetUserDataPath() & "\Data\ReportTemplate.pptx"
             Dim reportFilePath As String = GetUserDataPath() & "\Data\EvalReport" & "_" & Format(Now(), "yyyyMMdd_HHmmss") & ".pptx"
 
             WaitScreen.ShowWaitScreen("Report Creation Started")
@@ -29663,6 +29663,7 @@ Public Class frmTechnology
                                 ReDim chartElColor(0)
                                 ReDim chartYAxisScale(1)
 
+                                '******* applying period calculation on the chart *******
                                 ch = ApplyPerodCalculationOnChart(ch, dtData)
 
                                 'Store chart bitmap image to directory
