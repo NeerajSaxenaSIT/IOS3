@@ -143,7 +143,9 @@ Partial Class frmEvalRptChangeKPI
         Me.ClientSize = New System.Drawing.Size(1058, 568)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.MaximizeBox = False
+        Me.MaximumSize = New System.Drawing.Size(1060, 600)
         Me.MinimizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(1060, 600)
         Me.Name = "frmEvalRptChangeKPI"
         Me.Text = "Evaluate Report Change KPI"
         CType(Me.GridControl1, System.ComponentModel.ISupportInitialize).EndInit()

@@ -29819,8 +29819,8 @@ Public Class frmTechnology
                                     End If
 
                                     shadeThreshold.LegendEntry.Visible = False
-                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
-                                    shadeThreshold.Label.Alignment = StringAlignment.Near
+                                    shadeThreshold.Label.LineAlignment = StringAlignment.Near
+                                    shadeThreshold.Label.Alignment = StringAlignment.Center
                                     shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
                                     shadeThreshold.LegendEntry.Value = ""
                                     shadeThreshold.BringToFront = True
@@ -29843,8 +29843,8 @@ Public Class frmTechnology
                                     End If
 
                                     shadeThreshold.LegendEntry.Visible = False
-                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
-                                    shadeThreshold.Label.Alignment = StringAlignment.Near
+                                    shadeThreshold.Label.LineAlignment = StringAlignment.Near
+                                    shadeThreshold.Label.Alignment = StringAlignment.Center
                                     shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
                                     shadeThreshold.LegendEntry.Value = ""
                                     shadeThreshold.BringToFront = True
@@ -29867,8 +29867,8 @@ Public Class frmTechnology
                                     End If
 
                                     shadeThreshold.LegendEntry.Visible = False
-                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
-                                    shadeThreshold.Label.Alignment = StringAlignment.Near
+                                    shadeThreshold.Label.LineAlignment = StringAlignment.Near
+                                    shadeThreshold.Label.Alignment = StringAlignment.Center
                                     shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
                                     shadeThreshold.LegendEntry.Value = ""
                                     shadeThreshold.BringToFront = True
