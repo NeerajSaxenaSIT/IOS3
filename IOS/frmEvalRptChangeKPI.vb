@@ -1,4 +1,5 @@
 ﻿Imports IOS.DataLibrary
+Imports DevExpress.XtraPrinting
 
 Public Class frmEvalRptChangeKPI
 
@@ -144,97 +145,146 @@ Public Class frmEvalRptChangeKPI
 
     Public Function LoadSingleKpiTopXGridData(ByRef dtGrid As DataTable) As DevExpress.XtraGrid.GridControl
         Try
-            'GridControl2.DataSource = Nothing
-            'GridControl2.MainView = GridView2
-            'GridView2.Columns.Clear()
-            'GridView2.OptionsBehavior.AutoPopulateColumns = True
-            'GridControl2.DataSource = dtGrid
-            IOS.Library.IOSDevExpressGrid.PopulateDataInGrid(GridControl2, GridView2, dtGrid, "ALL")
-            Return GridControl2
+            'IOS.Library.IOSDevExpressGrid.PopulateDataInGrid(GridControl3, GridView3, dtGrid, "ALL")
+            GridControl3.MainView = GridView3
+            GridView3.Columns.Clear()
+
+            GridControl3.ViewCollection.Add(GridView3)
+            GridControl3.DataSource = dtGrid
+
+            GridView3.OptionsView.ShowGroupPanel = False
+            GridView3.OptionsView.ShowIndicator = False
+            GridView3.OptionsView.ColumnAutoWidth = True
+
+            GridView3.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
+            GridView3.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
+            GridView3.HorzScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never
+            GridView3.VertScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never
+
+            GridView3.AutoFillColumn = GridView3.Columns("ObjectName")
+
+            GridView3.Columns(0).Width = GridControl3.Width / 5
+            GridView3.Columns(1).Width = GridControl3.Width / 5
+            GridView3.Columns(2).Width = GridControl3.Width / 5
+            GridView3.Columns(3).Width = GridControl3.Width / 5
+            GridView3.Columns(4).Width = GridControl3.Width / 5
+
+            GridControl3.ForceInitialize()
+            Return GridControl3
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
         End Try
         Return Nothing
     End Function
 
-    Public Function SetupBandedVerticalGrid(ByRef dtGrid As DataTable) As DevExpress.XtraVerticalGrid.VGridControl
-        VGridControl1.DataSource = dtGrid
+    'Public Function SetupBandedVerticalGrid(ByRef dtGrid As DataTable) As DevExpress.XtraVerticalGrid.VGridControl
+    '    VGridControl1.DataSource = dtGrid
 
-        ' IMPORTANT: Enable BandsView to show record columns grouped by bands
-        VGridControl1.LayoutStyle = DevExpress.XtraVerticalGrid.LayoutViewStyle.BandsView
+    '    ' IMPORTANT: Enable BandsView to show record columns grouped by bands
+    '    VGridControl1.LayoutStyle = DevExpress.XtraVerticalGrid.LayoutViewStyle.BandsView
 
-        ' Optional: Auto-size record columns to fit the grid width
-        VGridControl1.OptionsView.AutoScaleBands = True
+    '    ' Optional: Auto-size record columns to fit the GridControl2 width
+    '    VGridControl1.OptionsView.AutoScaleBands = True
 
-        ' Create Categories (Bands)
-        Dim catPrdCalc As New DevExpress.XtraVerticalGrid.Rows.CategoryRow("Period Calculation")
-        Dim catAvg As New DevExpress.XtraVerticalGrid.Rows.CategoryRow("AVG")
-        Dim catP10 As New DevExpress.XtraVerticalGrid.Rows.CategoryRow("P10")
-        Dim catP90 As New DevExpress.XtraVerticalGrid.Rows.CategoryRow("P90")
+    '    ' Create Categories (Bands)
+    '    Dim catPrdCalc As New DevExpress.XtraVerticalGrid.Rows.CategoryRow("Period Calculation")
+    '    Dim catAvg As New DevExpress.XtraVerticalGrid.Rows.CategoryRow("AVG")
+    '    Dim catP10 As New DevExpress.XtraVerticalGrid.Rows.CategoryRow("P10")
+    '    Dim catP90 As New DevExpress.XtraVerticalGrid.Rows.CategoryRow("P90")
 
-        ' Create Data Rows
-        Dim rowName As New DevExpress.XtraVerticalGrid.Rows.EditorRow("KPIName")
-        rowName.Properties.Caption = "KPI"
+    '    ' Create Data Rows
+    '    Dim rowName As New DevExpress.XtraVerticalGrid.Rows.EditorRow("KPIName")
+    '    rowName.Properties.Caption = "KPI"
 
-        Dim rowAvgBefore As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_Before")
-        rowAvgBefore.Properties.Caption = "Before"
+    '    Dim rowAvgBefore As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_Before")
+    '    rowAvgBefore.Properties.Caption = "Before"
 
-        Dim rowAvgAfter As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_After")
-        rowAvgAfter.Properties.Caption = "After"
+    '    Dim rowAvgAfter As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_After")
+    '    rowAvgAfter.Properties.Caption = "After"
 
-        Dim rowAvgDelta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_Delta")
-        rowAvgDelta.Properties.Caption = "Delta"
+    '    Dim rowAvgDelta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_Delta")
+    '    rowAvgDelta.Properties.Caption = "Delta"
 
-        Dim rowAvgPercDelta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_%Delta")
-        rowAvgPercDelta.Properties.Caption = "%Delta"
+    '    Dim rowAvgPercDelta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_%Delta")
+    '    rowAvgPercDelta.Properties.Caption = "%Delta"
 
-        Dim rowP10Before As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_Before")
-        rowP10Before.Properties.Caption = "Before"
+    '    Dim rowP10Before As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_Before")
+    '    rowP10Before.Properties.Caption = "Before"
 
-        Dim rowP10After As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_After")
-        rowP10After.Properties.Caption = "After"
+    '    Dim rowP10After As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_After")
+    '    rowP10After.Properties.Caption = "After"
 
-        Dim rowP10Delta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_Delta")
-        rowP10Delta.Properties.Caption = "Delta"
+    '    Dim rowP10Delta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_Delta")
+    '    rowP10Delta.Properties.Caption = "Delta"
 
-        Dim rowP10PercDelta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_%Delta")
-        rowP10PercDelta.Properties.Caption = "%Delta"
+    '    Dim rowP10PercDelta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("AVG_%Delta")
+    '    rowP10PercDelta.Properties.Caption = "%Delta"
 
-        Dim rowP90Before As New DevExpress.XtraVerticalGrid.Rows.EditorRow("P90_Before")
-        rowP90Before.Properties.Caption = "Before"
+    '    Dim rowP90Before As New DevExpress.XtraVerticalGrid.Rows.EditorRow("P90_Before")
+    '    rowP90Before.Properties.Caption = "Before"
 
-        Dim rowP90After As New DevExpress.XtraVerticalGrid.Rows.EditorRow("P90_After")
-        rowP90After.Properties.Caption = "After"
+    '    Dim rowP90After As New DevExpress.XtraVerticalGrid.Rows.EditorRow("P90_After")
+    '    rowP90After.Properties.Caption = "After"
 
-        Dim rowP90Delta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("P90_Delta")
-        rowP90Delta.Properties.Caption = "Delta"
+    '    Dim rowP90Delta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("P90_Delta")
+    '    rowP90Delta.Properties.Caption = "Delta"
 
-        Dim rowP90PercDelta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("P90_%Delta")
-        rowP90PercDelta.Properties.Caption = "%Delta"
+    '    Dim rowP90PercDelta As New DevExpress.XtraVerticalGrid.Rows.EditorRow("P90_%Delta")
+    '    rowP90PercDelta.Properties.Caption = "%Delta"
 
-        ' Clear auto-generated rows and build hierarchy
-        VGridControl1.Rows.Clear()
-        VGridControl1.Rows.AddRange(New DevExpress.XtraVerticalGrid.Rows.BaseRow() {catPrdCalc, catAvg, catP10, catP90})
+    '    ' Clear auto-generated rows and build hierarchy
+    '    VGridControl1.Rows.Clear()
+    '    VGridControl1.Rows.AddRange(New DevExpress.XtraVerticalGrid.Rows.BaseRow() {catPrdCalc, catAvg, catP10, catP90})
 
-        ' Nest the fields under their respective category/band
-        catPrdCalc.ChildRows.Add(rowName)
+    '    ' Nest the fields under their respective category/band
+    '    catPrdCalc.ChildRows.Add(rowName)
 
-        catAvg.ChildRows.Add(rowAvgBefore)
-        catAvg.ChildRows.Add(rowAvgAfter)
-        catAvg.ChildRows.Add(rowAvgDelta)
-        catAvg.ChildRows.Add(rowAvgPercDelta)
+    '    catAvg.ChildRows.Add(rowAvgBefore)
+    '    catAvg.ChildRows.Add(rowAvgAfter)
+    '    catAvg.ChildRows.Add(rowAvgDelta)
+    '    catAvg.ChildRows.Add(rowAvgPercDelta)
 
-        catP10.ChildRows.Add(rowP10Before)
-        catP10.ChildRows.Add(rowP10After)
-        catP10.ChildRows.Add(rowP10Delta)
-        catP10.ChildRows.Add(rowP10PercDelta)
+    '    catP10.ChildRows.Add(rowP10Before)
+    '    catP10.ChildRows.Add(rowP10After)
+    '    catP10.ChildRows.Add(rowP10Delta)
+    '    catP10.ChildRows.Add(rowP10PercDelta)
 
-        catP90.ChildRows.Add(rowP90Before)
-        catP90.ChildRows.Add(rowP90After)
-        catP90.ChildRows.Add(rowP90Delta)
-        catP90.ChildRows.Add(rowP90PercDelta)
+    '    catP90.ChildRows.Add(rowP90Before)
+    '    catP90.ChildRows.Add(rowP90After)
+    '    catP90.ChildRows.Add(rowP90Delta)
+    '    catP90.ChildRows.Add(rowP90PercDelta)
 
-        Return VGridControl1
+    '    Return VGridControl1
+    'End Function
+
+    Public Function BuildSingleKpiGridData(ByVal dtSrc As DataTable) As DevExpress.XtraGrid.GridControl
+        Dim dt As New DataTable()
+
+        dt.Columns.Add("KPI Changes")
+        dt.Columns.Add("Before")
+        dt.Columns.Add("After")
+        dt.Columns.Add("Delta")
+        dt.Columns.Add("Delta%")
+
+        Dim dr As DataRow = dtSrc.Rows(0)
+        dt.Rows.Add("AVG", dr("AVG_Before"), dr("AVG_After"), dr("AVG_Delta"), dr("AVG_%Delta"))
+        dt.Rows.Add("P10", dr("P10_Before"), dr("P10_After"), dr("P10_Delta"), dr("P10_%Delta"))
+        dt.Rows.Add("P90", dr("P90_Before"), dr("P90_After"), dr("P90_Delta"), dr("P90_%Delta"))
+
+        GridControl2.MainView = GridView2
+        GridView2.Columns.Clear()
+
+        GridControl2.ViewCollection.Add(GridView2)
+        GridControl2.DataSource = dt
+
+        GridView2.OptionsView.ShowGroupPanel = False
+        GridView2.OptionsView.ShowIndicator = False
+        GridView2.OptionsView.ColumnAutoWidth = False
+
+        GridView2.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
+        GridView2.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
+        GridControl2.ForceInitialize()
+        Return GridControl2
     End Function
 
 End Class

@@ -24792,6 +24792,7 @@ Public Class frmTechnology
     Private EvaluateReport As Boolean = False
     Private lstEvalRptImgStream As List(Of MemoryStream)
     Private dicEvalRptGridImages As Dictionary(Of String, MemoryStream)
+    Private dicEvalRptGridBmp As Dictionary(Of String, Bitmap)
     Private dicEvalRptGridDataTables As Dictionary(Of String, DataTable)
     Private dicEvalRptChartImages As Dictionary(Of String, Bitmap)
 
@@ -24975,6 +24976,9 @@ Public Class frmTechnology
         End If
         If dicEvalRptGridImages IsNot Nothing Then
             dicEvalRptGridImages.Clear()
+        End If
+        If dicEvalRptGridBmp IsNot Nothing Then
+            dicEvalRptGridBmp.Clear()
         End If
         If dicEvalRptGridDataTables IsNot Nothing Then
             dicEvalRptGridDataTables.Clear()
@@ -29005,6 +29009,7 @@ Public Class frmTechnology
 
             lstEvalRptImgStream = New List(Of MemoryStream)
             dicEvalRptGridImages = New Dictionary(Of String, MemoryStream)
+            dicEvalRptGridBmp = New Dictionary(Of String, Bitmap)
             dicEvalRptGridDataTables = New Dictionary(Of String, DataTable)
             dicEvalRptChartImages = New Dictionary(Of String, Bitmap)
             Dim objEvalRptMtd As New clsEvalReportMethods()
@@ -29060,7 +29065,6 @@ Public Class frmTechnology
 
                     Dim obj As New frmEvalRptChangeKPI()
                     Dim gc = obj.LoadChangeKpiGridData(dtGrid)
-                    'Dim gc = LoadChangeKpiGridData(dtGrid)
                     Dim ms As MemoryStream = objEvalRptMtd.ExportGridToImage(gc)
                     dicEvalRptGridImages.Add("ChangeKPITable", ms)
 
@@ -29070,8 +29074,15 @@ Public Class frmTechnology
 
                         '******* Load Per KPI Calc Data *******
                         Dim dtKPI As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of String)("KPIName") = drKPI("KPIName").ToString).CopyToDataTable
-                        Dim gcKPI = obj.LoadSingleKpiGridData(dtKPI)
+                        Dim gcKPI = obj.BuildSingleKpiGridData(dtKPI)
                         Dim msKPI As MemoryStream = objEvalRptMtd.ExportGridToImage(gcKPI)
+
+                        '************************************************************************************************************************
+                        Dim gridBmp As Bitmap = New Bitmap(gcKPI.Width, gcKPI.Height)
+                        gcKPI.DrawToBitmap(gridBmp, New Rectangle(0, 0, gcKPI.Width, gcKPI.Height))
+                        dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_Trend", gridBmp)
+                        '************************************************************************************************************************
+
                         dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_Trend", msKPI)
                         dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_Trend", dtKPI)
 
@@ -29092,6 +29103,12 @@ Public Class frmTechnology
                         Dim dtKPITopX = DataAccessorODBC.GetDataTable(connstring, sqlParam)
                         Dim gcTopX = obj.LoadSingleKpiTopXGridData(dtKPITopX)
 
+                        '************************************************************************************************************************
+                        Dim gridBmpTopX As Bitmap = New Bitmap(gcTopX.Width, gcTopX.Height)
+                        gcTopX.DrawToBitmap(gridBmpTopX, New Rectangle(0, 0, gcTopX.Width, gcTopX.Height))
+                        dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_TopX", gridBmpTopX)
+                        '************************************************************************************************************************
+
                         Dim msKpiTopX As MemoryStream = objEvalRptMtd.ExportGridToImage(gcTopX)
                         dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_TopX", msKpiTopX)
                         dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_TopX", dtKPITopX)
@@ -29099,10 +29116,11 @@ Public Class frmTechnology
                     Next
 
                     objEvalRptMtd.dicEvalRptGridImages = dicEvalRptGridImages
+                    objEvalRptMtd.dicEvalRptGridBmp = dicEvalRptGridBmp
                     objEvalRptMtd.dicEvalRptGridDataTables = dicEvalRptGridDataTables
 
                     'Loading Histogram Charts For KPIs
-                    '****************************************
+                    '************************************************************************************************************************
                     For Each drKPI As DataRow In dtGrid.Rows
                         WaitScreen.ShowWaitScreen("Loading Histogram Chart Per KPI")
 
@@ -29111,7 +29129,7 @@ Public Class frmTechnology
                     Next
 
                     'Loading Normal Tend Charts For KPIs
-                    '****************************************
+                    '************************************************************************************************************************
                     SetComboBox(cmbChartSetNameStats, ComboSelectBased.TextBased, cmbChartSetNameEval.SelectedItem.ToString)
                     SetComboBox(cmbObjectTreeStats, ComboSelectBased.TextBased, cmbObjectTreeEval.SelectedItem.ToString)
                     Dim objectsel As String = tvObjectsTreeEval.GetChecked2String(_strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
@@ -29239,14 +29257,12 @@ Public Class frmTechnology
         nc.Application = "DY4Zd/25XLMFNDYTc7eMQ7RCQfp58yVWNbgx/x0cDkruA0S6d3O/f2qh0jotTM3L"
 
         SetChartConfigData(_strNetwork, nc, chartTitle, category)
-
         ProcessStatsChart(nc, kpiName)
     End Sub
 
     Private Sub SetChartConfigData(tech As String, ch As Chart, chartTitle As String, category As String)
         Dim sql As String = Nothing
         ChartConfig = New ChartConfigDataTables
-        'WHERE (((ChartSetName = " & Chr(39) & chartSetName & Chr(39) & ") OR (ChartSetName = " & Chr(39) & Environment.UserName.ToString & Chr(39) & ")) AND
         sql = "SELECT * FROM IOS_Chart_Configuration WHERE TechTab = " & Chr(39) & tech & Chr(39) & " AND ChartTitle " & chartTitle & "
                And ChartSetName = " & Chr(39) & cmbChartSetNameStats.Text.Trim & Chr(39) & " And CategoryTab " & category & "
                ORDER BY techtab, objecttab, objecttabindex, categorytabindex, chartindex,ChartTitle ASC"
@@ -29293,29 +29309,13 @@ Public Class frmTechnology
 
     Private Sub AssignDataToCharts_EvalReport(ByRef ch As Chart, ByRef dtData As DataTable, kpiName As String)
         Dim dtChartConfig As New DataTable
-        'If dtChartSubset Is Nothing Then
-        'Dim selected_obj As String = tvKPIStats.GetKPIChecked2String(1, "ObjectName")
-        'Dim selected_charts As String = tvKPIStats.GetKPIChecked2String(3, "ObjectName")
         Dim username As String = Chr(39) & Environment.UserName.ToString & Chr(39)
-        'Dim ChartConfig As ChartConfigDataTables = TabControl.Tag
-
-        '(((ChartSetName = " & Chr(39) & chartSetName & Chr(39) & "))  AND TechTab = " & Chr(39) & objChartProp.Technology & Chr(39) & " AND CrossTabObj IS NULL
-        '                                                            And ObjectTab='" & dtChartStyleProperties.Rows(0)("CounterType").ToString & "' AND 
-
         ChartConfig.ChartFillingDataTable.DefaultView.RowFilter = "ChartName ='" & ch.Name & "' AND TechTab = " & Chr(39) & _strNetwork & Chr(39) & " "
         ChartConfig.ChartFillingDataTable.DefaultView.Sort = "techtab ASC, objecttabindex ASC, categorytabindex ASC, chartindex ASC, chartelementid ASC"
         dtChartConfig = ChartConfig.ChartFillingDataTable.DefaultView.ToTable()
         ChartConfig.ChartFillingDataTable.DefaultView.RowFilter = ""
-        'Else
-        '    dtChartSubset.DefaultView.RowFilter = "CrossTabObj IS NULL"
-        '    dtChartSubset.DefaultView.Sort = "techtab ASC, objecttabindex ASC, categorytabindex ASC, chartindex ASC, chartelementid ASC"
-        '    dtChartConfig = dtChartSubset.DefaultView.ToTable
-        '    dtChartSubset.DefaultView.RowFilter = ""
-        'End If
 
         Try
-            'Assign data to all charts
-            'Dim ch As Chart
             Dim objectscharted As String = ""
             Dim X1AxisLabel As String = "Date"
             Dim Y1axislabel As String = "", Y2axislabel As String = ""
@@ -29325,7 +29325,6 @@ Public Class frmTechnology
             Dim yaxis2 As Axis = Nothing
             Dim color_R As Integer = 0, color_B As Integer = 0, color_G As Integer = 0
             Dim tabIndexNew As Integer = 0
-            'Dim chartIndex As Integer = 0
 
             Dim chartElements() As String = {"0"}
             Dim chartElementsYAxis() As String = {"0"}
@@ -29337,31 +29336,12 @@ Public Class frmTechnology
             Using dtObjectTab = dtChartConfig.DefaultView.ToTable(True, {"ObjectTab", "ObjectTabIndex"})
                 For Each drObjectTab As DataRow In dtObjectTab.Select("", "ObjectTabIndex ASC")
 
-                    'tabcontrol = GetTabControlFromTech(tech).TabPages(GetTabPageIndex(tcTabControlHighStats, drObjectTab("ObjectTab").ToString.Trim)).Controls(0)
                     dtChartConfig.DefaultView.RowFilter = "ObjectTabIndex=" & drObjectTab("ObjectTabIndex")
                     Using dtChartList = dtChartConfig.DefaultView.ToTable(True, {"TechTab", "CategoryTabIndex", "CategoryTab", "ChartIndex", "ChartName", "ChartTitle", "ChartType"})
                         For Each drChart As DataRow In dtChartList.Select("", "CategoryTabIndex, ChartIndex ASC")
-                            'chartIndex = CInt(drChart("ChartIndex").ToString) * NumOfObjects + IndexOfObject
-                            'If CInt(drChart("CategoryTabIndex").ToString) = 99 Then
-                            '    tabIndexNew = GetTabPageIndex(tabcontrol, "Custom")
-                            'Else
-                            '    tabIndexNew = drChart("CategoryTabIndex")
-                            'End If
-
-                            'If tabIndexNew = 10 And chartIndex = 1 Then
-                            'Console.WriteLine("")
-                            'End If
-
-                            'ch = tabcontrol.TabPages(tabIndexNew).Controls(0).Controls(chartIndex)
 
                             If drChart("ChartType") = IOSChartType.AlignInterval Then
-                                'If tsmi_ObjectAggregationOnOff.Checked = False Then
-                                '    Dim dsTemp As New DataSet
-                                '    dsTemp.Tables.Add(dtData)
-                                '    ProcessStatsCompareTime_Custom(tech, dsTemp, connStr, drChart("ChartName"), chartSetName, drObjectTab("ObjectTab").ToString.Trim, ch, ObjectName)
-                                'Else
-                                'ProcessStatsCompareTime_Custom(tech, dsStats, connStr, drChart("ChartName"), chartSetName, drObjectTab("ObjectTab").ToString.Trim, ch)
-                                'End If
+                                'Do Nothing
                             Else
                                 X1AxisLabel = "Date"
                                 Y1axislabel = ""
@@ -29382,12 +29362,8 @@ Public Class frmTechnology
                                 'Settings For Chart Type
                                 ChartTypeSettings(ch, drChart, objectscharted)
 
-                                'If ObjectName <> "" Then
-                                'objectscharted = ObjectName
-                                'End If
-
                                 ch.TitleBox.HeaderLabel.Text = drChart("ChartTitle").Trim
-                                ch.TitleBox.Label.Text = "Objects: " & objectscharted
+                                'ch.TitleBox.Label.Text = "Objects: " & objectscharted
 
                                 Dim colList As String() = {
                                     "ChartElementID", "ChartElements", "chartElementsType", "chartElementsYAxis", "chartYaxisScaleProp", "chartY1axisLabels",
@@ -29672,37 +29648,6 @@ Public Class frmTechnology
                                     End Try
                                 Next
 
-                                'Configure histogram chart area
-                                Try
-                                    If drChart("ChartType") = IOSChartType.Histogram Then
-                                        Dim boundariesArr As Double() = StringToDoubleArray(boundaries, New String() {","})
-                                        Dim minValue As Double = boundariesArr.Min()
-                                        Dim maxValue As Double = boundariesArr.Max()
-                                        Dim binsGap As Double = System.Math.Ceiling((maxValue - minValue) / 30)
-
-                                        Dim bins(29) As Double
-                                        For index As Integer = 0 To bins.Length - 1
-                                            bins(index) = minValue + (binsGap * (index + 1))
-                                            Dim drHistogram As DataRow
-                                            drHistogram = dtHistogramData.NewRow
-                                            drHistogram.Item("Bins") = Convert.ToDouble(bins(index))
-                                            dtHistogramData.Rows.Add(drHistogram)
-                                        Next
-                                        ch.ExtraChartAreas.Item(0).XAxis.Minimum = minValue
-                                        ch.ExtraChartAreas.Item(0).XAxis.Interval = binsGap
-
-                                        dsHistogramData.Tables.Add(dtHistogramData)
-
-                                        For i = 0 To sc.Count() - 1
-                                            Dim freqTable As Series = StatisticalEngine.FrequencyTableOL(sc(i), bins)
-                                            freqTable.Name = "Freq_" & sc(i).Name
-                                            freqTable.Type = SeriesType.Bar
-                                            ch.ExtraChartAreas.Item(0).SeriesCollection.Add(freqTable)
-                                        Next
-                                    End If
-                                Catch
-                                End Try
-
                                 ch.SeriesCollection.Clear()
                                 ch.SeriesCollection.Add(sc)
 
@@ -29717,6 +29662,8 @@ Public Class frmTechnology
                                 ReDim chartEltype(0)
                                 ReDim chartElColor(0)
                                 ReDim chartYAxisScale(1)
+
+                                ch = ApplyPerodCalculationOnChart(ch, dtData)
 
                                 'Store chart bitmap image to directory
                                 If EvaluateReport = True Then
@@ -29739,32 +29686,219 @@ Public Class frmTechnology
         dtChartConfig = Nothing
     End Sub
 
-    Public Function ConvertGridToBitmap(ByRef grid As DevExpress.XtraGrid.GridControl) As Bitmap
-        ' Create a bitmap with the same width and height as the grid
-        Dim bmp As New Bitmap(grid.Width, grid.Height)
+    Private Function ApplyPerodCalculationOnChart(ByRef ch As Chart, dtData As DataTable) As Chart
+        Try
+            Dim chartConfigTable As DataTable = ChartConfig.ChartFillingDataTable
+            Dim dtPrdCalcEval As DataTable = gcPrdCalcEval.DataSource
 
-        ' Draw the grid control into the bitmap
-        ' Note: This only captures the visible area of the grid
-        grid.DrawToBitmap(bmp, New Rectangle(0, 0, grid.Width, grid.Height))
+            Try
+                ch.XAxis.Markers.Clear()
+                ch.ExtraLegendBoxes.Clear()
 
-        Return bmp
-    End Function
+                Dim tech As String = _strNetwork 'ch.Tag
+                Dim seriesList() As String = Nothing
+                Dim chartElements() As String = Nothing
+                ReDim Preserve seriesList(0)
+                seriesList(0) = "Date"
+                Dim j As Integer = 1
+                Dim NumOfPeriods As Integer = 0
+                Dim sc = ch.SeriesCollection
+                Dim NumOfChartElements As Integer = ch.SeriesCollection.Count
+                Dim dt_periodCalc As DataTable = Nothing
 
-    Private Function CropBitmap(source As Bitmap, cropRect As Rectangle) As Bitmap
-        ' Create a new target bitmap with the crop dimensions
-        Dim target As New Bitmap(cropRect.Width, cropRect.Height)
+                For Each sr As Series In ch.SeriesCollection
+                    ReDim Preserve seriesList(j)
+                    seriesList(j) = sr.Name
+                    j = j + 1
+                Next
 
-        Using g As Graphics = Graphics.FromImage(target)
-            ' Set high quality settings to keep text clear
-            g.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBicubic
-            g.SmoothingMode = Drawing2D.SmoothingMode.HighQuality
-            g.PixelOffsetMode = Drawing2D.PixelOffsetMode.HighQuality
+                Try
+                    If seriesList.Length > 1 Then
 
-            ' Draw only the specified area (cropRect) from the source to the target (0, 0)
-            g.DrawImage(source, New Rectangle(0, 0, target.Width, target.Height), cropRect, GraphicsUnit.Pixel)
-        End Using
+                        chartElements = seriesList.Skip(1).ToArray()
 
-        Return target
+                        Try
+                            If Not dtPrdCalcEval Is Nothing AndAlso dtPrdCalcEval.Rows.Count > 0 Then
+                                NumOfPeriods = dtPrdCalcEval.Rows.Count
+                                dt_periodCalc = PeriodCalculation(dtData, dtPrdCalcEval, chartElements)
+                            End If
+                        Catch
+                        End Try
+
+                        If dt_periodCalc IsNot Nothing Then
+
+                            If Not dtPrdCalcEval Is Nothing AndAlso dtPrdCalcEval.Rows.Count > 0 Then
+                                'adding period calc legend
+
+                                Dim distinctPeriods = dt_periodCalc.AsEnumerable().
+                                                        Select(Function(r) r.Field(Of String)("PeriodName")).
+                                                        Distinct().ToList()
+
+                                Dim distinctKPI = dt_periodCalc.AsEnumerable().
+                                                        Select(Function(r) r.Field(Of String)("KPIName")).
+                                                        Distinct().ToList()
+
+                                Dim newLegend As LegendBox = New LegendBox()
+                                Dim header1 As LegendEntry
+
+                                If NumOfPeriods = 1 Then
+                                    newLegend.Template = "%Icon %Name %Value"
+                                ElseIf NumOfPeriods = 2 Then
+                                    newLegend.Template = "%Icon %Name %Value %ValueP2 %ValueDelta %ValueDeltaP"
+                                    header1 = New LegendEntry("KPI", distinctPeriods(0), "   ")
+                                    header1.CustomAttributes = "Icon=   "
+                                    header1.CustomAttributes.Add("ValueP2", distinctPeriods(1))
+                                    header1.CustomAttributes.Add("ValueDelta", "Delta")
+                                    header1.CustomAttributes.Add("ValueDeltaP", "Delta%")
+                                    header1.SortOrder = 99
+                                    header1.LabelStyle.Font = New Font("Arial", 8, FontStyle.Bold)
+                                    header1.HeaderMode = LegendEntryHeaderMode.RepeatOnEachColumn
+                                    newLegend.ExtraEntries.Add(header1)
+                                End If
+
+                                Try
+                                    For Each kpi As String In distinctKPI
+                                        If NumOfPeriods = 1 Then
+                                            Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                            Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+                                            le.SortOrder = 2
+
+                                            newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+                                            newLegend.ExtraEntries.Add(le)
+
+                                        ElseIf NumOfPeriods = 2 Then
+                                            Dim ValP1 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(0) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+                                            Dim ValP2 As String = dt_periodCalc.Select("KPIName = '" & kpi & "' AND PeriodName = '" & distinctPeriods(1) & "'")(0)(cmbPrdCalcStats.SelectedItem.ToString).ToString
+
+                                            Dim le As LegendEntry = New LegendEntry(kpi, Math.Round(CDbl(ValP1), 2).ToString, New Background(sc(kpi).DefaultElement.Color))
+
+                                            le.CustomAttributes.Add("ValueP2", Math.Round(CDbl(ValP2), 2))
+                                            le.CustomAttributes.Add("ValueDelta", Math.Round(CDbl(ValP2) - CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                            le.CustomAttributes.Add("ValueDeltaP", Math.Round(100 * (CDbl(ValP2) - CDbl(ValP1)) / CDbl(ValP1), IIf(kpi.ToLower.Contains("rat"), 2, 1)))
+                                            le.SortOrder = 1
+
+                                            newLegend.Header.Label.Text = "Period Calculation: " & cmbPrdCalcStats.SelectedItem.ToString
+                                            newLegend.ExtraEntries.Add(le)
+
+                                        End If
+                                    Next
+                                Catch ex As Exception
+                                    UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                                End Try
+
+                                ' Set orientation for the custom legend
+                                newLegend.ListTopToBottom = True
+                                newLegend.Orientation = Orientation.Bottom
+
+                                ' The the new legend to the chart.
+                                ch.ExtraLegendBoxes.Add(newLegend)
+                                ch.RefreshChart()
+
+                            End If
+                        End If
+
+                        If Not dtPrdCalcEval Is Nothing AndAlso dtPrdCalcEval.Rows.Count > 0 Then
+                            Dim iPrdCalcBandCntr As Integer = 0
+                            Dim rnd As Random = New Random(10)
+                            'adding period calculation bands
+                            For Each dr As DataRow In dtPrdCalcEval.Rows
+
+                                If iPrdCalcBandCntr = 0 Then
+
+                                    Dim shadeThreshold As AxisMarker = Nothing
+                                    If GetFromTech_RadioButton(tech, "Raw").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightBlue)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                    End If
+
+                                    shadeThreshold.LegendEntry.Visible = False
+                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
+                                    shadeThreshold.Label.Alignment = StringAlignment.Near
+                                    shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
+                                    shadeThreshold.LegendEntry.Value = ""
+                                    shadeThreshold.BringToFront = True
+
+                                    ch.XAxis.Markers.Add(shadeThreshold)
+
+                                ElseIf iPrdCalcBandCntr = 1 Then
+
+                                    Dim shadeThreshold As AxisMarker = Nothing
+                                    If GetFromTech_RadioButton(tech, "Raw").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(120, Color.LightGreen)), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                    End If
+
+                                    shadeThreshold.LegendEntry.Visible = False
+                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
+                                    shadeThreshold.Label.Alignment = StringAlignment.Near
+                                    shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
+                                    shadeThreshold.LegendEntry.Value = ""
+                                    shadeThreshold.BringToFront = True
+
+                                    ch.XAxis.Markers.Add(shadeThreshold)
+
+                                Else
+
+                                    Dim shadeThreshold As AxisMarker = Nothing
+                                    If GetFromTech_RadioButton(tech, "Raw").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Minute, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Hourly").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Hour, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Daily").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Day, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Weekly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.WeekOfYear, 0, CDate(dr("PeriodEnd"))))
+                                    ElseIf GetFromTech_RadioButton(tech, "Monthly").Checked Or GetFromTech_RadioButton(tech, "BH").Checked Or GetFromTech_RadioButton(tech, "BHPS").Checked Then
+                                        shadeThreshold = New AxisMarker(dr("PeriodName").ToString, New Background(Color.FromArgb(100, rnd.Next(255), rnd.Next(255), rnd.Next(255))), CDate(dr("PeriodStart")), DateAdd(DateInterval.Month, 0, CDate(dr("PeriodEnd"))))
+                                    End If
+
+                                    shadeThreshold.LegendEntry.Visible = False
+                                    shadeThreshold.Label.LineAlignment = StringAlignment.Center
+                                    shadeThreshold.Label.Alignment = StringAlignment.Near
+                                    shadeThreshold.Label.Font = New Font("Arial", 8, FontStyle.Bold)
+                                    shadeThreshold.LegendEntry.Value = ""
+                                    shadeThreshold.BringToFront = True
+
+                                    ch.XAxis.Markers.Add(shadeThreshold)
+
+                                End If
+
+                                iPrdCalcBandCntr = iPrdCalcBandCntr + 1
+                            Next
+                        End If
+
+                    End If
+
+                Catch ex As Exception
+                    _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+                    UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                End Try
+
+            Catch ex As Exception
+                _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+                UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+            End Try
+
+            Return ch
+
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        End Try
     End Function
 
     Private Sub LaunchHistogramChart_EvalReport(chName As String, kpiName As String)

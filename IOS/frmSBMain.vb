@@ -6483,6 +6483,9 @@ Public Class frmSBMain
                       End Sub)
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+            Me.Invoke(Sub()
+                          txtExpReportStatus.Text = txtExpReportStatus.Text & vbCrLf & reportName & ": Report Export Is Failed."
+                      End Sub)
         End Try
     End Sub
 
