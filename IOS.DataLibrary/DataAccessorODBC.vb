@@ -64,6 +64,34 @@ Public Class DataAccessorODBC
         Return dtOSS
     End Function
 
+    Public Shared Function GetDataTableSqlConn(ByVal connstring As String, ByVal sql As String, Optional ByVal commandTimeOut As Integer = 60) As DataTable
+        If String.IsNullOrEmpty(sql) Or String.IsNullOrEmpty(connstring) Then
+            Return Nothing
+        End If
+
+        WriteString_Query("Timestamp: " & Now.ToString & vbCrLf & "SQL Fired: " & vbCrLf & sql & vbCrLf & "------------------------------" & vbCrLf)
+
+        Dim dtOSS As New DataTable()
+        Try
+            Using cnOSS As New System.Data.SqlClient.SqlConnection(connstring)
+                cnOSS.Open()
+                Using daOSS As New System.Data.SqlClient.SqlDataAdapter(sql, cnOSS)
+                    daOSS.SelectCommand.CommandTimeout = commandTimeOut
+                    Using dsOSS As New System.Data.DataSet
+                        daOSS.Fill(dsOSS)
+                        If dsOSS.Tables.Count > 0 Then
+                            dtOSS = dsOSS.Tables(0)
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            WriteString_Query("Timestamp: " & Now.ToString & vbCrLf & "Error Message: " & vbCrLf & ex.Message & vbCrLf & "------------------------------" & vbCrLf)
+            Return Nothing
+        End Try
+        Return dtOSS
+    End Function
+
     Public Shared Function GetDataTableForNBIReportManualSQL(ByVal connstring As String, ByVal sql As String, Optional ByVal commandTimeOut As Integer = 60) As DataTable
         If sql = "" Or connstring = "" Then
             Return Nothing
@@ -73,10 +101,10 @@ Public Class DataAccessorODBC
 
         Dim dtOSS As New DataTable()
         Try
-            Using cnOSS As New System.Data.Odbc.OdbcConnection(connstring)
-                cnOSS.ConnectionTimeout = 5
+            Using cnOSS As New SqlClient.SqlConnection(connstring)
                 cnOSS.Open()
-                Using daOSS As New System.Data.Odbc.OdbcDataAdapter(sql, cnOSS)
+                Using daOSS As New System.Data.SqlClient.SqlDataAdapter(sql, cnOSS)
+                    daOSS.SelectCommand.CommandTimeout = commandTimeOut
                     Using dsOSS As New System.Data.DataSet
                         daOSS.SelectCommand.CommandTimeout = commandTimeOut
                         daOSS.Fill(dsOSS)

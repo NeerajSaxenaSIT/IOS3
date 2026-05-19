@@ -10074,7 +10074,7 @@ Public Class frmTechnology
                 Dim selected_ObjectType As String = tvKPIStats.GetKPIChecked2String(1, "ObjectName")
                 Dim selected_Category As String = tvKPIStats.GetKPIChecked2String(2, "ObjectName")
                 Dim selected_Charts As String = tvKPIStats.GetKPIChecked2String(3, "ObjectName")
-                sqlelement = clsSQLCommands.GetSqlElementQuery(supportcode, tech, aliastable, Nothing, selected_Charts, cmbChartSetNameStats.SelectedItem.ToString, selected_ObjectType, selected_Category)
+                sqlelement = clsSQLCommands.GetSqlElementQuery(supportcode, tech, aliastable, Nothing, selected_Charts, cmbChartSetNameStats.SelectedItem.ToString, selected_ObjectType, selected_Category, Environment.UserName.ToString)
             Else
                 If Not kpiname Is Nothing Then
                     sqlelement = clsSQLCommands.GetSqlElementQuery(supportcode, tech, aliastable, kpiname)
@@ -16292,7 +16292,7 @@ Public Class frmTechnology
         End Try
     End Function
 
-    Private Function SQL_Construct(objtype As String, aliastable As String, chartname As String, CrossTabObj As String, Optional IsObjectAggregated As Boolean = True) As String
+    Private Function SQL_Construct(objtype As String, aliastable As String, chartname As String, CrossTabObj As String, Optional IsObjectAggregated As Boolean = True, Optional KpiName As String = "%") As String
 
         Dim tech As String = _strNetwork
         Dim sql_select As String = Nothing
@@ -16954,12 +16954,21 @@ Public Class frmTechnology
             If chartname = Nothing Then
                 sqlelement = "SELECT DISTINCT IOS_SQL_KPI.KPI_SQL, IOS_SQL_KPI.sourcetable, IOS_SQL_KPI.tablealias, IOS_SQL_KPI.JoinObjects, IOS_SQL_KPI.Object , IOS_SQL_KPI.KPI_Name FROM IOS_Chart_Configuration " _
                     & " INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID " _
-                    & " WHERE (IOS_Chart_Configuration.TechTab = " & Chr(39) & tech & Chr(39) & ")  AND (IOS_SQL_KPI.sourcetable = " & Chr(39) & aliastable & Chr(39) & " AND " _
-                    & " CategoryTab " & selected_tabs & " AND ChartTitle " & selected_charts & crosstabkpisql & ") AND supportcode >= " & supportcode & ";" '& 'ORDER BY IOS_Chart_Configuration.CategoryTabIndex, IOS_Chart_Configuration.ChartIndex"
+                    & " WHERE 
+                    (IOS_Chart_Configuration.TechTab = " & Chr(39) & tech & Chr(39) & ")  
+                    AND (IOS_SQL_KPI.sourcetable = " & Chr(39) & aliastable & Chr(39) & " 
+                    AND (IOS_SQL_KPI.KPI_Name like " & Chr(39) & KpiName & Chr(39) & ")
+                    AND  CategoryTab " & selected_tabs & " 
+                    AND ChartTitle " & selected_charts & crosstabkpisql & ")
+                    AND supportcode >= " & supportcode & ";" '& 'ORDER BY IOS_Chart_Configuration.CategoryTabIndex, IOS_Chart_Configuration.ChartIndex"
             Else
                 sqlelement = "SELECT IOS_SQL_KPI.KPI_SQL, IOS_SQL_KPI.sourcetable, IOS_SQL_KPI.tablealias, IOS_SQL_KPI.JoinObjects, IOS_SQL_KPI.Object, IOS_SQL_KPI.KPI_Name FROM IOS_Chart_Configuration " _
                     & " INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID " _
-                    & " WHERE (IOS_Chart_Configuration.ChartName = " & Chr(39) & chartname & Chr(39) & " ) AND (IOS_Chart_Configuration.TechTab = " & Chr(39) & tech & Chr(39) & ")  AND " _
+                    & " WHERE (
+                    IOS_Chart_Configuration.ChartName = " & Chr(39) & chartname & Chr(39) & " ) 
+        -           AND IOS_SQL_KPI.KPI_Name like " & Chr(39) & KpiName & Chr(39) & " ) 
+                    AND (IOS_Chart_Configuration.TechTab = " & Chr(39) & tech & Chr(39) & ")  
+                    AND " _
                     & " (IOS_SQL_KPI.sourcetable= " & Chr(39) & aliastable & Chr(39) & ") AND (IOS_Chart_Configuration.ObjectTab = " & Chr(39) & objtype & Chr(39) & ") " _
                     & " GROUP BY IOS_SQL_KPI.KPI_SQL, IOS_SQL_KPI.KPI_Name, IOS_SQL_KPI.sourcetable, IOS_SQL_KPI.tablealias, IOS_SQL_KPI.JoinObjects, IOS_SQL_KPI.Object, IOS_Chart_Configuration.CategoryTabIndex, IOS_Chart_Configuration.ChartIndex " _
                     & " ORDER BY IOS_Chart_Configuration.CategoryTabIndex, IOS_Chart_Configuration.ChartIndex ;"
@@ -28451,12 +28460,14 @@ Public Class frmTechnology
                         New String() {"@TargetType", Chr(39) & cmbObjectTreeEval.SelectedItem.ToString & Chr(39)},
                         New String() {"@ShowObjects", Chr(39) & ShowObjectButton & Chr(39)},
                         New String() {"@KPISetID", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
-                        New String() {"@PeriodStart", Chr(39) & CDate(cellDate).ToString("yyyy-MM-dd") & Chr(39)},
-                        New String() {"@PeriodEnd", Chr(39) & CDate(cellDate).ToString("yyyy-MM-dd") & Chr(39)},
+                        New String() {"@PeriodStart", Chr(39) & CDate(dtPrdCalcEval.Rows(0)("PeriodStart")).ToString("yyyy-MM-dd") & Chr(39)},
+                        New String() {"@PeriodEnd", Chr(39) & CDate(dtPrdCalcEval.Rows(0)("PeriodEnd")).ToString("yyyy-MM-dd") & Chr(39)},
                         New String() {"@EvalPeriodInterval", Chr(39) & GetEvalPeriodInterval() & Chr(39)},
                         New String() {"@Objects", Chr(39) & selectedObjs & Chr(39)},
                         New String() {"@Purpose", Chr(39) & "TopX" & Chr(39)},
-                        New String() {"@SelectedKPIIDs", Chr(39) & selectedKpiIDs & Chr(39)}
+                        New String() {"@SelectedKPIIDs", Chr(39) & selectedKpiIDs & Chr(39)},
+                        New String() {"@PeriodEvalStart", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodStart")).ToString("yyyy-MM-dd") & Chr(39)},
+                        New String() {"@PeriodEvalEnd", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodEnd")).ToString("yyyy-MM-dd") & Chr(39)}
                     }
                     connectionString = GetSQL(7022, parray)(0)
                     sqlParam = GetSQL(7022, parray)(1)
@@ -28471,11 +28482,13 @@ Public Class frmTechnology
                             New String() {"@IOS_Tech", Chr(39) & Me._strNetwork & Chr(39)},
                             New String() {"@TargetType", Chr(39) & cmbObjectTreeEval.SelectedItem.ToString & Chr(39)},
                             New String() {"@KPISetID", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
-                            New String() {"@PeriodStart", Chr(39) & CDate(cellDate).ToString("yyyy-MM-dd") & Chr(39)},
-                            New String() {"@PeriodEnd", Chr(39) & CDate(cellDate).ToString("yyyy-MM-dd") & Chr(39)},
+                            New String() {"@PeriodStart", Chr(39) & CDate(dtPrdCalcEval.Rows(0)("PeriodStart")).ToString("yyyy-MM-dd") & Chr(39)},
+                            New String() {"@PeriodEnd", Chr(39) & CDate(dtPrdCalcEval.Rows(0)("PeriodEnd")).ToString("yyyy-MM-dd") & Chr(39)},
                             New String() {"@Objects", Chr(39) & selectedObjs & Chr(39)},
                             New String() {"@EvalPeriodInterval", Chr(39) & GetEvalPeriodInterval() & Chr(39)},
-                            New String() {"@ThresholdSetID", CInt(TryCast(cmbThresholdSetEval.SelectedItem, clsComboBoxItem).Value)}
+                            New String() {"@ThresholdSetID", CInt(TryCast(cmbThresholdSetEval.SelectedItem, clsComboBoxItem).Value)},
+                            New String() {"@PeriodEvalStart", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodStart")).ToString("yyyy-MM-dd") & Chr(39)},
+                            New String() {"@PeriodEvalEnd", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodEnd")).ToString("yyyy-MM-dd") & Chr(39)}
                         }
                         connectionString = GetSQL(7023, parray)(0)
                         sqlParam = GetSQL(7023, parray)(1)
@@ -28719,12 +28732,14 @@ Public Class frmTechnology
                             New String() {"@TargetType", Chr(39) & cmbObjectTreeEval.SelectedItem.ToString & Chr(39)},
                             New String() {"@ShowObjects", Chr(39) & lblKPISetCounter.Text.Trim & Chr(39)},
                             New String() {"@KPISetID", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
-                            New String() {"@PeriodStart", Chr(39) & CDate(cellDate).ToString("yyyy-MM-dd") & Chr(39)},
-                            New String() {"@PeriodEnd", Chr(39) & CDate(cellDate).ToString("yyyy-MM-dd") & Chr(39)},
+                            New String() {"@PeriodStart", Chr(39) & CDate(dtPrdCalcEval.Rows(0)("PeriodStart")).ToString("yyyy-MM-dd") & Chr(39)},
+                            New String() {"@PeriodEnd", Chr(39) & CDate(dtPrdCalcEval.Rows(0)("PeriodEnd")).ToString("yyyy-MM-dd") & Chr(39)},
                             New String() {"@EvalPeriodInterval", Chr(39) & GetEvalPeriodInterval() & Chr(39)},
                             New String() {"@Objects", Chr(39) & selectedObjs & Chr(39)},
                             New String() {"@Purpose", Chr(39) & "ObjectTimeBreak" & Chr(39)},
-                            New String() {"@SelectedKPIIDs", Chr(39) & selectedKpiIDs & Chr(39)}
+                            New String() {"@SelectedKPIIDs", Chr(39) & selectedKpiIDs & Chr(39)},
+                            New String() {"@PeriodEvalStart", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodStart")).ToString("yyyy-MM-dd") & Chr(39)},
+                            New String() {"@PeriodEvalEnd", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodEnd")).ToString("yyyy-MM-dd") & Chr(39)}
                         }
                     Else
                         parray = {
@@ -28732,12 +28747,14 @@ Public Class frmTechnology
                             New String() {"@TargetType", Chr(39) & cmbObjectTreeEval.SelectedItem.ToString & Chr(39)},
                             New String() {"@ShowObjects", Chr(39) & lblKPISetCounter.Text.Trim & Chr(39)},
                             New String() {"@KPISetID", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
-                            New String() {"@PeriodStart", Chr(39) & CDate(startDate).ToString("yyyy-MM-dd") & Chr(39)},
-                            New String() {"@PeriodEnd", Chr(39) & CDate(endDate).ToString("yyyy-MM-dd") & Chr(39)},
+                            New String() {"@PeriodStart", Chr(39) & CDate(dtPrdCalcEval.Rows(0)("PeriodStart")).ToString("yyyy-MM-dd") & Chr(39)},
+                            New String() {"@PeriodEnd", Chr(39) & CDate(dtPrdCalcEval.Rows(0)("PeriodEnd")).ToString("yyyy-MM-dd") & Chr(39)},
                             New String() {"@EvalPeriodInterval", Chr(39) & GetEvalPeriodInterval() & Chr(39)},
                             New String() {"@Objects", Chr(39) & selectedObjs & Chr(39)},
                             New String() {"@Purpose", Chr(39) & "ObjectTimeBreak" & Chr(39)},
-                            New String() {"@SelectedKPIIDs", Chr(39) & selectedKpiIDs & Chr(39)}
+                            New String() {"@SelectedKPIIDs", Chr(39) & selectedKpiIDs & Chr(39)},
+                            New String() {"@PeriodEvalStart", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodStart")).ToString("yyyy-MM-dd") & Chr(39)},
+                            New String() {"@PeriodEvalEnd", Chr(39) & CDate(dtPrdCalcEval.Rows(1)("PeriodEnd")).ToString("yyyy-MM-dd") & Chr(39)}
                         }
                     End If
                     connString = GetSQL(7022, parray)(0)
@@ -29014,8 +29031,8 @@ Public Class frmTechnology
             dicEvalRptChartImages = New Dictionary(Of String, Bitmap)
             Dim objEvalRptMtd As New clsEvalReportMethods()
 
-            'Dim tempFileFolder As String = GetUserDataPath() & "\Data\EvalReport"
-            Dim templateFilePath As String = Application.StartupPath & "\" & "ReportTemplate.pptx"
+            Dim tempFileFolder As String = GetUserDataPath() & "\Data\EvalReport"
+            Dim templateFilePath As String = Application.StartupPath & "\EvalReportTemplate.pptx"
             Dim reportFilePath As String = GetUserDataPath() & "\Data\EvalReport" & "_" & Format(Now(), "yyyyMMdd_HHmmss") & ".pptx"
 
             WaitScreen.ShowWaitScreen("Report Creation Started")
@@ -29043,7 +29060,7 @@ Public Class frmTechnology
 
             sqlParam = GetSQL(8826, parray)(1)
             connstring = GetSQL(8826, parray)(0)
-            Dim dt = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+            Dim dt = DataAccessorODBC.GetDataTable(connstring, sqlParam, 300)
 
             If dt IsNot Nothing Then
                 If dt.Rows.Count > 0 Then
@@ -29068,50 +29085,52 @@ Public Class frmTechnology
                     Dim ms As MemoryStream = objEvalRptMtd.ExportGridToImage(gc)
                     dicEvalRptGridImages.Add("ChangeKPITable", ms)
 
+                    Dim j As Int16 = 0
+
                     For Each drKPI As DataRow In dtGrid.Rows
 
-                        WaitScreen.ShowWaitScreen("Loading Per KPI Change Data")
+                        Try
+                            j = j + 1
 
-                        '******* Load Per KPI Calc Data *******
-                        Dim dtKPI As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of String)("KPIName") = drKPI("KPIName").ToString).CopyToDataTable
-                        Dim gcKPI = obj.BuildSingleKpiGridData(dtKPI)
-                        Dim msKPI As MemoryStream = objEvalRptMtd.ExportGridToImage(gcKPI)
+                            WaitScreen.ShowWaitScreen("ChangeSlide: " + Math.Round(100 * (j / dtGrid.Rows.Count), 0).ToString + "%")
 
-                        '************************************************************************************************************************
-                        Dim gridBmp As Bitmap = New Bitmap(gcKPI.Width, gcKPI.Height)
-                        gcKPI.DrawToBitmap(gridBmp, New Rectangle(0, 0, gcKPI.Width, gcKPI.Height))
-                        dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_Trend", gridBmp)
-                        '************************************************************************************************************************
+                            '******* Load Per KPI Calc Data *******
+                            Dim dtKPI As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of String)("KPIName") = drKPI("KPIName").ToString).CopyToDataTable
+                            Dim gcKPI = obj.BuildSingleKpiGridData(dtKPI)
 
-                        dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_Trend", msKPI)
-                        dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_Trend", dtKPI)
+                            '************************************************************************************************************************
+                            Dim gridBmp As Bitmap = New Bitmap(gcKPI.Width, gcKPI.Height)
+                            gcKPI.DrawToBitmap(gridBmp, New Rectangle(0, 0, gcKPI.Width, gcKPI.Height))
+                            dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_Trend", gridBmp)
+                            '************************************************************************************************************************
 
-                        WaitScreen.ShowWaitScreen("Loading Top X Rows Per KPI")
+                            dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_Trend", dtKPI)
 
-                        '******* Load Top 20 Kpi Rows *******
-                        sqlParam = Nothing
-                        connstring = Nothing
-                        parray = Nothing
-                        parray = {
-                            New String() {"@KPISetId", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
-                            New String() {"@UserName", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)},
-                            New String() {"@KPIName", Chr(39) & drKPI("KPIName").ToString & Chr(39)}
-                        }
+                            '******* Load Top 20 Kpi Rows *******
+                            sqlParam = Nothing
+                            connstring = Nothing
+                            parray = Nothing
+                            parray = {
+                                New String() {"@KPISetId", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
+                                New String() {"@UserName", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)},
+                                New String() {"@KPIName", Chr(39) & drKPI("KPIName").ToString & Chr(39)}
+                            }
 
-                        sqlParam = GetSQL(8828, parray)(1)
-                        connstring = GetSQL(8828, parray)(0)
-                        Dim dtKPITopX = DataAccessorODBC.GetDataTable(connstring, sqlParam)
-                        Dim gcTopX = obj.LoadSingleKpiTopXGridData(dtKPITopX)
+                            sqlParam = GetSQL(8828, parray)(1)
+                            connstring = GetSQL(8828, parray)(0)
+                            Dim dtKPITopX = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+                            Dim gcTopX = obj.LoadSingleKpiTopXGridData(dtKPITopX)
 
-                        '************************************************************************************************************************
-                        Dim gridBmpTopX As Bitmap = New Bitmap(gcTopX.Width, gcTopX.Height)
-                        gcTopX.DrawToBitmap(gridBmpTopX, New Rectangle(0, 0, gcTopX.Width, gcTopX.Height))
-                        dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_TopX", gridBmpTopX)
-                        '************************************************************************************************************************
+                            '************************************************************************************************************************
+                            Dim gridBmpTopX As Bitmap = New Bitmap(gcTopX.Width, gcTopX.Height)
+                            gcTopX.DrawToBitmap(gridBmpTopX, New Rectangle(0, 0, gcTopX.Width, gcTopX.Height))
+                            dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_TopX", gridBmpTopX)
+                            '************************************************************************************************************************
 
-                        Dim msKpiTopX As MemoryStream = objEvalRptMtd.ExportGridToImage(gcTopX)
-                        dicEvalRptGridImages.Add(drKPI("KPIName").ToString & "_TopX", msKpiTopX)
-                        dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_TopX", dtKPITopX)
+                            dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_TopX", dtKPITopX)
+                        Catch ex As Exception
+                            MsgBox("Failure processing:" & drKPI("KPIName").ToString & vbCrLf & ex.Message)
+                        End Try
 
                     Next
 
@@ -29119,13 +29138,20 @@ Public Class frmTechnology
                     objEvalRptMtd.dicEvalRptGridBmp = dicEvalRptGridBmp
                     objEvalRptMtd.dicEvalRptGridDataTables = dicEvalRptGridDataTables
 
+                    j = 0
+
                     'Loading Histogram Charts For KPIs
                     '************************************************************************************************************************
                     For Each drKPI As DataRow In dtGrid.Rows
-                        WaitScreen.ShowWaitScreen("Loading Histogram Chart Per KPI")
+                        j = j + 1
+                        WaitScreen.ShowWaitScreen("Histogram:" + Math.Round(100 * (j / dtGrid.Rows.Count), 0).ToString + "%")
 
-                        Dim chName As String = "Histogram" & drKPI("KPIName").ToString
-                        LaunchHistogramChart_EvalReport(chName, drKPI("KPIName").ToString)
+                        Try
+                            Dim chName As String = "Histogram" & drKPI("KPIName").ToString
+                            LaunchHistogramChart_EvalReport(chName, drKPI("KPIName").ToString)
+                        Catch ex As Exception
+                            MsgBox("Failure processing:" & drKPI("KPIName").ToString & vbCrLf & ex.Message)
+                        End Try
                     Next
 
                     'Loading Normal Tend Charts For KPIs
@@ -29153,21 +29179,32 @@ Public Class frmTechnology
                     dtEditStartTimeStats.EditValue = dtEditStartTimeEval.EditValue
                     dtEditEndTimeStats.EditValue = dtEditEndTimeEval.EditValue
 
-                    For Each drKPI As DataRow In dtGrid.Rows
-                        tvKPIStats.UncheckAll()
+                    Dim dtKPIAll As DataTable = CType(gvEvalTimeBased.DataSource, DataView).ToTable
+                    j = 0
 
-                        'Select KPIs of interest in the Stats KPI tree
-                        Dim tv_kpi As TreeListNode = tvKPIStats.FindNodeByFieldValue("ObjectName", drKPI("KPIName").ToString)
-                        If Not tv_kpi Is Nothing Then
-                            tv_kpi.Checked = True
-                            tvKPIStats.CheckParentNode(tv_kpi)
+                    For Each drKPIall As DataRow In dtKPIAll.Rows
+
+                        j = j + 1
+
+                        Dim foundKPI() As DataRow
+                        foundKPI = dtGrid.Select("KPIName=" & Chr(39) & drKPIall("KPIName") & Chr(39))
+
+                        If foundKPI.Count = 0 Then
+                            'Select KPIs of interest in the Stats KPI tree
+                            Dim tv_kpi As TreeListNode = tvKPIStats.FindNodeByFieldValue("ObjectName", drKPIall("KPIName").ToString)
+                            If Not tv_kpi Is Nothing Then
+                                tv_kpi.Checked = True
+                                tvKPIStats.CheckParentNode(tv_kpi)
+                            End If
+
+                            Dim categoryTab As String = tvKPIStats.GetKPIChecked2String(2, "ObjectName")
+                            Dim selectedChart As String = tvKPIStats.GetKPIChecked2String(3, "ObjectName")
+
+                            WaitScreen.ShowWaitScreen("Charts:" + Math.Round(100 * (j / dtKPIAll.Rows.Count), 0).ToString + "%")
+                            CreateStatsChart(categoryTab, selectedChart, drKPIall("KPIName").ToString)
+                            tvKPIStats.UncheckAll()
+
                         End If
-
-                        Dim categoryTab As String = tvKPIStats.GetKPIChecked2String(2, "ObjectName")
-                        Dim selectedChart As String = tvKPIStats.GetKPIChecked2String(3, "ObjectName")
-
-                        WaitScreen.ShowWaitScreen("Loading Normal KPI Trend Charts")
-                        CreateStatsChart(categoryTab, selectedChart, drKPI("KPIName").ToString)
 
                     Next
 
@@ -29193,6 +29230,18 @@ Public Class frmTechnology
 
                 End If
             End If
+
+            Try
+                Process.Start("explorer.exe", "/select," & reportFilePath)
+            Catch ex As Exception
+                XtraMessageBox.Show("Failed to open folder location, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
+            End Try
+
+            Try
+                Process.Start(reportFilePath)
+            Catch ex As Exception
+                XtraMessageBox.Show("Failed to open report, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
+            End Try
 
             WaitScreen.ShowWaitScreen("PPT File Created Successfully")
         Catch ex As Exception
@@ -29234,7 +29283,7 @@ Public Class frmTechnology
         nc.LegendBox.Orientation = dotnetCHARTING.WinForms.Orientation.Bottom
         nc.LegendBox.DefaultEntry.Value = ""
         nc.LegendBox.DefaultEntry.Hotspot.ToolTip = "%Name"
-        nc.LegendBox.Visible = True
+        nc.LegendBox.Visible = False
         nc.LegendBox.DefaultCorner = BoxCorner.Round
 
         nc.XAxis.TickLabelMode = TickLabelMode.Angled
@@ -29256,22 +29305,24 @@ Public Class frmTechnology
         nc.TitleBox.Label.AutoWrap = True
         nc.Application = "DY4Zd/25XLMFNDYTc7eMQ7RCQfp58yVWNbgx/x0cDkruA0S6d3O/f2qh0jotTM3L"
 
-        SetChartConfigData(_strNetwork, nc, chartTitle, category)
+        SetChartConfigData(_strNetwork, nc, chartTitle, category, kpiName)
         ProcessStatsChart(nc, kpiName)
     End Sub
 
-    Private Sub SetChartConfigData(tech As String, ch As Chart, chartTitle As String, category As String)
+    Private Sub SetChartConfigData(tech As String, ch As Chart, chartTitle As String, category As String, KPIName As String)
         Dim sql As String = Nothing
         ChartConfig = New ChartConfigDataTables
         sql = "SELECT * FROM IOS_Chart_Configuration WHERE TechTab = " & Chr(39) & tech & Chr(39) & " AND ChartTitle " & chartTitle & "
-               And ChartSetName = " & Chr(39) & cmbChartSetNameStats.Text.Trim & Chr(39) & " And CategoryTab " & category & "
+               And ChartSetName = " & Chr(39) & cmbChartSetNameStats.Text.Trim & Chr(39) & " 
+                And ChartElements = '" & KPIName & "'
+               And CategoryTab " & category & "
                ORDER BY techtab, objecttab, objecttabindex, categorytabindex, chartindex,ChartTitle ASC"
         Dim dt_charts As DataTable = DataAccessorODBC.GetDataTable(connStrIOSServer, sql)
         Dim dtChartGeneration As New DataTable
         dtChartGeneration = dt_charts.DefaultView.ToTable(True, {"techtab", "categorytabindex", "categorytab", "chartindex", "chartname", "objecttab", "objecttabindex", "ChartTitle"})
         ChartConfig.ChartFillingDataTable = dt_charts
         ChartConfig.ChartGenerationDataTable = dtChartGeneration
-        ch.Name = dtChartGeneration.Rows(0)("ChartNAme").ToString
+        ch.Name = dtChartGeneration.Rows(0)("ChartName").ToString
     End Sub
 
     Private Sub ProcessStatsChart(ByRef ch As Chart, kpiName As String)
@@ -29293,7 +29344,7 @@ Public Class frmTechnology
                     Using dr As Odbc.OdbcDataReader = comm_Element.ExecuteReader
                         While dr.Read
                             tblName = srcbtn.SourceButtonText
-                            chartSql = SQL_Construct(srcbtn.SourceButtonText, nZ(dr.Item("sourcetable").ToString.Trim, ""), Nothing, nZ(dr.Item("CrossTabObj"), ""))
+                            chartSql = SQL_Construct(srcbtn.SourceButtonText, nZ(dr.Item("sourcetable").ToString.Trim, ""), Nothing, nZ(dr.Item("CrossTabObj"), ""), True, kpiName)
                         End While
                     End Using
                 End Using
@@ -29577,15 +29628,17 @@ Public Class frmTechnology
                                 Dim dtHistogramData As DataTable = Nothing
                                 For i = 0 To sc.Count() - 1
                                     If ch.Type = ChartType.Combo Then
-                                        Select Case UCase(chartEltype(i).Trim)
-                                            Case "LINE"
-                                                sc(i).Type = SeriesType.Line
-                                                sc(i).Line.Width = 3
-                                            Case "BAR"
-                                                sc(i).Type = SeriesType.Bar
-                                            Case "AREALINE"
-                                                sc(i).Type = SeriesType.AreaLine
-                                        End Select
+                                        'Select Case UCase(chartEltype(i).Trim)
+                                        '    Case "LINE"
+                                        ' FORCING LINE AS SINGLE KPI
+                                        '***************************
+                                        sc(i).Type = SeriesType.Line
+                                        sc(i).Line.Width = 3
+                                        '    Case "BAR"
+                                        '        sc(i).Type = SeriesType.Bar
+                                        '    Case "AREALINE"
+                                        '        sc(i).Type = SeriesType.AreaLine
+                                        'End Select
                                     ElseIf ch.Type = ChartType.Scatter Then
                                         yaxis1.Label.Text = Y1axislabel
                                         sc(i).Type = SeriesType.Marker
@@ -29665,6 +29718,7 @@ Public Class frmTechnology
 
                                 '******* applying period calculation on the chart *******
                                 ch = ApplyPerodCalculationOnChart(ch, dtData)
+                                ch.LegendBox.Visible = False
 
                                 'Store chart bitmap image to directory
                                 If EvaluateReport = True Then

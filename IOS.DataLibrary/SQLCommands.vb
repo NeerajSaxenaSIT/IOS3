@@ -739,18 +739,28 @@ Public Class clsSQLCommands
         'sqlQuery.AppendLine("INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID ")
         'sqlQuery.AppendLine("WHERE (IOS_Chart_Configuration.TechTab = " & Chr(39) & _tech & Chr(39) & ") And (IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _chartSetName & Chr(39) & ") AND (IOS_SQL_KPI.supportcode > -1) AND (sourcetable is not null) ")
         'Return sqlQuery.ToString
-        If _chartSetName = _UserName Then
-            sqlQuery.AppendLine("SELECT DISTINCT COALESCE(IOS_SQL_KPI.sourcetable,'') AS sourcetable, COALESCE(IOS_SQL_KPI.JoinObjects,'') AS JoinObjects, COALESCE(IOS_Chart_Configuration.CrossTabObj,'') AS CrossTabObj, COALESCE(IOS_SQL_KPI.Object,'') AS [Object] FROM IOS_Chart_Configuration ")
-            sqlQuery.AppendLine("INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID ")
-            sqlQuery.AppendLine("WHERE 
-                (IOS_Chart_Configuration.TechTab = " & Chr(39) & _tech & Chr(39) & ") 
-                And ((IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _chartSetName & Chr(39) & ") or (IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _UserName & Chr(39) & "))
-                AND (IOS_SQL_KPI.supportcode > -1) AND (sourcetable is not null) ")
-        Else
-            sqlQuery.AppendLine("SELECT DISTINCT COALESCE(IOS_SQL_KPI.sourcetable,'') AS sourcetable, COALESCE(IOS_SQL_KPI.JoinObjects,'') AS JoinObjects, COALESCE(IOS_Chart_Configuration.CrossTabObj,'') AS CrossTabObj, COALESCE(IOS_SQL_KPI.Object,'') AS [Object] FROM IOS_Chart_Configuration ")
-            sqlQuery.AppendLine("INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID ")
-            sqlQuery.AppendLine("WHERE (IOS_Chart_Configuration.TechTab = " & Chr(39) & _tech & Chr(39) & ") And (IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _chartSetName & Chr(39) & ") AND (IOS_SQL_KPI.supportcode > -1) AND (sourcetable is not null) ")
-        End If
+
+        '     If _chartSetName = _UserName Then
+        '         sqlQuery.AppendLine("SELECT DISTINCT COALESCE(IOS_SQL_KPI.sourcetable,'') AS sourcetable, COALESCE(IOS_SQL_KPI.JoinObjects,'') AS JoinObjects, COALESCE(IOS_Chart_Configuration.CrossTabObj,'') AS CrossTabObj, COALESCE(IOS_SQL_KPI.Object,'') AS [Object] FROM IOS_Chart_Configuration ")
+        '         sqlQuery.AppendLine("INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID ")
+        '         sqlQuery.AppendLine("WHERE 
+        '             (IOS_Chart_Configuration.TechTab = " & Chr(39) & _tech & Chr(39) & ") 
+        '             And ((IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _chartSetName & Chr(39) & ") or (IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _UserName & Chr(39) & "))
+        '             AND (IOS_SQL_KPI.supportcode > -1) AND (sourcetable is not null) ")
+        '     Else
+        '         sqlQuery.AppendLine("SELECT DISTINCT COALESCE(IOS_SQL_KPI.sourcetable,'') AS sourcetable, COALESCE(IOS_SQL_KPI.JoinObjects,'') AS JoinObjects, COALESCE(IOS_Chart_Configuration.CrossTabObj,'') AS CrossTabObj, COALESCE(IOS_SQL_KPI.Object,'') AS [Object] FROM IOS_Chart_Configuration ")
+        '         sqlQuery.AppendLine("INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID ")
+        '         sqlQuery.AppendLine("WHERE 
+        '(IOS_Chart_Configuration.TechTab = " & Chr(39) & _tech & Chr(39) & ") And 
+        '((IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _chartSetName & Chr(39) & ") OR (Chr(39) & _chartSetName & Chr(39) = @DefaultChartSetNameOfUSer and chartsetname = " & Chr(39) & _UserName & Chr(39) & " )) AND 
+        '(IOS_SQL_KPI.supportcode > -1) AND (sourcetable is not null) ")
+        '     End If
+
+        sqlQuery.AppendLine("SELECT DISTINCT COALESCE(IOS_SQL_KPI.sourcetable,'') AS sourcetable, COALESCE(IOS_SQL_KPI.JoinObjects,'') AS JoinObjects, COALESCE(IOS_Chart_Configuration.CrossTabObj,'') AS CrossTabObj, COALESCE(IOS_SQL_KPI.Object,'') AS [Object] FROM IOS_Chart_Configuration ")
+        sqlQuery.AppendLine("INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID ")
+        sqlQuery.AppendLine("WHERE (IOS_Chart_Configuration.TechTab = " & Chr(39) & _tech & Chr(39) & ") And ((IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _chartSetName & Chr(39) & ") OR ")
+        sqlQuery.AppendLine("(IOS_Chart_Configuration.ChartSetName = (Select ChartSetName From IOS_Licenses Where LicenseUser = " & Chr(39) & _UserName & Chr(39) & ") 
+					And ChartSetName = " & Chr(39) & _UserName & Chr(39) & " )) AND (IOS_SQL_KPI.supportcode > -1) AND (sourcetable is not null) ")
         Return sqlQuery.ToString
     End Function
 
@@ -808,7 +818,7 @@ Public Class clsSQLCommands
     End Function
 
     Public Shared Function GetSqlElementQuery(ByVal _supportcode As Integer, _tech As String, _aliastable As String, Optional ByVal _kpiname As String = Nothing, Optional _chartTitle As String = Nothing,
-                                              Optional _chartSetName As String = "RF", Optional _chartObjectType As String = Nothing, Optional _chartCategory As String = Nothing) As String
+                                              Optional _chartSetName As String = "RF", Optional _chartObjectType As String = Nothing, Optional _chartCategory As String = Nothing, Optional _UserName As String = Nothing) As String
         sqlQuery = New StringBuilder()
         If Not _kpiname Is Nothing Then
             sqlQuery.AppendLine("SELECT DISTINCT IOS_SQL_KPI.KPI_SQL, IOS_SQL_KPI.sourcetable, IOS_SQL_KPI.tablealias, IOS_SQL_KPI.JoinObjects, IOS_SQL_KPI.Object, IOS_SQL_KPI.KPI_Name FROM IOS_Chart_Configuration ")
@@ -817,10 +827,17 @@ Public Class clsSQLCommands
             sqlQuery.AppendLine(" AND (IOS_SQL_KPI.sourcetable = " & Chr(39) & _aliastable & Chr(39) & ") AND (UPPER(IOS_SQL_KPI.KPI_Name) = UPPER(" & Chr(39) & _kpiname & Chr(39) & ")) ")
             'sqlQuery.AppendLine(" And (IOS_Chart_Configuration.ChartSetName = '" & _chartSetName & "') AND (IOS_Chart_Configuration.ObjectTab " & _chartObjectType & ") AND (IOS_Chart_Configuration.CategoryTab " & _chartCategory & ")")
         Else
+            'sqlQuery.AppendLine("SELECT DISTINCT IOS_SQL_KPI.KPI_SQL, IOS_SQL_KPI.sourcetable, IOS_SQL_KPI.tablealias, IOS_SQL_KPI.JoinObjects, IOS_SQL_KPI.Object,IOS_SQL_KPI.KPI_Name FROM IOS_Chart_Configuration ")
+            'sqlQuery.AppendLine(" INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID ")
+            'sqlQuery.AppendLine(" WHERE  (IOS_Chart_Configuration.TechTab = " & Chr(39) & _tech & Chr(39) & ") AND (IOS_SQL_KPI.supportcode > " & _supportcode - 1 & ") AND (IOS_SQL_KPI.sourcetable = " & Chr(39) & _aliastable & Chr(39) & ") ")
+            'sqlQuery.AppendLine(" AND (IOS_Chart_Configuration.ChartTitle " & _chartTitle & ") AND (IOS_Chart_Configuration.ChartSetName = '" & _chartSetName & "') AND (IOS_Chart_Configuration.ObjectTab " & _chartObjectType & ") AND (IOS_Chart_Configuration.CategoryTab " & _chartCategory & ")")
             sqlQuery.AppendLine("SELECT DISTINCT IOS_SQL_KPI.KPI_SQL, IOS_SQL_KPI.sourcetable, IOS_SQL_KPI.tablealias, IOS_SQL_KPI.JoinObjects, IOS_SQL_KPI.Object,IOS_SQL_KPI.KPI_Name FROM IOS_Chart_Configuration ")
             sqlQuery.AppendLine(" INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID ")
-            sqlQuery.AppendLine(" WHERE  (IOS_Chart_Configuration.TechTab = " & Chr(39) & _tech & Chr(39) & ") AND (IOS_SQL_KPI.supportcode > " & _supportcode - 1 & ") AND (IOS_SQL_KPI.sourcetable = " & Chr(39) & _aliastable & Chr(39) & ") ")
-            sqlQuery.AppendLine(" AND (IOS_Chart_Configuration.ChartTitle " & _chartTitle & ") AND (IOS_Chart_Configuration.ChartSetName = '" & _chartSetName & "') AND (IOS_Chart_Configuration.ObjectTab " & _chartObjectType & ") AND (IOS_Chart_Configuration.CategoryTab " & _chartCategory & ")")
+            sqlQuery.AppendLine(" WHERE (IOS_Chart_Configuration.TechTab = " & Chr(39) & _tech & Chr(39) & ") AND (IOS_SQL_KPI.supportcode > " & _supportcode - 1 & ") AND (IOS_SQL_KPI.sourcetable = " & Chr(39) & _aliastable & Chr(39) & ") ")
+            sqlQuery.AppendLine(" AND (IOS_Chart_Configuration.ChartTitle " & _chartTitle & ") AND ((IOS_Chart_Configuration.ChartSetName = " & Chr(39) & _chartSetName & Chr(39) & ")) ")
+            sqlQuery.AppendLine(" OR (" & Chr(39) & _chartSetName & Chr(39) & " = (Select ChartSetName From IOS_Licenses Where LicenseUser = " & Chr(39) & _UserName & Chr(39) & ")")
+            sqlQuery.AppendLine(" OR ChartSetName = " & Chr(39) & _UserName & Chr(39) & " )")
+            sqlQuery.AppendLine(" AND (IOS_Chart_Configuration.ObjectTab " & _chartObjectType & ") AND (IOS_Chart_Configuration.CategoryTab " & _chartCategory & ")")
         End If
         Return sqlQuery.ToString
     End Function

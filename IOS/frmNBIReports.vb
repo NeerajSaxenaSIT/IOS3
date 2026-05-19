@@ -171,7 +171,7 @@ Public Class frmNBIReports
             New String() {"@ToNBI", 2}
         }
         ConnStringAndSqlParam = GetSQL(8535, parray)
-        Return DataAccessorODBC.GetDataTable(connStr, ConnStringAndSqlParam(1), CInt(IIf(txtTimeout.Text.Trim = "", 300, txtTimeout.Text.Trim)))
+        Return DataAccessorODBC.GetDataTableSqlConn(connStr, ConnStringAndSqlParam(1), CInt(IIf(txtTimeout.Text.Trim = "", 300, txtTimeout.Text.Trim)))
     End Function
 
     Private Sub LoadCountersList()
@@ -857,11 +857,11 @@ Public Class frmNBIReports
 
                     End If
 
-                    'get connection string for datareader operation
+                    'get read only connection string for datareader operation
                     Dim connArr() As String = GetIOSConnection(10000)
 
                     If connArr(1) = "" Then
-                        SetMessage("Connection String (ID = 1000) Is Unavailable")
+                        SetMessage("Connection String (ID = 10000) Is Unavailable")
                         Exit Sub
                     End If
 

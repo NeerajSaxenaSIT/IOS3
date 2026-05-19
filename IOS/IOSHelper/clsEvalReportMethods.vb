@@ -112,6 +112,13 @@ Public Class clsEvalReportMethods
                 link.Landscape = True
                 link.PaperKind = System.Drawing.Printing.PaperKind.A3
 
+                link.Margins = New System.Drawing.Printing.Margins(0, 0, 0, 0)
+
+                ps.PageSettings.LeftMargin = 0
+                ps.PageSettings.RightMargin = 0
+                ps.PageSettings.TopMargin = 0
+                ps.PageSettings.BottomMargin = 0
+
                 ps.Document.AutoFitToPagesWidth = 1
                 link.CreateDocument()
 
@@ -119,7 +126,7 @@ Public Class clsEvalReportMethods
                 .Format = System.Drawing.Imaging.ImageFormat.Png,
                 .ExportMode = ImageExportMode.SingleFilePageByPage,
                 .PageRange = "1",
-                .Resolution = 300
+                .Resolution = 600
             })
 
             End Using
@@ -277,12 +284,10 @@ Public Class clsEvalReportMethods
 
                 For Each kvp In dicEvalRptChartImages
                     If kvp.Key.Contains("_Hist") Then
-                        If dicEvalRptGridImages.Keys.Contains(Replace(kvp.Key, "_Hist", "_Trend")) Then
-                            Dim kpiGridStream As MemoryStream = dicEvalRptGridImages(Replace(kvp.Key, "_Hist", "_Trend"))
+                        If dicEvalRptGridDataTables.Keys.Contains(Replace(kvp.Key, "_Hist", "_Trend")) Then
                             Dim kpiGridBmp As Bitmap = dicEvalRptGridBmp(Replace(kvp.Key, "_Hist", "_Trend"))
                             Dim dt1 As DataTable = dicEvalRptGridDataTables(Replace(kvp.Key, "_Hist", "_Trend"))
-                            If dicEvalRptGridImages.Keys.Contains(Replace(kvp.Key, "_Hist", "_TopX")) Then
-                                Dim kpiTopXGridStream As MemoryStream = dicEvalRptGridImages(Replace(kvp.Key, "_Hist", "_TopX"))
+                            If dicEvalRptGridDataTables.Keys.Contains(Replace(kvp.Key, "_Hist", "_TopX")) Then
                                 Dim kpiTopXGridBmp As Bitmap = dicEvalRptGridBmp(Replace(kvp.Key, "_Hist", "_TopX"))
                                 Dim dtTopX As DataTable = dicEvalRptGridDataTables(Replace(kvp.Key, "_Hist", "_TopX"))
                                 'CreateHistoGramChartSlide(presDoc, dicEvalRptChartImages(kvp.Key), kpiGridStream, kpiTopXGridStream)
@@ -563,22 +568,6 @@ Public Class clsEvalReportMethods
 
         Next
 
-        Dim validator As New DocumentFormat.OpenXml.Validation.OpenXmlValidator()
-
-        'Dim errors = validator.Validate(presDoc)
-        'For Each validationError In errors
-        '    Debug.WriteLine("------------------------------------------------")
-        '    Debug.WriteLine("Description : " & validationError.Description)
-
-        '    If validationError.Path IsNot Nothing Then
-        '        Debug.WriteLine("Path        : " & validationError.Path.XPath)
-        '    End If
-
-        '    If validationError.Part IsNot Nothing Then
-        '        Debug.WriteLine("Part        : " & validationError.Part.Uri.ToString())
-        '    End If
-        'Next
-
         presPart.Presentation.Save()
 
     End Sub
@@ -748,77 +737,6 @@ Public Class clsEvalReportMethods
         End If
     End Sub
 
-    Private Sub CreateHistoGramChartSlide(ByRef presDoc As PresentationDocument, chBmp As Bitmap, ByRef dtSummary As DataTable, ByRef kpiTopXGridStream As MemoryStream)
-        Try
-
-            Dim presPart = presDoc.PresentationPart
-
-            Dim templateSlidePart As SlidePart = presPart.SlideParts.First()
-
-            ' ---------------------------------------------------
-            ' CREATE CHART SLIDE
-            ' ---------------------------------------------------
-
-            Dim newSlidePart As SlidePart = CloneSlide(presPart, templateSlidePart)
-            Dim newSlide As Slide = newSlidePart.Slide
-
-            drawingObjectId = 1
-
-            ' ---------------------------------------------------
-            ' INSERT HISTOGRAM CHART
-            ' ---------------------------------------------------
-
-            CopyChartBitmapToSlide(newSlide, newSlidePart, drawingObjectId, chBmp)
-
-            newSlide.Save()
-
-            ' ---------------------------------------------------
-            ' CREATE TABLE SLIDE
-            ' ---------------------------------------------------
-
-            CreateHistogramGridSlideDataTables(newSlide, newSlidePart, dtSummary, kpiTopXGridStream)
-
-        Catch ex As Exception
-
-        End Try
-
-    End Sub
-
-    Private Sub CreateHistoGramChartSlide(ByRef presDoc As PresentationDocument, chBmp As Bitmap, kpiGridStream As MemoryStream, kpiTopXGridStream As MemoryStream)
-        Try
-            Dim presPart = presDoc.PresentationPart
-            Dim templateSlidePart As SlidePart = presPart.SlideParts.First()
-
-            ' Clone template slide (IMPORTANT)
-            Dim newSlidePart As SlidePart = CloneSlide(presPart, templateSlidePart)
-
-            Dim newSlide As Slide = newSlidePart.Slide
-
-            ' Reset drawing ID
-            drawingObjectId = 1
-
-            ' Insert image properly
-            CopyChartBitmapToSlide(newSlide, newSlidePart, drawingObjectId, chBmp)
-
-            ' 2. Layout constants for the Grids
-            Dim gridY As Long = (4 * 914400) + 100000
-            Dim gridWidth As Long = (12 * 914400) / 2
-            Dim gridHeight As Long = 3500000    '3.4 * 914400
-
-            'Dim availableHeight As Long = 6858000 - gridY - 100000
-
-            ' 3. Insert Grid 1 (Left)
-            InsertImageFromStream(newSlide, newSlidePart, drawingObjectId, kpiGridStream, 30000, gridY, gridWidth, gridHeight)
-
-            ' 4. Insert Grid 2 (Right)
-            InsertImageFromStream(newSlide, newSlidePart, drawingObjectId + 1, kpiTopXGridStream, 30000 + gridWidth, gridY, gridWidth, gridHeight)
-
-            newSlide.Save()
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
     Private Sub CreateHistogramGridSlide(ByRef presDoc As PresentationDocument, ByRef kpiGridStream As MemoryStream, ByRef kpiTopXGridStream As MemoryStream)
         Dim presPart = presDoc.PresentationPart
 
@@ -967,73 +885,6 @@ Public Class clsEvalReportMethods
         InsertImageFromStream(newSlide, newSlidePart, drawingObjectId, kpiTopXGridStream, grid2X, grid2Y, grid2Width, gridHeight)
 
         newSlide.Save()
-
-    End Sub
-
-    Private Sub InsertImageFromStreamVGrid(ByRef slide As Slide, ByRef slidePart As SlidePart, ByRef nextId As Integer, imgStream As MemoryStream, x As Long, y As Long, targetWidth As Long, targetHeight As Long)
-
-        nextId += 1
-
-        imgStream.Position = 0
-        Dim img As Image = Image.FromStream(imgStream)
-
-        Dim dpiX = img.HorizontalResolution
-        Dim dpiY = img.VerticalResolution
-
-        Dim emuPerPixelX = 914400.0 / dpiX
-        Dim emuPerPixelY = 914400.0 / dpiY
-
-        Dim imgWidthEmu = img.Width * emuPerPixelX
-        Dim imgHeightEmu = img.Height * emuPerPixelY
-
-        img.Dispose()
-
-        Dim ratio As Double = imgHeightEmu / imgWidthEmu
-
-        Dim widthBasedHeight As Long = CLng(targetWidth * ratio)
-
-        Dim finalWidth As Long
-        Dim finalHeight As Long
-
-        If widthBasedHeight <= targetHeight Then
-            ' fits → use full width
-            finalWidth = targetWidth
-            finalHeight = widthBasedHeight
-        Else
-            ' too tall → scale by height
-            finalHeight = targetHeight
-            finalWidth = CLng(finalHeight / ratio)
-        End If
-
-        imgStream.Position = 0
-
-        Dim imagePart = slidePart.AddImagePart(ImagePartType.Png)
-        imagePart.FeedData(imgStream)
-
-        Dim relId = slidePart.GetIdOfPart(imagePart)
-
-        Dim pic As New Picture(
-        New NonVisualPictureProperties(
-            New NonVisualDrawingProperties() With {.Id = nextId, .Name = "Grid"},
-            New NonVisualPictureDrawingProperties(New Drawing.PictureLocks() With {.NoChangeAspect = True}),
-            New ApplicationNonVisualDrawingProperties()
-        ),
-        New BlipFill(
-            New Drawing.Blip() With {.Embed = relId},
-            New Drawing.Stretch(New Drawing.FillRectangle())
-        ),
-        New ShapeProperties(
-            New Drawing.Transform2D(
-                New Drawing.Offset() With {.X = x, .Y = y},
-                New Drawing.Extents() With {.Cx = finalWidth, .Cy = finalHeight}
-            ),
-            New Drawing.PresetGeometry(New Drawing.AdjustValueList()) With {
-                .Preset = Drawing.ShapeTypeValues.Rectangle
-            }
-        )
-    )
-
-        slide.CommonSlideData.ShapeTree.AppendChild(pic)
 
     End Sub
 

@@ -4276,7 +4276,7 @@ Public Class frmSBMain
                     GetFieldByReportId(reportId)
                     EnableDisableReportControls(True)
 
-                    If ReportIDOwner = Environment.UserName.ToString Then
+                    If ReportIDOwner.ToString.ToLower = Environment.UserName.ToString.ToString.ToLower Then
                         btnCommit.Enabled = True
                     Else
                         btnCommit.Enabled = False

@@ -8992,8 +8992,8 @@ Public Class frmMapWindow
                 Next
 
                 '******* Testing TDC (Generate Networks) ******* 
-                'btnGenerateNetworks.Enabled = True
-                'btnGenerateNetworks.Visible = True
+                btnGenerateNetworks.Enabled = True
+                btnGenerateNetworks.Visible = True
 
             End If
         Catch ex As Exception
