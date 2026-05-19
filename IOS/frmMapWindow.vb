@@ -8991,6 +8991,10 @@ Public Class frmMapWindow
                     End If
                 Next
 
+                '******* Testing TDC (Generate Networks) ******* 
+                'btnGenerateNetworks.Enabled = True
+                'btnGenerateNetworks.Visible = True
+
             End If
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
@@ -17411,27 +17415,28 @@ function toggleHeatmap() {
                 Dim endDate As String = Nothing
                 Dim accessToken As String = Nothing
                 Dim refreshToken As String = Nothing
+                Dim tokenFilePath As String = GetUserDataPath() & "\Data\ServiceNowApiToken.dat"
 
                 Using client As New HttpClient()
 
-                    'Fetch refresh token from the database
-                    '*****************************************
+                    If File.Exists(tokenFilePath) Then
 
-                    If refreshToken <> "" Then
+                        Dim fileContent = File.ReadAllText(tokenFilePath)
+                        refreshToken = fileContent.Split(":")(1)
 
                         'POST request to get access token from refresh token
                         client.BaseAddress = New Uri(authTokenUrl)
                         client.DefaultRequestHeaders.Accept.Clear()
                         client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"))
                         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                        Dim reqBodyContent = New FormUrlEncodedContent(
+                        Dim fileBodyContent = New FormUrlEncodedContent(
                         {
                             New KeyValuePair(Of String, String)("grant_type", "refresh_token"),
                             New KeyValuePair(Of String, String)("client_id", clientID),
                             New KeyValuePair(Of String, String)("client_secret", clientSecret),
                             New KeyValuePair(Of String, String)("refresh_token", refreshToken)
                         })
-                        Dim newToken = Await client.PostAsync(client.BaseAddress, reqBodyContent)
+                        Dim newToken = Await client.PostAsync(client.BaseAddress, fileBodyContent)
                         If newToken.StatusCode = HttpStatusCode.OK Then
                             Dim tokenContent = newToken.Content.ReadAsStringAsync()
                             Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(tokenContent.Result.ToString), JObject)
@@ -17462,6 +17467,10 @@ function toggleHeatmap() {
                             refreshToken = jTokenData.GetValue("refresh_token").ToString
                         End If
 
+                        Dim filecontent As String = "RefreshToken:" & refreshToken
+                        File.WriteAllText(tokenFilePath, filecontent, System.Text.Encoding.UTF8)
+                        File.SetAttributes(tokenFilePath, FileAttributes.Hidden)
+
                     End If
 
                     'POST subsequent request to get access token/refresh token
@@ -17490,16 +17499,14 @@ function toggleHeatmap() {
                     startDate = CDate(vdtp_networkstatus_start.EditValue).ToString("yyyy-MM-dd")
                     endDate = CDate(vdtp_networkstatus_end.EditValue).ToString("yyyy-MM-dd")
 
-                    actualUrl = apiBaseUrl & "task" & "?" & methodParams(0) & "=" & sysParamFields & "&" & methodParams(1) & "=" & 100 & "&" & methodParams(2) & "=" & sysParamQuery & "&" & methodParams(3) & "=true" & "&" & methodParams(4) & "=true"
+                    sysParamQuery = sysParamQuery & "^opened_at>" & startDate & "^opened_at<" & endDate
+
+                    actualUrl = apiBaseUrl & "?" & methodParams(0) & "=" & sysParamFields & "&" & methodParams(1) & "=" & 100 & "&" & methodParams(2) & "=" & sysParamQuery & "&" & methodParams(3) & "=true" & "&" & methodParams(4) & "=true"
 
                     'GET request to get access tickets data
                     client.BaseAddress = New Uri(apiBaseUrl)
                     client.DefaultRequestHeaders.Accept.Clear()
                     client.DefaultRequestHeaders.Authorization = New AuthenticationHeaderValue("Bearer", accessToken)
-                    'client.DefaultRequestHeaders.Add("cis", location)
-                    'client.DefaultRequestHeaders.Add("start_date", startDate)
-                    'client.DefaultRequestHeaders.Add("end_date", endDate)
-                    'client.DefaultRequestHeaders.Add("priority", priority)
                     client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/xml"))
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
 

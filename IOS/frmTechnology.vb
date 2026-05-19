@@ -29014,8 +29014,8 @@ Public Class frmTechnology
             dicEvalRptChartImages = New Dictionary(Of String, Bitmap)
             Dim objEvalRptMtd As New clsEvalReportMethods()
 
-            Dim tempFileFolder As String = GetUserDataPath() & "\Data\EvalReport"
-            Dim templateFilePath As String = GetUserDataPath() & "\Data\ReportTemplate.pptx"
+            'Dim tempFileFolder As String = GetUserDataPath() & "\Data\EvalReport"
+            Dim templateFilePath As String = Application.StartupPath & "\" & "ReportTemplate.pptx"
             Dim reportFilePath As String = GetUserDataPath() & "\Data\EvalReport" & "_" & Format(Now(), "yyyyMMdd_HHmmss") & ".pptx"
 
             WaitScreen.ShowWaitScreen("Report Creation Started")
