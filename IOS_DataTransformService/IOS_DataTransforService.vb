@@ -116,7 +116,7 @@ Module IOS_DataTransforService
                         Dim EmailEnabled As String = False
                         Dim Recipient As String = ""
                         Dim EmailLinkNBI As Boolean = False
-                        Dim OutputDelimiter As String = ";"
+                        Dim OutputDelimiter As String = ConfigurationManager.AppSettings("OutputDelimiter").ToString
                         Dim ReportRunID As String = dr_nbi_custom("CustomReportID").ToString & "_" & Now().ToString("yyyyMMddHHmmss")
                         Dim nbiAttempts As Integer = Nothing
                         Dim sqlToFire As String = dr_nbi_custom("SQL").ToString
