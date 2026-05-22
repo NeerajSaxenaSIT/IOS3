@@ -806,7 +806,9 @@ Public Class frmNBIReports
             IOSDevExpressGrid.PopulateDataInGrid(gcViewReport, gvViewReport, dt, "ALL")
 
             sw.Stop()
-            lblMessage.Text = "Total Records: " & dt.Rows.Count.ToString & vbCrLf & "Time executed (ms): " & sw.Elapsed.TotalMilliseconds
+            If dt IsNot Nothing AndAlso (dt.Rows.Count > 0) Then
+                lblMessage.Text = "Total Records: " & dt.Rows.Count.ToString & vbCrLf & "Time executed (ms): " & sw.Elapsed.TotalMilliseconds
+            End If
 
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)

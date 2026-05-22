@@ -17,6 +17,8 @@
                 WebBrowser_Ticket.Navigate("http://pwimrep/sitelogview/tt_info.php?id=" & ticketnumber)
             ElseIf System.Configuration.ConfigurationManager.AppSettings("DeploymentName").ToString = "TMUS" Then
                 WebBrowser_Ticket.Navigate("http://natweb.eng.t-mobile.com/sites/Reporting/Reports/Homer/TTDetailReport.aspx?lsSttid=" & ticketnumber)
+            ElseIf System.Configuration.ConfigurationManager.AppSettings("DeploymentName").ToString = "TDC" Then
+                'TODO
             End If
         Else
             WebBrowser_Ticket.Navigate(link)

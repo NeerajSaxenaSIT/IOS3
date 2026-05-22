@@ -9235,14 +9235,15 @@ Public Class frmTechnology
                     Case 3
                         Dim tc As XtraTabControl = GetTabControlFromTech(tech)
                         tc.SelectedTabPage = GetTabPage(tc, e.Node.ParentNode.ParentNode.Item("ObjectName"))
-
-                        Dim tc2 As XtraTabControl = CType(tc.SelectedTabPage.Controls(0), XtraTabControl)
-                        tc2.SelectedTabPage = GetTabPage(tc2, e.Node.ParentNode.Item("ObjectName"))
-                        tc2.SelectedTabPage.Focus()
-                        Dim tlist As TreeListNode = e.Node.ParentNode
-                        Dim childList() As TreeListNode = tlist.Nodes.ToArray()
-                        Dim index As Integer = Array.FindIndex(childList, Function(x) x.Item("ObjectName") = e.Node.Item("ObjectName"))
-                        tc2.SelectedTabPage.Controls(0).Controls(index).Focus()
+                        If tc.SelectedTabPage IsNot Nothing Then
+                            Dim tc2 As XtraTabControl = CType(tc.SelectedTabPage.Controls(0), XtraTabControl)
+                            tc2.SelectedTabPage = GetTabPage(tc2, e.Node.ParentNode.Item("ObjectName"))
+                            tc2.SelectedTabPage.Focus()
+                            Dim tlist As TreeListNode = e.Node.ParentNode
+                            Dim childList() As TreeListNode = tlist.Nodes.ToArray()
+                            Dim index As Integer = Array.FindIndex(childList, Function(x) x.Item("ObjectName") = e.Node.Item("ObjectName"))
+                            tc2.SelectedTabPage.Controls(0).Controls(index).Focus()
+                        End If
                 End Select
             End If
         Catch ex As Exception
@@ -11933,7 +11934,7 @@ Public Class frmTechnology
                                                 cl = Color.FromArgb(200, Color.DarkRed)
                                         End Select
                                     ElseIf colprio.ToUpper = "PRIO" Then
-                                        Select Case drow(colprio).ToString
+                                        Select Case ExtractNumber(drow(colprio).ToString)
                                             Case "1"
                                                 cl = Color.FromArgb(200, Color.Red)
                                             Case "2"
@@ -11979,6 +11980,17 @@ Public Class frmTechnology
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
         End Try
     End Sub
+
+    Public Function ExtractNumber(input As String) As String
+        ' \d+ looks for one or more digits
+        Dim match As System.Text.RegularExpressions.Match = System.Text.RegularExpressions.Regex.Match(input, "\d+")
+
+        If match.Success Then
+            Return match.Value
+        Else
+            Return String.Empty ' Or handle as error/null
+        End If
+    End Function
 
     Private Sub AddChartAxisMarkers_New(ByRef dr As DataRowView, coldate As String, colprio As String, Optional labelcol As String = "")
         If dr Is Nothing Then
@@ -12027,7 +12039,7 @@ Public Class frmTechnology
                                         cl = Color.FromArgb(200, Color.DarkRed)
                                 End Select
                             ElseIf colprio.ToUpper = "PRIO" Then
-                                Select Case dr.Item(colprio).ToString
+                                Select Case ExtractNumber(dr.Item(colprio).ToString)
                                     Case "1"
                                         cl = Color.FromArgb(200, Color.Red)
                                     Case "2"
@@ -12325,29 +12337,35 @@ Public Class frmTechnology
 
     Private Async Sub LoadServiceNowApiTicketsData(location As String)
         Try
-            Dim dtAuth As DataTable = dsTicketsAPIConfig.Tables(0)
-            Dim authTokenUrl As String = dtAuth.Rows(0)("AuthTokenUrl")
-            Dim apiBaseUrl As String = dtAuth.Rows(0)("APIBaseUrl")
-            Dim userName As String = dtAuth.Rows(0)("UserName")
-            Dim pswd As String = dtAuth.Rows(0)("Password")
-            Dim clientID As String = dtAuth.Rows(0)("ClientID")
-            Dim clientSecret As String = dtAuth.Rows(0)("ClientSecret")
-            Dim methodType As String = dtAuth.Rows(0)("MethodType")
-            Dim methodParams() As String = dtAuth.Rows(0)("MethodParams").ToString.Split("|")
+            Dim cols() As String = Nothing
+            Dim replaceCols() As String = Nothing
+            Dim colsOrdinal() As String = Nothing
 
-            Dim actualUrl As String = Nothing
-            Dim startDate As String = Nothing
-            Dim accessToken As String = Nothing
-            Dim refreshToken As String = Nothing
+            If configMgr.User.LicenseCompany.ToUpper = "ODIDO" Then
 
-            Using client As New HttpClient()
+                Dim dtAuth As DataTable = dsTicketsAPIConfig.Tables(0)
+                Dim authTokenUrl As String = dtAuth.Rows(0)("AuthTokenUrl")
+                Dim apiBaseUrl As String = dtAuth.Rows(0)("APIBaseUrl")
+                Dim userName As String = dtAuth.Rows(0)("UserName")
+                Dim pswd As String = dtAuth.Rows(0)("Password")
+                Dim clientID As String = dtAuth.Rows(0)("ClientID")
+                Dim clientSecret As String = dtAuth.Rows(0)("ClientSecret")
+                Dim methodType As String = dtAuth.Rows(0)("MethodType")
+                Dim methodParams() As String = dtAuth.Rows(0)("MethodParams").ToString.Split("|")
 
-                'POST request to get access token/refresh token
-                client.BaseAddress = New Uri(authTokenUrl)
-                client.DefaultRequestHeaders.Accept.Clear()
-                client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"))
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                Dim reqBodyContent = New FormUrlEncodedContent(
+                Dim actualUrl As String = Nothing
+                Dim startDate As String = Nothing
+                Dim accessToken As String = Nothing
+                Dim refreshToken As String = Nothing
+
+                Using client As New HttpClient()
+
+                    'POST request to get access token/refresh token
+                    client.BaseAddress = New Uri(authTokenUrl)
+                    client.DefaultRequestHeaders.Accept.Clear()
+                    client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"))
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                    Dim reqBodyContent = New FormUrlEncodedContent(
                 {
                     New KeyValuePair(Of String, String)("grant_type", "password"),
                     New KeyValuePair(Of String, String)("client_id", clientID),
@@ -12355,78 +12373,240 @@ Public Class frmTechnology
                     New KeyValuePair(Of String, String)("username", userName),
                     New KeyValuePair(Of String, String)("password", pswd)
                 })
-                Dim token = Await client.PostAsync(client.BaseAddress, reqBodyContent)
-                If token.StatusCode = HttpStatusCode.OK Then
-                    Dim tokenContent = token.Content.ReadAsStringAsync()
-                    Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(tokenContent.Result.ToString), JObject)
-                    accessToken = jTokenData.GetValue("access_token").ToString
-                    refreshToken = jTokenData.GetValue("refresh_token").ToString
-                End If
+                    Dim token = Await client.PostAsync(client.BaseAddress, reqBodyContent)
+                    If token.StatusCode = HttpStatusCode.OK Then
+                        Dim tokenContent = token.Content.ReadAsStringAsync()
+                        Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(tokenContent.Result.ToString), JObject)
+                        accessToken = jTokenData.GetValue("access_token").ToString
+                        refreshToken = jTokenData.GetValue("refresh_token").ToString
+                    End If
 
-                'POST subsequent request to get access token/refresh token
-                client.DefaultRequestHeaders.Accept.Clear()
-                client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"))
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                Dim subReqBodyContent = New FormUrlEncodedContent(
+                    'POST subsequent request to get access token/refresh token
+                    client.DefaultRequestHeaders.Accept.Clear()
+                    client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"))
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                    Dim subReqBodyContent = New FormUrlEncodedContent(
                 {
                     New KeyValuePair(Of String, String)("grant_type", "refresh_token"),
                     New KeyValuePair(Of String, String)("client_id", clientID),
                     New KeyValuePair(Of String, String)("client_secret", clientSecret),
                     New KeyValuePair(Of String, String)("refresh_token", refreshToken)
                 })
-                Dim subToken = Await client.PostAsync(client.BaseAddress, subReqBodyContent)
-                If subToken.StatusCode = HttpStatusCode.OK Then
-                    Dim subTokenContent = subToken.Content.ReadAsStringAsync()
-                    Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(subTokenContent.Result.ToString), JObject)
-                    accessToken = jTokenData.GetValue("access_token").ToString
-                    refreshToken = jTokenData.GetValue("refresh_token").ToString
-                End If
-            End Using
-
-            Dim cols() As String = dsTicketsAPIConfig.Tables(0).Rows(0)("ColumnName").ToString.Split("|")
-            Dim replaceCols() As String = dsTicketsAPIConfig.Tables(0).Rows(0)("ReplacedColumn").ToString.Split("|")
-            Dim colsOrdinal() As String = dsTicketsAPIConfig.Tables(0).Rows(0)("ColumnOrdinal").ToString.Split("|")
-
-            Using client As New HttpClient()
-
-                startDate = CDate(dtEditStartTimeStats.EditValue).ToString("yyyy-MM-dd")
-                actualUrl = apiBaseUrl & methodType & "?" & methodParams(0) & "=" & location & "&" & methodParams(1) & "=" & startDate
-
-                'GET request to get access tickets data
-                client.BaseAddress = New Uri(apiBaseUrl)
-                client.DefaultRequestHeaders.Accept.Clear()
-                client.DefaultRequestHeaders.Authorization = New AuthenticationHeaderValue("Bearer", accessToken)
-                client.DefaultRequestHeaders.Add("cis", location)
-                client.DefaultRequestHeaders.Add("start_date", startDate)
-                client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/xml"))
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-
-                Dim response = Await client.GetAsync(actualUrl)
-                If response.StatusCode = HttpStatusCode.OK Then
-                    Dim tickesData = Await response.Content.ReadAsStringAsync()
-                    Dim taskResponse As String = Await client.GetStringAsync(actualUrl)
-                    Dim ds As DataSet = XMLToDataSet(tickesData, "")
-                    If ds IsNot Nothing AndAlso ds.Tables.Count <> 0 Then
-                        dtGetTickets = ds.Tables(0)
+                    Dim subToken = Await client.PostAsync(client.BaseAddress, subReqBodyContent)
+                    If subToken.StatusCode = HttpStatusCode.OK Then
+                        Dim subTokenContent = subToken.Content.ReadAsStringAsync()
+                        Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(subTokenContent.Result.ToString), JObject)
+                        accessToken = jTokenData.GetValue("access_token").ToString
+                        refreshToken = jTokenData.GetValue("refresh_token").ToString
                     End If
-                End If
-            End Using
+                End Using
 
-            If Not dtGetTickets Is Nothing Then
-                For iCntr = 0 To replaceCols.Count - 1
-                    dtGetTickets.Columns(iCntr).ColumnName = CStr(replaceCols(iCntr))
-                    dtGetTickets.AcceptChanges()
-                Next
-                SetHyperlinkColumnsInGridControl(gcTicketsStats, gvTicketsStats, dtGetTickets)
-                For iCntr = 0 To cols.Count - 1
-                    gvTicketsStats.Columns(replaceCols(iCntr).ToString).VisibleIndex = CInt(colsOrdinal(iCntr))
-                Next
-                gcTicketsStats.Refresh()
-                AddChartAxisMarkers_New(dtGetTickets, "CREATED", "PRIO")
-            Else
-                IOSDevExpressGrid.ClearGrid(gcTicketsStats)
-                Charts_AxisMarkers_Clear(_strNetwork)
+                cols = dsTicketsAPIConfig.Tables(0).Rows(0)("ColumnName").ToString.Split("|")
+                replaceCols = dsTicketsAPIConfig.Tables(0).Rows(0)("ReplacedColumn").ToString.Split("|")
+                colsOrdinal = dsTicketsAPIConfig.Tables(0).Rows(0)("ColumnOrdinal").ToString.Split("|")
+
+                Using client As New HttpClient()
+
+                    startDate = CDate(dtEditStartTimeStats.EditValue).ToString("yyyy-MM-dd")
+                    actualUrl = apiBaseUrl & methodType & "?" & methodParams(0) & "=" & location & "&" & methodParams(1) & "=" & startDate
+
+                    'GET request to get access tickets data
+                    client.BaseAddress = New Uri(apiBaseUrl)
+                    client.DefaultRequestHeaders.Accept.Clear()
+                    client.DefaultRequestHeaders.Authorization = New AuthenticationHeaderValue("Bearer", accessToken)
+                    client.DefaultRequestHeaders.Add("cis", location)
+                    client.DefaultRequestHeaders.Add("start_date", startDate)
+                    client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/xml"))
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+
+                    Dim response = Await client.GetAsync(actualUrl)
+                    If response.StatusCode = HttpStatusCode.OK Then
+                        Dim tickesData = Await response.Content.ReadAsStringAsync()
+                        Dim taskResponse As String = Await client.GetStringAsync(actualUrl)
+                        Dim ds As DataSet = XMLToDataSet(tickesData, "")
+                        If ds IsNot Nothing AndAlso ds.Tables.Count <> 0 Then
+                            dtGetTickets = ds.Tables(0)
+                        End If
+                    End If
+                End Using
+
+                If Not dtGetTickets Is Nothing Then
+                    For iCntr = 0 To replaceCols.Count - 1
+                        dtGetTickets.Columns(iCntr).ColumnName = CStr(replaceCols(iCntr))
+                        dtGetTickets.AcceptChanges()
+                    Next
+                    SetHyperlinkColumnsInGridControl(gcTicketsStats, gvTicketsStats, dtGetTickets)
+                    For iCntr = 0 To cols.Count - 1
+                        gvTicketsStats.Columns(replaceCols(iCntr).ToString).VisibleIndex = CInt(colsOrdinal(iCntr))
+                    Next
+                    gcTicketsStats.Refresh()
+                    AddChartAxisMarkers_New(dtGetTickets, "CREATED", "PRIO")
+                Else
+                    IOSDevExpressGrid.ClearGrid(gcTicketsStats)
+                    Charts_AxisMarkers_Clear(_strNetwork)
+                End If
+
+            ElseIf configMgr.User.LicenseCompany.ToUpper = "TDC" Then
+
+                Dim dtAuth As DataTable = dsTicketsAPIConfig.Tables(0)
+                Dim authTokenUrl As String = dtAuth.Rows(0)("AuthTokenUrl")
+                Dim apiBaseUrl As String = dtAuth.Rows(0)("APIBaseUrl")
+                Dim userName As String = dtAuth.Rows(0)("UserName")
+                Dim pswd As String = dtAuth.Rows(0)("Password")
+                Dim clientID As String = dtAuth.Rows(0)("ClientID")
+                Dim clientSecret As String = dtAuth.Rows(0)("ClientSecret")
+                Dim methodType As String = dtAuth.Rows(0)("MethodType")
+                Dim methodParams() As String = dtAuth.Rows(0)("MethodParams").ToString.Split("|")
+                Dim sysParamFields As String = dtAuth.Rows(0)("ColumnName").ToString
+                replaceCols = dtAuth.Rows(0)("ReplacedColumn").ToString.Split("|")
+                colsOrdinal = dtAuth.Rows(0)("ColumnOrdinal").ToString.Split("|")
+                Dim sysParamQuery As String = dtAuth.Rows(0)("SysParamQuery").ToString
+
+                Dim actualUrl As String = Nothing
+                Dim startDate As String = Nothing
+                Dim endDate As String = Nothing
+                Dim accessToken As String = Nothing
+                Dim refreshToken As String = Nothing
+                Dim tokenFilePath As String = GetUserDataPath() & "\Data\ServiceNowApiToken.dat"
+
+                Using client As New HttpClient()
+
+                    If File.Exists(tokenFilePath) Then
+
+                        Dim fileContent = File.ReadAllText(tokenFilePath)
+                        refreshToken = fileContent.Split(":")(1)
+
+                        'POST request to get access token from refresh token
+                        client.BaseAddress = New Uri(authTokenUrl)
+                        client.DefaultRequestHeaders.Accept.Clear()
+                        client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"))
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                        Dim fileBodyContent = New FormUrlEncodedContent(
+                        {
+                            New KeyValuePair(Of String, String)("grant_type", "refresh_token"),
+                            New KeyValuePair(Of String, String)("client_id", clientID),
+                            New KeyValuePair(Of String, String)("client_secret", clientSecret),
+                            New KeyValuePair(Of String, String)("refresh_token", refreshToken)
+                        })
+                        Dim newToken = Await client.PostAsync(client.BaseAddress, fileBodyContent)
+                        If newToken.StatusCode = HttpStatusCode.OK Then
+                            Dim tokenContent = newToken.Content.ReadAsStringAsync()
+                            Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(tokenContent.Result.ToString), JObject)
+                            accessToken = jTokenData.GetValue("access_token").ToString
+                            refreshToken = jTokenData.GetValue("refresh_token").ToString
+                        End If
+
+                    Else
+
+                        'POST request to get access token/refresh token
+                        client.BaseAddress = New Uri(authTokenUrl)
+                        client.DefaultRequestHeaders.Accept.Clear()
+                        client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"))
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                        Dim reqBodyContent = New FormUrlEncodedContent(
+                        {
+                            New KeyValuePair(Of String, String)("grant_type", "password"),
+                            New KeyValuePair(Of String, String)("client_id", clientID),
+                            New KeyValuePair(Of String, String)("client_secret", clientSecret),
+                            New KeyValuePair(Of String, String)("username", userName),
+                            New KeyValuePair(Of String, String)("password", pswd)
+                        })
+                        Dim token = Await client.PostAsync(client.BaseAddress, reqBodyContent)
+                        If token.StatusCode = HttpStatusCode.OK Then
+                            Dim tokenContent = token.Content.ReadAsStringAsync()
+                            Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(tokenContent.Result.ToString), JObject)
+                            accessToken = jTokenData.GetValue("access_token").ToString
+                            refreshToken = jTokenData.GetValue("refresh_token").ToString
+                        End If
+
+                        Dim filecontent As String = "RefreshToken:" & refreshToken
+                        File.WriteAllText(tokenFilePath, filecontent, System.Text.Encoding.UTF8)
+                        File.SetAttributes(tokenFilePath, FileAttributes.Hidden)
+
+                    End If
+
+                    'POST subsequent request to get access token/refresh token
+                    client.DefaultRequestHeaders.Accept.Clear()
+                    client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"))
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                    Dim subReqBodyContent = New FormUrlEncodedContent(
+                    {
+                        New KeyValuePair(Of String, String)("grant_type", "refresh_token"),
+                        New KeyValuePair(Of String, String)("client_id", clientID),
+                        New KeyValuePair(Of String, String)("client_secret", clientSecret),
+                        New KeyValuePair(Of String, String)("refresh_token", refreshToken)
+                    })
+                    Dim subToken = Await client.PostAsync(client.BaseAddress, subReqBodyContent)
+                    If subToken.StatusCode = HttpStatusCode.OK Then
+                        Dim subTokenContent = subToken.Content.ReadAsStringAsync()
+                        Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(subTokenContent.Result.ToString), JObject)
+                        accessToken = jTokenData.GetValue("access_token").ToString
+                        refreshToken = jTokenData.GetValue("refresh_token").ToString
+                    End If
+                    '****************************************************************************
+                End Using
+
+                Using client As New HttpClient()
+
+                    startDate = CDate(dtEditStartTimeStats.EditValue).ToString("yyyy-MM-dd")
+                    endDate = CDate(dtEditEndTimeStats.EditValue).ToString("yyyy-MM-dd")
+
+                    sysParamQuery = sysParamQuery & "^opened_at>" & startDate & "^opened_at<" & endDate
+                    sysParamQuery = sysParamQuery.Replace("LIKERBS_", "IN" & Replace(location, """", "")).Replace("""", "")
+
+                    actualUrl = apiBaseUrl & "?" & methodParams(0) & "=" & sysParamFields & "&" & methodParams(1) & "=" & 100 & "&" & methodParams(2) & "=" & sysParamQuery & "&" & methodParams(3) & "=true" & "&" & methodParams(4) & "=true"
+
+                    'GET request to get access tickets data
+                    client.BaseAddress = New Uri(apiBaseUrl)
+                    client.DefaultRequestHeaders.Accept.Clear()
+                    client.DefaultRequestHeaders.Authorization = New AuthenticationHeaderValue("Bearer", accessToken)
+                    client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/xml"))
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+
+                    Dim response = Await client.GetAsync(actualUrl)
+                    If response.StatusCode = HttpStatusCode.OK Then
+                        Dim tickesData = Await response.Content.ReadAsStringAsync()
+                        Dim taskResponse As String = Await client.GetStringAsync(actualUrl)
+                        Dim ds As DataSet = XMLToDataSet(tickesData, "")
+                        If ds IsNot Nothing AndAlso ds.Tables.Count <> 0 Then
+                            dtGetTickets = ds.Tables(0)
+                        End If
+                    End If
+                End Using
+
+                If Not dtGetTickets Is Nothing Then
+                    For iCntr = 0 To replaceCols.Count - 1
+                        dtGetTickets.Columns(iCntr).ColumnName = CStr(replaceCols(iCntr))
+                        dtGetTickets.AcceptChanges()
+                    Next
+                    SetHyperlinkColumnsInGridControl(gcTicketsStats, gvTicketsStats, dtGetTickets)
+                    'For iCntr = 0 To cols.Count - 1
+                    '    gvTicketsStats.Columns(replaceCols(iCntr).ToString).VisibleIndex = CInt(colsOrdinal(iCntr))
+                    'Next
+                    gcTicketsStats.Refresh()
+                    AddChartAxisMarkers_New(dtGetTickets, "CREATED", "PRIO")
+                Else
+                    IOSDevExpressGrid.ClearGrid(gcTicketsStats)
+                    Charts_AxisMarkers_Clear(_strNetwork)
+                End If
+
             End If
+
+            'If Not dtGetTickets Is Nothing Then
+            '    For iCntr = 0 To replaceCols.Count - 1
+            '        dtGetTickets.Columns(iCntr).ColumnName = CStr(replaceCols(iCntr))
+            '        dtGetTickets.AcceptChanges()
+            '    Next
+            '    SetHyperlinkColumnsInGridControl(gcTicketsStats, gvTicketsStats, dtGetTickets)
+            '    For iCntr = 0 To cols.Count - 1
+            '        gvTicketsStats.Columns(replaceCols(iCntr).ToString).VisibleIndex = CInt(colsOrdinal(iCntr))
+            '    Next
+            '    gcTicketsStats.Refresh()
+            '    AddChartAxisMarkers_New(dtGetTickets, "CREATED", "PRIO")
+            'Else
+            '    IOSDevExpressGrid.ClearGrid(gcTicketsStats)
+            '    Charts_AxisMarkers_Clear(_strNetwork)
+            'End If
 
             manualAxisMarkerApplied = True
             ReDrawPeriodCalcAxisMarkers()
@@ -12499,7 +12679,7 @@ Public Class frmTechnology
     Private Sub gvTicketsStats_RowClick(sender As Object, e As Views.Grid.RowClickEventArgs) Handles gvTicketsStats.RowClick
         Try
             If e.RowHandle > -1 Then
-                Dim dgr As DataRowView = gvNotesStats.GetRow(e.RowHandle)
+                Dim dgr As DataRowView = gvTicketsStats.GetRow(e.RowHandle)
                 AddChartAxisMarkers_New(dgr, "CREATED", "PRIO")
                 manualAxisMarkerApplied = True
             End If
