@@ -3293,21 +3293,11 @@ Public Class frmSBMain
             If (tvReportGroup.FocusedNode.Level = 2) Then
 
                 Try
-                    'Dim frmReportContentFilters As New frmSBReportContentFilters()
-                    'frmReportContentFilters.ReportId = tvReportGroup.FocusedNode.Tag
-                    'frmReportContentFilters.reportConnString = dt_TechPackCounter.Rows(0)("SQL_ConnString").ToString 'dtChartConfigSandbox.Rows(0)("ReportConnString").ToString
-                    'frmReportContentFilters.ShowDialog()
-                    'If (frmReportContentFilters.IsFilterInserted) Then
-                    '    SetMessage("Filter applied.")
-                    'Else
-                    '    SetMessage("Filter not applied.")
-                    'End If
-
-                    Dim objDataMartContentFilter As New dlgDataMartContentFilter()
-                    objDataMartContentFilter.ReportId = tvReportGroup.FocusedNode.Tag
-                    objDataMartContentFilter.reportConnString = dt_TechPackCounter.Rows(0)("SQL_ConnString").ToString 'dtChartConfigSandbox.Rows(0)("ReportConnString").ToString
-                    objDataMartContentFilter.ShowDialog()
-                    If (objDataMartContentFilter.IsFilterInserted) Then
+                    Dim frmReportContentFilters As New frmSBReportContentFilters()
+                    frmReportContentFilters.ReportId = tvReportGroup.FocusedNode.Tag
+                    frmReportContentFilters.reportConnString = dt_TechPackCounter.Rows(0)("SQL_ConnString").ToString 'dtChartConfigSandbox.Rows(0)("ReportConnString").ToString
+                    frmReportContentFilters.ShowDialog()
+                    If (frmReportContentFilters.IsFilterInserted) Then
                         SetMessage("Filter applied.")
                     Else
                         SetMessage("Filter not applied.")
@@ -6475,10 +6465,6 @@ Public Class frmSBMain
                                         StreamWriterObj.Write(fileDelimiter)
                                         If dataReader.GetFieldType(i) Is GetType(String) Then
                                             StreamWriterObj.Write($""" & {dataReader.Item(i)} & """)
-                                        ElseIf dataReader.GetFieldType(i) Is GetType(DateTime) Then
-                                            ' Format as yyyy-MM-dd HH:mm:ss
-                                            Dim dtValue As DateTime = DirectCast(dataReader.Item(i), DateTime)
-                                            StreamWriterObj.Write(dtValue.ToString("yyyy-MM-dd HH:mm:ss"))
                                         Else
                                             StreamWriterObj.Write(dataReader.Item(i))
                                         End If
@@ -8069,7 +8055,7 @@ Public Class frmSBMain
 
         Dim filterPeriodstring As String = GetFilterPeriodStats(cmbPredefinedFilter, dateNavigator)
         If filterPeriodstring <> "" Then
-            where_fieldTemp = where_fieldTemp & " " & filterPeriodstring.Replace("@alias", sourceTable)
+            where_fieldTemp = where_fieldTemp & " " & filterPeriodstring.Replace("@alias", sourceTable.Split(",")(0))
         End If
 
         Dim DimensionFilter As String = ""

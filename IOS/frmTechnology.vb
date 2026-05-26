@@ -12253,48 +12253,53 @@ Public Class frmTechnology
                 'Else
                 ''Dim subj As String = sql_ticket.Substring(InStr(sql_ticket, "AND") + 5, (InStr(sql_ticket, "@site") - 1) - (InStr(sql_ticket, "AND") + 5))
                 Dim i As Integer = 0
-                If _strNetwork.ToUpper = networkAll.Network2G1.ToUpper Then
+                If configMgr.User.LicenseCompany.ToUpper = "ODIDO" Then
+                    If _strNetwork.ToUpper = networkAll.Network2G1.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).Substring(0, 5) & "%" & """" & ","
+                        Next
+                    ElseIf _strNetwork.ToUpper = networkAll.Network2G3.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_G_", ".MBTS.") & """" & ","
+                        Next
+                    ElseIf _strNetwork.ToUpper = networkAll.Network3G1.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).Substring(0, 5) & "%" & """" & ","
+                        Next
+                    ElseIf _strNetwork.ToUpper = networkAll.Network3G3.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_U_", ".MBTS.") & """" & ","
+                        Next
+                    ElseIf _strNetwork.ToUpper = networkAll.Network4G1.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_L_", ".MBTS.") & """" & ","
+                        Next
+                    ElseIf _strNetwork.ToUpper = networkAll.Network4G2.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_L_", ".MBTS.") & """" & ","
+                        Next
+                    ElseIf _strNetwork.ToUpper = networkAll.Network4G3.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_L_", ".MBTS.") & """" & ","
+                        Next
+                    ElseIf _strNetwork.ToUpper = networkAll.Network5G1.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_N_", ".MBTS.") & """" & ","
+                        Next
+                    ElseIf _strNetwork.ToUpper = networkAll.Network5G2.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_N_", ".MBTS.") & """" & ","
+                        Next
+                    ElseIf _strNetwork.ToUpper = networkAll.Network5G3.ToUpper Then
+                        For i = 0 To sites.Split(",").Count - 1
+                            strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_N_", ".MBTS.") & """" & ","
+                        Next
+                    End If
+                Else
                     For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).Substring(0, 5) & "%" & """" & ","
-                    Next
-                ElseIf _strNetwork.ToUpper = networkAll.Network2G3.ToUpper Then
-                    For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_G_", ".MBTS.") & """" & ","
-                    Next
-                ElseIf _strNetwork.ToUpper = networkAll.Network3G1.ToUpper Then
-                    For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).Substring(0, 5) & "%" & """" & ","
-                    Next
-                ElseIf _strNetwork.ToUpper = networkAll.Network3G3.ToUpper Then
-                    For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_U_", ".MBTS.") & """" & ","
-                    Next
-                ElseIf _strNetwork.ToUpper = networkAll.Network4G1.ToUpper Then
-                    For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_L_", ".MBTS.") & """" & ","
-                    Next
-                ElseIf _strNetwork.ToUpper = networkAll.Network4G2.ToUpper Then
-                    For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_L_", ".MBTS.") & """" & ","
-                    Next
-                ElseIf _strNetwork.ToUpper = networkAll.Network4G3.ToUpper Then
-                    For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_L_", ".MBTS.") & """" & ","
-                    Next
-                ElseIf _strNetwork.ToUpper = networkAll.Network5G1.ToUpper Then
-                    For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_N_", ".MBTS.") & """" & ","
-                    Next
-                ElseIf _strNetwork.ToUpper = networkAll.Network5G2.ToUpper Then
-                    For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_N_", ".MBTS.") & """" & ","
-                    Next
-                ElseIf _strNetwork.ToUpper = networkAll.Network5G3.ToUpper Then
-                    For i = 0 To sites.Split(",").Count - 1
-                        strLoc = strLoc & """" & sites.Split(",")(i).ToString.Replace("_N_", ".MBTS.") & """" & ","
+                        strLoc = strLoc & """" & sites.Split(",")(i).ToString & """" & ","
                     Next
                 End If
-                'End If
 
                 strLoc = strLoc.Substring(0, strLoc.Length - 1)
                 dtGetTickets = Nothing

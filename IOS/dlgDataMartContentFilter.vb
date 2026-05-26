@@ -3,6 +3,8 @@ Imports IOS.DataLibrary
 Imports DevExpress.XtraGrid
 Imports DevExpress.XtraEditors.Repository
 Imports DevExpress.XtraEditors.Controls
+Imports DevExpress.XtraGrid.Views.Grid
+Imports DevExpress.XtraEditors
 
 Public Class dlgDataMartContentFilter
 
@@ -52,7 +54,6 @@ Public Class dlgDataMartContentFilter
                 InitializeGridSources()
                 InitializeSandBoxFieldsQuery()
                 InitializeSandBoxFieldsResult()
-                'GetObjectTypeValues()
                 GetReportContentFilter()
                 AddHandler flp_DimensionsQuery.SizeChanged, AddressOf flp_Dimensions_SizeChanged
                 AddHandler flp_DimensionsResult.SizeChanged, AddressOf flp_Dimensions_SizeChanged
@@ -87,21 +88,6 @@ Public Class dlgDataMartContentFilter
         dtResult.Columns.Add("FilterType", GetType(String))
         dtResult.Columns.Add("ObjectFieldType", GetType(Integer))
         'dtResult.Columns.Add("Delete", GetType(String))
-    End Sub
-
-    Private Sub InitRepositoryItems(ByRef gridCtrl As GridControl)
-        riCombo.Items.AddRange(New String() {"Value1", "Value2"})
-
-        riCheckedCombo.Items.Add("Option A")
-        riCheckedCombo.Items.Add("Option B")
-        riCheckedCombo.SeparatorChar = ","c
-
-        riOperatorCombo.Items.AddRange(New String() {"=", "<>", ">", "<", ">=", "<=", "+", "-", "*", "/", "^", "AND", "OR", "NOT", "LIKE", "IN", "NOT IN"})
-        riOperatorCombo.TextEditStyle = TextEditStyles.DisableTextEditor
-
-        riDateEdit.CalendarView = CalendarView.Default
-
-        gridCtrl.RepositoryItems.AddRange(New RepositoryItem() {riCombo, riCheckedCombo, riOperatorCombo, riDateEdit})
     End Sub
 
     Private Sub InitializeSandBoxFieldsQuery()
@@ -339,8 +325,6 @@ Public Class dlgDataMartContentFilter
 
             End If
 
-            'RefreshFilterContents()
-
         Catch ex As Exception
             SetMessage("Error : Filters Fetching fail.")
         End Try
@@ -349,90 +333,20 @@ Public Class dlgDataMartContentFilter
     Private Sub SetSQLQuery()
         RichTextBoxQuery.Text = ""
         For iCntr As Integer = 0 To gvQuery.RowCount - 1
-            'Dim controlTmp As New Control
-            'If (gvQuery.Columns(iCntr).FieldName = "Dimension") Then
-            'Dim lblFilterDimensionTmp As DevExpress.XtraEditors.LabelControl = TryCast(controlTmp, DevExpress.XtraEditors.LabelControl)
-            'If (lblFilterDimensionTmp IsNot Nothing) Then
             AppendText(RichTextBoxQuery, " " & gvQuery.GetRowCellValue(iCntr, "Dimension").ToString.Trim, Color.Black, False)
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vCmbFilterOperator_")) Then
-            'Dim cmbFilterOperatorTmp As DevExpress.XtraEditors.ComboBoxEdit = TryCast(controlTmp, DevExpress.XtraEditors.ComboBoxEdit)
-            'If (cmbFilterOperatorTmp IsNot Nothing) Then
             AppendText(RichTextBoxQuery, " " & gvQuery.GetRowCellValue(iCntr, "Operator").ToString.Trim, Color.OrangeRed, False)
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vDtpFilterValue_")) Then
-            'Dim dtpFilterValueTmp As DevExpress.XtraEditors.DateEdit = TryCast(controlTmp, DevExpress.XtraEditors.DateEdit)
-            'If (dtpFilterValueTmp IsNot Nothing) Then
             AppendText(RichTextBoxQuery, " '" & gvQuery.GetRowCellValue(iCntr, "Value").ToString.Trim & "' ", Color.Black, False)
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vTxtFilterValue_")) Then
-            'Dim txtFilterValueTmp As DevExpress.XtraEditors.TextEdit = TryCast(controlTmp, DevExpress.XtraEditors.TextEdit)
-            'If (txtFilterValueTmp IsNot Nothing) Then
-
-            'AppendText(RichTextBoxQuery, " '" & txtFilterValueTmp.Text.Trim & "' ", Color.Black, False)
-
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vCmbLogicalLink_")) Then
-            'Dim cmbLogicalLinkTemp As DevExpress.XtraEditors.ComboBoxEdit = TryCast(controlTmp, DevExpress.XtraEditors.ComboBoxEdit)
-            'If (cmbLogicalLinkTemp IsNot Nothing) Then
-            'If (cmbLogicalLinkTemp.Enabled) Then
             AppendText(RichTextBoxQuery, " " & gvQuery.GetRowCellValue(iCntr, "LogicalLink").ToString.Trim, Color.Red, False)
-            'End If
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vCmbFilterValue_")) Then
-            'Dim cmbFldValTemp As DevExpress.XtraEditors.ComboBoxEdit = TryCast(controlTmp, DevExpress.XtraEditors.ComboBoxEdit)
-            'If (cmbFldValTemp IsNot Nothing) Then
-            'If (cmbFldValTemp.Enabled) Then
-            'AppendText(RichTextBoxQuery, " " & Chr(39) & cmbFldValTemp.SelectedItem.Text & Chr(39), Color.Red, False)
-            'End If
-            'End If
-            'End If
         Next
     End Sub
 
     Private Sub SetSQLResult()
         RichTextBoxResult.Text = ""
         For iCntr As Integer = 0 To gvResult.RowCount - 1
-            'Dim controlTmp As New Control
-            'If (controlTmp.Name.Contains("vlblDimension_")) Then
-            '    Dim lblFilterDimensionTmp As DevExpress.XtraEditors.LabelControl = TryCast(controlTmp, DevExpress.XtraEditors.LabelControl)
-            '    If (lblFilterDimensionTmp IsNot Nothing) Then
             AppendText(RichTextBoxResult, " " & gvResult.GetRowCellValue(iCntr, "Dimension").ToString.Trim, Color.Black, False)
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vCmbFilterOperator_")) Then
-            '    Dim cmbFilterOperatorTmp As DevExpress.XtraEditors.ComboBoxEdit = TryCast(controlTmp, DevExpress.XtraEditors.ComboBoxEdit)
-            '    If (cmbFilterOperatorTmp IsNot Nothing) Then
             AppendText(RichTextBoxResult, " " & gvResult.GetRowCellValue(iCntr, "Operator").ToString.Trim, Color.OrangeRed, False)
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vDtpFilterValue_")) Then
-            '    Dim dtpFilterValueTmp As DevExpress.XtraEditors.DateEdit = TryCast(controlTmp, DevExpress.XtraEditors.DateEdit)
-            '    If (dtpFilterValueTmp IsNot Nothing) Then
-
             AppendText(RichTextBoxResult, " '" & gvResult.GetRowCellValue(iCntr, "Value").ToString.Trim & "' ", Color.Black, False)
-
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vTxtFilterValue_")) Then
-            '    Dim txtFilterValueTmp As DevExpress.XtraEditors.TextEdit = TryCast(controlTmp, DevExpress.XtraEditors.TextEdit)
-            '    If (txtFilterValueTmp IsNot Nothing) Then
-
-            'AppendText(RichTextBoxResult, " '" & txtFilterValueTmp.Text & "' ", Color.Black, False)
-
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vCmbLogicalLink_")) Then
-            '    Dim cmbLogicalLinkTemp As DevExpress.XtraEditors.ComboBoxEdit = TryCast(controlTmp, DevExpress.XtraEditors.ComboBoxEdit)
-            '    If (cmbLogicalLinkTemp IsNot Nothing) Then
-            '        If (cmbLogicalLinkTemp.Enabled) Then
             AppendText(RichTextBoxResult, " " & gvResult.GetRowCellValue(iCntr, "LogicalLink").ToString.Trim, Color.Red, False)
-            'End If
-            'End If
-            'ElseIf (controlTmp.Name.Contains("vCmbFilterValue_")) Then
-            '    Dim cmbFldValTemp As DevExpress.XtraEditors.ComboBoxEdit = TryCast(controlTmp, DevExpress.XtraEditors.ComboBoxEdit)
-            '    If (cmbFldValTemp IsNot Nothing) Then
-            '        If (cmbFldValTemp.Enabled) Then
-            '            AppendText(RichTextBoxResult, " " & cmbFldValTemp.SelectedItem.Text, Color.Red, False)
-            '        End If
-            '    End If
-            'End If
         Next
     End Sub
 
@@ -440,144 +354,332 @@ Public Class dlgDataMartContentFilter
         If (AddNewLine) Then
             text += Environment.NewLine
         End If
+        Dim pattern As String = "\b(NOT IN|IN)\s*$"
         box.SelectionStart = box.Text.Length
         box.SelectionLength = 0
         box.ForeColor = color
-        box.Text = box.Text + text
+        Dim match As System.Text.RegularExpressions.Match = System.Text.RegularExpressions.Regex.Match(box.Text, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        If match.Success Then
+            text = text.Replace("'", "")
+            box.Text = box.Text + " (" + String.Join(", ", text.Split(","c).Select(Function(s) $"'{s.Trim()}'")) + ") "
+        Else
+            box.Text = box.Text + text
+        End If
         'box.SelectionColor = box.ForeColor
     End Sub
 
     Private Sub BindReportContentFilter(ByRef dtReportContentFilter As DataTable, ByRef gridCtrl As GridControl, ByVal rowIndex As Integer)
-
         Dim isFirstIndex As Boolean = True
         Dim objFldFound As Boolean = False
         Dim noOfrows As Integer = dtReportContentFilter.Rows.Count
         Dim rowNo As Integer = 1
-        For Each drFilter As DataRow In dtReportContentFilter.Rows
-            isFirstIndex = True
-            objFldFound = False
-            Dim filterParam As FilterParam = New FilterParam()
-            Dim drQuery As DataRow = dtQuery.NewRow()
 
-            filterParam.FilterDimension = drFilter(ReportContentFilterFields.FilterDimension)
-            filterParam.ObjectFieldType = drFilter(ReportContentFilterFields.ObjectFieldType)
-            drQuery("Dimension") = drFilter(ReportContentFilterFields.FilterDimension)
-            filterParam.FilterOperator = drFilter(ReportContentFilterFields.FilterOperator)
-            drQuery("Operator") = drFilter(ReportContentFilterFields.FilterOperator)
+        If gridCtrl.Name.Contains("Query") Then
 
-            If (filterParam.FilterDimension.ToUpper = "PERIOD_START_TIME") Then
-                filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue)
-                filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
-                drQuery("Value") = drFilter(ReportContentFilterFields.FilterValue)
-            Else
-                For Each ctrl As DevExSandBoxField In flp_DimensionsQuery.Controls
-                    If filterParam.FilterDimension.Contains(".") Then
-                        If (ctrl.VSandBoxType = DatamartFieldType.ObjectFld) AndAlso (ctrl.Text = filterParam.FilterDimension.Split(".")(1).ToString) Then
-                            filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue)
-                            filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
-                            drQuery("Value") = drFilter(filterParam.FilterDimension.Split(".")(1))
-                            objFldFound = True
-                            Exit For
-                        End If
-                    Else
-                        If (ctrl.VSandBoxType = DatamartFieldType.ObjectFld) AndAlso (ctrl.Text = filterParam.FilterDimension.ToString) Then
-                            filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue)
-                            filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
-                            drQuery("Value") = drFilter(filterParam.FilterDimension)
-                            objFldFound = True
-                            Exit For
-                        End If
-                    End If
+            RemoveHandler gvQuery.CustomRowCellEdit, AddressOf gvQuery_CustomRowCellEdit
 
-                Next
+            For Each drFilter As DataRow In dtReportContentFilter.Rows
+                isFirstIndex = True
+                objFldFound = False
+                Dim filterParam As FilterParam = New FilterParam()
+                Dim drQuery As DataRow = dtQuery.NewRow()
 
-                If objFldFound = False Then
+                filterParam.FilterDimension = drFilter(ReportContentFilterFields.FilterDimension)
+                filterParam.ObjectFieldType = drFilter(ReportContentFilterFields.ObjectFieldType)
+                drQuery("Dimension") = drFilter(ReportContentFilterFields.FilterDimension)
+                filterParam.FilterOperator = drFilter(ReportContentFilterFields.FilterOperator)
+                drQuery("Operator") = drFilter(ReportContentFilterFields.FilterOperator)
+
+                If (filterParam.FilterDimension.ToUpper = "PERIOD_START_TIME") Then
                     filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue)
                     filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
                     drQuery("Value") = drFilter(ReportContentFilterFields.FilterValue)
                     drQuery("FilterType") = drFilter(ReportContentFilterFields.FilterType)
+                Else
+                    For Each ctrl As DevExSandBoxField In flp_DimensionsQuery.Controls
+                        If filterParam.FilterDimension.Contains(".") Then
+                            If (ctrl.VSandBoxType = DatamartFieldType.ObjectFld) AndAlso (ctrl.Text = filterParam.FilterDimension.Split(".")(1).ToString) Then
+                                filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue).ToString.Trim
+                                filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
+                                drQuery("Dimension") = filterParam.FilterDimension.Split(".")(1).ToString
+                                drQuery("Value") = drFilter(ReportContentFilterFields.FilterValue)
+                                drQuery("FilterType") = drFilter(ReportContentFilterFields.FilterType)
+                                objFldFound = True
+                                Exit For
+                            End If
+                        Else
+                            If (ctrl.VSandBoxType = DatamartFieldType.ObjectFld) AndAlso (ctrl.Text = filterParam.FilterDimension.ToString) Then
+                                filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue).ToString.Trim
+                                filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
+                                drQuery("Value") = drFilter(ReportContentFilterFields.FilterValue)
+                                drQuery("FilterType") = drFilter(ReportContentFilterFields.FilterType)
+                                objFldFound = True
+                                Exit For
+                            End If
+                        End If
+
+                    Next
+
+                    If objFldFound = False Then
+                        filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue)
+                        filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
+                        drQuery("Value") = drFilter(ReportContentFilterFields.FilterValue).ToString.Trim
+                        drQuery("FilterType") = drFilter(ReportContentFilterFields.FilterType)
+                    End If
+                End If
+
+                filterParam.FilterLogicalLink = drFilter(ReportContentFilterFields.LogicalLink)
+                If (rowNo = noOfrows) Then
+                    isFirstIndex = False
+                    filterParam.FilterLogicalLink = ""
+                End If
+
+                drQuery("LogicalLink") = drFilter(ReportContentFilterFields.LogicalLink)
+
+                drQuery("ObjectFieldType") = drFilter(ReportContentFilterFields.ObjectFieldType)
+                filterParam.ObjectFieldType = drFilter(ReportContentFilterFields.ObjectFieldType)
+
+                dtQuery.Rows.Add(drQuery)
+
+                FilterParamList.Add(filterParam)
+                rowIndex += 1
+                rowNo += 1
+                isFirstIndex = False
+            Next
+
+            IOSDevExpressGrid.PopulateDataInGrid(gcQuery, gvQuery, dtQuery, "ALL", {"FilterType", "ObjectFieldType"}, "Dimension")
+
+            Dim btnDelete As New RepositoryItemButtonEdit()
+            btnDelete.TextEditStyle = TextEditStyles.HideTextEditor
+            btnDelete.Buttons(0).Kind = ButtonPredefines.Glyph
+            btnDelete.LookAndFeel.UseDefaultLookAndFeel = True
+            btnDelete.Buttons(0).Caption = "Delete"
+            btnDelete.LookAndFeel.SkinName = "DevExpress Style"
+            'btnDelete.LookAndFeel.SkinMaskColor = Color.Blue
+            btnDelete.Tag = "Query"
+            btnDelete.LookAndFeel.Style = DevExpress.LookAndFeel.LookAndFeelStyle.Skin
+            AddHandler btnDelete.ButtonClick, AddressOf btnDeleteQuery_ButtonClick
+
+            'Add an Unbound Column for the button
+            Dim colDelete = gvQuery.Columns.AddField("Delete")
+            colDelete.Tag = "Query"
+            colDelete.Visible = True
+            colDelete.ColumnEdit = btnDelete
+            colDelete.ShowButtonMode = Views.Base.ShowButtonModeEnum.ShowAlways
+
+            AddHandler gvQuery.CustomRowCellEdit, AddressOf gvQuery_CustomRowCellEdit
+
+        ElseIf gridCtrl.Name.Contains("Result") Then
+
+            RemoveHandler gvResult.CustomRowCellEdit, AddressOf gvResult_CustomRowCellEdit
+
+            For Each drFilter As DataRow In dtReportContentFilter.Rows
+                isFirstIndex = True
+                objFldFound = False
+                Dim filterParam As FilterParam = New FilterParam()
+                Dim drResult As DataRow = dtResult.NewRow()
+
+                filterParam.FilterDimension = drFilter(ReportContentFilterFields.FilterDimension)
+                filterParam.ObjectFieldType = drFilter(ReportContentFilterFields.ObjectFieldType)
+                drResult("Dimension") = drFilter(ReportContentFilterFields.FilterDimension)
+                filterParam.FilterOperator = drFilter(ReportContentFilterFields.FilterOperator)
+                drResult("Operator") = drFilter(ReportContentFilterFields.FilterOperator)
+
+                If (filterParam.FilterDimension.ToUpper = "PERIOD_START_TIME") Then
+                    filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue)
+                    filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
+                    drResult("Value") = drFilter(ReportContentFilterFields.FilterValue)
+                    drResult("FilterType") = drFilter(ReportContentFilterFields.FilterType)
+                Else
+                    For Each ctrl As DevExSandBoxField In flp_DimensionsQuery.Controls
+                        If filterParam.FilterDimension.Contains(".") Then
+                            If (ctrl.VSandBoxType = DatamartFieldType.ObjectFld) AndAlso (ctrl.Text = filterParam.FilterDimension.Split(".")(1).ToString) Then
+                                filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue)
+                                filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
+                                drResult("Value") = drFilter(filterParam.FilterValue)
+                                drResult("FilterType") = drFilter(filterParam.FilterType)
+                                objFldFound = True
+                                Exit For
+                            End If
+                        Else
+                            If (ctrl.VSandBoxType = DatamartFieldType.ObjectFld) AndAlso (ctrl.Text = filterParam.FilterDimension.ToString) Then
+                                filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue)
+                                filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
+                                drResult("Value") = drFilter(filterParam.FilterValue)
+                                drResult("FilterType") = drFilter(filterParam.FilterType)
+                                objFldFound = True
+                                Exit For
+                            End If
+                        End If
+
+                    Next
+
+                    If objFldFound = False Then
+                        filterParam.FilterValue = drFilter(ReportContentFilterFields.FilterValue)
+                        filterParam.FilterType = drFilter(ReportContentFilterFields.FilterType)
+                        drResult("Value") = drFilter(ReportContentFilterFields.FilterValue)
+                        drResult("FilterType") = drFilter(ReportContentFilterFields.FilterType)
+                    End If
+                End If
+
+                filterParam.FilterLogicalLink = drFilter(ReportContentFilterFields.LogicalLink)
+                If (rowNo = noOfrows) Then
+                    isFirstIndex = False
+                    filterParam.FilterLogicalLink = ""
+                End If
+
+                drResult("LogicalLink") = drFilter(ReportContentFilterFields.LogicalLink)
+                filterParam.ObjectFieldType = drFilter(ReportContentFilterFields.ObjectFieldType)
+
+                dtResult.Rows.Add(drResult)
+
+                FilterParamList.Add(filterParam)
+                rowIndex += 1
+                rowNo += 1
+                isFirstIndex = False
+            Next
+
+            IOSDevExpressGrid.PopulateDataInGrid(gcResult, gvResult, dtResult, "ALL", {"FilterType", "ObjectFieldType"}, "Dimension")
+
+            Dim btnDelete As New RepositoryItemButtonEdit()
+            btnDelete.TextEditStyle = TextEditStyles.HideTextEditor
+            btnDelete.Buttons(0).Kind = ButtonPredefines.Glyph
+            btnDelete.LookAndFeel.UseDefaultLookAndFeel = True
+            btnDelete.Buttons(0).Caption = "Delete"
+            btnDelete.LookAndFeel.SkinName = "DevExpress Style"
+            'btnDelete.LookAndFeel.SkinMaskColor = Color.Blue
+            btnDelete.Tag = "Result"
+            btnDelete.LookAndFeel.Style = DevExpress.LookAndFeel.LookAndFeelStyle.Skin
+            AddHandler btnDelete.ButtonClick, AddressOf btnDeleteResult_ButtonClick
+
+            'Add an Unbound Column for the button
+            Dim colDelete = gvResult.Columns.AddField("Delete")
+            colDelete.Tag = "Result"
+            colDelete.Visible = True
+            colDelete.ColumnEdit = btnDelete
+            colDelete.ShowButtonMode = Views.Base.ShowButtonModeEnum.ShowAlways
+
+            AddHandler gvResult.CustomRowCellEdit, AddressOf gvResult_CustomRowCellEdit
+
+        End If
+    End Sub
+
+    Private Sub gvQuery_CustomRowCellEdit(sender As Object, e As CustomRowCellEditEventArgs)
+        Dim view As GridView = TryCast(sender, GridView)
+        Dim gc As GridControl = view.GridControl
+
+        If e.Column.FieldName = "Operator" Then
+            CreateOperatorCombo(gc)
+            e.RepositoryItem = riOperatorCombo
+        End If
+
+        If e.Column.FieldName = "Value" Then
+            Dim dimensionName As String = view.GetRowCellValue(e.RowHandle, "Dimension").ToString
+            Dim value As String = view.GetRowCellValue(e.RowHandle, "Value").ToString
+
+            If dimensionName.ToUpper = "PERIOD_START_TIME" Then
+                e.RepositoryItem = riDateEdit
+            ElseIf view.GetRowCellValue(e.RowHandle, "Operator") = "IN" Or view.GetRowCellValue(e.RowHandle, "Operator") = "NOT IN" Then
+                CreateMultiParamValuesCombo(gc, dimensionName)
+                e.RepositoryItem = riCheckedCombo
+            Else
+                CreateParamValuesCombo(gc, dimensionName)
+                e.RepositoryItem = riCombo
+            End If
+        End If
+    End Sub
+
+    Private Sub gvResult_CustomRowCellEdit(sender As Object, e As CustomRowCellEditEventArgs)
+        Dim view As GridView = TryCast(sender, GridView)
+        Dim gc As GridControl = view.GridControl
+
+        If e.Column.FieldName = "Operator" Then
+            CreateOperatorCombo(gc)
+            e.RepositoryItem = riOperatorCombo
+        End If
+
+        If e.Column.FieldName = "Value" Then
+            Dim dimensionName As String = view.GetRowCellValue(e.RowHandle, "Dimension").ToString
+            Dim value As String = view.GetRowCellValue(e.RowHandle, "Value").ToString
+
+            If dimensionName.ToUpper = "PERIOD_START_TIME" Then
+                e.RepositoryItem = riDateEdit
+            ElseIf view.GetRowCellValue(e.RowHandle, "Operator") = "IN" Or view.GetRowCellValue(e.RowHandle, "Operator") = "NOT IN" Then
+                CreateMultiParamValuesCombo(gc, dimensionName)
+                e.RepositoryItem = riCheckedCombo
+            Else
+                CreateParamValuesCombo(gc, dimensionName)
+                e.RepositoryItem = riCombo
+            End If
+        End If
+    End Sub
+
+    Private Sub btnDeleteQuery_ButtonClick(sender As Object, e As ButtonPressedEventArgs)
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Invoked")
+        Try
+            Dim btnDeleteFilter As ButtonEdit = TryCast(sender, ButtonEdit)
+            'If (btnDeleteFilter.Tag = "Query") Then
+
+            If (FilterParamList.Count > 0) Then
+                Dim _filterParam As FilterParam = Nothing
+                For Each filterParam As FilterParam In FilterParamList
+                    If filterParam.FilterDimension.ToString.ToUpper.Contains(gvQuery.GetFocusedRowCellValue("Dimension").ToString.ToUpper) Then
+                        _filterParam = filterParam
+                        Exit For
+                    End If
+                Next
+                If (_filterParam IsNot Nothing) Then
+                    FilterParamList.Remove(_filterParam)
                 End If
             End If
 
-            filterParam.FilterLogicalLink = drFilter(ReportContentFilterFields.LogicalLink)
-            If (rowNo = noOfrows) Then
-                isFirstIndex = False
-                filterParam.FilterLogicalLink = ""
+            If xtcReportFilter.SelectedTabPageIndex = 0 Then
+                Dim datarow = gvQuery.GetDataRow(gvQuery.FocusedRowHandle)
+                dtQuery.Rows.Remove(datarow)
+
+                If (FilterParamList.Count > 0) Then
+                    SetSQLQuery()
+                Else
+                    SetSQLQuery()
+                End If
             End If
-
-            drQuery("LogicalLink") = drFilter(ReportContentFilterFields.LogicalLink)
-            dtQuery.Rows.Add(drQuery)
-
-            FilterParamList.Add(filterParam)
-            rowIndex += 1
-            rowNo += 1
-            isFirstIndex = False
-        Next
-
-        IOSDevExpressGrid.PopulateDataInGrid(gcQuery, gvQuery, dtQuery, "ALL", {"FilterType", "ObjectFieldType"}, "Dimension")
-
-        Dim btnDelete As New RepositoryItemButtonEdit()
-        btnDelete.TextEditStyle = TextEditStyles.HideTextEditor
-        btnDelete.Buttons(0).Kind = ButtonPredefines.Glyph
-        btnDelete.LookAndFeel.UseDefaultLookAndFeel = True
-        btnDelete.Buttons(0).Caption = "Delete"
-        btnDelete.LookAndFeel.SkinName = "DevExpress Style"
-        'btnDelete.LookAndFeel.SkinMaskColor = Color.Blue
-        btnDelete.LookAndFeel.Style = DevExpress.LookAndFeel.LookAndFeelStyle.Skin
-        AddHandler btnDelete.ButtonClick, AddressOf btnDelete_ButtonClick
-
-        'Add an Unbound Column for the button
-        Dim colDelete = gvQuery.Columns.AddField("Delete")
-        colDelete.Visible = True
-        colDelete.ColumnEdit = btnDelete
-        colDelete.ShowButtonMode = Views.Base.ShowButtonModeEnum.ShowAlways
-
+            'End If
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+        End Try
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
     End Sub
 
-    Private Sub btnDelete_ButtonClick(sender As Object, e As ButtonPressedEventArgs)
+    Private Sub btnDeleteResult_ButtonClick(sender As Object, e As ButtonPressedEventArgs)
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Invoked")
         Try
             Dim btnDeleteFilter As DevExpress.XtraEditors.ButtonEdit = TryCast(sender, DevExpress.XtraEditors.ButtonEdit)
-            If (btnDeleteFilter IsNot Nothing) Then
-                btnDeleteFilter.Enabled = False
+            'If (btnDeleteFilter.Tag = "Result") Then
 
-                If (FilterParamList.Count > 0) Then
-                    Dim _filterParam As FilterParam = Nothing
-                    For Each filterParam As FilterParam In FilterParamList
-                        If filterParam.FilterDimension.ToString.ToUpper.Contains(gvQuery.GetFocusedRowCellValue("FilterDimension").ToString.ToUpper) Then
-                            _filterParam = filterParam
-                            Exit For
-                        End If
-                    Next
-                    If (_filterParam IsNot Nothing) Then
-                        FilterParamList.Remove(_filterParam)
+            If (FilterParamList.Count > 0) Then
+                Dim _filterParam As FilterParam = Nothing
+                For Each filterParam As FilterParam In FilterParamList
+                    If filterParam.FilterDimension.ToString.ToUpper.Contains(gvResult.GetFocusedRowCellValue("Dimension").ToString.ToUpper) Then
+                        _filterParam = filterParam
+                        Exit For
                     End If
-                End If
-
-                If xtcReportFilter.SelectedTabPageIndex = 0 Then
-
-                    Dim datarow = gvQuery.GetDataRow(gvQuery.FocusedRowHandle)
-                    dtQuery.Rows.Remove(datarow)
-
-                    If (FilterParamList.Count > 0) Then
-                        SetSQLQuery()
-                    Else
-                        SetSQLQuery()
-                    End If
-
-                ElseIf xtcReportFilter.SelectedTabPageIndex = 1 Then
-
-                    Dim datarow = gvResult.GetDataRow(gvResult.FocusedRowHandle)
-                    dtResult.Rows.Remove(datarow)
-
-                    If (FilterParamList.Count > 0) Then
-                        SetSQLResult()
-                    Else
-                        SetSQLResult()
-                    End If
-
+                Next
+                If (_filterParam IsNot Nothing) Then
+                    FilterParamList.Remove(_filterParam)
                 End If
             End If
+
+            If xtcReportFilter.SelectedTabPageIndex = 1 Then
+                Dim datarow = gvResult.GetDataRow(gvResult.FocusedRowHandle)
+                dtResult.Rows.Remove(datarow)
+
+                If (FilterParamList.Count > 0) Then
+                    SetSQLResult()
+                Else
+                    SetSQLResult()
+                End If
+            End If
+            'End If
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
         End Try
@@ -616,6 +718,417 @@ Public Class dlgDataMartContentFilter
         RemoveHandler Timer2.Tick, AddressOf Timer2_Tick
         Timer2.Enabled = False
         Timer2.Stop()
+    End Sub
+
+    Private Sub btn_ReportContentFilterCommit_Click(sender As Object, e As EventArgs) Handles btn_ReportContentFilterCommitQuery.Click, btn_ReportContentFilterCommitResult.Click
+        Try
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Invoked")
+            If (FilterParamList.Count > 0) Then
+                Dim sqlCommand As String = SQLReportContentFilter.DeleteByReportID(_reportId)
+                Dim alteredFilterParam As List(Of FilterParam) = GetFilteredParam()
+                For Each filters As FilterParam In alteredFilterParam
+                    If filters.FilterOperator = "IN" Or filters.FilterOperator = "NOT IN" Then
+                        sqlCommand = sqlCommand & SQLReportContentFilter.InsertReportContent_Filter(_reportId, filters.FilterDimension, filters.FilterOperator, Replace(filters.FilterValue.Trim, "'", "''"), filters.FilterLogicalLink, filters.FilterType, filters.ObjectFieldType)
+                    Else
+                        sqlCommand = sqlCommand & SQLReportContentFilter.InsertReportContent_Filter(_reportId, filters.FilterDimension, filters.FilterOperator, filters.FilterValue.Trim, filters.FilterLogicalLink, filters.FilterType, filters.ObjectFieldType)
+                    End If
+                Next
+                DataAccessorODBC.ExecuteNonQuery(connStrSandBoxServer, sqlCommand)
+            Else
+                Dim sqlCommand As String = SQLReportContentFilter.DeleteByReportID(_reportId)
+                DataAccessorODBC.ExecuteNonQuery(connStrSandBoxServer, sqlCommand)
+            End If
+
+            CheckFilterApply()
+
+            Me.Close()
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+        End Try
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
+    End Sub
+
+    Private Sub btn_Cancel_Click(sender As Object, e As EventArgs) Handles btn_CancelResult.Click, btn_CancelQuery.Click
+        CheckFilterApply()
+        Me.DialogResult = DialogResult.Cancel
+        Me.Close()
+    End Sub
+
+    Private Sub CheckFilterApply()
+        Dim dtExitReportContentFilter As DataTable = DataAccessorODBC.GetDataTable(connStrSandBoxServer, SQLReportContentFilter.GetReportContentFilter(_reportId))
+        If (dtExitReportContentFilter IsNot Nothing) AndAlso (dtExitReportContentFilter.Rows.Count > 0) Then
+            _isFilterInserted = True
+        Else
+            _isFilterInserted = False
+        End If
+    End Sub
+
+    Private Sub GridControl_DragOver(sender As Object, e As DragEventArgs) Handles gcQuery.DragOver, gcResult.DragOver
+        e.Effect = DragDropEffects.Copy
+    End Sub
+
+    Private Sub gcQuery_DragDrop(sender As Object, e As DragEventArgs) Handles gcQuery.DragDrop
+        Try
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Invoked")
+            Dim items As String = e.Data.GetData(DataFormats.Text).ToString
+            Dim draggedObjectText As String = items.Split("#")(0).ToString
+            Dim draggedObjectTag As String = items.Split("#")(1).ToString
+            Dim draggedObjectFieldType As Integer = items.Split("#")(2).ToString
+
+            Dim filterParam As FilterParam = New FilterParam()
+
+            If dtQuery IsNot Nothing Then
+
+                Dim drQuery As DataRow = dtQuery.NewRow()
+
+                drQuery("Dimension") = draggedObjectText
+
+                If draggedObjectTag <> "" Then
+                    filterParam.FilterDimension = draggedObjectTag & "." & draggedObjectText
+                Else
+                    filterParam.FilterDimension = draggedObjectText
+                End If
+
+                drQuery("Operator") = "="
+                filterParam.FilterOperator = "="
+
+                If (draggedObjectText.ToUpper = "PERIOD_START_TIME") Then
+                    drQuery("Value") = Date.Now.ToString("dd-MM-yyyy")
+                    filterParam.FilterValue = Date.Now.ToString("dd-MM-yyyy")
+                ElseIf draggedObjectFieldType = DatamartFieldType.ObjectFld Then
+                    drQuery("Value") = ""
+                    filterParam.FilterValue = ""
+                Else
+                    drQuery("Value") = "0"
+                    filterParam.FilterValue = "0"
+                End If
+
+                drQuery("LogicalLink") = "AND"
+                drQuery("FilterType") = "QUERY"
+
+                filterParam.FilterType = "QUERY"
+
+                drQuery("ObjectFieldType") = draggedObjectFieldType
+                filterParam.ObjectFieldType = draggedObjectFieldType
+
+                For Each filterParamTem As FilterParam In FilterParamList
+                    If (filterParamTem.FilterLogicalLink = "") Then
+                        filterParamTem.FilterLogicalLink = "AND"
+                    End If
+                Next
+                FilterParamList.Add(filterParam)
+                dtQuery.Rows.Add(drQuery)
+            End If
+
+            If gcQuery.DataSource Is Nothing Then
+                IOSDevExpressGrid.PopulateDataInGrid(gcQuery, gvQuery, dtQuery, "ALL", {"FilterType", "ObjectFieldType"}, "Dimension")
+
+                Dim btnDelete As New RepositoryItemButtonEdit()
+                btnDelete.TextEditStyle = TextEditStyles.HideTextEditor
+                btnDelete.Buttons(0).Kind = ButtonPredefines.Glyph
+                btnDelete.LookAndFeel.UseDefaultLookAndFeel = True
+                btnDelete.Buttons(0).Caption = "Delete"
+                btnDelete.LookAndFeel.SkinName = "DevExpress Style"
+                'btnDelete.LookAndFeel.SkinMaskColor = Color.Blue
+                btnDelete.Tag = "Query"
+                btnDelete.LookAndFeel.Style = DevExpress.LookAndFeel.LookAndFeelStyle.Skin
+                AddHandler btnDelete.ButtonClick, AddressOf btnDeleteQuery_ButtonClick
+
+                'Add an Unbound Column for the button
+                Dim colDelete = gvQuery.Columns.AddField("Delete")
+                colDelete.Tag = "Query"
+                colDelete.Visible = True
+                colDelete.ColumnEdit = btnDelete
+                colDelete.ShowButtonMode = Views.Base.ShowButtonModeEnum.ShowAlways
+            Else
+                gcQuery.RefreshDataSource()
+            End If
+
+            SetSQLQuery()
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+        End Try
+        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
+    End Sub
+
+    Private Sub gcResult_DragDrop(sender As Object, e As DragEventArgs) Handles gcResult.DragDrop
+        Try
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Invoked")
+            Dim items As String = e.Data.GetData(DataFormats.Text).ToString
+            Dim draggedObjectText As String = items.Split("#")(0).ToString
+            Dim draggedObjectTag As String = items.Split("#")(1).ToString
+            Dim draggedObjectFieldType As Integer = items.Split("#")(2).ToString
+            Dim filterParam As FilterParam = New FilterParam()
+
+            If dtResult IsNot Nothing Then
+
+                Dim drResult As DataRow = dtResult.NewRow()
+
+                drResult("Dimension") = draggedObjectText
+
+                If draggedObjectTag <> "" Then
+                    filterParam.FilterDimension = draggedObjectTag & "." & draggedObjectText
+                Else
+                    filterParam.FilterDimension = draggedObjectText
+                End If
+
+                drResult("Operator") = "="
+                filterParam.FilterOperator = "="
+
+                If (draggedObjectText.ToUpper = "PERIOD_START_TIME") Then
+                    drResult("Value") = CDate(Date.Now.ToString("dd-MM-yyyy"))
+                    filterParam.FilterValue = CDate(Date.Now.ToString("dd-MM-yyyy"))
+                ElseIf draggedObjectFieldType = DatamartFieldType.ObjectFld Then
+                    drResult("Value") = draggedObjectText
+                    filterParam.FilterValue = draggedObjectText
+                Else
+                    drResult("Value") = "0"
+                    filterParam.FilterValue = "0"
+                End If
+
+                drResult("LogicalLink") = "AND"
+                drResult("FilterType") = "RESULT"
+
+                filterParam.FilterType = "RESULT"
+
+                drResult("ObjectFieldType") = draggedObjectFieldType
+                filterParam.ObjectFieldType = draggedObjectFieldType
+
+                For Each filterParamTem As FilterParam In FilterParamList
+                    If (filterParamTem.FilterLogicalLink = "") Then
+                        filterParamTem.FilterLogicalLink = "AND"
+                    End If
+                Next
+                FilterParamList.Add(filterParam)
+
+                dtResult.Rows.Add(drResult)
+            End If
+
+            If gcResult.DataSource Is Nothing Then
+                IOSDevExpressGrid.PopulateDataInGrid(gcResult, gvResult, dtResult, "ALL", {"FilterType", "ObjectFieldType"}, "Dimension")
+
+                Dim btnDelete As New RepositoryItemButtonEdit()
+                btnDelete.TextEditStyle = TextEditStyles.HideTextEditor
+                btnDelete.Buttons(0).Kind = ButtonPredefines.Glyph
+                btnDelete.LookAndFeel.UseDefaultLookAndFeel = True
+                btnDelete.Buttons(0).Caption = "Delete"
+                btnDelete.LookAndFeel.SkinName = "DevExpress Style"
+                btnDelete.Tag = "Result"
+                btnDelete.LookAndFeel.Style = DevExpress.LookAndFeel.LookAndFeelStyle.Skin
+                AddHandler btnDelete.ButtonClick, AddressOf btnDeleteResult_ButtonClick
+
+                'Add an Unbound Column for the button
+                Dim colDelete = gvResult.Columns.AddField("Delete")
+                colDelete.Tag = "Result"
+                colDelete.Visible = True
+                colDelete.ColumnEdit = btnDelete
+                colDelete.ShowButtonMode = Views.Base.ShowButtonModeEnum.ShowAlways
+            Else
+                gcResult.RefreshDataSource()
+            End If
+
+            SetSQLResult()
+
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub gcDragValue_DragOver(sender As Object, e As DragEventArgs) Handles gcQuery.DragOver, gcResult.DragOver
+        e.Effect = DragDropEffects.Copy
+    End Sub
+
+    Private Sub gvQuery_ShowingEditor(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles gvQuery.ShowingEditor
+        Try
+            If (gvQuery.FocusedColumn.FieldName = "Value") Or (gvQuery.FocusedColumn.FieldName = "Operator") Or
+                (gvQuery.FocusedColumn.FieldName = "LogicalLink") Or (gvQuery.FocusedColumn.FieldName = "Delete") Then
+                e.Cancel = False
+            Else
+                e.Cancel = True
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub gvResult_ShowingEditor(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles gvResult.ShowingEditor
+        Try
+            If (gvResult.FocusedColumn.FieldName = "Value") Or (gvResult.FocusedColumn.FieldName = "Operator") Or
+                (gvResult.FocusedColumn.FieldName = "LogicalLink") Or (gvResult.FocusedColumn.FieldName = "Delete") Then
+                e.Cancel = False
+            Else
+                e.Cancel = True
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Function GetDynamicValues(dimensionName As String) As Object
+        If objectTableName IsNot Nothing Then
+            dtObjectTypeValues = DataAccessorODBC.GetDataTable(connStrSandBoxServer, SQLReportContentFilter.GetReportDimensionDistinctValues(dimensionName, objectTableName))
+            Return dtObjectTypeValues
+        End If
+    End Function
+
+    Private Sub gvResult_CellValueChanged(sender As Object, e As Views.Base.CellValueChangedEventArgs) Handles gvResult.CellValueChanged
+        Try
+            SetSQLResult()
+            SetFilterParamList("RESULT")
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub gvQuery_CellValueChanged(sender As Object, e As Views.Base.CellValueChangedEventArgs) Handles gvQuery.CellValueChanged
+        Try
+            SetSQLQuery()
+            SetFilterParamList("QUERY")
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub SetFilterParamList(filterType As String)
+        If FilterParamList IsNot Nothing Then
+            FilterParamList.RemoveAll(Function(x) x.FilterType?.ToUpper() = filterType)
+        End If
+        If filterType = "QUERY" Then
+            For Each dr As DataRow In dtQuery.Rows
+                Dim filterParam As FilterParam = New FilterParam()
+                filterParam.FilterDimension = dr("Dimension").ToString
+                filterParam.FilterOperator = dr("Operator").ToString
+                If filterParam.FilterOperator = "IN" Or filterParam.FilterOperator = "NOT IN" Then
+                    filterParam.FilterValue = " (" + String.Join(", ", dr("Value").ToString.Split(","c).Select(Function(s) $"'{s.Trim()}'")) + ") "
+                Else
+                    filterParam.FilterValue = dr("Value").ToString
+                End If
+
+                filterParam.FilterType = dr("FilterType").ToString
+                filterParam.FilterLogicalLink = dr("LogicalLink").ToString
+                filterParam.ObjectFieldType = dr("ObjectFieldType").ToString
+
+                FilterParamList.Add(filterParam)
+            Next
+        ElseIf filterType = "RESULT" Then
+            For Each dr As DataRow In dtResult.Rows
+                Dim filterParam As FilterParam = New FilterParam()
+                filterParam.FilterDimension = dr("Dimension").ToString
+                filterParam.FilterOperator = dr("Operator").ToString
+                If filterParam.FilterOperator = "IN" Or filterParam.FilterOperator = "NOT IN" Then
+                    filterParam.FilterValue = " (" + String.Join(", ", dr("Value").ToString.Split(","c).Select(Function(s) $"'{s.Trim()}'")) + ") "
+                Else
+                    filterParam.FilterValue = dr("Value").ToString
+                End If
+
+                filterParam.FilterType = dr("FilterType").ToString
+                filterParam.FilterLogicalLink = dr("LogicalLink").ToString
+                filterParam.ObjectFieldType = dr("ObjectFieldType").ToString
+
+                FilterParamList.Add(filterParam)
+            Next
+        End If
+    End Sub
+
+    Private Sub gvQuery_RowCellClick(sender As Object, e As RowCellClickEventArgs) Handles gvQuery.RowCellClick
+        Try
+            Dim gv As GridView = TryCast(sender, GridView)
+            Dim gc As GridControl = gv.GridControl
+
+            If e.Column.FieldName = "Operator" Then
+                CreateOperatorCombo(gc)
+            ElseIf e.Column.FieldName = "Value" AndAlso (gvQuery.GetRowCellValue(e.RowHandle, "Dimension") = "PERIOD_START_TIME") Then
+                riDateEdit.EditMask = "dd/MM/yyyy"
+                riDateEdit.DisplayFormat.FormatString = "dd/MM/yyyy"
+                riDateEdit.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+                riDateEdit.EditFormat.FormatString = "dd/MM/yyyy"
+                riDateEdit.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+                riDateEdit.Mask.UseMaskAsDisplayFormat = True
+            ElseIf e.Column.FieldName = "Value" Then
+                If (gv.GetRowCellValue(e.RowHandle, "Operator").ToString = "IN") Or (gv.GetRowCellValue(e.RowHandle, "Operator").ToString = "NOT IN") Then
+                    CreateMultiParamValuesCombo(gc, gv.GetFocusedRowCellValue("Dimension").ToString)
+                Else
+                    CreateParamValuesCombo(gc, gv.GetFocusedRowCellValue("Dimension").ToString)
+                End If
+            ElseIf e.Column.FieldName = "Delete" Then
+                btnDeleteQuery_ButtonClick(e.Button, Nothing)
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub gvResult_RowCellClick(sender As Object, e As RowCellClickEventArgs) Handles gvResult.RowCellClick
+        Try
+            Try
+                Dim gv As GridView = TryCast(sender, GridView)
+                Dim gc As GridControl = gv.GridControl
+
+                If e.Column.FieldName = "Operator" Then
+                    CreateOperatorCombo(gc)
+                ElseIf e.Column.FieldName = "Value" Then
+                    If (gv.GetRowCellValue(e.RowHandle, "Operator").ToString = "IN") Or (gv.GetRowCellValue(e.RowHandle, "Operator").ToString = "NOT IN") Then
+                        CreateMultiParamValuesCombo(gc, gv.GetFocusedRowCellValue("Dimension").ToString)
+                    Else
+                        CreateParamValuesCombo(gc, gv.GetFocusedRowCellValue("Dimension").ToString)
+                    End If
+                ElseIf e.Column.FieldName = "Delete" Then
+                    btnDeleteResult_ButtonClick(e.Button, Nothing)
+                End If
+            Catch ex As Exception
+            End Try
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub CreateOperatorCombo(ByRef gc As GridControl)
+        Try
+            riOperatorCombo = New RepositoryItemComboBox()
+            gc.RepositoryItems.Add(riOperatorCombo)
+            'RemoveHandler riOperatorCombo.SelectedIndexChanged, AddressOf riOperatorCombo_SelectedIndexChanged
+            Dim items As String() = {"=", "<>", ">", "<", ">=", "<=", "+", "-", "*", "/", "^", "AND", "OR", "NOT", "LIKE", "IN", "NOT IN"}
+            riOperatorCombo.Items.AddRange(items)
+            'AddHandler riOperatorCombo.SelectedIndexChanged, AddressOf riOperatorCombo_SelectedIndexChanged
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
+        End Try
+    End Sub
+
+    Private Sub CreateParamValuesCombo(ByRef gc As GridControl, dimenaionName As String)
+        Try
+            riCombo = New RepositoryItemComboBox()
+            'RemoveHandler riCombo.SelectedIndexChanged, AddressOf riCombo_SelectedIndexChanged
+            Dim dt As DataTable = GetDynamicValues(dimenaionName)
+            If Not dt Is Nothing Then
+                gc.RepositoryItems.Clear()
+                gc.RepositoryItems.Add(riCombo)
+                riCombo.AutoHeight = False
+                Dim items As String() = dt.AsEnumerable().Select(Function(x) x.Field(Of Object)(dimenaionName).ToString).ToArray()
+                riCombo.Items.AddRange(items)
+            Else
+                riCombo.Items.Clear()
+            End If
+            'AddHandler riCombo.SelectedIndexChanged, AddressOf riCombo_SelectedIndexChanged
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
+        End Try
+    End Sub
+
+    Private Sub CreateMultiParamValuesCombo(ByRef gc As GridControl, dimenaionName As String)
+        Try
+            riCheckedCombo = New RepositoryItemCheckedComboBoxEdit()
+            'RemoveHandler riCheckedCombo.EditValueChanged, AddressOf riCheckedCombo_EditValueChanged
+            Dim dt As DataTable = GetDynamicValues(dimenaionName)
+            If Not dt Is Nothing Then
+                gc.RepositoryItems.Clear()
+                gc.RepositoryItems.Add(riCheckedCombo)
+                riCheckedCombo.AutoHeight = False
+                Dim items As String() = dt.AsEnumerable().Select(Function(x) x.Field(Of Object)(dimenaionName).ToString).ToArray()
+                riCheckedCombo.Items.AddRange(items)
+            Else
+                riCheckedCombo.Items.Clear()
+            End If
+            'AddHandler riCheckedCombo.EditValueChanged, AddressOf riCheckedCombo_EditValueChanged
+        Catch ex As Exception
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
+        End Try
     End Sub
 
 End Class

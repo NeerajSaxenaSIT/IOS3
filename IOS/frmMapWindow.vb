@@ -8992,8 +8992,8 @@ Public Class frmMapWindow
                 Next
 
                 '******* Testing TDC (Generate Networks) ******* 
-                btnGenerateNetworks.Enabled = True
-                btnGenerateNetworks.Visible = True
+                'btnGenerateNetworks.Enabled = True
+                'btnGenerateNetworks.Visible = True
 
             End If
         Catch ex As Exception
@@ -17523,7 +17523,7 @@ function toggleHeatmap() {
                             Next
 
                             If cmbNSTicketState.Text.ToUpper = "OPEN" Then
-                                Dim dtOpenTickets = dt_Network_State_Tickets.AsEnumerable().Where(Function(x) x.Field(Of String)("state") <> "Closed" Or x.Field(Of String)("state") <> "closed").CopyToDataTable()
+                                Dim dtOpenTickets = dt_Network_State_Tickets.AsEnumerable().Where(Function(x) x.Field(Of String)("state") <> "Closed" And x.Field(Of String)("state") <> "closed").CopyToDataTable()
                                 TicketState_Map(dtOpenTickets, replaceCols, colsOrdinal)
                             Else
                                 TicketState_Map(dt_Network_State_Tickets, replaceCols, colsOrdinal)

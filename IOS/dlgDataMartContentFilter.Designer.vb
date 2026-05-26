@@ -28,6 +28,8 @@ Partial Class dlgDataMartContentFilter
         Me.flp_DimensionsQuery = New System.Windows.Forms.FlowLayoutPanel()
         Me.ExTableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.GC_FilterStatementQuery = New DevExpress.XtraEditors.GroupControl()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.RichTextBoxQuery = New DevExpress.XtraEditors.MemoEdit()
         Me.gcQuery = New DevExpress.XtraGrid.GridControl()
         Me.gvQuery = New DevExpress.XtraGrid.Views.Grid.GridView()
         Me.GridView1 = New DevExpress.XtraGrid.Views.Grid.GridView()
@@ -41,6 +43,8 @@ Partial Class dlgDataMartContentFilter
         Me.flp_DimensionsResult = New System.Windows.Forms.FlowLayoutPanel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.GC_FilterStatementResult = New DevExpress.XtraEditors.GroupControl()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.RichTextBoxResult = New DevExpress.XtraEditors.MemoEdit()
         Me.gcResult = New DevExpress.XtraGrid.GridControl()
         Me.gvResult = New DevExpress.XtraGrid.Views.Grid.GridView()
         Me.GridView3 = New DevExpress.XtraGrid.Views.Grid.GridView()
@@ -50,10 +54,6 @@ Partial Class dlgDataMartContentFilter
         Me.lbl_MessageResult = New DevExpress.XtraEditors.LabelControl()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.RichTextBoxQuery = New DevExpress.XtraEditors.MemoEdit()
-        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.RichTextBoxResult = New DevExpress.XtraEditors.MemoEdit()
         CType(Me.xtcReportFilter, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.xtcReportFilter.SuspendLayout()
         Me.xtbQuery.SuspendLayout()
@@ -63,6 +63,8 @@ Partial Class dlgDataMartContentFilter
         Me.ExTableLayoutPanel2.SuspendLayout()
         CType(Me.GC_FilterStatementQuery, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GC_FilterStatementQuery.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
+        CType(Me.RichTextBoxQuery.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.gcQuery, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.gvQuery, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.GridView1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -74,14 +76,12 @@ Partial Class dlgDataMartContentFilter
         Me.TableLayoutPanel2.SuspendLayout()
         CType(Me.GC_FilterStatementResult, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GC_FilterStatementResult.SuspendLayout()
+        Me.TableLayoutPanel3.SuspendLayout()
+        CType(Me.RichTextBoxResult.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.gcResult, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.gvResult, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.GridView3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tlpResultBottom.SuspendLayout()
-        Me.TableLayoutPanel1.SuspendLayout()
-        CType(Me.RichTextBoxQuery.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel3.SuspendLayout()
-        CType(Me.RichTextBoxResult.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'xtcReportFilter
@@ -166,6 +166,29 @@ Partial Class dlgDataMartContentFilter
         Me.GC_FilterStatementQuery.TabIndex = 0
         Me.GC_FilterStatementQuery.Text = "Filter Statement"
         '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 1
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.RichTextBoxQuery, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.gcQuery, 0, 0)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 24)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(614, 371)
+        Me.TableLayoutPanel1.TabIndex = 4
+        '
+        'RichTextBoxQuery
+        '
+        Me.RichTextBoxQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBoxQuery.Location = New System.Drawing.Point(3, 318)
+        Me.RichTextBoxQuery.Name = "RichTextBoxQuery"
+        Me.RichTextBoxQuery.Size = New System.Drawing.Size(608, 50)
+        Me.RichTextBoxQuery.TabIndex = 4
+        '
         'gcQuery
         '
         Me.gcQuery.AllowDrop = True
@@ -173,7 +196,7 @@ Partial Class dlgDataMartContentFilter
         Me.gcQuery.Location = New System.Drawing.Point(3, 3)
         Me.gcQuery.MainView = Me.gvQuery
         Me.gcQuery.Name = "gcQuery"
-        Me.gcQuery.Size = New System.Drawing.Size(608, 327)
+        Me.gcQuery.Size = New System.Drawing.Size(608, 309)
         Me.gcQuery.TabIndex = 3
         Me.gcQuery.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.gvQuery, Me.GridView1})
         '
@@ -190,6 +213,7 @@ Partial Class dlgDataMartContentFilter
         Me.gvQuery.OptionsClipboard.ClipboardMode = DevExpress.Export.ClipboardMode.Formatted
         Me.gvQuery.OptionsClipboard.CopyCollapsedData = DevExpress.Utils.DefaultBoolean.[True]
         Me.gvQuery.OptionsClipboard.CopyColumnHeaders = DevExpress.Utils.DefaultBoolean.[True]
+        Me.gvQuery.OptionsCustomization.AllowSort = False
         Me.gvQuery.OptionsMenu.EnableColumnMenu = False
         Me.gvQuery.OptionsMenu.EnableFooterMenu = False
         Me.gvQuery.OptionsView.ShowGroupPanel = False
@@ -319,6 +343,29 @@ Partial Class dlgDataMartContentFilter
         Me.GC_FilterStatementResult.TabIndex = 0
         Me.GC_FilterStatementResult.Text = "Filter Statement"
         '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.ColumnCount = 1
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.RichTextBoxResult, 0, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.gcResult, 0, 0)
+        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(3, 24)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 2
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85.0!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(614, 371)
+        Me.TableLayoutPanel3.TabIndex = 4
+        '
+        'RichTextBoxResult
+        '
+        Me.RichTextBoxResult.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBoxResult.Location = New System.Drawing.Point(3, 318)
+        Me.RichTextBoxResult.Name = "RichTextBoxResult"
+        Me.RichTextBoxResult.Size = New System.Drawing.Size(608, 50)
+        Me.RichTextBoxResult.TabIndex = 4
+        '
         'gcResult
         '
         Me.gcResult.AllowDrop = True
@@ -326,7 +373,7 @@ Partial Class dlgDataMartContentFilter
         Me.gcResult.Location = New System.Drawing.Point(3, 3)
         Me.gcResult.MainView = Me.gvResult
         Me.gcResult.Name = "gcResult"
-        Me.gcResult.Size = New System.Drawing.Size(608, 327)
+        Me.gcResult.Size = New System.Drawing.Size(608, 309)
         Me.gcResult.TabIndex = 3
         Me.gcResult.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.gvResult, Me.GridView3})
         '
@@ -343,6 +390,7 @@ Partial Class dlgDataMartContentFilter
         Me.gvResult.OptionsClipboard.ClipboardMode = DevExpress.Export.ClipboardMode.Formatted
         Me.gvResult.OptionsClipboard.CopyCollapsedData = DevExpress.Utils.DefaultBoolean.[True]
         Me.gvResult.OptionsClipboard.CopyColumnHeaders = DevExpress.Utils.DefaultBoolean.[True]
+        Me.gvResult.OptionsCustomization.AllowSort = False
         Me.gvResult.OptionsMenu.EnableColumnMenu = False
         Me.gvResult.OptionsMenu.EnableFooterMenu = False
         Me.gvResult.OptionsView.ShowGroupPanel = False
@@ -408,52 +456,6 @@ Partial Class dlgDataMartContentFilter
         '
         Me.Timer2.Interval = 3000
         '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.ColumnCount = 1
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.RichTextBoxQuery, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.gcQuery, 0, 0)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 24)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 2
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(614, 371)
-        Me.TableLayoutPanel1.TabIndex = 4
-        '
-        'RichTextBoxQuery
-        '
-        Me.RichTextBoxQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RichTextBoxQuery.Location = New System.Drawing.Point(3, 336)
-        Me.RichTextBoxQuery.Name = "RichTextBoxQuery"
-        Me.RichTextBoxQuery.Size = New System.Drawing.Size(608, 32)
-        Me.RichTextBoxQuery.TabIndex = 4
-        '
-        'TableLayoutPanel3
-        '
-        Me.TableLayoutPanel3.ColumnCount = 1
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel3.Controls.Add(Me.RichTextBoxResult, 0, 1)
-        Me.TableLayoutPanel3.Controls.Add(Me.gcResult, 0, 0)
-        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(3, 24)
-        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
-        Me.TableLayoutPanel3.RowCount = 2
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90.0!))
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(614, 371)
-        Me.TableLayoutPanel3.TabIndex = 4
-        '
-        'RichTextBoxResult
-        '
-        Me.RichTextBoxResult.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RichTextBoxResult.Location = New System.Drawing.Point(3, 336)
-        Me.RichTextBoxResult.Name = "RichTextBoxResult"
-        Me.RichTextBoxResult.Size = New System.Drawing.Size(608, 32)
-        Me.RichTextBoxResult.TabIndex = 4
-        '
         'dlgDataMartContentFilter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -466,6 +468,7 @@ Partial Class dlgDataMartContentFilter
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(900, 500)
         Me.Name = "dlgDataMartContentFilter"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DataMart: Filter"
         CType(Me.xtcReportFilter, System.ComponentModel.ISupportInitialize).EndInit()
         Me.xtcReportFilter.ResumeLayout(False)
@@ -477,6 +480,8 @@ Partial Class dlgDataMartContentFilter
         Me.ExTableLayoutPanel2.ResumeLayout(False)
         CType(Me.GC_FilterStatementQuery, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GC_FilterStatementQuery.ResumeLayout(False)
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        CType(Me.RichTextBoxQuery.Properties, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.gcQuery, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.gvQuery, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.GridView1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -490,15 +495,13 @@ Partial Class dlgDataMartContentFilter
         Me.TableLayoutPanel2.ResumeLayout(False)
         CType(Me.GC_FilterStatementResult, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GC_FilterStatementResult.ResumeLayout(False)
+        Me.TableLayoutPanel3.ResumeLayout(False)
+        CType(Me.RichTextBoxResult.Properties, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.gcResult, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.gvResult, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.GridView3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tlpResultBottom.ResumeLayout(False)
         Me.tlpResultBottom.PerformLayout()
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        CType(Me.RichTextBoxQuery.Properties, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TableLayoutPanel3.ResumeLayout(False)
-        CType(Me.RichTextBoxResult.Properties, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
