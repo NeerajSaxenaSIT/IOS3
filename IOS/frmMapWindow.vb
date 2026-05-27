@@ -5490,6 +5490,14 @@ Public Class frmMapWindow
                     objTechTicketsUrlWC.WebRequestFrom = "Map"
                     frmMDI.OpenFormAsDockPanel("Tickets Web Url",, objTechTicketsUrlWC, urlLink)
                     'End If
+                ElseIf tempGrid.FocusedColumn.FieldName.ToLower = "number" Then
+                    Dim urlLink As String = dr("sys_id").ToString
+                    If objReportEditWebLinkWC Is Nothing Then
+                        objReportEditWebLinkWC = New frmInternetExplorer("Map Ticket URL", urlLink)
+                    End If
+                    objReportEditWebLinkWC.NavigationUrl = urlLink
+                    objReportEditWebLinkWC.WebRequestFrom = "MapWindow"
+                    frmMDI.OpenFormAsDockPanel("Map Ticket URL",, objReportEditWebLinkWC, urlLink)
                 End If
             End If
 
@@ -6248,23 +6256,30 @@ Public Class frmMapWindow
                 MapInfo.Tools.MapTool.SetInfoTipExpression(MapControl1.Tools.MapToolProperties, lyr, ColumnsInfoTip_MapinfoTable(tbl_map))
                 Dim GridCtrl_Map As GridControl = Me.CreateTabWithGridViewForMapData("NetworkStatus_Tickets")
                 Dim GridView_Map As New DevExpress.XtraGrid.Views.Grid.GridView(GridCtrl_Map)
-                IOSDevExpressGrid.PopulateDataInGrid(GridCtrl_Map, GridView_Map, dt, "ALL")
+
+                If configMgr.User.LicenseCompany.ToUpper = "ODIDO" Then
+                    IOSDevExpressGrid.PopulateDataInGrid(GridCtrl_Map, GridView_Map, dt, "ALL")
+                ElseIf configMgr.User.LicenseCompany.ToUpper = "TDC" Then
+                    LoadGridWithHyperlink(GridCtrl_Map, GridView_Map, dt, "number", "sys_id")
+                End If
 
                 For Each col As DevExpress.XtraGrid.Columns.GridColumn In TryCast(GridCtrl_Map.MainView, Views.Grid.GridView).Columns
-                    If (col.Name.Contains("url")) Then
+                    If (col.Name.Contains("url")) Or (col.Name.Contains("number")) Then
                         col.AppearanceCell.ForeColor = Color.Blue
                         col.AppearanceCell.Font = New System.Drawing.Font("Arial", 8.0F, FontStyle.Underline)
                         col.Tag = "Link"
                     End If
                 Next
 
-                If replaceCols IsNot Nothing Or colsOrdinal IsNot Nothing Then
-                    For iCntr = 0 To replaceCols.Count - 1
-                        TryCast(GridCtrl_Map.MainView, Views.Grid.GridView).Columns(replaceCols(iCntr).ToString).VisibleIndex = CInt(colsOrdinal(iCntr))
-                        TryCast(GridCtrl_Map.MainView, Views.Grid.GridView).Columns(replaceCols(iCntr).ToString).BestFit()
-                    Next
+                If configMgr.User.LicenseCompany.ToUpper = "ODIDO" Then
+                    If replaceCols IsNot Nothing Or colsOrdinal IsNot Nothing Then
+                        For iCntr = 0 To replaceCols.Count - 1
+                            TryCast(GridCtrl_Map.MainView, Views.Grid.GridView).Columns(replaceCols(iCntr).ToString).VisibleIndex = CInt(colsOrdinal(iCntr))
+                            TryCast(GridCtrl_Map.MainView, Views.Grid.GridView).Columns(replaceCols(iCntr).ToString).BestFit()
+                        Next
+                    End If
+                    GridCtrl_Map.Refresh()
                 End If
-                GridCtrl_Map.Refresh()
 
             End If
             connection.Close()
@@ -6275,6 +6290,60 @@ Public Class frmMapWindow
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
         End Try
     End Sub
+
+    'Private Sub LoadGridWithHyperlink(ByVal grid As GridControl, ByVal view As GridView, ByVal table As DataTable, columnName As String, columnToHide As String)
+    '    Try
+    '        view.OptionsView.ColumnAutoWidth = False
+    '        view.OptionsBehavior.AutoPopulateColumns = True
+    '        view.Columns.Clear()
+    '        grid.DataSource = table
+    '        grid.MainView = view
+    '        view.PopulateColumns()
+
+    '        For Each dtCol As DataColumn In table.Columns
+    '            If (view.Columns(columnToHide) IsNot Nothing) AndAlso (view.Columns(columnToHide).FieldName = dtCol.ColumnName) Then
+    '                view.Columns(columnToHide).Visible = False
+    '                view.Columns(columnToHide).VisibleIndex = -1
+    '            End If
+    '        Next
+
+    '        Dim hyperlinkEdit As New RepositoryItemHyperLinkEdit()
+
+    '        hyperlinkEdit.SingleClick = True
+    '        grid.RepositoryItems.Add(hyperlinkEdit)
+    '        view.Columns(columnName).ColumnEdit = hyperlinkEdit
+
+    '        AddHandler view.RowCellStyle,
+    '            Sub(sender, e)
+    '                If e.Column.FieldName = columnName Then
+    '                    e.Appearance.ForeColor = Color.Blue
+    '                    e.Appearance.Font = New System.Drawing.Font(e.Appearance.Font, FontStyle.Underline)
+    '                End If
+    '            End Sub
+
+    '        AddHandler view.RowCellClick,
+    '            Sub(sender, e)
+    '                If e.Column.FieldName <> columnName Then Exit Sub
+
+    '                Dim sysId As String = view.GetRowCellValue(e.RowHandle, columnToHide).ToString()
+    '                Dim ticketNumber As String = view.GetRowCellValue(e.RowHandle, columnName).ToString()
+
+    '                If objReportEditWebLinkWC Is Nothing Then
+    '                    objReportEditWebLinkWC = New frmInternetExplorer("Map Ticket URL", sysId)
+    '                End If
+    '                objReportEditWebLinkWC.NavigationUrl = sysId
+    '                objReportEditWebLinkWC.WebRequestFrom = "MapWindow"
+    '                frmMDI.OpenFormAsDockPanel("Map Ticket URL",, objReportEditWebLinkWC, sysId)
+    '            End Sub
+
+    '        view.OptionsBehavior.Editable = False
+    '        view.OptionsView.ShowGroupPanel = False
+    '        view.BestFitColumns()
+    '    Catch ex As Exception
+    '        _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
+    '        UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+    '    End Try
+    'End Sub
 
     Public Sub ParameterLabel_Map(ByVal dt As DataTable, ByVal LayerName As String, ByVal tech As String, ByVal param As String)
         Dim connection As New MIConnection
@@ -17409,6 +17478,7 @@ function toggleHeatmap() {
                 Dim replaceCols() As String = dtAuth.Rows(0)("ReplacedColumn").ToString.Split("|")
                 Dim colsOrdinal() As String = dtAuth.Rows(0)("ColumnOrdinal").ToString.Split("|")
                 Dim sysParamQuery As String = dtAuth.Rows(0)("SysParamQuery").ToString
+                Dim ticketURL As String = dtAuth.Rows(0)("TicketURL").ToString
 
                 Dim actualUrl As String = Nothing
                 Dim startDate As String = Nothing
@@ -17524,6 +17594,9 @@ function toggleHeatmap() {
 
                             If cmbNSTicketState.Text.ToUpper = "OPEN" Then
                                 Dim dtOpenTickets = dt_Network_State_Tickets.AsEnumerable().Where(Function(x) x.Field(Of String)("state") <> "Closed" And x.Field(Of String)("state") <> "closed").CopyToDataTable()
+                                For Each dr As DataRow In dtOpenTickets.Rows
+                                    dr("sys_id") = ticketURL & dr("sys_id")
+                                Next
                                 TicketState_Map(dtOpenTickets, replaceCols, colsOrdinal)
                             Else
                                 TicketState_Map(dt_Network_State_Tickets, replaceCols, colsOrdinal)

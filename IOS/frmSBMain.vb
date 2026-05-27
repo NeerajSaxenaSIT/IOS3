@@ -3293,11 +3293,21 @@ Public Class frmSBMain
             If (tvReportGroup.FocusedNode.Level = 2) Then
 
                 Try
-                    Dim frmReportContentFilters As New frmSBReportContentFilters()
-                    frmReportContentFilters.ReportId = tvReportGroup.FocusedNode.Tag
-                    frmReportContentFilters.reportConnString = dt_TechPackCounter.Rows(0)("SQL_ConnString").ToString 'dtChartConfigSandbox.Rows(0)("ReportConnString").ToString
-                    frmReportContentFilters.ShowDialog()
-                    If (frmReportContentFilters.IsFilterInserted) Then
+                    'Dim frmReportContentFilters As New frmSBReportContentFilters()
+                    'frmReportContentFilters.ReportId = tvReportGroup.FocusedNode.Tag
+                    'frmReportContentFilters.reportConnString = dt_TechPackCounter.Rows(0)("SQL_ConnString").ToString 'dtChartConfigSandbox.Rows(0)("ReportConnString").ToString
+                    'frmReportContentFilters.ShowDialog()
+                    'If (frmReportContentFilters.IsFilterInserted) Then
+                    '    SetMessage("Filter applied.")
+                    'Else
+                    '    SetMessage("Filter not applied.")
+                    'End If
+
+                    Dim objDataMartContentFilter As New dlgDataMartContentFilter()
+                    objDataMartContentFilter.ReportId = tvReportGroup.FocusedNode.Tag
+                    objDataMartContentFilter.reportConnString = dt_TechPackCounter.Rows(0)("SQL_ConnString").ToString 'dtChartConfigSandbox.Rows(0)("ReportConnString").ToString
+                    objDataMartContentFilter.ShowDialog()
+                    If (objDataMartContentFilter.IsFilterInserted) Then
                         SetMessage("Filter applied.")
                     Else
                         SetMessage("Filter not applied.")
@@ -6416,6 +6426,7 @@ Public Class frmSBMain
 
     Private Sub Process_ReportExportAppend(_reportName As String, _reportSql As String, _fileName As String, _fileDelimiter As String)
         SyncLock objExportThreadLock
+            txtExpReportStatus.Text = String.Empty
             ExportDataToCSV(_reportName, _reportSql, _fileName, _fileDelimiter)
         End SyncLock
 
@@ -6487,6 +6498,11 @@ Public Class frmSBMain
                           txtExpReportStatus.Text = txtExpReportStatus.Text & vbCrLf & reportName & ": Report Export Is Failed."
                       End Sub)
         End Try
+
+        'forcing to read to the end of the control
+        txtExpReportStatus.SelectionStart = txtExpReportStatus.Text.Length
+        txtExpReportStatus.ScrollToCaret()
+
     End Sub
 
 #End Region
@@ -8182,7 +8198,6 @@ Public Class frmSBMain
         Return having_fieldsTemp
     End Function
 
-
     Private Function SQL_FilterPart(ByRef dtFilter As DataTable) As String
         Dim having_fieldsTemp As String = String.Empty
         Dim valParam As String = String.Empty
@@ -8193,16 +8208,25 @@ Public Class frmSBMain
 
             If dtFilter.Rows(i)(ReportContentFilterFields.ObjectFieldType).ToString.Trim <> DatamartFieldType.Kpi Then
 
-
                 sqlHavingPart = dtFilter.Rows(i)(ReportContentFilterFields.FilterDimension).ToString()
 
-                    valParam = (If(IsString(dtFilter.Rows(i)(ReportContentFilterFields.FilterValue).ToString()),
-                                "'" & dtFilter.Rows(i)(ReportContentFilterFields.FilterValue).ToString() & "'",
-                                dtFilter.Rows(i)(ReportContentFilterFields.FilterValue).ToString()))
+                If dtFilter.Rows(i)(ReportContentFilterFields.FilterOperator).ToString.Trim = "IN" Or dtFilter.Rows(i)(ReportContentFilterFields.FilterOperator).ToString.Trim = "NOT IN" Then
+                    valParam = If(IsString(dtFilter.Rows(i)(ReportContentFilterFields.FilterValue).ToString()), dtFilter.Rows(i)(ReportContentFilterFields.FilterValue).ToString.Trim,
+                                dtFilter.Rows(i)(ReportContentFilterFields.FilterValue).ToString())
+                Else
+                    valParam = If(IsString(dtFilter.Rows(i)(ReportContentFilterFields.FilterValue).ToString()), "'" & dtFilter.Rows(i)(ReportContentFilterFields.FilterValue).ToString.Trim & "'",
+                                dtFilter.Rows(i)(ReportContentFilterFields.FilterValue).ToString())
+                End If
 
-                    If (Not having_fieldsTemp.Contains(sqlHavingPart)) Then
+                If (Not having_fieldsTemp.Contains(sqlHavingPart)) Then
+
+                    If dtFilter.Rows(i)(ReportContentFilterFields.FilterOperator).ToString.Trim = "IN" Or dtFilter.Rows(i)(ReportContentFilterFields.FilterOperator).ToString.Trim = "NOT IN" Then
+                        having_fieldsTemp &= " " & sqlHavingPart & Chr(32) & dtFilter.Rows(i)(ReportContentFilterFields.FilterOperator).ToString() & Chr(32) & valParam.Trim & " AND "
+                    Else
                         having_fieldsTemp &= " " & sqlHavingPart & Chr(32) & dtFilter.Rows(i)(ReportContentFilterFields.FilterOperator).ToString() & Chr(32) & Chr(39) & Replace(valParam.Trim, Chr(39), "") & Chr(39) & " AND "
                     End If
+
+                End If
 
             End If
 

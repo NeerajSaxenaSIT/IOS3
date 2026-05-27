@@ -12466,6 +12466,7 @@ Public Class frmTechnology
                 replaceCols = dtAuth.Rows(0)("ReplacedColumn").ToString.Split("|")
                 colsOrdinal = dtAuth.Rows(0)("ColumnOrdinal").ToString.Split("|")
                 Dim sysParamQuery As String = dtAuth.Rows(0)("SysParamQuery").ToString
+                Dim ticketURL As String = dtAuth.Rows(0)("TicketURL").ToString
 
                 Dim actualUrl As String = Nothing
                 Dim startDate As String = Nothing
@@ -12584,10 +12585,18 @@ Public Class frmTechnology
                         dtGetTickets.Columns(iCntr).ColumnName = CStr(replaceCols(iCntr))
                         dtGetTickets.AcceptChanges()
                     Next
-                    SetHyperlinkColumnsInGridControl(gcTicketsStats, gvTicketsStats, dtGetTickets)
+
+                    For Each dr As DataRow In dtGetTickets.Rows
+                        dr("sys_id") = ticketURL & dr("sys_id")
+                    Next
+
+                    LoadGridWithHyperlink(gcTicketsStats, gvTicketsStats, dtGetTickets, "number", "sys_id")
+
+                    'SetHyperlinkColumnsInGridControl(gcTicketsStats, gvTicketsStats, dtGetTickets)
                     'For iCntr = 0 To cols.Count - 1
                     '    gvTicketsStats.Columns(replaceCols(iCntr).ToString).VisibleIndex = CInt(colsOrdinal(iCntr))
                     'Next
+
                     gcTicketsStats.Refresh()
                     AddChartAxisMarkers_New(dtGetTickets, "CREATED", "PRIO")
                 Else

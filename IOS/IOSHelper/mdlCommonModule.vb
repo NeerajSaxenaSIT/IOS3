@@ -5676,6 +5676,7 @@ Module mdlCommonModule
 
             If Not String.IsNullOrWhiteSpace(columnToHide) AndAlso view.Columns.ColumnByFieldName(columnToHide) IsNot Nothing Then
                 view.Columns(columnToHide).Visible = False
+                view.Columns(columnToHide).OptionsColumn.ShowInCustomizationForm = False
             End If
 
             If Not table.Columns.Contains(columnName) Then Exit Sub
@@ -5719,9 +5720,16 @@ Module mdlCommonModule
             Sub(sender, e)
                 If e.Column.FieldName <> columnName Then Exit Sub
 
-                Dim html As String = view.GetRowCellValue(e.RowHandle, columnName).ToString()
+                Dim html As String = ""
+                Dim match As Match = Nothing
 
-                Dim match = Regex.Match(html, "href\s*=\s*""([^""]+)""", RegexOptions.IgnoreCase)
+                If configMgr.User.LicenseCompany = "TDC" Then
+                    html = view.GetRowCellValue(e.RowHandle, "sys_id").ToString()
+                    match = Regex.Match(html, "(https?://[^\s""<>]+)", RegexOptions.IgnoreCase)
+                Else
+                    html = view.GetRowCellValue(e.RowHandle, columnName).ToString()
+                    match = Regex.Match(html, "href\s*=\s*""([^""]+)""", RegexOptions.IgnoreCase)
+                End If
 
                 If match.Success Then
                     If columnName.ToLower = "ticketurl" Then
@@ -5741,6 +5749,14 @@ Module mdlCommonModule
                         objReportEditWebLinkWC.NavigationUrl = match.Groups(1).Value.ToString
                         objReportEditWebLinkWC.WebRequestFrom = "ReportEditor"
                         frmMDI.OpenFormAsDockPanel("Report Editor WebLink",, objReportEditWebLinkWC, match.Groups(1).Value.ToString)
+                    ElseIf columnName.ToLower = "number" Then
+                        Dim ticketURL As String = view.GetRowCellValue(e.RowHandle, columnToHide).ToString()
+                        If objReportEditWebLinkWC Is Nothing Then
+                            objReportEditWebLinkWC = New frmInternetExplorer("Map Ticket URL", ticketURL)
+                        End If
+                        objReportEditWebLinkWC.NavigationUrl = ticketURL
+                        objReportEditWebLinkWC.WebRequestFrom = "MapWindow"
+                        frmMDI.OpenFormAsDockPanel("Map Ticket URL",, objReportEditWebLinkWC, ticketURL)
                     End If
                 End If
             End Sub

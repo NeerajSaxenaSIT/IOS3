@@ -186,6 +186,7 @@ Partial Class dlgDataMartContentFilter
         Me.RichTextBoxQuery.Dock = System.Windows.Forms.DockStyle.Fill
         Me.RichTextBoxQuery.Location = New System.Drawing.Point(3, 318)
         Me.RichTextBoxQuery.Name = "RichTextBoxQuery"
+        Me.RichTextBoxQuery.Properties.ReadOnly = True
         Me.RichTextBoxQuery.Size = New System.Drawing.Size(608, 50)
         Me.RichTextBoxQuery.TabIndex = 4
         '
@@ -275,6 +276,7 @@ Partial Class dlgDataMartContentFilter
         '
         Me.xtbResult.Controls.Add(Me.tlpRresultMain)
         Me.xtbResult.Name = "xtbResult"
+        Me.xtbResult.PageEnabled = False
         Me.xtbResult.Size = New System.Drawing.Size(896, 443)
         Me.xtbResult.Tag = "RESULT"
         Me.xtbResult.Text = "In Result"

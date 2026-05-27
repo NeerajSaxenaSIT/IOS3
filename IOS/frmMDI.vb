@@ -1553,6 +1553,9 @@ Public Class frmMDI
                     WaitScreen.ShowWaitScreen("Site Integration Loading...")
                     OpenFormInDockPanel("Site Integration", "Site Integration", frmSiteIntegration, dpWindow)
                     WaitScreen.CloseWaitScreen()
+                Case "Map Ticket URL".ToUpper
+                    Dim frmObj As New frmInternetExplorer("MapWindow", navigateUrl)
+                    OpenFormInDockPanel("Map Ticket URL", "Map Ticket URL", frmObj, dpWindow)
             End Select
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)

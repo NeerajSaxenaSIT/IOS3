@@ -305,6 +305,9 @@ Public Class dlgDataMartContentFilter
 
     Private Sub GetReportContentFilter()
         Try
+            gcQuery.Cursor = Cursors.WaitCursor
+            Application.DoEvents()
+
             Dim dtExitReportContentFilter As DataTable = DataAccessorODBC.GetDataTable(connStrSandBoxServer, SQLReportContentFilter.GetReportContentFilter(_reportId))
 
             If (dtExitReportContentFilter.Rows.Count > 0) Then
@@ -327,6 +330,9 @@ Public Class dlgDataMartContentFilter
 
         Catch ex As Exception
             SetMessage("Error : Filters Fetching fail.")
+        Finally
+            gcQuery.Cursor = Cursors.Default
+            Application.DoEvents()
         End Try
     End Sub
 
@@ -335,7 +341,11 @@ Public Class dlgDataMartContentFilter
         For iCntr As Integer = 0 To gvQuery.RowCount - 1
             AppendText(RichTextBoxQuery, " " & gvQuery.GetRowCellValue(iCntr, "Dimension").ToString.Trim, Color.Black, False)
             AppendText(RichTextBoxQuery, " " & gvQuery.GetRowCellValue(iCntr, "Operator").ToString.Trim, Color.OrangeRed, False)
-            AppendText(RichTextBoxQuery, " '" & gvQuery.GetRowCellValue(iCntr, "Value").ToString.Trim & "' ", Color.Black, False)
+            If gvQuery.GetRowCellValue(iCntr, "Operator").ToString.Trim = "IN" Or gvQuery.GetRowCellValue(iCntr, "Operator").ToString.Trim = "NOT IN" Then
+                AppendText(RichTextBoxQuery, " " & gvQuery.GetRowCellValue(iCntr, "Value").ToString.Trim & " ", Color.Black, False)
+            Else
+                AppendText(RichTextBoxQuery, " '" & gvQuery.GetRowCellValue(iCntr, "Value").ToString.Trim & "' ", Color.Black, False)
+            End If
             AppendText(RichTextBoxQuery, " " & gvQuery.GetRowCellValue(iCntr, "LogicalLink").ToString.Trim, Color.Red, False)
         Next
     End Sub
@@ -360,8 +370,12 @@ Public Class dlgDataMartContentFilter
         box.ForeColor = color
         Dim match As System.Text.RegularExpressions.Match = System.Text.RegularExpressions.Regex.Match(box.Text, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         If match.Success Then
-            text = text.Replace("'", "")
-            box.Text = box.Text + " (" + String.Join(", ", text.Split(","c).Select(Function(s) $"'{s.Trim()}'")) + ") "
+            If text.Contains("(") AndAlso text.Contains(")") Then
+                box.Text = box.Text + " " + text.Trim + " "
+            Else
+                text = text.Replace(" '", "")
+                box.Text = box.Text + " (" + String.Join(", ", text.Split(","c).Select(Function(s) $"'{s.Trim()}'")) + ") "
+            End If
         Else
             box.Text = box.Text + text
         End If
@@ -728,12 +742,19 @@ Public Class dlgDataMartContentFilter
                 Dim alteredFilterParam As List(Of FilterParam) = GetFilteredParam()
                 For Each filters As FilterParam In alteredFilterParam
                     If filters.FilterOperator = "IN" Or filters.FilterOperator = "NOT IN" Then
-                        sqlCommand = sqlCommand & SQLReportContentFilter.InsertReportContent_Filter(_reportId, filters.FilterDimension, filters.FilterOperator, Replace(filters.FilterValue.Trim, "'", "''"), filters.FilterLogicalLink, filters.FilterType, filters.ObjectFieldType)
+                        Dim MultiFilterVal As String = ""
+                        If filters.FilterValue.Contains("(") Or filters.FilterValue.Contains(")") Then
+                            MultiFilterVal = filters.FilterValue.Trim.Replace("('('", "(''").Replace("')')", "'')").Replace("'", "''")
+                        Else
+                            MultiFilterVal = filters.FilterValue.Trim.Replace("'", "''")
+                        End If
+                        sqlCommand = sqlCommand & SQLReportContentFilter.InsertReportContent_Filter(_reportId, filters.FilterDimension, filters.FilterOperator, MultiFilterVal, filters.FilterLogicalLink, filters.FilterType, filters.ObjectFieldType)
                     Else
                         sqlCommand = sqlCommand & SQLReportContentFilter.InsertReportContent_Filter(_reportId, filters.FilterDimension, filters.FilterOperator, filters.FilterValue.Trim, filters.FilterLogicalLink, filters.FilterType, filters.ObjectFieldType)
                     End If
                 Next
                 DataAccessorODBC.ExecuteNonQuery(connStrSandBoxServer, sqlCommand)
+                IsFilterInserted = True
             Else
                 Dim sqlCommand As String = SQLReportContentFilter.DeleteByReportID(_reportId)
                 DataAccessorODBC.ExecuteNonQuery(connStrSandBoxServer, sqlCommand)
@@ -743,6 +764,7 @@ Public Class dlgDataMartContentFilter
 
             Me.Close()
         Catch ex As Exception
+            IsFilterInserted = False
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
         End Try
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
@@ -803,7 +825,7 @@ Public Class dlgDataMartContentFilter
                     filterParam.FilterValue = "0"
                 End If
 
-                drQuery("LogicalLink") = "AND"
+                drQuery("LogicalLink") = ""
                 drQuery("FilterType") = "QUERY"
 
                 filterParam.FilterType = "QUERY"
@@ -817,6 +839,13 @@ Public Class dlgDataMartContentFilter
                     End If
                 Next
                 FilterParamList.Add(filterParam)
+
+                If dtQuery.Rows.Count > 0 Then
+                    Dim lastRowIndex As Integer = dtQuery.Rows.Count - 1
+                    dtQuery.Rows(lastRowIndex)("LogicalLink") = "AND"
+                    dtQuery.AcceptChanges()
+                End If
+
                 dtQuery.Rows.Add(drQuery)
             End If
 
@@ -968,18 +997,24 @@ Public Class dlgDataMartContentFilter
         End If
     End Function
 
+    Private Sub gvQuery_CellValueChanged(sender As Object, e As Views.Base.CellValueChangedEventArgs) Handles gvQuery.CellValueChanged
+        Try
+            gcQuery.Cursor = Cursors.WaitCursor
+            Application.DoEvents()
+
+            SetSQLQuery()
+            SetFilterParamList("QUERY")
+        Catch ex As Exception
+        Finally
+            gcQuery.Cursor = Cursors.Default
+            Application.DoEvents()
+        End Try
+    End Sub
+
     Private Sub gvResult_CellValueChanged(sender As Object, e As Views.Base.CellValueChangedEventArgs) Handles gvResult.CellValueChanged
         Try
             SetSQLResult()
             SetFilterParamList("RESULT")
-        Catch ex As Exception
-        End Try
-    End Sub
-
-    Private Sub gvQuery_CellValueChanged(sender As Object, e As Views.Base.CellValueChangedEventArgs) Handles gvQuery.CellValueChanged
-        Try
-            SetSQLQuery()
-            SetFilterParamList("QUERY")
         Catch ex As Exception
         End Try
     End Sub
@@ -994,7 +1029,11 @@ Public Class dlgDataMartContentFilter
                 filterParam.FilterDimension = dr("Dimension").ToString
                 filterParam.FilterOperator = dr("Operator").ToString
                 If filterParam.FilterOperator = "IN" Or filterParam.FilterOperator = "NOT IN" Then
-                    filterParam.FilterValue = " (" + String.Join(", ", dr("Value").ToString.Split(","c).Select(Function(s) $"'{s.Trim()}'")) + ") "
+                    If dr("Value").ToString.Contains("(") Or dr("Value").ToString.Contains(")") Then
+                        filterParam.FilterValue = " " + dr("Value").ToString + " "
+                    Else
+                        filterParam.FilterValue = " (" + String.Join(", ", dr("Value").ToString.Split(","c).Select(Function(s) $"'{s.Trim()}'")) + ") "
+                    End If
                 Else
                     filterParam.FilterValue = dr("Value").ToString
                 End If
