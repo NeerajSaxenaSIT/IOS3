@@ -410,8 +410,8 @@ Public Class IOSDevExpressGrid
                     If delimiter Is Nothing OrElse delimiter.ToUpper = "TAB" Then
                         If dt.Rows(i)(j) IsNot Nothing Then
                             If dt.Rows(i)(j).GetType().Name.ToString.ToLower = "datetime" Then
-                                writer.Write(Convert.ToString(dt.Rows(i)(j)) & vbTab)
-                                'writer.Write(Convert.ToString(CType(dt.Rows(i)(j), DateTime).ToString("yyyy-MM-dd HH:mm:ss")) & vbTab)
+                                'writer.Write(Convert.ToString(dt.Rows(i)(j)) & vbTab)
+                                writer.Write(Convert.ToString(CType(dt.Rows(i)(j), DateTime).ToString("yyyy-MM-dd HH:mm:ss")) & vbTab)
                             Else
                                 writer.Write(Convert.ToString(dt.Rows(i)(j)) & vbTab)
                             End If
@@ -421,8 +421,8 @@ Public Class IOSDevExpressGrid
                     Else
                         If dt.Rows(i)(j) IsNot Nothing Then
                             If dt.Rows(i)(j).GetType().Name.ToString.ToLower = "datetime" Then
-                                writer.Write(Convert.ToString(dt.Rows(i)(j)) & delimiter)
-                                'writer.Write(Convert.ToString(CType(dt.Rows(i)(j), DateTime).ToString("yyyy-MM-dd HH:mm:ss")) & delimiter)
+                                'writer.Write(Convert.ToString(dt.Rows(i)(j)) & delimiter)
+                                writer.Write(Convert.ToString(CType(dt.Rows(i)(j), DateTime).ToString("yyyy-MM-dd HH:mm:ss")) & delimiter)
                             Else
                                 writer.Write(Convert.ToString(dt.Rows(i)(j)) & delimiter)
                             End If

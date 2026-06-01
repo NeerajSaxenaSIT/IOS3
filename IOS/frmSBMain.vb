@@ -6471,11 +6471,23 @@ Public Class frmSBMain
                                 StreamWriterObj.WriteLine()
 
                                 Do While dataReader.Read()
-                                    StreamWriterObj.Write(dataReader.Item(0))
+
+                                    If dataReader.GetFieldType(0) Is GetType(DateTime) AndAlso Not IsDBNull(dataReader(0)) Then
+                                        StreamWriterObj.Write(CType(dataReader(0), DateTime).ToString("yyyy-MM-dd HH:mm:ss"))
+                                    Else
+                                        StreamWriterObj.Write(dataReader.Item(0))
+                                    End If
+
                                     For i = 1 To FieldCount
+
                                         StreamWriterObj.Write(fileDelimiter)
-                                        If dataReader.GetFieldType(i) Is GetType(String) Then
-                                            StreamWriterObj.Write($""" & {dataReader.Item(i)} & """)
+
+                                        If IsDBNull(dataReader(i)) Then
+                                            StreamWriterObj.Write("")
+                                        ElseIf dataReader.GetFieldType(i) Is GetType(String) Then
+                                            StreamWriterObj.Write($"""{dataReader.Item(i)}""")
+                                        ElseIf dataReader.GetFieldType(i) Is GetType(DateTime) Then
+                                            StreamWriterObj.Write(CType(dataReader(i), DateTime).ToString("yyyy-MM-dd HH:mm:ss"))
                                         Else
                                             StreamWriterObj.Write(dataReader.Item(i))
                                         End If
