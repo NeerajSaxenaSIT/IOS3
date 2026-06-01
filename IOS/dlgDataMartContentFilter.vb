@@ -995,6 +995,7 @@ Public Class dlgDataMartContentFilter
             dtObjectTypeValues = DataAccessorODBC.GetDataTable(connStrSandBoxServer, SQLReportContentFilter.GetReportDimensionDistinctValues(dimensionName, objectTableName))
             Return dtObjectTypeValues
         End If
+        Return Nothing
     End Function
 
     Private Sub gvQuery_CellValueChanged(sender As Object, e As Views.Base.CellValueChangedEventArgs) Handles gvQuery.CellValueChanged

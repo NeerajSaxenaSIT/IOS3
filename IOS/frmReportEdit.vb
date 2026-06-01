@@ -3421,7 +3421,7 @@ Public Class frmReportEdit
         Dim sp As New SmartPalette()
         'Dim sc As New SeriesCollection
         Dim color_R, color_B, color_G As Integer
-        Dim tblayout As TableLayoutPanel
+        'Dim tblayout As TableLayoutPanel
         Dim lastchart As String = ""
 
         Dim chart_elements() As String = {"0"}
@@ -5376,8 +5376,8 @@ Public Class frmReportEdit
         Dim Y1axislabel, Y2axislabel As String
         Dim Y1axisAbsorPerc, Y2axisAbsOrPerc As String
         Dim Y1axisPrecision, Y2axisPrecision As Integer
-        Dim yaxis1 As Axis
-        Dim yaxis2 As Axis
+        Dim yaxis1 As Axis = Nothing
+        Dim yaxis2 As Axis = Nothing
         Dim sp As New SmartPalette()
         Dim sc As New SeriesCollection
         Dim color_R, color_B, color_G As Integer
