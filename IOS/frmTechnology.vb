@@ -27519,7 +27519,7 @@ Public Class frmTechnology
                 End If
 
                 If Not sql_select.Contains(targettype2) And cmbObjectTreeEval.Text <> "PLMN" And cmbObjectTreeEval.Text <> "TAGS" Then
-                    sql_total = sql_select + targettype2 + sql_kpi + " into #PM" + calcPeriod + " " + sql_from_time + sql_where_misc + sql_where_object + sql_where_tables + sql_where_period + sql_where_paramfilter + jointable + sql_groupby + targettype
+                    sql_total = sql_select + sql_kpi + " into #PM" + calcPeriod + " " + sql_from_time + sql_where_misc + sql_where_object + sql_where_tables + sql_where_period + sql_where_paramfilter + jointable + sql_groupby
                 Else
                     sql_total = sql_select + sql_kpi + " into #PM" + calcPeriod + " " + sql_from_time + sql_where_misc + sql_where_object + sql_where_tables + sql_where_period + sql_where_paramfilter + jointable + sql_groupby
                 End If
