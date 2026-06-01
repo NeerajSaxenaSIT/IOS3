@@ -329,7 +329,7 @@ Module IOS_DataTransforService
                 Dim sql_from_job As String = dr("SQLString").ToString
 
                 Dim success As Boolean = True
-                Dim successAsync As Threading.Tasks.Task(Of Boolean)
+                Dim successAsync As Threading.Tasks.Task(Of Boolean) = Nothing
 
                 Console.WriteLine("Job Started - Sequence: " & dr("SequenceNumber").ToString)
 
@@ -457,6 +457,10 @@ Module IOS_DataTransforService
                     success = TransferDataFromRestAPI_OOKLA()
                 End If
 
+                If dr("JobType").ToString.Trim = "CMSOAP" Then
+                    success = TransferDataFromSoapService(dr("DestinationConnString"), dr("DestinationTable"), dr("QueryTimeOut"))
+                End If
+
                 If Not successAsync Is Nothing Then
 
                     If successAsync.Result = True Then
@@ -496,6 +500,7 @@ Module IOS_DataTransforService
         End Try
 
     End Sub
+
 
     Private Sub UpdateJobIDRunManualStatus(connString As String, jobId As Integer)
         Try
@@ -3668,6 +3673,41 @@ Module IOS_DataTransforService
 
         Return ds
     End Function
+
+#Region "CM Data SOAP Service"
+
+    Private Function TransferDataFromSoapService(destinationConnString As Object, destinationTable As Object, queryTimeOut As Object) As Boolean
+        Try
+            'CM Data Get Terminal Point Retrieval
+            Dim objCMDataServ As New CMDataService.TerminationPointRetrieval_RPCClient()
+            'objCMDataServ.getAllPhysicalTerminationPointsWithoutFtps()
+
+            'CM Data Get All Managed Elements
+            Dim objCMdataMEServ As New CMDataMEServ.ManagedElementRetrieval_RPCClient()
+            'objCMdataMEServ.getAllManagedElements()
+
+            Dim soapHeader As New CMDataMEServ.header()
+            soapHeader.security = "mw_npm:Nbi_mw_1"
+            soapHeader.communicationPattern = "MultipleBatchResponse"
+            soapHeader.communicationStyle = "RPC"
+            soapHeader.requestedBatchSize = 2000
+            soapHeader.batchSequenceNumber = 1
+
+            Dim request As New CMDataMEServ.getAllManagedElementsRequest()
+
+            Dim response As CMDataMEServ.MultipleMeObjectsResponseType = objCMdataMEServ.getAllManagedElements(soapHeader, request)
+
+            Dim x As String = response.ToString
+
+        Catch ex As Exception
+            Console.WriteLine(Now() & "    " & " Failed using CM SOAP Data Service: " & ex.Message.ToString & vbCrLf & ex.StackTrace.ToString)
+            WriteString_Log(Now() & "    " & " Failed using CM SOAP Data Service: " & ex.Message.ToString & vbCrLf & ex.StackTrace.ToString)
+            Return False
+        End Try
+
+    End Function
+
+#End Region
 
 End Module
 
