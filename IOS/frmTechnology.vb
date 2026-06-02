@@ -12500,6 +12500,27 @@ Public Class frmTechnology
                             Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(tokenContent.Result.ToString), JObject)
                             accessToken = jTokenData.GetValue("access_token").ToString
                             refreshToken = jTokenData.GetValue("refresh_token").ToString
+                        Else
+                            Dim reqBodyContent = New FormUrlEncodedContent(
+                            {
+                                New KeyValuePair(Of String, String)("grant_type", "password"),
+                                New KeyValuePair(Of String, String)("client_id", clientID),
+                                New KeyValuePair(Of String, String)("client_secret", clientSecret),
+                                New KeyValuePair(Of String, String)("username", userName),
+                                New KeyValuePair(Of String, String)("password", pswd)
+                            })
+                            Dim token = Await client.PostAsync(client.BaseAddress, reqBodyContent)
+                            If token.StatusCode = HttpStatusCode.OK Then
+                                Dim tokenContent = token.Content.ReadAsStringAsync()
+                                Dim jTokenData As JObject = TryCast(JsonConvert.DeserializeObject(tokenContent.Result.ToString), JObject)
+                                accessToken = jTokenData.GetValue("access_token").ToString
+                                refreshToken = jTokenData.GetValue("refresh_token").ToString
+                            End If
+
+                            File.Delete(tokenFilePath)
+                            Dim writeContent As String = "RefreshToken:" & refreshToken
+                            File.WriteAllText(tokenFilePath, writeContent, System.Text.Encoding.UTF8)
+                            File.SetAttributes(tokenFilePath, FileAttributes.Hidden)
                         End If
 
                     Else
