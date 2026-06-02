@@ -168,6 +168,86 @@ Public Class DataMartGridView
         End Try
     End Sub
 
+    Public Shared Sub SelectAllAndCopyGridData_Stream(ByRef gControl As GridControl, ByVal gView As GridView, Optional isCopyAll As Boolean = True, Optional ByVal isIncludeHeader As Boolean = True, Optional columnListToExclude() As String = Nothing)
+        Try
+            ' 1. Use MemoryStream and StreamWriter for maximum performance
+            Using ms As New System.IO.MemoryStream()
+                Using sw As New System.IO.StreamWriter(ms, System.Text.Encoding.Unicode)
+
+                    Dim colExcludeHash As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+                    If columnListToExclude IsNot Nothing Then
+                        For Each col In columnListToExclude
+                            colExcludeHash.Add(col)
+                        Next
+                    End If
+
+                    If isCopyAll Then
+                        Dim dtData As DataTable = TryCast(gControl.DataSource, DataTable)
+                        If dtData Is Nothing Then Exit Sub
+
+                        ' Header Logic
+                        If isIncludeHeader Then
+                            Dim first As Boolean = True
+                            For Each col As DataColumn In dtData.Columns
+                                If Not colExcludeHash.Contains(col.ColumnName) Then
+                                    If Not first Then sw.Write(vbTab)
+                                    sw.Write(col.Caption)
+                                    first = False
+                                End If
+                            Next
+                            sw.WriteLine()
+                        End If
+
+                        ' Data Logic - Fast Row Access
+                        For Each row As DataRow In dtData.Rows
+                            Dim first As Boolean = True
+                            For Each col As DataColumn In dtData.Columns
+                                If Not colExcludeHash.Contains(col.ColumnName) Then
+                                    If Not first Then sw.Write(vbTab)
+                                    sw.Write(row.Item(col).ToString())
+                                    first = False
+                                End If
+                            Next
+                            sw.WriteLine()
+                        Next
+                    Else
+                        ' View-based selection logic
+                        Dim selectedRowHandles As Integer() = gView.GetSelectedRows()
+                        If selectedRowHandles.Length = 0 Then Exit Sub
+
+                        Dim targetCols = gView.VisibleColumns.Where(Function(c) Not colExcludeHash.Contains(c.FieldName)).ToList()
+
+                        If isIncludeHeader Then
+                            For i As Integer = 0 To targetCols.Count - 1
+                                sw.Write(targetCols(i).Caption)
+                                If i < targetCols.Count - 1 Then sw.Write(vbTab)
+                            Next
+                            sw.WriteLine()
+                        End If
+
+                        For Each rowHandle As Integer In selectedRowHandles
+                            If gView.IsDataRow(rowHandle) Then
+                                For i As Integer = 0 To targetCols.Count - 1
+                                    sw.Write(gView.GetRowCellValue(rowHandle, targetCols(i)))
+                                    If i < targetCols.Count - 1 Then sw.Write(vbTab)
+                                Next
+                                sw.WriteLine()
+                            End If
+                        Next
+                    End If
+
+                    ' 2. Flush and convert the entire stream to the clipboard
+                    sw.Flush()
+                    ms.Position = 0
+                    Using reader As New System.IO.StreamReader(ms)
+                        Clipboard.SetText(reader.ReadToEnd())
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+        End Try
+    End Sub
+
     Public Shared Sub CopyGridDataToClipBoard(ByRef gControl As GridControl, ByVal gView As Views.Grid.GridView, Optional IsCopyAll As Boolean = True, Optional ByVal IsIncludeHeader As Boolean = True,
                                               Optional ColumnListToExclude() As String = Nothing)
         Dim stringToCopy As String = ""

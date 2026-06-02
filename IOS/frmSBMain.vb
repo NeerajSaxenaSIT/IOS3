@@ -3473,7 +3473,7 @@ Public Class frmSBMain
         Dim tempSplitCont As SplitContainer = GetSplitControl(cm_SourceControl)
         Try
             If (tempSplitCont IsNot Nothing) Then
-                DataMartGridView.SelectAllAndCopyGridData(CType(tempSplitCont.Panel2.Controls(0), DevExpress.XtraGrid.GridControl), CType(tempSplitCont.Panel2.Controls(0), DevExpress.XtraGrid.GridControl).DefaultView)
+                DataMartGridView.SelectAllAndCopyGridData_Stream(CType(tempSplitCont.Panel2.Controls(0), DevExpress.XtraGrid.GridControl), CType(tempSplitCont.Panel2.Controls(0), DevExpress.XtraGrid.GridControl).DefaultView)
             End If
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
