@@ -5258,7 +5258,7 @@ Public Class frmMapWindow
                 themeFrame.SubTitle = lyr.Name
                 themeFrame.Border = LegendFrameBorder.Off
 
-                If Not legend.Frames.Contains(customFrame) Then
+                If Not legend.Frames.Contains(customFrame) AndAlso legendMappingDate IsNot Nothing Then
                     Dim rows(0) As MapInfo.Mapping.Legends.CustomLegendFrameRow
                     rows(0) = New CustomLegendFrameRow(New CompositeStyle(Nothing, Nothing, New TextStyle(New Font("Arial", 6)), Nothing), "Date: " & legendMappingDate.ToString)
                     customFrame = LegendFrameFactory.CreateCustomLegendFrame("Custom Legend", "Custom_Legend_Alias", rows)

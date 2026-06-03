@@ -24949,6 +24949,28 @@ Public Class frmTechnology
         End Try
     End Sub
 
+    Private Sub cmPrdCalcStats_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmPrdCalcStats.Opening
+        Try
+            If gvPrdCalcCompStats.RowCount = 0 Then
+                tsmi_PrdCalcCopyToClipboard.Enabled = False
+            Else
+                tsmi_PrdCalcCopyToClipboard.Enabled = True
+            End If
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        End Try
+    End Sub
+
+    Private Sub tsmi_PrdCalcCopyToClipboard_Click(sender As Object, e As EventArgs) Handles tsmi_PrdCalcCopyToClipboard.Click
+        Try
+            DataMartGridView.SelectAllAndCopyGridData_Stream(gcPrdCalcCompStats, gvPrdCalcCompStats, True)
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+        End Try
+    End Sub
+
 #End Region
 
 #End Region

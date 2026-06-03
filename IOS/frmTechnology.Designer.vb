@@ -988,6 +988,8 @@ Partial Class frmTechnology
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolTipCtrlParamFilters = New DevExpress.Utils.ToolTipController(Me.components)
+        Me.cmPrdCalcStats = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmi_PrdCalcCopyToClipboard = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.xtcTechnology, System.ComponentModel.ISupportInitialize).BeginInit
         Me.xtcTechnology.SuspendLayout
         Me.xtpStats.SuspendLayout
@@ -1379,6 +1381,7 @@ Partial Class frmTechnology
         Me.cmTopX.SuspendLayout
         Me.cmTopXChart.SuspendLayout
         CType(Me.documentViewerRibbonController1, System.ComponentModel.ISupportInitialize).BeginInit
+        Me.cmPrdCalcStats.SuspendLayout
         Me.SuspendLayout
         '
         'xtcTechnology
@@ -1428,7 +1431,7 @@ Partial Class frmTechnology
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
-        Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 312.0!))
+        Me.tlpCounterTypeStats.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 313.0!))
         Me.tlpCounterTypeStats.Controls.Add(Me.btnApplyStats, 2, 0)
         Me.tlpCounterTypeStats.Controls.Add(Me.seChartsPerRowStats, 8, 0)
         Me.tlpCounterTypeStats.Controls.Add(Me.lblObjectsStats, 0, 0)
@@ -1463,7 +1466,7 @@ Partial Class frmTechnology
         '
         Me.seChartsPerRowStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.seChartsPerRowStats.EditValue = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.seChartsPerRowStats.Location = New System.Drawing.Point(769, 4)
+        Me.seChartsPerRowStats.Location = New System.Drawing.Point(768, 4)
         Me.seChartsPerRowStats.Name = "seChartsPerRowStats"
         Me.seChartsPerRowStats.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.seChartsPerRowStats.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
@@ -1506,7 +1509,7 @@ Partial Class frmTechnology
         Me.lblChartHeightStats.Appearance.Options.UseTextOptions = True
         Me.lblChartHeightStats.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.lblChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblChartHeightStats.Location = New System.Drawing.Point(810, 4)
+        Me.lblChartHeightStats.Location = New System.Drawing.Point(809, 4)
         Me.lblChartHeightStats.LookAndFeel.SkinName = "Office 2013"
         Me.lblChartHeightStats.LookAndFeel.UseDefaultLookAndFeel = False
         Me.lblChartHeightStats.Name = "lblChartHeightStats"
@@ -1537,7 +1540,7 @@ Partial Class frmTechnology
         Me.lblChartsPerRow.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.lblChartsPerRow.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
         Me.lblChartsPerRow.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblChartsPerRow.Location = New System.Drawing.Point(683, 4)
+        Me.lblChartsPerRow.Location = New System.Drawing.Point(682, 4)
         Me.lblChartsPerRow.LookAndFeel.SkinName = "Office 2013"
         Me.lblChartsPerRow.LookAndFeel.UseDefaultLookAndFeel = False
         Me.lblChartsPerRow.Name = "lblChartsPerRow"
@@ -1552,27 +1555,27 @@ Partial Class frmTechnology
         Me.flpCounterTypeStats.Location = New System.Drawing.Point(356, 1)
         Me.flpCounterTypeStats.Margin = New System.Windows.Forms.Padding(0)
         Me.flpCounterTypeStats.Name = "flpCounterTypeStats"
-        Me.flpCounterTypeStats.Size = New System.Drawing.Size(272, 28)
+        Me.flpCounterTypeStats.Size = New System.Drawing.Size(271, 28)
         Me.flpCounterTypeStats.TabIndex = 6
         '
         'tbChartHeightStats
         '
         Me.tbChartHeightStats.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbChartHeightStats.EditValue = 480
-        Me.tbChartHeightStats.Location = New System.Drawing.Point(886, 4)
+        Me.tbChartHeightStats.Location = New System.Drawing.Point(885, 4)
         Me.tbChartHeightStats.Name = "tbChartHeightStats"
         Me.tbChartHeightStats.Properties.LabelAppearance.Options.UseTextOptions = True
         Me.tbChartHeightStats.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.tbChartHeightStats.Properties.Maximum = 1000
         Me.tbChartHeightStats.Properties.Minimum = 100
-        Me.tbChartHeightStats.Size = New System.Drawing.Size(306, 22)
+        Me.tbChartHeightStats.Size = New System.Drawing.Size(307, 22)
         Me.tbChartHeightStats.TabIndex = 7
         Me.tbChartHeightStats.Value = 480
         '
         'btnExportStats
         '
         Me.btnExportStats.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btnExportStats.Location = New System.Drawing.Point(631, 3)
+        Me.btnExportStats.Location = New System.Drawing.Point(630, 3)
         Me.btnExportStats.Margin = New System.Windows.Forms.Padding(2)
         Me.btnExportStats.Name = "btnExportStats"
         Me.btnExportStats.Size = New System.Drawing.Size(46, 24)
@@ -5526,6 +5529,7 @@ Partial Class frmTechnology
         'gcPrdCalcCompStats
         '
         Me.gcPrdCalcCompStats.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gcPrdCalcCompStats.ContextMenuStrip = Me.cmPrdCalcStats
         Me.gcPrdCalcCompStats.Location = New System.Drawing.Point(0, 0)
         Me.gcPrdCalcCompStats.MainView = Me.gvPrdCalcCompStats
         Me.gcPrdCalcCompStats.Name = "gcPrdCalcCompStats"
@@ -5543,6 +5547,8 @@ Partial Class frmTechnology
         Me.gvPrdCalcCompStats.OptionsBehavior.Editable = False
         Me.gvPrdCalcCompStats.OptionsBehavior.ReadOnly = True
         Me.gvPrdCalcCompStats.OptionsClipboard.AllowCopy = DevExpress.Utils.DefaultBoolean.[True]
+        Me.gvPrdCalcCompStats.OptionsSelection.MultiSelect = True
+        Me.gvPrdCalcCompStats.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CellSelect
         Me.gvPrdCalcCompStats.OptionsView.ShowGroupPanel = False
         '
         'xtpTopX
@@ -5581,7 +5587,7 @@ Partial Class frmTechnology
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
-        Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 312.0!))
+        Me.tlpCounterTypeTopX.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 313.0!))
         Me.tlpCounterTypeTopX.Controls.Add(Me.tbChartHeightTopX, 8, 0)
         Me.tlpCounterTypeTopX.Controls.Add(Me.btnApplyTopX, 2, 0)
         Me.tlpCounterTypeTopX.Controls.Add(Me.LabelTopX1, 0, 0)
@@ -5604,13 +5610,13 @@ Partial Class frmTechnology
         '
         Me.tbChartHeightTopX.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbChartHeightTopX.EditValue = 480
-        Me.tbChartHeightTopX.Location = New System.Drawing.Point(886, 4)
+        Me.tbChartHeightTopX.Location = New System.Drawing.Point(885, 4)
         Me.tbChartHeightTopX.Name = "tbChartHeightTopX"
         Me.tbChartHeightTopX.Properties.LabelAppearance.Options.UseTextOptions = True
         Me.tbChartHeightTopX.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         Me.tbChartHeightTopX.Properties.Maximum = 1000
         Me.tbChartHeightTopX.Properties.Minimum = 100
-        Me.tbChartHeightTopX.Size = New System.Drawing.Size(306, 22)
+        Me.tbChartHeightTopX.Size = New System.Drawing.Size(307, 22)
         Me.tbChartHeightTopX.TabIndex = 10
         Me.tbChartHeightTopX.Value = 480
         '
@@ -5669,7 +5675,7 @@ Partial Class frmTechnology
         Me.flpCounterTypeTopX.Location = New System.Drawing.Point(356, 1)
         Me.flpCounterTypeTopX.Margin = New System.Windows.Forms.Padding(0)
         Me.flpCounterTypeTopX.Name = "flpCounterTypeTopX"
-        Me.flpCounterTypeTopX.Size = New System.Drawing.Size(349, 28)
+        Me.flpCounterTypeTopX.Size = New System.Drawing.Size(348, 28)
         Me.flpCounterTypeTopX.TabIndex = 7
         '
         'ucProgPnlTopX
@@ -5685,7 +5691,7 @@ Partial Class frmTechnology
         'tglDataGridTopX
         '
         Me.tglDataGridTopX.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tglDataGridTopX.Location = New System.Drawing.Point(706, 1)
+        Me.tglDataGridTopX.Location = New System.Drawing.Point(705, 1)
         Me.tglDataGridTopX.LookAndFeel.SkinName = "McSkin"
         Me.tglDataGridTopX.LookAndFeel.UseDefaultLookAndFeel = False
         Me.tglDataGridTopX.Margin = New System.Windows.Forms.Padding(0)
@@ -5698,7 +5704,7 @@ Partial Class frmTechnology
         'LabelControl15
         '
         Me.LabelControl15.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LabelControl15.Location = New System.Drawing.Point(810, 4)
+        Me.LabelControl15.Location = New System.Drawing.Point(809, 4)
         Me.LabelControl15.Name = "LabelControl15"
         Me.LabelControl15.Padding = New System.Windows.Forms.Padding(4, 0, 0, 0)
         Me.LabelControl15.Size = New System.Drawing.Size(69, 22)
@@ -10760,6 +10766,18 @@ Partial Class frmTechnology
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
         Me.ToolStripSeparator7.Size = New System.Drawing.Size(177, 6)
         '
+        'cmPrdCalcStats
+        '
+        Me.cmPrdCalcStats.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_PrdCalcCopyToClipboard})
+        Me.cmPrdCalcStats.Name = "cmChartLegendBox"
+        Me.cmPrdCalcStats.Size = New System.Drawing.Size(172, 48)
+        '
+        'tsmi_PrdCalcCopyToClipboard
+        '
+        Me.tsmi_PrdCalcCopyToClipboard.Name = "tsmi_PrdCalcCopyToClipboard"
+        Me.tsmi_PrdCalcCopyToClipboard.Size = New System.Drawing.Size(171, 22)
+        Me.tsmi_PrdCalcCopyToClipboard.Text = "Copy to Clipboard"
+        '
         'frmTechnology
         '
         Me.Appearance.ForeColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer), CType(CType(59, Byte), Integer))
@@ -11220,6 +11238,7 @@ Partial Class frmTechnology
         Me.cmTopX.ResumeLayout(False)
         Me.cmTopXChart.ResumeLayout(False)
         CType(Me.documentViewerRibbonController1, System.ComponentModel.ISupportInitialize).EndInit
+        Me.cmPrdCalcStats.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -12003,4 +12022,6 @@ Partial Class frmTechnology
     Friend WithEvents tsmi_TopX_CopyToTag As ToolStripMenuItem
     Friend WithEvents tlpEvalShowObjects As TableLayoutPanel
     Friend WithEvents btnEvalReport As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents cmPrdCalcStats As ContextMenuStrip
+    Friend WithEvents tsmi_PrdCalcCopyToClipboard As ToolStripMenuItem
 End Class
