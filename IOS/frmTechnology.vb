@@ -25036,7 +25036,6 @@ Public Class frmTechnology
     Private syncInProgress As Boolean = False
     Private filterSyncInProgress As Boolean = False
     Private EvaluateReport As Boolean = False
-    Private lstEvalRptImgStream As List(Of MemoryStream)
     Private dicEvalRptGridImages As Dictionary(Of String, MemoryStream)
     Private dicEvalRptGridBmp As Dictionary(Of String, Bitmap)
     Private dicEvalRptGridDataTables As Dictionary(Of String, DataTable)
@@ -25217,9 +25216,6 @@ Public Class frmTechnology
         'If tcHighEvaluate.SelectedTabPage.Text.ToLower = "time based" Then
 
         EvaluateReport = False
-        If lstEvalRptImgStream IsNot Nothing Then
-            lstEvalRptImgStream.Clear()
-        End If
         If dicEvalRptGridImages IsNot Nothing Then
             dicEvalRptGridImages.Clear()
         End If
@@ -27942,7 +27938,12 @@ Public Class frmTechnology
 
                     ch.Annotations.Clear()
                     ch.Annotations.Add(New Annotation(tech.ToUpper))
-                    ch.TitleBox.HeaderLabel.Text = "Evaluate   -   TimeBased " & "  -   KPI: " & cm_Chart_kpiname
+
+                    If nc IsNot Nothing Then
+                        ch.TitleBox.HeaderLabel.Text = "KPI: " & cm_Chart_kpiname
+                    Else
+                        ch.TitleBox.HeaderLabel.Text = "Evaluate   -   TimeBased " & "  -   KPI: " & cm_Chart_kpiname
+                    End If
 
                     If Count_OT > 10 Then
                         ch.TitleBox.Label.Text = " "
@@ -29261,226 +29262,233 @@ Public Class frmTechnology
             evalHistogramChartCntr = 0
             lstTimeBasedKPIEval.Clear()
 
-            lstEvalRptImgStream = New List(Of MemoryStream)
-            dicEvalRptGridImages = New Dictionary(Of String, MemoryStream)
-            dicEvalRptGridBmp = New Dictionary(Of String, Bitmap)
-            dicEvalRptGridDataTables = New Dictionary(Of String, DataTable)
-            dicEvalRptChartImages = New Dictionary(Of String, Bitmap)
-            Dim objEvalRptMtd As New clsEvalReportMethods()
+            'Open Report Filter Dialog
+            Dim objEvalFilterConfig As New dlgEvalReportConfig()
+            If objEvalFilterConfig.ShowDialog = DialogResult.OK Then
 
-            Dim tempFileFolder As String = GetUserDataPath() & "\Data\EvalReport"
-            Dim templateFilePath As String = Application.StartupPath & "\EvalReportTemplate.pptx"
-            Dim reportFilePath As String = GetUserDataPath() & "\Data\EvalReport" & "_" & Format(Now(), "yyyyMMdd_HHmmss") & ".pptx"
+                dicEvalRptGridImages = New Dictionary(Of String, MemoryStream)
+                dicEvalRptGridBmp = New Dictionary(Of String, Bitmap)
+                dicEvalRptGridDataTables = New Dictionary(Of String, DataTable)
+                dicEvalRptChartImages = New Dictionary(Of String, Bitmap)
+                Dim objEvalRptMtd As New clsEvalReportMethods()
 
-            WaitScreen.ShowWaitScreen("Report Creation Started")
-            Me.Cursor = Cursors.WaitCursor
-            Application.DoEvents()
+                Dim tempFileFolder As String = GetUserDataPath() & "\Data\EvalReport"
+                Dim templateFilePath As String = Application.StartupPath & "\EvalReportTemplate.pptx"
+                Dim reportFilePath As String = GetUserDataPath() & "\Data\EvalReport" & "_" & Format(Now(), "yyyyMMdd_HHmmss") & ".pptx"
 
-            Dim selectedObjs As String = tvObjectsTreeEval.GetChecked2String(Me._strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
-            selectedObjs = selectedObjs.Replace("'", "''").Trim
-            Dim filterPeriodstring As String = GetFilterPeriodEval(cmbPredefinedFilterEval, dateNavigatorEval)
-            Dim filterParamString As String = ""
+                WaitScreen.ShowWaitScreen("Report Creation Started")
+                Me.Cursor = Cursors.WaitCursor
+                Application.DoEvents()
 
-            If tvObjTreeFilterTempEval.Nodes.Count > 0 Then
-                filterParamString = GetParamFilterStringTemplate("", "eval")
-            End If
+                Dim selectedObjs As String = tvObjectsTreeEval.GetChecked2String(Me._strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
+                selectedObjs = selectedObjs.Replace("'", "''").Trim
+                Dim filterPeriodstring As String = GetFilterPeriodEval(cmbPredefinedFilterEval, dateNavigatorEval)
+                Dim filterParamString As String = ""
 
-            Dim sqlParam As String = Nothing
-            Dim connstring As String = Nothing
-            Dim parray()() As String = {
-                New String() {"@username", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)},
-                New String() {"@kpiset", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
-                New String() {"@Objects", Chr(39) & selectedObjs & Chr(39)},
-                New String() {"@TargetType", Chr(39) & cmbObjectTreeEval.SelectedItem.ToString & Chr(39)},
-                New String() {"@ObjectFilter", Chr(39) & filterParamString.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
-            }
+                If tvObjTreeFilterTempEval.Nodes.Count > 0 Then
+                    filterParamString = GetParamFilterStringTemplate("", "eval")
+                End If
 
-            sqlParam = GetSQL(8826, parray)(1)
-            connstring = GetSQL(8826, parray)(0)
-            Dim dt = DataAccessorODBC.GetDataTable(connstring, sqlParam, 300)
+                Dim sqlParam As String = Nothing
+                Dim connstring As String = Nothing
+                Dim parray()() As String = {
+                    New String() {"@username", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)},
+                    New String() {"@kpiset", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
+                    New String() {"@Objects", Chr(39) & selectedObjs & Chr(39)},
+                    New String() {"@TargetType", Chr(39) & cmbObjectTreeEval.SelectedItem.ToString & Chr(39)},
+                    New String() {"@ObjectFilter", Chr(39) & filterParamString.Replace(Chr(39), Chr(39) & Chr(39)) & Chr(39)}
+                }
 
-            If dt IsNot Nothing Then
-                If dt.Rows.Count > 0 Then
+                sqlParam = GetSQL(8826, parray)(1)
+                connstring = GetSQL(8826, parray)(0)
+                Dim dt = DataAccessorODBC.GetDataTable(connstring, sqlParam, 300)
 
-                    sqlParam = Nothing
-                    connstring = Nothing
-                    parray = Nothing
-                    parray = {
-                        New String() {"@UserName", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)}
-                    }
+                If dt IsNot Nothing Then
+                    If dt.Rows.Count > 0 Then
 
-                    sqlParam = GetSQL(8827, parray)(1)
-                    connstring = GetSQL(8827, parray)(0)
-                    Dim dtGrid = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+                        sqlParam = Nothing
+                        connstring = Nothing
+                        parray = Nothing
+                        parray = {
+                            New String() {"@UserName", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)}
+                        }
 
-                    'load banded grid into a separate window
-                    '****************************************
-                    WaitScreen.ShowWaitScreen("Loading Change KPI Data")
+                        sqlParam = GetSQL(8827, parray)(1)
+                        connstring = GetSQL(8827, parray)(0)
+                        Dim dtGrid = DataAccessorODBC.GetDataTable(connstring, sqlParam)
 
-                    Dim obj As New frmEvalRptChangeKPI()
-                    Dim gc = obj.LoadChangeKpiGridData(dtGrid)
-                    Dim ms As MemoryStream = objEvalRptMtd.ExportGridToImage(gc)
-                    dicEvalRptGridImages.Add("ChangeKPITable", ms)
+                        'load banded grid into a separate window
+                        '****************************************
+                        WaitScreen.ShowWaitScreen("Loading Change KPI Data")
 
-                    Dim j As Int16 = 0
+                        Dim obj As New frmEvalRptChangeKPI()
+                        Dim dtKpiTbl As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of Integer)("KPITable") = 1).CopyToDataTable
+                        Dim gc = obj.LoadChangeKpiGridData(dtKpiTbl)
+                        Dim ms As MemoryStream = objEvalRptMtd.ExportGridToImage(gc)
+                        dicEvalRptGridImages.Add("ChangeKPITable", ms)
 
-                    For Each drKPI As DataRow In dtGrid.Rows
+                        Dim j As Int16 = 0
 
-                        Try
+                        For Each drKPI As DataRow In dtKpiTbl.Rows
+
+                            Try
+                                j = j + 1
+
+                                WaitScreen.ShowWaitScreen("ChangeSlide: " + Math.Round(100 * (j / dtGrid.Rows.Count), 0).ToString + "%")
+
+                                '******* Load Per KPI Calc Data *******
+                                Dim dtKPI As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of String)("KPIName") = drKPI("KPIName").ToString).CopyToDataTable
+                                Dim gcKPI = obj.BuildSingleKpiGridData(dtKPI)
+
+                                '************************************************************************************************************************
+                                Dim gridBmp As Bitmap = New Bitmap(gcKPI.Width, gcKPI.Height)
+                                gcKPI.DrawToBitmap(gridBmp, New Rectangle(0, 0, gcKPI.Width, gcKPI.Height))
+                                dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_Trend", gridBmp)
+                                '************************************************************************************************************************
+
+                                dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_Trend", dtKPI)
+
+                                '******* Load Top 20 Kpi Rows *******
+                                sqlParam = Nothing
+                                connstring = Nothing
+                                parray = Nothing
+                                parray = {
+                                    New String() {"@KPISetId", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
+                                    New String() {"@UserName", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)},
+                                    New String() {"@KPIName", Chr(39) & drKPI("KPIName").ToString & Chr(39)}
+                                }
+
+                                sqlParam = GetSQL(8828, parray)(1)
+                                connstring = GetSQL(8828, parray)(0)
+                                Dim dtKPITopX = DataAccessorODBC.GetDataTable(connstring, sqlParam)
+                                Dim gcTopX = obj.LoadSingleKpiTopXGridData(dtKPITopX)
+
+                                '************************************************************************************************************************
+                                Dim gridBmpTopX As Bitmap = New Bitmap(gcTopX.Width, gcTopX.Height)
+                                gcTopX.DrawToBitmap(gridBmpTopX, New Rectangle(0, 0, gcTopX.Width, gcTopX.Height))
+                                dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_TopX", gridBmpTopX)
+                                '************************************************************************************************************************
+
+                                dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_TopX", dtKPITopX)
+                            Catch ex As Exception
+                                MsgBox("Failure processing:" & drKPI("KPIName").ToString & vbCrLf & ex.Message)
+                            End Try
+
+                        Next
+
+                        objEvalRptMtd.dicEvalRptGridImages = dicEvalRptGridImages
+                        objEvalRptMtd.dicEvalRptGridBmp = dicEvalRptGridBmp
+                        objEvalRptMtd.dicEvalRptGridDataTables = dicEvalRptGridDataTables
+
+                        j = 0
+
+                        'Loading Histogram Charts For KPIs
+                        '************************************************************************************************************************
+                        Dim dtHistChart As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of Integer)("HistogramTopX") = 1).CopyToDataTable
+                        For Each drKPI As DataRow In dtHistChart.Rows
+                            j = j + 1
+                            WaitScreen.ShowWaitScreen("Histogram:" + Math.Round(100 * (j / dtHistChart.Rows.Count), 0).ToString + "%")
+
+                            Try
+                                Dim chName As String = "Histogram" & drKPI("KPIName").ToString
+                                LaunchHistogramChart_EvalReport(chName, drKPI("KPIName").ToString)
+                            Catch ex As Exception
+                                MsgBox("Failure processing:" & drKPI("KPIName").ToString & vbCrLf & ex.Message)
+                            End Try
+                        Next
+
+                        'Loading Normal Tend Charts For KPIs
+                        '************************************************************************************************************************
+                        SetComboBox(cmbChartSetNameStats, ComboSelectBased.TextBased, cmbChartSetNameEval.SelectedItem.ToString)
+                        SetComboBox(cmbObjectTreeStats, ComboSelectBased.TextBased, cmbObjectTreeEval.SelectedItem.ToString)
+                        Dim objectsel As String = tvObjectsTreeEval.GetChecked2String(_strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
+
+                        objectsel = Replace(Replace(Replace(objectsel, "IN ('", ""), ")", ""), "'", "")
+                        Dim objs() As String = objectsel.Split(",")
+
+                        'Select objects in the Stats objects tree
+                        Dim tvlastNodeLevelStats As Integer = tvObjectsTreeStats.GetMaxNodeLevel()
+                        For Each strObj In objs
+                            Dim tv_result As TreeListNode = tvObjectsTreeStats.FindNodeByFieldValue("ObjectID", strObj)
+                            If Not tv_result Is Nothing Then
+                                If tv_result.Checked = False And tv_result.Level = tvlastNodeLevelStats Then
+                                    tv_result.Checked = True
+                                    tvObjectsTreeStats.CheckParentNode(tv_result)
+                                End If
+                            End If
+                        Next
+
+                        'Select Period in the Stats period start/end date controls
+                        dtEditStartTimeStats.EditValue = dtEditStartTimeEval.EditValue
+                        dtEditEndTimeStats.EditValue = dtEditEndTimeEval.EditValue
+
+                        Dim dtKPIAll As DataTable = CType(gvEvalTimeBased.DataSource, DataView).ToTable
+                        j = 0
+
+                        For Each drKPIall As DataRow In dtKPIAll.Rows
+
                             j = j + 1
 
-                            WaitScreen.ShowWaitScreen("ChangeSlide: " + Math.Round(100 * (j / dtGrid.Rows.Count), 0).ToString + "%")
+                            Dim foundKPI() As DataRow
+                            foundKPI = dtGrid.AsEnumerable().
+                                Where(Function(n) n.Field(Of Integer)("TimebasedCharts") = 1).CopyToDataTable.
+                                Select("KPIName=" & Chr(39) & drKPIall("KPIName") & Chr(39))
 
-                            '******* Load Per KPI Calc Data *******
-                            Dim dtKPI As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of String)("KPIName") = drKPI("KPIName").ToString).CopyToDataTable
-                            Dim gcKPI = obj.BuildSingleKpiGridData(dtKPI)
+                            If foundKPI.Count > 0 Then
+                                'Select KPIs of interest in the Stats KPI tree
+                                Dim tv_kpi As TreeListNode = tvKPIStats.FindNodeByFieldValue("ObjectName", drKPIall("KPIName").ToString)
+                                If Not tv_kpi Is Nothing Then
+                                    tv_kpi.Checked = True
+                                    tvKPIStats.CheckParentNode(tv_kpi)
+                                End If
 
-                            '************************************************************************************************************************
-                            Dim gridBmp As Bitmap = New Bitmap(gcKPI.Width, gcKPI.Height)
-                            gcKPI.DrawToBitmap(gridBmp, New Rectangle(0, 0, gcKPI.Width, gcKPI.Height))
-                            dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_Trend", gridBmp)
-                            '************************************************************************************************************************
+                                Dim categoryTab As String = tvKPIStats.GetKPIChecked2String(2, "ObjectName")
+                                Dim selectedChart As String = tvKPIStats.GetKPIChecked2String(3, "ObjectName")
 
-                            dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_Trend", dtKPI)
-
-                            '******* Load Top 20 Kpi Rows *******
-                            sqlParam = Nothing
-                            connstring = Nothing
-                            parray = Nothing
-                            parray = {
-                                New String() {"@KPISetId", CInt(TryCast(cmbKPISetEval.SelectedItem, clsComboBoxItem).Value)},
-                                New String() {"@UserName", Chr(39) & Environment.UserName.ToString.Trim & Chr(39)},
-                                New String() {"@KPIName", Chr(39) & drKPI("KPIName").ToString & Chr(39)}
-                            }
-
-                            sqlParam = GetSQL(8828, parray)(1)
-                            connstring = GetSQL(8828, parray)(0)
-                            Dim dtKPITopX = DataAccessorODBC.GetDataTable(connstring, sqlParam)
-                            Dim gcTopX = obj.LoadSingleKpiTopXGridData(dtKPITopX)
-
-                            '************************************************************************************************************************
-                            Dim gridBmpTopX As Bitmap = New Bitmap(gcTopX.Width, gcTopX.Height)
-                            gcTopX.DrawToBitmap(gridBmpTopX, New Rectangle(0, 0, gcTopX.Width, gcTopX.Height))
-                            dicEvalRptGridBmp.Add(drKPI("KPIName").ToString & "_TopX", gridBmpTopX)
-                            '************************************************************************************************************************
-
-                            dicEvalRptGridDataTables.Add(drKPI("KPIName").ToString & "_TopX", dtKPITopX)
-                        Catch ex As Exception
-                            MsgBox("Failure processing:" & drKPI("KPIName").ToString & vbCrLf & ex.Message)
-                        End Try
-
-                    Next
-
-                    objEvalRptMtd.dicEvalRptGridImages = dicEvalRptGridImages
-                    objEvalRptMtd.dicEvalRptGridBmp = dicEvalRptGridBmp
-                    objEvalRptMtd.dicEvalRptGridDataTables = dicEvalRptGridDataTables
-
-                    j = 0
-
-                    'Loading Histogram Charts For KPIs
-                    '************************************************************************************************************************
-                    For Each drKPI As DataRow In dtGrid.Rows
-                        j = j + 1
-                        WaitScreen.ShowWaitScreen("Histogram:" + Math.Round(100 * (j / dtGrid.Rows.Count), 0).ToString + "%")
-
-                        Try
-                            Dim chName As String = "Histogram" & drKPI("KPIName").ToString
-                            LaunchHistogramChart_EvalReport(chName, drKPI("KPIName").ToString)
-                        Catch ex As Exception
-                            MsgBox("Failure processing:" & drKPI("KPIName").ToString & vbCrLf & ex.Message)
-                        End Try
-                    Next
-
-                    'Loading Normal Tend Charts For KPIs
-                    '************************************************************************************************************************
-                    SetComboBox(cmbChartSetNameStats, ComboSelectBased.TextBased, cmbChartSetNameEval.SelectedItem.ToString)
-                    SetComboBox(cmbObjectTreeStats, ComboSelectBased.TextBased, cmbObjectTreeEval.SelectedItem.ToString)
-                    Dim objectsel As String = tvObjectsTreeEval.GetChecked2String(_strNetwork, cmbObjectTreeEval.Text, "ObjectID", strTreeFilterEval)
-
-                    objectsel = Replace(Replace(Replace(objectsel, "IN ('", ""), ")", ""), "'", "")
-                    Dim objs() As String = objectsel.Split(",")
-
-                    'Select objects in the Stats objects tree
-                    Dim tvlastNodeLevelStats As Integer = tvObjectsTreeStats.GetMaxNodeLevel()
-                    For Each strObj In objs
-                        Dim tv_result As TreeListNode = tvObjectsTreeStats.FindNodeByFieldValue("ObjectID", strObj)
-                        If Not tv_result Is Nothing Then
-                            If tv_result.Checked = False And tv_result.Level = tvlastNodeLevelStats Then
-                                tv_result.Checked = True
-                                tvObjectsTreeStats.CheckParentNode(tv_result)
-                            End If
-                        End If
-                    Next
-
-                    'Select Period in the Stats period start/end date controls
-                    dtEditStartTimeStats.EditValue = dtEditStartTimeEval.EditValue
-                    dtEditEndTimeStats.EditValue = dtEditEndTimeEval.EditValue
-
-                    Dim dtKPIAll As DataTable = CType(gvEvalTimeBased.DataSource, DataView).ToTable
-                    j = 0
-
-                    For Each drKPIall As DataRow In dtKPIAll.Rows
-
-                        j = j + 1
-
-                        Dim foundKPI() As DataRow
-                        foundKPI = dtGrid.Select("KPIName=" & Chr(39) & drKPIall("KPIName") & Chr(39))
-
-                        If foundKPI.Count = 0 Then
-                            'Select KPIs of interest in the Stats KPI tree
-                            Dim tv_kpi As TreeListNode = tvKPIStats.FindNodeByFieldValue("ObjectName", drKPIall("KPIName").ToString)
-                            If Not tv_kpi Is Nothing Then
-                                tv_kpi.Checked = True
-                                tvKPIStats.CheckParentNode(tv_kpi)
+                                WaitScreen.ShowWaitScreen("Charts:" + Math.Round(100 * (j / dtKPIAll.Rows.Count), 0).ToString + "%")
+                                CreateStatsChart(categoryTab, selectedChart, drKPIall("KPIName").ToString)
+                                tvKPIStats.UncheckAll()
                             End If
 
-                            Dim categoryTab As String = tvKPIStats.GetKPIChecked2String(2, "ObjectName")
-                            Dim selectedChart As String = tvKPIStats.GetKPIChecked2String(3, "ObjectName")
+                        Next
 
-                            WaitScreen.ShowWaitScreen("Charts:" + Math.Round(100 * (j / dtKPIAll.Rows.Count), 0).ToString + "%")
-                            CreateStatsChart(categoryTab, selectedChart, drKPIall("KPIName").ToString)
-                            tvKPIStats.UncheckAll()
+                        WaitScreen.ShowWaitScreen("Loading Chart/Grid Images On Slides")
+                        objEvalRptMtd.dicEvalRptChartImages = dicEvalRptChartImages
 
-                        End If
+                        'Set Class Variables
+                        objEvalRptMtd.Technology = _strNetwork
+                        objEvalRptMtd.TargetType = cmbObjectTreeEval.SelectedItem.ToString
+                        objEvalRptMtd.ChartSetName = cmbChartSetNameEval.SelectedItem.ToString
+                        objEvalRptMtd.Area = cmbObjectTreeEval.SelectedItem.ToString
+                        objEvalRptMtd.SiteCount = tvObjectsTreeEval.GetEndCheckedNodes().Count.ToString
+                        objEvalRptMtd.SelectedArea = ""
+                        objEvalRptMtd.StartTime = CDate(dtEditStartTimeEval.EditValue).ToString("dd-MM-yyyy")
+                        objEvalRptMtd.EndTime = CDate(dtEditEndTimeEval.EditValue).ToString("dd-MM-yyyy")
+                        objEvalRptMtd.Resolution = GetResolutionEval()
+                        objEvalRptMtd.Filter = "Weekdays"
+                        objEvalRptMtd.PrdCompBeforeTime = CDate(dtPrdCalcEval.Rows(0)("PeriodStart")).ToString("dd-MM-yyyy") & " to " & CDate(dtPrdCalcEval.Rows(0)("PeriodEnd")).ToString("dd-MM-yyyy")
+                        objEvalRptMtd.PrdCompAfterTime = CDate(dtPrdCalcEval.Rows(1)("PeriodStart")).ToString("dd-MM-yyyy") & " to " & CDate(dtPrdCalcEval.Rows(1)("PeriodEnd")).ToString("dd-MM-yyyy")
+                        objEvalRptMtd.TopX = 20
 
-                    Next
+                        objEvalRptMtd.CreateEvaluateReportFromTemplate(templateFilePath, reportFilePath)
 
-                    WaitScreen.ShowWaitScreen("Loading Chart/Grid Images On Slides")
-                    objEvalRptMtd.dicEvalRptChartImages = dicEvalRptChartImages
-
-                    'Set Class Variables
-                    objEvalRptMtd.Technology = _strNetwork
-                    objEvalRptMtd.TargetType = cmbObjectTreeEval.SelectedItem.ToString
-                    objEvalRptMtd.ChartSetName = cmbChartSetNameEval.SelectedItem.ToString
-                    objEvalRptMtd.Area = cmbObjectTreeEval.SelectedItem.ToString
-                    objEvalRptMtd.SiteCount = tvObjectsTreeEval.GetEndCheckedNodes().Count.ToString
-                    objEvalRptMtd.SelectedArea = ""
-                    objEvalRptMtd.StartTime = CDate(dtEditStartTimeEval.EditValue).ToString("dd-MM-yyyy")
-                    objEvalRptMtd.EndTime = CDate(dtEditEndTimeEval.EditValue).ToString("dd-MM-yyyy")
-                    objEvalRptMtd.Resolution = GetResolutionEval()
-                    objEvalRptMtd.Filter = "Weekdays"
-                    objEvalRptMtd.PrdCompBeforeTime = CDate(dtPrdCalcEval.Rows(0)("PeriodStart")).ToString("dd-MM-yyyy") & " to " & CDate(dtPrdCalcEval.Rows(0)("PeriodEnd")).ToString("dd-MM-yyyy")
-                    objEvalRptMtd.PrdCompAfterTime = CDate(dtPrdCalcEval.Rows(1)("PeriodStart")).ToString("dd-MM-yyyy") & " to " & CDate(dtPrdCalcEval.Rows(1)("PeriodEnd")).ToString("dd-MM-yyyy")
-                    objEvalRptMtd.TopX = 20
-
-                    objEvalRptMtd.CreateEvaluateReportFromTemplate(templateFilePath, reportFilePath)
-
+                    End If
                 End If
+
+                Try
+                    Process.Start("explorer.exe", "/select," & reportFilePath)
+                Catch ex As Exception
+                    XtraMessageBox.Show("Failed to open folder location, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
+                End Try
+
+                Try
+                    Process.Start(reportFilePath)
+                Catch ex As Exception
+                    XtraMessageBox.Show("Failed to open report, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
+                End Try
+
+                WaitScreen.ShowWaitScreen("PPT File Created Successfully")
             End If
-
-            Try
-                Process.Start("explorer.exe", "/select," & reportFilePath)
-            Catch ex As Exception
-                XtraMessageBox.Show("Failed to open folder location, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
-            End Try
-
-            Try
-                Process.Start(reportFilePath)
-            Catch ex As Exception
-                XtraMessageBox.Show("Failed to open report, check folder: " & Application.StartupPath, "Report Editor", MessageBoxButtons.OK)
-            End Try
-
-            WaitScreen.ShowWaitScreen("PPT File Created Successfully")
         Catch ex As Exception
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
         Finally

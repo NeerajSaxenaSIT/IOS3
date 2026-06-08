@@ -203,6 +203,15 @@ Public Class frmEvalRptChangeKPI
 
         GridView2.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
         GridView2.Appearance.Row.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
+        GridView2.HorzScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never
+        GridView2.VertScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never
+
+        GridView2.Columns(0).Width = GridControl2.Width / 5
+        GridView2.Columns(1).Width = GridControl2.Width / 5
+        GridView2.Columns(2).Width = GridControl2.Width / 5
+        GridView2.Columns(3).Width = GridControl2.Width / 5
+        GridView2.Columns(4).Width = GridControl2.Width / 5
+
         GridControl2.ForceInitialize()
         Return GridControl2
     End Function

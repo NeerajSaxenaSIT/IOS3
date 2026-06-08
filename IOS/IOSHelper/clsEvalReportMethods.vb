@@ -292,7 +292,7 @@ Public Class clsEvalReportMethods
                                 Dim dtTopX As DataTable = dicEvalRptGridDataTables(Replace(kvp.Key, "_Hist", "_TopX"))
                                 'CreateHistoGramChartSlide(presDoc, dicEvalRptChartImages(kvp.Key), kpiGridStream, kpiTopXGridStream)
                                 'CreateHistoGramChartSlide(presDoc, dicEvalRptChartImages(kvp.Key), dt1, kpiTopXGridStream)
-                                CreateHistoGramChartSlide(presDoc, dicEvalRptChartImages(kvp.Key), kpiGridBmp, kpiTopXGridBmp)
+                                CreateHistoGramChartSlide(presDoc, dicEvalRptChartImages(kvp.Key), Replace(kvp.Key, "_Hist", ""), kpiGridBmp, kpiTopXGridBmp)
                             End If
                         End If
                     End If
@@ -982,6 +982,48 @@ Public Class clsEvalReportMethods
 
     End Sub
 
+    Private Sub AddSlideTitle(ByRef slide As Slide, ByVal drawingObjectId As Integer, ByVal titleText As String)
+        Dim shapeTree = slide.CommonSlideData.ShapeTree
+        Dim shape As New Shape()
+
+        shape.NonVisualShapeProperties =
+        New NonVisualShapeProperties(
+            New NonVisualDrawingProperties() With {
+                .Id = CUInt(drawingObjectId),
+                .Name = "Slide Title"
+            },
+            New NonVisualShapeDrawingProperties(),
+            New ApplicationNonVisualDrawingProperties())
+
+        shape.ShapeProperties =
+        New ShapeProperties(
+            New Drawing.Transform2D(
+                New Drawing.Offset() With {
+                    .X = 30000,
+                    .Y = 50000
+                },
+                New Drawing.Extents() With {
+                    .Cx = 11000000,
+                    .Cy = 500000
+                }))
+
+        shape.TextBody =
+        New TextBody(
+            New Drawing.BodyProperties(),
+            New Drawing.ListStyle(),
+            New Drawing.Paragraph(
+                New Drawing.Run(
+                    New Drawing.RunProperties() With {
+                        .FontSize = 2400, '24 pt
+                        .Bold = True
+                    },
+                    New Drawing.Text("KPI: " & titleText)
+                )
+            )
+        )
+        shapeTree.Append(shape)
+    End Sub
+
     Private Sub CopyChartBitmapToSlide(ByRef slide As Slide, ByRef slidePart As SlidePart, ByVal drawingObjectId As Integer, chBmp As Bitmap)
         Try
             Dim shapeTree = slide.CommonSlideData.ShapeTree
@@ -1026,8 +1068,8 @@ Public Class clsEvalReportMethods
             ' Position & Size (IMPORTANT)
             picture.ShapeProperties = New ShapeProperties(
             New Drawing.Transform2D(
-                New Drawing.Offset() With {.X = 30000, .Y = 30000},
-                New Drawing.Extents() With {.Cx = 12 * 914400, .Cy = 4 * 914400}
+                New Drawing.Offset() With {.X = 30000, .Y = 550000},
+                New Drawing.Extents() With {.Cx = 12 * 914400, .Cy = 3.4 * 914400}
                 ),
                 New Drawing.PresetGeometry(New Drawing.AdjustValueList()) With {.Preset = Drawing.ShapeTypeValues.Rectangle}
             )
@@ -1101,7 +1143,7 @@ Public Class clsEvalReportMethods
 
 #Region "Change KPI Trend"
 
-    Private Sub CreateHistoGramChartSlide(ByRef presDoc As PresentationDocument, chBmp As Bitmap, kpiGridBmp As Bitmap, kpiTopXGridBmp As Bitmap)
+    Private Sub CreateHistoGramChartSlide(ByRef presDoc As PresentationDocument, chBmp As Bitmap, kpiName As String, kpiGridBmp As Bitmap, kpiTopXGridBmp As Bitmap)
         Try
             Dim presPart = presDoc.PresentationPart
             Dim templateSlidePart As SlidePart = presPart.SlideParts.First()
@@ -1111,6 +1153,10 @@ Public Class clsEvalReportMethods
 
             drawingObjectId = 1
 
+            ' Add a title text for the KPI name just above the histogram chart
+            AddSlideTitle(newSlide, drawingObjectId, kpiName)
+
+            ' Plot the KPI histogram chart
             CopyChartBitmapToSlide(newSlide, newSlidePart, drawingObjectId, chBmp)
 
             Dim slideWidth As Long = 9144000
@@ -1122,7 +1168,7 @@ Public Class clsEvalReportMethods
             Dim gridWidth As Long = (slideWidth \ 2) - 60000
             Dim leftGridX As Long = 30000
             Dim rightGridX As Long = leftGridX + gridWidth + 30000
-            Dim leftGridHeight As Long = slideHeight - gridY - bottomMargin '1800000
+            Dim leftGridHeight As Long = slideHeight - gridY - bottomMargin 
             Dim rightGridHeight As Long = slideHeight - gridY - bottomMargin
 
             ' INSERT LEFT GRID BITMAP
