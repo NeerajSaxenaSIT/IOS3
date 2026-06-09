@@ -65,66 +65,6 @@ Public Class DataAccessorODBC
         Return dtOSS
     End Function
 
-    Public Shared Function GetDataTable_ExecSP(ByVal connstring As String, ByVal sql As String, Optional ByVal commandTimeOut As Integer = 300) As DataTable
-        If sql = "" Or connstring = "" Then
-            Return Nothing
-        End If
-
-        ' Strip DECLARE/@return_value wrapper if present — ODBC cannot prepare multi-statement batches
-        If sql.TrimStart.ToUpper.StartsWith("DECLARE") OrElse sql.ToUpper.Contains("@RETURN_VALUE") Then
-            Dim execIndex As Integer = sql.ToUpper.IndexOf("EXEC")
-            If execIndex >= 0 Then
-                ' Extract from EXEC to end, drop the trailing SELECT line
-                Dim selectIndex As Integer = sql.ToUpper.IndexOf("SELECT", execIndex)
-                If selectIndex > execIndex Then
-                    sql = sql.Substring(execIndex, selectIndex - execIndex).Trim
-                Else
-                    sql = sql.Substring(execIndex).Trim
-                End If
-
-                ' Strip "@return_value =" assignment from "EXEC @return_value = [dbo].[...]"
-                Dim assignIndex As Integer = sql.ToUpper.IndexOf("@RETURN_VALUE")
-                If assignIndex >= 0 Then
-                    Dim equalSign As Integer = sql.IndexOf("=", assignIndex)
-                    If equalSign >= 0 Then
-                        sql = "EXEC " & sql.Substring(equalSign + 1).Trim
-                    End If
-                End If
-            End If
-        End If
-
-        WriteString_Query("Timestamp: " & Now.ToString & vbCrLf & "SQL Fired: " & vbCrLf & sql & vbCrLf & "------------------------------" & vbCrLf)
-
-        Dim dtOSS As New DataTable()
-
-        Try
-            Using cnOSS As New System.Data.Odbc.OdbcConnection(connstring)
-                cnOSS.ConnectionTimeout = 60
-                cnOSS.Open()
-
-                Using cmd As New System.Data.Odbc.OdbcCommand(sql, cnOSS)
-                    cmd.CommandType = CommandType.Text
-                    cmd.CommandTimeout = commandTimeOut
-
-                    Using daOSS As New System.Data.Odbc.OdbcDataAdapter(cmd)
-                        Using dsOSS As New System.Data.DataSet()
-                            daOSS.Fill(dsOSS)
-                            If dsOSS.Tables.Count > 0 Then
-                                dtOSS = dsOSS.Tables(0)
-                            End If
-                        End Using
-                    End Using
-                End Using
-            End Using
-
-        Catch ex As Exception
-            WriteString_Query("Timestamp: " & Now.ToString & vbCrLf & "Error Message: " & vbCrLf & ex.Message & vbCrLf & "------------------------------" & vbCrLf)
-            Return Nothing
-        End Try
-
-        Return dtOSS
-    End Function
-
     Public Shared Function GetDataTableSqlConn(ByVal connstring As String, ByVal sql As String, Optional ByVal commandTimeOut As Integer = 60) As DataTable
         If String.IsNullOrEmpty(sql) Or String.IsNullOrEmpty(connstring) Then
             Return Nothing
