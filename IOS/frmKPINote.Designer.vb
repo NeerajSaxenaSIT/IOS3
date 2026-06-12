@@ -504,6 +504,9 @@ Partial Class frmKPINote
         Me.lblKPIDescription.Appearance.Options.UseBackColor = True
         Me.lblKPIDescription.Appearance.Options.UseFont = True
         Me.lblKPIDescription.Appearance.Options.UseForeColor = True
+        Me.lblKPIDescription.Appearance.Options.UseTextOptions = True
+        Me.lblKPIDescription.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Top
+        Me.lblKPIDescription.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap
         Me.lblKPIDescription.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None
         Me.lblKPIDescription.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lblKPIDescription.Location = New System.Drawing.Point(6, 27)
@@ -568,7 +571,7 @@ Partial Class frmKPINote
         Me.VLabel13.Dock = System.Windows.Forms.DockStyle.Left
         Me.VLabel13.Location = New System.Drawing.Point(3, 37)
         Me.VLabel13.Name = "VLabel13"
-        Me.VLabel13.Size = New System.Drawing.Size(51, 13)
+        Me.VLabel13.Size = New System.Drawing.Size(51, 19)
         Me.VLabel13.TabIndex = 2
         Me.VLabel13.Text = "End Date :"
         '
@@ -579,7 +582,7 @@ Partial Class frmKPINote
         Me.VLabel15.Dock = System.Windows.Forms.DockStyle.Left
         Me.VLabel15.Location = New System.Drawing.Point(3, 8)
         Me.VLabel15.Name = "VLabel15"
-        Me.VLabel15.Size = New System.Drawing.Size(57, 13)
+        Me.VLabel15.Size = New System.Drawing.Size(57, 18)
         Me.VLabel15.TabIndex = 1
         Me.VLabel15.Text = "Start Date :"
         '

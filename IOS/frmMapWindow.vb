@@ -2254,6 +2254,19 @@ Public Class frmMapWindow
         End Try
     End Function
 
+    Public Sub Map_Setview_ToBounds(min_x As Double, min_y As Double, max_x As Double, max_y As Double)
+        Dim p1 As DPoint = New DPoint(min_x, min_y)
+        Dim p2 As DPoint = New DPoint(max_x, max_y)
+        Dim rect As MapInfo.Geometry.DRect = New MapInfo.Geometry.DRect(p1, p2)
+        MapControl1.Map.SetView(rect, csysWGS84)
+    End Sub
+
+    Public Function Map_GetBitmap() As System.Drawing.Bitmap
+        Dim bmp As New System.Drawing.Bitmap(MapControl1.Width, MapControl1.Height)
+        MapControl1.DrawToBitmap(bmp, New System.Drawing.Rectangle(0, 0, MapControl1.Width, MapControl1.Height))
+        Return bmp
+    End Function
+
 #End Region
 
 #Region "Private Sub"

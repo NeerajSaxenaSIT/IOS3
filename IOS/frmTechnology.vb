@@ -15142,7 +15142,6 @@ Public Class frmTechnology
 
                     If yaxis1.NumberPrecision < 2 And Not yaxis1.Percent = True Then
                         yaxis1.MinimumInterval = 1
-
                     End If
 
                     If yaxis2.NumberPrecision < 2 And Not yaxis2.Percent = True Then
@@ -15186,6 +15185,44 @@ Public Class frmTechnology
                     sc = de.GetSeries()
                     Dim rnd As Random = New Random(10)
 
+                    Dim LeftAxisDivisor As Int32 = 1
+                    Dim RightAxisDivisor As Int32 = 1
+                    Dim LeftAxisLabelAddition As String = ""
+                    Dim RightAxisLabelAddition As String = ""
+
+                    For i = 0 To sc.Count - 1
+                        Dim MaxValueOfSeries As Double = sc(i).Calculate("test", Calculation.Maximum).YValue
+                        If MaxValueOfSeries > 1000000000 Then
+                            If MaxValueOfSeries > 1000000000000 Then
+                                Select Case drow("chartElementsYAxis").ToString().Trim().ToUpper()
+                                    Case "LEFT"
+                                        LeftAxisDivisor = 1000000
+                                        LeftAxisLabelAddition = " Million"
+                                        Exit Select
+                                    Case "RIGHT"
+                                        RightAxisDivisor = 1000000
+                                        RightAxisLabelAddition = " Million"
+                                        Exit Select
+                                End Select
+                            Else
+                                Select Case drow("chartElementsYAxis").ToString().Trim().ToUpper()
+                                    Case "LEFT"
+                                        If LeftAxisDivisor < 1000 Then
+                                            LeftAxisDivisor = 1000
+                                            LeftAxisLabelAddition = " Thousand"
+                                        End If
+                                        Exit Select
+                                    Case "RIGHT"
+                                        If RightAxisDivisor < 1000 Then
+                                            RightAxisDivisor = 1000
+                                            RightAxisLabelAddition = " Thousand"
+                                        End If
+                                        Exit Select
+                                End Select
+                            End If
+                        End If
+                    Next
+
                     For i = 0 To sc.Count() - 1
                         Select Case UCase(drow(8).trim)
                             Case "LINE"
@@ -15196,13 +15233,39 @@ Public Class frmTechnology
                             Case "AREALINE"
                                 sc(i).Type = SeriesType.AreaLine
                         End Select
-                        Select Case UCase(drow(9).trim)
-                            Case "LEFT"
-                                sc(i).YAxis = yaxis1
-                            Case "RIGHT"
-                                sc(i).YAxis = yaxis2
-                        End Select
 
+                        Select Case drow("chartElementsYAxis").ToString().Trim().ToUpper()
+                            Case "LEFT"
+                                If LeftAxisDivisor > 1 Then
+                                    sc(i) = Series.Divide(sc(i), LeftAxisDivisor)
+                                End If
+                                If Not yaxis1.Label.Text.Contains(LeftAxisLabelAddition) Then
+                                    yaxis1.Label.Text = yaxis1.Label.Text + LeftAxisLabelAddition
+                                End If
+
+                                sc(i).YAxis = yaxis1
+
+                                If CBool(drow("AutoScale")) = False Then
+                                    yaxis1.Minimum = 0
+                                End If
+
+                                Exit Select
+                            Case "RIGHT"
+                                If RightAxisDivisor > 1 Then
+                                    sc(i) = Series.Divide(sc(i), RightAxisDivisor)
+                                End If
+
+                                If Not yaxis2.Label.Text.Contains(RightAxisLabelAddition) Then
+                                    yaxis2.Label.Text = yaxis2.Label.Text + RightAxisLabelAddition
+                                End If
+                                sc(i).YAxis = yaxis2
+
+                                If CBool(drow("AutoScale")) = False Then
+                                    yaxis2.Minimum = 0
+                                End If
+
+                                Exit Select
+                        End Select
 
                         sc(i).DefaultElement.Color = Color.FromArgb(255, rnd.Next(255), rnd.Next(255), rnd.Next(255))
                         sc(i).DefaultElement.Marker.Type = i
@@ -15222,11 +15285,11 @@ Public Class frmTechnology
 
                     ReDim chart_elements(0)
                     ReDim chart_elementsYAxis(0)
+                    ReDim chart_YaxisScale(0)
                     ReDim chart_Eltype(0)
                     ReDim chart_ElColor(0)
-                    ReDim chart_YaxisScale(1)
+                    'ReDim chart_YaxisScale(1)
                     'ReDim chart_ElLineSize(0)
-
                     j = 0
                 End If
 
@@ -25038,6 +25101,7 @@ Public Class frmTechnology
     Private EvaluateReport As Boolean = False
     Private dicEvalRptGridImages As Dictionary(Of String, MemoryStream)
     Private dicEvalRptGridBmp As Dictionary(Of String, Bitmap)
+    Private dicEvalRptMapBmp As Dictionary(Of String, Bitmap)
     Private dicEvalRptGridDataTables As Dictionary(Of String, DataTable)
     Private dicEvalRptChartImages As Dictionary(Of String, Bitmap)
 
@@ -25221,6 +25285,9 @@ Public Class frmTechnology
         End If
         If dicEvalRptGridBmp IsNot Nothing Then
             dicEvalRptGridBmp.Clear()
+        End If
+        If dicEvalRptMapBmp IsNot Nothing Then
+            dicEvalRptMapBmp.Clear()
         End If
         If dicEvalRptGridDataTables IsNot Nothing Then
             dicEvalRptGridDataTables.Clear()
@@ -29268,6 +29335,7 @@ Public Class frmTechnology
 
                 dicEvalRptGridImages = New Dictionary(Of String, MemoryStream)
                 dicEvalRptGridBmp = New Dictionary(Of String, Bitmap)
+                dicEvalRptMapBmp = New Dictionary(Of String, Bitmap)
                 dicEvalRptGridDataTables = New Dictionary(Of String, DataTable)
                 dicEvalRptChartImages = New Dictionary(Of String, Bitmap)
                 Dim objEvalRptMtd As New clsEvalReportMethods()
@@ -29306,6 +29374,13 @@ Public Class frmTechnology
                 If dt IsNot Nothing Then
                     If dt.Rows.Count > 0 Then
 
+                        'Get the map bitmap based on the bound coordinates provided
+                        '***********************************************************
+                        frmMapWindow.Map_Setview_ToBounds(CDbl(dt.Rows(0)("x_min")), CDbl(dt.Rows(0)("y_min")), CDbl(dt.Rows(0)("x_max")), CDbl(dt.Rows(0)("y_max")))
+                        Dim mapBmp As Bitmap = frmMapWindow.Map_GetBitmap()
+                        dicEvalRptMapBmp.Add("MapBmp", mapBmp)
+                        '***********************************************************
+
                         sqlParam = Nothing
                         connstring = Nothing
                         parray = Nothing
@@ -29328,6 +29403,8 @@ Public Class frmTechnology
                         dicEvalRptGridImages.Add("ChangeKPITable", ms)
 
                         Dim j As Int16 = 0
+                        dtKpiTbl.Dispose()
+                        dtKpiTbl = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of Integer)("HistogramTopX") = 1).CopyToDataTable
 
                         For Each drKPI As DataRow In dtKpiTbl.Rows
 
@@ -29376,6 +29453,7 @@ Public Class frmTechnology
 
                         Next
 
+                        objEvalRptMtd.dicEvalRptMapBmp = dicEvalRptMapBmp
                         objEvalRptMtd.dicEvalRptGridImages = dicEvalRptGridImages
                         objEvalRptMtd.dicEvalRptGridBmp = dicEvalRptGridBmp
                         objEvalRptMtd.dicEvalRptGridDataTables = dicEvalRptGridDataTables
@@ -29387,13 +29465,13 @@ Public Class frmTechnology
                         Dim dtHistChart As DataTable = dtGrid.AsEnumerable().Where(Function(n) n.Field(Of Integer)("HistogramTopX") = 1).CopyToDataTable
                         For Each drKPI As DataRow In dtHistChart.Rows
                             j = j + 1
-                            WaitScreen.ShowWaitScreen("Histogram:" + Math.Round(100 * (j / dtHistChart.Rows.Count), 0).ToString + "%")
+                            WaitScreen.ShowWaitScreen("Histogram: " + Math.Round(100 * (j / dtHistChart.Rows.Count), 0).ToString + "%")
 
                             Try
                                 Dim chName As String = "Histogram" & drKPI("KPIName").ToString
                                 LaunchHistogramChart_EvalReport(chName, drKPI("KPIName").ToString)
                             Catch ex As Exception
-                                MsgBox("Failure processing:" & drKPI("KPIName").ToString & vbCrLf & ex.Message)
+                                MsgBox("Failure processing: " & drKPI("KPIName").ToString & vbCrLf & ex.Message)
                             End Try
                         Next
 
@@ -29445,7 +29523,7 @@ Public Class frmTechnology
                                 Dim categoryTab As String = tvKPIStats.GetKPIChecked2String(2, "ObjectName")
                                 Dim selectedChart As String = tvKPIStats.GetKPIChecked2String(3, "ObjectName")
 
-                                WaitScreen.ShowWaitScreen("Charts:" + Math.Round(100 * (j / dtKPIAll.Rows.Count), 0).ToString + "%")
+                                WaitScreen.ShowWaitScreen("Charts: " + Math.Round(100 * (j / dtKPIAll.Rows.Count), 0).ToString + "%")
                                 CreateStatsChart(categoryTab, selectedChart, drKPIall("KPIName").ToString)
                                 tvKPIStats.UncheckAll()
                             End If
@@ -29460,8 +29538,8 @@ Public Class frmTechnology
                         objEvalRptMtd.TargetType = cmbObjectTreeEval.SelectedItem.ToString
                         objEvalRptMtd.ChartSetName = cmbChartSetNameEval.SelectedItem.ToString
                         objEvalRptMtd.Area = cmbObjectTreeEval.SelectedItem.ToString
-                        objEvalRptMtd.SiteCount = tvObjectsTreeEval.GetEndCheckedNodes().Count.ToString
-                        objEvalRptMtd.SelectedArea = ""
+                        objEvalRptMtd.SiteCount = dt.Rows(0)("CountOfSites").ToString
+                        objEvalRptMtd.SelectedArea = objectsel
                         objEvalRptMtd.StartTime = CDate(dtEditStartTimeEval.EditValue).ToString("dd-MM-yyyy")
                         objEvalRptMtd.EndTime = CDate(dtEditEndTimeEval.EditValue).ToString("dd-MM-yyyy")
                         objEvalRptMtd.Resolution = GetResolutionEval()

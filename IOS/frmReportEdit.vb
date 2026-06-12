@@ -1963,6 +1963,11 @@ Public Class frmReportEdit
     Private Sub tsmi_ReportRunConfigured_Click(sender As Object, e As EventArgs) Handles tsmi_ReportRunConfigured.Click
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Invoked")
 
+        If Me.reportType Is Nothing Then
+            XtraMessageBox.Show("Please Select Report.", "Report Editor", MessageBoxButtons.OK)
+            Exit Sub
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         WaitScreenReportEditor.ShowWaitScreen("Generating Report...")
         Application.DoEvents()
@@ -2025,6 +2030,11 @@ Public Class frmReportEdit
 
     Private Sub tsmi_ReportRunCurrent_Click(sender As Object, e As EventArgs) Handles tsmi_ReportRunCurrent.Click
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Invoked")
+
+        If Me.reportType Is Nothing Then
+            XtraMessageBox.Show("Please Select Report.", "Report Editor", MessageBoxButtons.OK)
+            Exit Sub
+        End If
 
         Dim ReportingTemplateFileName As String = GetConfigClientKeyValue("ReportingTemplateFileName")
         Dim pptfile As String = Application.StartupPath & "\" & ReportingTemplateFileName

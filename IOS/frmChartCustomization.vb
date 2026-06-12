@@ -672,6 +672,8 @@ Public Class frmChartCustomization
                     Me.ProcessStatsIndexedCombo_Custom(dsStats, Chart1)
                 ElseIf CType(cmbChartType.SelectedItem, clsComboBoxItem).Value = IOSChartType.AlignIntervalCompare Then
                     Me.ProcessStatsCompareOverlapTime_Custom(dsStats, Chart1)
+                ElseIf CType(cmbChartType.SelectedItem, clsComboBoxItem).Value = IOSChartType.GroupPerAttribute Then
+                    Me.ProcessStatsGroupPerAttribute_Custom(dsStats, Chart1)
                 Else
                     Me.AssignDataToCustomChart(dsStats.Tables(0), cmbTechnology.SelectedItem.ToString)
                 End If
@@ -704,6 +706,359 @@ Public Class frmChartCustomization
         End If
 
     End Sub
+
+    Private Sub ProcessStatsGroupPerAttribute_Custom(dsStats As DataSet, chart1 As Chart)
+        System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfoDefault
+        System.Threading.Thread.CurrentThread.CurrentUICulture = CultureUIDefault
+
+        Dim objectscharted As String = ""
+        'Dim dt_chart As New DataTable
+        'dt_chart_subset.DefaultView.RowFilter = "CrossTabObj = " & Chr(39) & CrossTabObj & Chr(39)
+        'dt_chart_subset.DefaultView.Sort = "techtab, objecttabindex, categorytabindex, chartindex, chartelementid ASC"
+        'dt_chart = dt_chart_subset.DefaultView.ToTable
+        'dt_chart_subset.DefaultView.RowFilter = ""
+
+        'Assign data to all charts
+        '*************************
+        Dim ch As Chart
+        Dim i As Integer
+        Dim Y1axislabel, Y2axislabel As String
+        Dim Y1axisAbsorPerc = "", Y2axisAbsOrPerc As String = ""
+        Dim Y1axisPrecision, Y2axisPrecision As Integer
+        Dim yaxis1 As Axis = Nothing
+        Dim yaxis2 As Axis = Nothing
+        Dim chart_ElLineSize() As Integer = {0}
+        Dim chart_ElShowDatapoints() As Boolean = {False}
+        Dim chart_SeriesVisible() As Boolean = {True}
+        Dim chart_SeriesAutoScale() As Boolean = {True}
+        Dim chart_AxisLabelText() As String = {"0"}
+        Dim sc As New SeriesCollection
+        Dim lastchart As String = ""
+
+        Dim chart_elements() As String = {"0"}
+        Dim chart_elementsYAxis() As String = {"0"}
+        Dim chart_Eltype() As String = {"Bar"}
+        Dim chart_ElColor() As Integer = {0}
+        Dim chart_YaxisScale() As String = {"0", "0"}
+        'Dim chart_ElLineSize() As Integer = {0}
+
+        Dim j As Integer = 0
+        Dim rownum As Integer = 0
+
+        Dim tabindex_old As Integer = 0
+        Dim chartindex As Integer = -1
+
+        For rownum = 0 To tlvCustomChartsSeries.Nodes.Count - 1
+            Try
+                'collecting elements from chart confguration
+                Dim nd As TreeListViewNode = tlvCustomChartsSeries.Nodes(rownum)
+
+                'checking if kpi in row can be found in table
+                Dim kpifound As Boolean = False
+                For Each dcol As DataColumn In dsStats.Tables(0).Columns
+                    If dcol.ColumnName.ToUpper = nd.SubItems(0).Text.Trim.ToUpper Then
+                        kpifound = True
+                    End If
+                Next
+
+                'tabcontrol = GetTabControlFromTech(tech).TabPages(GetTabPageIndex(GetTabControlFromTech(tech), drow("ObjectTab").ToString.Trim)).Controls(0)
+
+                'Dim tabindex_new As Integer = CInt(drow(2).ToString)
+                'chartindex = CInt(drow(4).ToString)
+
+                'If tabindex_old <> tabindex_new Then
+                '    chartindex = 0
+                '    tabindex_old = tabindex_new
+                'Else
+                '    chartindex = chartindex + 1
+                'End If
+
+                'configures individual chart when new chartline is detected
+                If (lastchart = "" Or lastchart <> txt_CustomChartName.Text.Trim And kpifound = True) Then
+                    lastchart = txt_CustomChartName.Text.Trim
+                    'sp.Clear()
+
+                    If nd.SubItems(5).Text.ToLower = "left" Then
+                        Y1axisAbsorPerc = nd.SubItems(7).Text.Trim
+                    Else
+                        Y2axisAbsOrPerc = nZ(nd.SubItems(7).Text.Trim, "Abs")
+                    End If
+
+                    If nd.SubItems(5).Text.ToLower = "left" Then
+                        Y1axisPrecision = CInt(nZ(nd.SubItems(6).Text, 0))
+                        Y2axisPrecision = 0
+                    Else
+                        Y1axisPrecision = 0
+                        Y2axisPrecision = CInt(nZ(nd.SubItems(6).Text, 0))
+                    End If
+
+                    'Y1axisPrecision = CInt(drow(15))
+                    'Y2axisPrecision = CInt(nZ(drow(16), "0"))
+
+                    If nd.SubItems(5).Text.ToLower = "left" Then
+                        If nZ(nd.SubItems(8).Text.Trim, "").Length > 0 Then
+                            Y1axislabel = nd.SubItems(8).Text.Trim
+                        End If
+                    Else
+                        If nZ(nd.SubItems(8).Text, "").Length > 0 Then
+                            Y2axislabel = nd.SubItems(8).Text.Trim
+                        End If
+                    End If
+
+                    'Dim tabindex As Integer = 0
+                    'If CInt(drow(2).ToString) = 99 Then
+                    '    tabindex_new = GetTabPageIndex(tabcontrol, "Custom")
+                    'End If
+
+                    ch = chart1
+                    SetChartXAxis(ch)
+
+                    ch.Annotations.Clear()
+                    ch.Annotations.Add(New Annotation(cmbTechnology.SelectedItem.ToString.ToUpper))
+                    If cmbTechnology.SelectedItem.ToString.Length > 3 Then
+                        Dim fnt As Font = New Font("Arial", 6, FontStyle.Regular)
+                        ch.Annotations(0).Label.Font = fnt
+                    End If
+
+                    ch.TitleBox.Label.Text = "Objects: " & objectscharted
+                    ch.TitleBox.HeaderLabel.Text = txt_Customize_Chart_Title.Text.Trim
+
+                    ch.TitleBox.Label.Alignment = StringAlignment.Near
+                    ch.TitleBox.Label.LineAlignment = StringAlignment.Near
+                    ch.DefaultElement.Hotspot.ToolTip = "DATE: %XValue" & Chr(13) & "%SeriesName: %Value "
+
+                    'Y-Axis Settingso   
+                    yaxis1 = New Axis
+                    yaxis1.Orientation = Orientation.Left
+                    yaxis1.Label.Text = Y1axislabel
+
+                    yaxis2 = New Axis
+                    yaxis2.Orientation = Orientation.Right
+
+                    yaxis1.Scale = dotnetCHARTING.WinForms.Scale.Normal
+
+                    If yaxis1.NumberPrecision < 2 And Not yaxis1.Percent = True Then
+                        yaxis1.MinimumInterval = 1
+                    End If
+
+                    If yaxis2.NumberPrecision < 2 And Not yaxis2.Percent = True Then
+                        yaxis2.MinimumInterval = 1
+                    End If
+
+                    If yaxis1.NumberPrecision < 2 And Not yaxis1.Percent = True Then
+                        yaxis1.MinimumInterval = 1
+                    End If
+
+                    If yaxis2 Is Nothing Then
+                        yaxis2 = New Axis()
+                        yaxis2.Orientation = Orientation.Right
+                    End If
+                    yaxis2.Label.Text = Y2axislabel
+
+                    If UCase(Y2axisAbsOrPerc) = "PERC" Then
+                        yaxis2.Percent = True
+                        yaxis2.NumberPrecision = Y2axisPrecision
+                    ElseIf UCase(Y2axisAbsOrPerc) = "ABS" Then
+                        yaxis2.NumberPrecision = Y2axisPrecision
+                    End If
+
+                    If yaxis2.NumberPrecision < 2 And Not yaxis2.Percent = True And nd.SubItems(5).Text.Trim = "Right" Then
+                        yaxis2.MinimumInterval = 1
+                    End If
+
+                    Do
+                        If ColumnInDataTable(nd.SubItems(0).Text.Trim, dsStats.Tables(0)) Then
+                            ReDim Preserve chart_elements(j)
+                            ReDim Preserve chart_elementsYAxis(j)
+                            ReDim Preserve chart_Eltype(j)
+                            ReDim Preserve chart_ElColor(j)
+                            ReDim Preserve chart_ElLineSize(j)
+                            ReDim Preserve chart_ElShowDatapoints(j)
+                            ReDim Preserve chart_SeriesVisible(j)
+                            ReDim Preserve chart_SeriesAutoScale(j)
+                            ReDim Preserve chart_AxisLabelText(j)
+
+                            chart_elements(j) = nd.SubItems(0).Text.Trim
+                            chart_elementsYAxis(j) = nd.SubItems(5).Text.Trim
+                            chart_Eltype(j) = nd.SubItems(2).Text
+                            chart_ElColor(j) = CInt(nd.SubItems(4).Text.Trim)
+                            chart_ElLineSize(j) = CInt(nd.SubItems(11).Text.Trim)
+                            chart_ElShowDatapoints(j) = CBool(nd.SubItems(12).Text.Trim)
+                            chart_SeriesVisible(j) = CBool(nZ(nd.SubItems(13).Text.Trim, True))
+                            chart_SeriesAutoScale(j) = CBool(nZ(nd.SubItems(14).Text.Trim, True))
+                            chart_AxisLabelText(j) = CStr(nZ(nd.SubItems(8).Text.Trim, ""))
+
+                            If UCase(chart_elementsYAxis(j)) = "LEFT" Then
+                                chart_YaxisScale(0) = nd.SubItems(3).Text.Trim
+                            ElseIf UCase(chart_elementsYAxis(j)) = "RIGHT" Then
+                                chart_YaxisScale(1) = nd.SubItems(3).Text.Trim
+                            End If
+
+                            j = j + 1
+                        End If
+                        rownum = rownum + 1
+                        If rownum > tlvCustomChartsSeries.Nodes.Count - 1 Then
+                            Exit Do
+                        Else
+                            nd = tlvCustomChartsSeries.Nodes(rownum)
+                        End If
+                    Loop Until txt_CustomChartName.Text.Trim <> lastchart
+                    rownum = rownum - 1
+
+                    j = 0
+                    Select Case UCase(nd.SubItems(5).Text.Trim)
+                        Case "LEFT"
+                            If UCase(nd.SubItems(1).Text.Trim) = "STACKED" Then
+                                yaxis1.Scale = dotnetCHARTING.WinForms.Scale.Stacked
+                            ElseIf UCase(nd.SubItems(1).Text.Trim) = "FULLSTACKED" Then
+                                yaxis1.Scale = dotnetCHARTING.WinForms.Scale.FullStacked
+                            Else
+                                yaxis1.Scale = dotnetCHARTING.WinForms.Scale.Normal
+                            End If
+                        Case "RIGHT"
+                            If UCase(nd.SubItems(1).Text.Trim) = "STACKED" Then
+                                yaxis2.Scale = dotnetCHARTING.WinForms.Scale.Stacked
+                            ElseIf UCase(nd.SubItems(1).Text.Trim) = "FULLSTACKED" Then
+                                yaxis2.Scale = dotnetCHARTING.WinForms.Scale.FullStacked
+                            Else
+                                yaxis2.Scale = dotnetCHARTING.WinForms.Scale.Normal
+                            End If
+                    End Select
+
+                    'Crosstabbing input
+                    Dim dt_crossed As DataTable = CrossTab(dsStats.Tables(0), "DATE", nd.SubItems(15).Text.Trim, nd.SubItems(0).Text.Trim, objectscharted & "_")
+                    'dsStatsSGSN_Crossed.Tables.Add(dt_crossed.Copy)
+
+                    For Each col As DataColumn In dt_crossed.Columns
+                        ReDim Preserve chart_elements(j)
+                        If col.ColumnName.ToUpper <> "DATE" Then
+                            chart_elements(j) = col.ColumnName.ToUpper
+                            j = j + 1
+                        End If
+                    Next
+
+                    Dim de As DataEngine = New DataEngine(dt_crossed)
+                    de.DataFields = String2DataFields(chart_elements, "Date")
+                    sc = de.GetSeries()
+                    Dim rnd As Random = New Random(10)
+
+                    For i = 0 To sc.Count() - 1
+                        Select Case UCase(chart_Eltype(i).Trim)
+                            Case "LINE"
+                                sc(i).Type = SeriesType.Line
+                                sc(i).Line.Width = chart_ElLineSize(i)
+                            Case "BAR"
+                                sc(i).Type = SeriesType.Bar
+                            Case "AREALINE"
+                                sc(i).Type = SeriesType.AreaLine
+                        End Select
+                        Select Case UCase(chart_Eltype(i).Trim)
+                            Case "LEFT"
+                                sc(i).YAxis = yaxis1
+                            Case "RIGHT"
+                                sc(i).YAxis = yaxis2
+                        End Select
+
+
+                        sc(i).DefaultElement.Color = Color.FromArgb(255, rnd.Next(255), rnd.Next(255), rnd.Next(255))
+                        sc(i).DefaultElement.Marker.Type = i
+                    Next
+                    ch.SeriesCollection.Clear()
+                    ch.SeriesCollection.Add(sc)
+                    ch.Series.Data = dt_crossed
+
+                    HideChartScaleIfNoDataStats(ch, dt_crossed)
+
+                    sc = Nothing
+                    de = Nothing
+
+                    ch.XAxis.Markers.Clear()
+                    ch.RefreshChart()
+                    ch.Visible = True
+
+                    ReDim chart_elements(0)
+                    ReDim chart_elementsYAxis(0)
+                    ReDim chart_Eltype(0)
+                    ReDim chart_ElColor(0)
+                    ReDim chart_YaxisScale(1)
+                    ReDim chart_ElLineSize(0)
+
+                    j = 0
+                End If
+
+            Catch ex As Exception
+                _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+                UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                Console.WriteLine(ex.Message.ToString)
+            End Try
+        Next
+        'dt_chart.Dispose()
+        'dt_chart = Nothing
+    End Sub
+
+    Private Function CrossTab(ByRef dtS As DataTable, leftColumn As String, topField As String, dataValue As String, Optional pFix As String = "F_") As DataTable
+        Try
+            If dtS Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim dtOut As New DataTable
+            Dim dtRowTitle As New DataTable
+            Dim dtColHeader As New DataTable
+            dtRowTitle = dtS.DefaultView.ToTable(True, dtS.Columns(leftColumn).ColumnName)
+            dtColHeader = dtS.DefaultView.ToTable(True, dtS.Columns(topField).ColumnName)
+
+            Dim dColx As New DataColumn
+            dColx.ColumnName = leftColumn
+            dColx.Caption = leftColumn
+            dColx.DataType = System.Type.GetType("System.DateTime")
+            dtOut.Columns.Add(dColx)
+
+            'pFix = pFix.Replace(",", "_").Replace("'", "")
+
+            For Each drow As DataRow In dtColHeader.Rows
+                Dim dCol As New DataColumn
+                dCol.ColumnName = drow.Item(topField).ToString.Trim 'pFix & 
+                dtOut.Columns.Add(dCol)
+            Next
+
+            Dim drowx As DataRow
+            For Each drow As DataRow In dtRowTitle.Rows
+                drowx = dtOut.NewRow()
+                drowx.Item(0) = drow.Item(leftColumn)
+                dtOut.Rows.Add(drowx)
+            Next
+
+            Dim xVal As Int32 = 0
+            Dim yVal As Int32 = 0
+
+            For Each mRow As DataRow In dtS.Rows
+                Dim xRowVal As String = mRow.Item(leftColumn).ToString
+                Dim dataVal As String = mRow.Item(dataValue).ToString
+                Dim yColVal As String = mRow.Item(topField).ToString.Trim
+
+                For Each nRow As DataRow In dtOut.AsEnumerable().Where(Function(x) x.Item(leftColumn) = xRowVal).ToArray()
+                    If xRowVal = nRow.Item(0).ToString Then
+                        For xVal = 0 To nRow.Table.Columns.Count() - 1
+                            If nRow.Table.Columns(xVal).ColumnName = yColVal Then  'pFix &
+                                Dim rIndex As Int32 = dtOut.Rows.IndexOf(nRow)
+                                dtOut.Rows(rIndex).Item(xVal) = dataVal
+                                Exit For
+                            End If
+                        Next
+                        Exit For
+                    End If
+                Next
+            Next
+
+            dtOut.DefaultView.Sort = dtOut.Columns(0).ColumnName
+            Return dtOut
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+        End Try
+        Return Nothing
+    End Function
 
     Private Sub ProcessStatsCompareTime_Custom(ds As DataSet, ByRef ch As Chart)
         Try
@@ -1288,6 +1643,11 @@ Public Class frmChartCustomization
 
             Dim aggr_to As String = "PLMN"
             Dim aggr_from As String = Nothing
+            Dim aggr_from_Sql As String = ""
+
+            If Not CrossTabObj Is Nothing AndAlso Not CrossTabObj = "" Then
+                aggr_from_Sql = " AND (Aggregate_from)=" & Chr(39) & objtype & Chr(39)
+            End If
 
             Dim CMFilter As String = Nothing
             Dim RegionFilter As String = objectsel
@@ -1300,7 +1660,7 @@ Public Class frmChartCustomization
             'End If
 
             Dim StringForSourceTable As String = ""
-            sql_sql = "SELECT * FROM qry_IOS_ConstructStatSQL WHERE (((tech)=" & Chr(39) & tech & Chr(39) & ") AND ((Purpose)=" & Chr(39) & purpose & Chr(39) & ") AND ((Aggregate_to)=" & Chr(39) & aggr_to & Chr(39) & ") AND ((ObjectType)=" & Chr(39) & objtype & Chr(39) & "));"
+            sql_sql = "SELECT * FROM qry_IOS_ConstructStatSQL WHERE (((tech)=" & Chr(39) & tech & Chr(39) & ") AND ((Purpose)=" & Chr(39) & purpose & Chr(39) & ") AND ((Aggregate_to)=" & Chr(39) & aggr_to & Chr(39) & ") AND ((ObjectType)=" & Chr(39) & objtype & Chr(39) & ") " & aggr_from_Sql & ");"
             comm_sql = New Odbc.OdbcCommand(sql_sql, conn_el)
             dr_sql = comm_sql.ExecuteReader
             sql_from_time = ""
@@ -1372,7 +1732,7 @@ Public Class frmChartCustomization
                 sqlelement = "SELECT IOS_SQL_KPI.KPI_SQL, IOS_SQL_KPI.sourcetable, IOS_SQL_KPI.tablealias, IOS_SQL_KPI.JoinObjects, IOS_SQL_KPI.Object FROM IOS_Chart_Configuration " &
                              " INNER JOIN IOS_SQL_KPI ON IOS_Chart_Configuration.SQLKPI_ID = IOS_SQL_KPI.SQLKPI_ID " &
                              " WHERE (IOS_Chart_Configuration.ChartName = " & Chr(39) & chartname & Chr(39) & " ) AND (IOS_Chart_Configuration.TechTab = " & Chr(39) & tech & Chr(39) & ")  AND " &
-                             " (IOS_SQL_KPI.sourcetable= " & Chr(39) & aliastable & Chr(39) & ") AND (IOS_Chart_Configuration.ObjectTab = " & Chr(39) & objtype & Chr(39) & ") " &
+                             " (IOS_SQL_KPI.sourcetable= " & Chr(39) & aliastable & Chr(39) & ") AND (IOS_Chart_Configuration.ObjectTab = " & Chr(39) & objtype & Chr(39) & ") " & crosstabkpisql &
                              " GROUP BY IOS_SQL_KPI.KPI_SQL, IOS_SQL_KPI.sourcetable, IOS_SQL_KPI.tablealias, IOS_SQL_KPI.JoinObjects, IOS_SQL_KPI.Object, IOS_Chart_Configuration.CategoryTabIndex, IOS_Chart_Configuration.ChartIndex " &
                              " ORDER BY IOS_Chart_Configuration.CategoryTabIndex, IOS_Chart_Configuration.ChartIndex ;"
             End If
@@ -1467,8 +1827,10 @@ Public Class frmChartCustomization
             Dim sql_crosstab_select As String = ""
             Dim sql_crosstab_groupby As String = ""
             If CrossTabObj <> "" Then
-                sql_crosstab_select = "@alias." + CrossTabObj + ","
-                sql_crosstab_groupby = ",@alias." + CrossTabObj
+                'sql_crosstab_select = "@alias." + CrossTabObj + ","
+                'sql_crosstab_groupby = ",@alias." + CrossTabObj
+                sql_crosstab_select = " COALESCE(" + CrossTabObj + ",'_NO_" + CrossTabObj + "_') " + CrossTabObj + ","
+                sql_crosstab_groupby = "," + " COALESCE(" + CrossTabObj + ",'_NO_" + CrossTabObj + "_') "
             End If
 
             'Closing and dereferencing
@@ -4534,12 +4896,14 @@ Public Class frmChartCustomization
         Try
             If tlvCustomChartsSeries.Nodes.Count > 0 Then
                 Dim nd As TreeListViewNode = tlvCustomChartsSeries.SelectedNode
-                If chkEnablePeriodCalc.Checked = True Then
-                    nd.SubItems(16).Text = "True"
-                Else
-                    nd.SubItems(16).Text = "False"
+                If nd IsNot Nothing Then
+                    If chkEnablePeriodCalc.Checked = True Then
+                        nd.SubItems(16).Text = "True"
+                    Else
+                        nd.SubItems(16).Text = "False"
+                    End If
+                    tlvCustomChartsSeries.Refresh()
                 End If
-                tlvCustomChartsSeries.Refresh()
             Else
                 chkEnablePeriodCalc.Checked = False
             End If

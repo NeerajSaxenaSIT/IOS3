@@ -895,7 +895,7 @@ Public Class frmKPIManage
         gvTableCounter.Columns.AddField("TableName").Visible = True
         gvTableCounter.Columns.AddField("CounterName").Visible = True
         gvTableCounter.Columns.AddField("VendorID").Visible = True
-        If data.Columns.Contains("Description") Then
+        If data IsNot Nothing AndAlso data.Columns.Contains("Description") Then
             gvTableCounter.Columns.AddField("Description").Visible = True
         End If
         gvTableCounter.OptionsBehavior.AutoPopulateColumns = False
@@ -979,13 +979,15 @@ Public Class frmKPIManage
                                 Dim tableN As String = tableKPI
                                 Dim tAlias As String = tableAlias
                                 InsertItemInUsingTableTLV(tableN, tAlias)
-                                dtRow = dtTablesAndCounters.Select("TableName ='" & tableN & "'")
-                                If (dtRow.Length > 0) Then
-                                    SetRowInDTUsingTable(dtRow(0)(1).ToString(), dtRow(0)(3).ToString(), dtRow(0)(4).ToString(), dtRow(0)(5).ToString(), dtRow(0)(6).ToString(), dtRow(0)(7).ToString())
-                                    If (dtRow(0)(5).ToString() = dbMSSQL) Then
-                                        kpiDataBaseName = IOS.Library.KPIDataBaseName.MSSQL
-                                    ElseIf (dtRow(0)(5).ToString() = dbORACLE) Then
-                                        kpiDataBaseName = IOS.Library.KPIDataBaseName.ORACLE
+                                If dtTablesAndCounters IsNot Nothing AndAlso dtTablesAndCounters.Rows.Count > 0 Then
+                                    dtRow = dtTablesAndCounters.Select("TableName ='" & tableN & "'")
+                                    If (dtRow.Length > 0) Then
+                                        SetRowInDTUsingTable(dtRow(0)(1).ToString(), dtRow(0)(3).ToString(), dtRow(0)(4).ToString(), dtRow(0)(5).ToString(), dtRow(0)(6).ToString(), dtRow(0)(7).ToString())
+                                        If (dtRow(0)(5).ToString() = dbMSSQL) Then
+                                            kpiDataBaseName = IOS.Library.KPIDataBaseName.MSSQL
+                                        ElseIf (dtRow(0)(5).ToString() = dbORACLE) Then
+                                            kpiDataBaseName = IOS.Library.KPIDataBaseName.ORACLE
+                                        End If
                                     End If
                                 End If
                             End If
@@ -1040,7 +1042,7 @@ Public Class frmKPIManage
         Dim firstTableKey As String = Nothing
         Dim alltablekeylist As New List(Of List(Of String))
 
-        If (dtTablesInUse.Rows.Count > 0) Then
+        If (dtTablesInUse IsNot Nothing) AndAlso (dtTablesInUse.Rows.Count > 0) Then
             For Each dtRow As DataRow In dtTablesInUse.Rows
                 If (callBy = "ByCommit") Then
                     tableNameStr += dtRow(0).ToString() & ","
@@ -1074,7 +1076,7 @@ Public Class frmKPIManage
                 megaQuery = dtRow(5).ToString
             Next
         End If
-        If dtTablesInUse.Rows.Count > 1 Then
+        If (dtTablesInUse IsNot Nothing) AndAlso (dtTablesInUse.Rows.Count > 1) Then
             For k As Integer = 0 To alltablekeylist(0).Count - 1    '(loop through rows)
                 For j As Integer = 0 To alltablekeylist.Count - 1   '(loop through columns)
                     If j + 1 < alltablekeylist(j).Count Then

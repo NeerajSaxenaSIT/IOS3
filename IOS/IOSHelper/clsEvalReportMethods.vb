@@ -12,6 +12,7 @@ Public Class clsEvalReportMethods
 
 #Region "Public Variables"
 
+    Public dicEvalRptMapBmp As Dictionary(Of String, Bitmap)
     Public dicEvalRptGridImages As Dictionary(Of String, MemoryStream)
     Public dicEvalRptGridBmp As Dictionary(Of String, Bitmap)
     Public dicEvalRptGridDataTables As Dictionary(Of String, DataTable)
@@ -272,7 +273,7 @@ Public Class clsEvalReportMethods
                 ' PILOT INTRODUCTION DETAILS SLIDE
                 ' ---------------------------------------------------
 
-                InsertPilotInfoSlide(presPart, templateSlidePart)
+                InsertPilotInfoSlide(presPart, templateSlidePart, dicEvalRptMapBmp("MapBmp"))
 
                 ' ---------------------------------------------------
                 ' Chnage KPI Table
@@ -313,26 +314,26 @@ Public Class clsEvalReportMethods
         End Try
     End Function
 
-    Private Sub InsertPilotInfoSlide(ByRef presPart As PresentationPart, ByRef templateSlidePart As SlidePart)
-
+    Private Sub InsertPilotInfoSlide(ByRef presPart As PresentationPart, ByRef templateSlidePart As SlidePart, mapBmp As Bitmap)
         ' ---------------------------------------------------
         ' CREATE NEW SLIDE FROM TEMPLATE
         ' ---------------------------------------------------
+        Dim slideSize = presPart.Presentation.SlideSize
 
-        Dim slidePart As SlidePart =
-        presPart.AddNewPart(Of SlidePart)()
+        Dim slideWidth As Long = slideSize.Cx
+        Dim slideHeight As Long = slideSize.Cy
 
-        slidePart.Slide =
-        CType(templateSlidePart.Slide.CloneNode(True), Slide)
+        Dim leftWidth As Long = slideWidth \ 2
+        Dim rightWidth As Long = slideWidth - leftWidth
 
+        Dim slidePart As SlidePart = presPart.AddNewPart(Of SlidePart)()
+
+        slidePart.Slide = CType(templateSlidePart.Slide.CloneNode(True), Slide)
         slidePart.AddPart(templateSlidePart.SlideLayoutPart)
-
-        Dim shapeTree =
-        slidePart.Slide.CommonSlideData.ShapeTree
+        Dim shapeTree = slidePart.Slide.CommonSlideData.ShapeTree
 
         ' Remove existing shapes
-        Dim shapesToRemove =
-        shapeTree.Elements().
+        Dim shapesToRemove = shapeTree.Elements().
         Where(Function(s) TypeOf s Is Shape OrElse
                           TypeOf s Is Picture).
         ToList()
@@ -363,12 +364,12 @@ Public Class clsEvalReportMethods
         New ShapeProperties(
             New Drawing.Transform2D(
                 New Drawing.Offset() With {
-                    .X = 300000,
-                    .Y = 300000
+                    .X = 0,
+                    .Y = 0
                 },
                 New Drawing.Extents() With {
-                    .Cx = 8500000,
-                    .Cy = 6000000
+                    .Cx = leftWidth,
+                    .Cy = slideHeight
                 }
             )
         )
@@ -379,17 +380,15 @@ Public Class clsEvalReportMethods
 
         Dim textBody As New TextBody()
 
-        textBody.BodyProperties =
-        New Drawing.BodyProperties()
+        textBody.BodyProperties = New Drawing.BodyProperties()
 
-        textBody.ListStyle =
-        New Drawing.ListStyle()
+        textBody.ListStyle = New Drawing.ListStyle()
 
         ' ---------------------------------------------------
         ' TITLE
         ' ---------------------------------------------------
 
-        textBody.Append(CreateParagraph("Pilot Name:", 3500, True, False))
+        textBody.Append(CreateParagraph("Pilot Name:", 3000, True, False))
 
         ' ---------------------------------------------------
         ' BULLETS
@@ -399,11 +398,11 @@ Public Class clsEvalReportMethods
 
         textBody.Append(CreateBulletParagraph("Target Type : ", Me.TargetType))
 
-        textBody.Append(CreateBulletParagraph("ChartSetName : ", Me.ChartSetName))
+        textBody.Append(CreateBulletParagraph("Chart Set : ", Me.ChartSetName))
 
         textBody.Append(CreateBulletParagraph("Cell/Site/Layer/Cluster/Nationwide : ", Me.Area))
 
-        textBody.Append(CreateBulletParagraph("Count : ", Me.SiteCount & " (Mention the site count)"))
+        textBody.Append(CreateBulletParagraph("Site Count : ", Me.SiteCount))
 
         textBody.Append(CreateBulletParagraph("Selected Area : ", Me.SelectedArea))
 
@@ -429,12 +428,16 @@ Public Class clsEvalReportMethods
 
         shapeTree.Append(textShape)
 
+        ' -------------------------------------------------------
+        ' Insert Bitmap of the Map on the other half of the slide
+        ' -------------------------------------------------------
+        InsertMapBitmapOnPilotSlide(slidePart, shapeTree, mapBmp, leftWidth, 0, rightWidth, slideHeight)
+
         ' ---------------------------------------------------
         ' ADD SLIDE TO PRESENTATION
         ' ---------------------------------------------------
 
-        Dim slideIdList =
-        presPart.Presentation.SlideIdList
+        Dim slideIdList = presPart.Presentation.SlideIdList
 
         Dim maxId As UInt32 = 1UI
 
@@ -451,6 +454,57 @@ Public Class clsEvalReportMethods
 
         slideIdList.Append(slideId)
         slidePart.Slide.Save()
+    End Sub
+
+    Private Sub InsertMapBitmapOnPilotSlide(ByRef slidePart As SlidePart, shapeTree As ShapeTree, bmp As Bitmap, x As Long, y As Long, width As Long, height As Long)
+        Dim imagePart As ImagePart = slidePart.AddImagePart(ImagePartType.Png)
+
+        Using ms As New MemoryStream()
+            bmp.Save(ms, Imaging.ImageFormat.Png)
+            ms.Position = 0
+            imagePart.FeedData(ms)
+        End Using
+
+        Dim relId As String = slidePart.GetIdOfPart(imagePart)
+
+        Dim picId As UInt32 = 500UI
+        Dim picture As New Picture()
+
+        picture.NonVisualPictureProperties =
+        New NonVisualPictureProperties(
+            New NonVisualDrawingProperties() With {
+                .Id = picId,
+                .Name = "MapImage"
+            },
+            New NonVisualPictureDrawingProperties(),
+            New ApplicationNonVisualDrawingProperties())
+
+        picture.BlipFill =
+        New BlipFill(
+            New Drawing.Blip() With {
+                .Embed = relId
+            },
+            New Drawing.Stretch(
+                New Drawing.FillRectangle()))
+
+        picture.ShapeProperties =
+        New ShapeProperties(
+            New Drawing.Transform2D(
+                New Drawing.Offset() With {
+                    .X = x,
+                    .Y = y
+                },
+                New Drawing.Extents() With {
+                    .Cx = width,
+                    .Cy = height
+                }),
+            New Drawing.PresetGeometry(
+                New Drawing.AdjustValueList()) With {
+                .Preset = Drawing.ShapeTypeValues.Rectangle
+            })
+
+        shapeTree.Append(picture)
+
     End Sub
 
     Private Function CreateParagraph(text As String, fontSize As Integer, bold As Boolean, bullet As Boolean) As Drawing.Paragraph
@@ -473,9 +527,7 @@ Public Class clsEvalReportMethods
 
         para.Append(
         New Drawing.Run(runProps, New Drawing.Text(text)))
-
         Return para
-
     End Function
 
     Private Function CreateBulletParagraph(labelText As String, valueText As String) As Drawing.Paragraph
@@ -489,7 +541,7 @@ Public Class clsEvalReportMethods
         New Drawing.Run(
             New Drawing.RunProperties() With {
                 .Bold = False,
-                .FontSize = 1800
+                .FontSize = 1500
             },
             New Drawing.Text("• " & labelText & " ")
         )
@@ -499,7 +551,7 @@ Public Class clsEvalReportMethods
         New Drawing.Run(
             New Drawing.RunProperties() With {
                 .Bold = True,
-                .FontSize = 1800
+                .FontSize = 1500
             },
             New Drawing.Text(valueText)
         )
