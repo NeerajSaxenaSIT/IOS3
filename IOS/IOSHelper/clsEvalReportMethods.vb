@@ -431,7 +431,7 @@ Public Class clsEvalReportMethods
         ' -------------------------------------------------------
         ' Insert Bitmap of the Map on the other half of the slide
         ' -------------------------------------------------------
-        InsertMapBitmapOnPilotSlide(slidePart, shapeTree, mapBmp, leftWidth, 0, rightWidth, slideHeight)
+        InsertMapBitmapOnPilotSlide(slidePart, shapeTree, mapBmp, leftWidth, 0, rightWidth, System.Math.Floor(rightWidth * mapBmp.PhysicalDimension.Height / mapBmp.PhysicalDimension.Width))
 
         ' ---------------------------------------------------
         ' ADD SLIDE TO PRESENTATION
@@ -491,8 +491,8 @@ Public Class clsEvalReportMethods
         New ShapeProperties(
             New Drawing.Transform2D(
                 New Drawing.Offset() With {
-                    .X = x,
-                    .Y = y
+                    .X = x - 200000,
+                    .Y = y + 500000
                 },
                 New Drawing.Extents() With {
                     .Cx = width,
@@ -1220,7 +1220,7 @@ Public Class clsEvalReportMethods
             Dim gridWidth As Long = (slideWidth \ 2) - 60000
             Dim leftGridX As Long = 30000
             Dim rightGridX As Long = leftGridX + gridWidth + 30000
-            Dim leftGridHeight As Long = slideHeight - gridY - bottomMargin 
+            Dim leftGridHeight As Long = slideHeight - gridY - bottomMargin
             Dim rightGridHeight As Long = slideHeight - gridY - bottomMargin
 
             ' INSERT LEFT GRID BITMAP

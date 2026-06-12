@@ -722,7 +722,7 @@ Public Class frmChartCustomization
         '*************************
         Dim ch As Chart
         Dim i As Integer
-        Dim Y1axislabel, Y2axislabel As String
+        Dim Y1axislabel = "", Y2axislabel As String = ""
         Dim Y1axisAbsorPerc = "", Y2axisAbsOrPerc As String = ""
         Dim Y1axisPrecision, Y2axisPrecision As Integer
         Dim yaxis1 As Axis = Nothing
@@ -761,22 +761,9 @@ Public Class frmChartCustomization
                     End If
                 Next
 
-                'tabcontrol = GetTabControlFromTech(tech).TabPages(GetTabPageIndex(GetTabControlFromTech(tech), drow("ObjectTab").ToString.Trim)).Controls(0)
-
-                'Dim tabindex_new As Integer = CInt(drow(2).ToString)
-                'chartindex = CInt(drow(4).ToString)
-
-                'If tabindex_old <> tabindex_new Then
-                '    chartindex = 0
-                '    tabindex_old = tabindex_new
-                'Else
-                '    chartindex = chartindex + 1
-                'End If
-
                 'configures individual chart when new chartline is detected
                 If (lastchart = "" Or lastchart <> txt_CustomChartName.Text.Trim And kpifound = True) Then
                     lastchart = txt_CustomChartName.Text.Trim
-                    'sp.Clear()
 
                     If nd.SubItems(5).Text.ToLower = "left" Then
                         Y1axisAbsorPerc = nd.SubItems(7).Text.Trim
@@ -792,9 +779,6 @@ Public Class frmChartCustomization
                         Y2axisPrecision = CInt(nZ(nd.SubItems(6).Text, 0))
                     End If
 
-                    'Y1axisPrecision = CInt(drow(15))
-                    'Y2axisPrecision = CInt(nZ(drow(16), "0"))
-
                     If nd.SubItems(5).Text.ToLower = "left" Then
                         If nZ(nd.SubItems(8).Text.Trim, "").Length > 0 Then
                             Y1axislabel = nd.SubItems(8).Text.Trim
@@ -804,11 +788,6 @@ Public Class frmChartCustomization
                             Y2axislabel = nd.SubItems(8).Text.Trim
                         End If
                     End If
-
-                    'Dim tabindex As Integer = 0
-                    'If CInt(drow(2).ToString) = 99 Then
-                    '    tabindex_new = GetTabPageIndex(tabcontrol, "Custom")
-                    'End If
 
                     ch = chart1
                     SetChartXAxis(ch)
@@ -827,7 +806,7 @@ Public Class frmChartCustomization
                     ch.TitleBox.Label.LineAlignment = StringAlignment.Near
                     ch.DefaultElement.Hotspot.ToolTip = "DATE: %XValue" & Chr(13) & "%SeriesName: %Value "
 
-                    'Y-Axis Settingso   
+                    'Y-Axis Settings
                     yaxis1 = New Axis
                     yaxis1.Orientation = Orientation.Left
                     yaxis1.Label.Text = Y1axislabel
@@ -927,7 +906,6 @@ Public Class frmChartCustomization
 
                     'Crosstabbing input
                     Dim dt_crossed As DataTable = CrossTab(dsStats.Tables(0), "DATE", nd.SubItems(15).Text.Trim, nd.SubItems(0).Text.Trim, objectscharted & "_")
-                    'dsStatsSGSN_Crossed.Tables.Add(dt_crossed.Copy)
 
                     For Each col As DataColumn In dt_crossed.Columns
                         ReDim Preserve chart_elements(j)
@@ -943,7 +921,7 @@ Public Class frmChartCustomization
                     Dim rnd As Random = New Random(10)
 
                     For i = 0 To sc.Count() - 1
-                        Select Case UCase(chart_Eltype(i).Trim)
+                        Select Case UCase(nd.SubItems(5).Text.Trim.ToUpper)
                             Case "LINE"
                                 sc(i).Type = SeriesType.Line
                                 sc(i).Line.Width = chart_ElLineSize(i)
@@ -952,13 +930,12 @@ Public Class frmChartCustomization
                             Case "AREALINE"
                                 sc(i).Type = SeriesType.AreaLine
                         End Select
-                        Select Case UCase(chart_Eltype(i).Trim)
+                        Select Case UCase(nd.SubItems(5).Text.Trim.ToUpper)
                             Case "LEFT"
                                 sc(i).YAxis = yaxis1
                             Case "RIGHT"
                                 sc(i).YAxis = yaxis2
                         End Select
-
 
                         sc(i).DefaultElement.Color = Color.FromArgb(255, rnd.Next(255), rnd.Next(255), rnd.Next(255))
                         sc(i).DefaultElement.Marker.Type = i
@@ -1609,9 +1586,16 @@ Public Class frmChartCustomization
         Dim sql_kpi As String = Nothing
         Dim sql_total As String = Nothing
         Dim connectionString As String = ""
+        Dim startdate As Date = Nothing
+        Dim enddate As Date = Nothing
 
-        Dim startdate As Date = CDate(dtpStartTime.EditValue)
-        Dim enddate As Date = CDate(dtpEndTime.EditValue)
+        If CrossTabObj = "" Then
+            startdate = CDate(dtpStartTime.EditValue)
+            enddate = CDate(dtpEndTime.EditValue)
+        Else
+            startdate = CDate(dtpEndTime.EditValue).AddDays(-15)
+            enddate = CDate(dtpEndTime.EditValue)
+        End If
 
         Dim startdate_string As String = Chr(39) & startdate.ToString("yyyy-MM-dd HH:mm") & Chr(39)
         Dim enddate_string As String = Chr(39) & enddate.ToString("yyyy-MM-dd HH:mm") & Chr(39)
@@ -1646,6 +1630,8 @@ Public Class frmChartCustomization
             Dim aggr_from_Sql As String = ""
 
             If Not CrossTabObj Is Nothing AndAlso Not CrossTabObj = "" Then
+                ObjectsCharted = "LIKE '%'"
+                aggr_to = cmbObjectType.SelectedItem.ToString
                 aggr_from_Sql = " AND (Aggregate_from)=" & Chr(39) & objtype & Chr(39)
             End If
 
