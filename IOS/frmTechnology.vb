@@ -16589,7 +16589,11 @@ Public Class frmTechnology
         Dim startdate As Date = Nothing
         Dim enddate As Date = Nothing
         startdate = dtEditStartTimeStats.EditValue
-        enddate = dtEditEndTimeStats.EditValue
+        If tglBtnMonitorModeStats.ToggleState = CheckState.Checked Then
+            enddate = Now().AddDays(1)
+        Else
+            enddate = dtEditEndTimeStats.EditValue
+        End If
 
         Dim startdate_string As String = Chr(39) & startdate.ToString("yyyy-MM-dd HH:mm") & Chr(39)
         Dim enddate_string As String = Chr(39) & enddate.ToString("yyyy-MM-dd HH:mm") & Chr(39)
