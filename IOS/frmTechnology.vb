@@ -13580,31 +13580,31 @@ Public Class frmTechnology
                         LoadPeriodCalculationData()
                     End If
 
-                    If selectedChartTab.Controls.Count > 0 Then
-                        For Each ch As Chart In selectedChartTab.Controls(0).Controls
-                            If prdCalcApplied = False Then
-                                ch.XAxis.Markers.Clear()
-                                ch.YAxis.Markers.Clear()
-                                For Each am As AxisMarker In AxisMarkerXListOfLastChart
-                                    ch.XAxis.Markers.Add(am)
-                                Next
-                            Else
-                                For Each am As AxisMarker In AxisMarkerXListOfLastChart
-                                    'If MarkerExists(prdCalcAxisMarkerColl, am) Then
-                                    If (am.ValueLow = am.ValueHigh) AndAlso (am.Value.GetType().ToString <> "System.Double") Then
-                                        ch.XAxis.Markers.Add(am)
-                                    End If
-                                    'End If
-                                Next
+                End If
+            End If
+
+            If selectedChartTab.Controls.Count > 0 Then
+                For Each ch As Chart In selectedChartTab.Controls(0).Controls
+                    If prdCalcApplied = False Then
+                        ch.XAxis.Markers.Clear()
+                        ch.YAxis.Markers.Clear()
+                        For Each am As AxisMarker In AxisMarkerXListOfLastChart
+                            ch.XAxis.Markers.Add(am)
+                        Next
+                    Else
+                        For Each am As AxisMarker In AxisMarkerXListOfLastChart
+                            'If MarkerExists(prdCalcAxisMarkerColl, am) Then
+                            If (am.ValueLow = am.ValueHigh) AndAlso (am.Value.GetType().ToString <> "System.Double") Then
+                                ch.XAxis.Markers.Add(am)
                             End If
-                            For Each am As AxisMarker In AxisMarkerYListOfLastChart
-                                ch.YAxis.Markers.Add(am)
-                            Next
-                            ch.RefreshChart()
+                            'End If
                         Next
                     End If
-
-                End If
+                    For Each am As AxisMarker In AxisMarkerYListOfLastChart
+                        ch.YAxis.Markers.Add(am)
+                    Next
+                    ch.RefreshChart()
+                Next
             End If
 
             'set LastChartTabActive to current tab
