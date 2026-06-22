@@ -369,16 +369,6 @@ Public Class frmMDI
                     baseTech = GetBaseTechnology(_network)
                 End If
 
-                'If Not objFrmTechList.Exists(Function(x) x.VendorName.Equals(dr(0).Item("Vendor")) AndAlso x.BaseTechnology.Equals(baseTech)) Then
-                '    WaitScreen.ShowWaitScreen(_network & " loading...")
-                '    frmMapWindow.SetStatus(_network & " loading...")
-                '    Application.DoEvents()
-                '    Dim ObjTreeDS As DataSet = Nothing
-                '    ObjTreeDS = GetObjectTreeDSByTechInternal(dr(0).Item("TechInternal").ToString)
-                '    LaunchTechForm(dr(0).Item("Vendor"), _network, baseTech.ToUpper, dr(0).Item("TechInternal").ToString, ObjTreeDS, ObjTreeDS, dpWindow)
-                'End If
-                'objFrmTechList.OfType(Of frmTechnology)().Count(Function(f) f.VendorName.Equals(dr(0).Item("Vendor")) AndAlso f.BaseTechnology.Equals(baseTech))
-
                 Dim existingCount = dicFrmTechInstances.Values.OfType(Of frmTechnology).Count(Function(m) m.VendorName.Equals(dr(0).Item("Vendor")) AndAlso m.BaseTechnology.Equals(baseTech))
                 If existingCount < 2 Then
                     WaitScreen.ShowWaitScreen(_network & " loading...")

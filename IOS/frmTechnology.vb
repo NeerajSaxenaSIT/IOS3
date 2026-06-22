@@ -20461,32 +20461,6 @@ Public Class frmTechnology
         End Try
     End Sub
 
-    Private Sub ConfigureDatePickerTimeEditing(ByRef de As DateEdit)
-        de.Properties.UseMaskAsDisplayFormat = True
-
-        de.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
-        de.Properties.Mask.EditMask = "dd/MM/yyyy HH:mm"
-
-        de.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
-        de.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
-
-        de.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime
-        de.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
-
-        de.Properties.CalendarTimeEditing = DevExpress.Utils.DefaultBoolean.True
-        de.Properties.CalendarView = DevExpress.XtraEditors.Repository.CalendarView.Vista
-        de.Properties.VistaDisplayMode = DevExpress.Utils.DefaultBoolean.True
-
-        If regionalSettings = False Then
-            de.Properties.Mask.Culture = System.Globalization.CultureInfo.InvariantCulture
-            de.Properties.CalendarTimeProperties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
-            de.Properties.CalendarTimeProperties.Mask.EditMask = "HH:mm"
-        Else
-            de.Properties.CalendarTimeProperties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
-            de.Properties.CalendarTimeProperties.Mask.EditMask = CultureInfoDefault.DateTimeFormat.ShortTimePattern
-        End If
-    End Sub
-
     Private Sub rdoDailyStats_CheckedChanged(sender As Object, e As EventArgs) Handles rdoDailyStats.CheckedChanged, rdoDailyBHStats.CheckedChanged, rdoWeeklyStats.CheckedChanged, rdoDailyBH2Stats.CheckedChanged, rdoMonthlyStats.CheckedChanged
         Try
             Dim rdo As RadioButton

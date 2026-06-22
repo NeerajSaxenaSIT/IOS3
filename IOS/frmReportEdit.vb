@@ -1,24 +1,25 @@
 ﻿Imports System.DirectoryServices
 Imports System.Drawing.Drawing2D
+Imports System.IO
+Imports DevExpress.DashboardCommon
+Imports DevExpress.DataAccess.ConnectionParameters
+Imports DevExpress.DataAccess.Native.Sql
+Imports DevExpress.DataAccess.Sql
+Imports DevExpress.Pdf
+Imports DevExpress.Spreadsheet
+Imports DevExpress.XtraEditors
+Imports DevExpress.XtraRichEdit.Import.Doc
+Imports DevExpress.XtraTreeList
+Imports DevExpress.XtraTreeList.Nodes
+Imports DocumentFormat.OpenXml
+Imports DocumentFormat.OpenXml.Packaging
+Imports DocumentFormat.OpenXml.Presentation
 Imports dotnetCHARTING.WinForms
 Imports IOS.Configuration.ReportManager
 Imports IOS.DataLibrary
 Imports IOS.Library
-Imports DevExpress.XtraTreeList
-Imports DevExpress.XtraTreeList.Nodes
-Imports Powerpoint = Microsoft.Office.Interop.PowerPoint
-Imports DocumentFormat.OpenXml
-Imports DocumentFormat.OpenXml.Packaging
-Imports DocumentFormat.OpenXml.Presentation
-Imports DevExpress.Spreadsheet
 Imports DXChart = DevExpress.Spreadsheet.Charts.Chart
-Imports DevExpress.XtraEditors
-Imports System.IO
-Imports DevExpress.DashboardCommon
-Imports DevExpress.DataAccess.Native.Sql
-Imports DevExpress.DataAccess.Sql
-Imports DevExpress.DataAccess.ConnectionParameters
-Imports DevExpress.Pdf
+Imports Powerpoint = Microsoft.Office.Interop.PowerPoint
 
 Public Class frmReportEdit
 
@@ -1225,15 +1226,15 @@ Public Class frmReportEdit
                 slidePropertyG.SelectedPages = IIf(IsDBNull(dtSlideStyle.Rows(0)("SelectedPages")), "", dtSlideStyle.Rows(0)("SelectedPages"))
             End If
             If (isObjectSelect) Then
-                    slidePropertyG.SlideOrdinal = Convert.ToInt32(dtSlideStyle.Rows(0)("SlideOrdinal"))
-                    slidePropertyG.SlideText = nZ(dtSlideStyle.Rows(0)("SlideText"), "")
-                    slidePropertyG.SlideTitle = nZ(dtSlideStyle.Rows(0)("SlideTitle"), "")
-                    slidePropertyG.SlideName = nZ(dtSlideStyle.Rows(0)("SlideName"), "")
-                    isObjectSelect = False
-                End If
-                _slideProperties = slidePropertyG
+                slidePropertyG.SlideOrdinal = Convert.ToInt32(dtSlideStyle.Rows(0)("SlideOrdinal"))
+                slidePropertyG.SlideText = nZ(dtSlideStyle.Rows(0)("SlideText"), "")
+                slidePropertyG.SlideTitle = nZ(dtSlideStyle.Rows(0)("SlideTitle"), "")
+                slidePropertyG.SlideName = nZ(dtSlideStyle.Rows(0)("SlideName"), "")
+                isObjectSelect = False
             End If
-            Return _slideProperties
+            _slideProperties = slidePropertyG
+        End If
+        Return _slideProperties
     End Function
 
     Private Function GetWorksheetPropeties(ByVal styleID As String, ByVal isByWorksheet As Boolean) As WorksheetProperties
@@ -1572,7 +1573,7 @@ Public Class frmReportEdit
         UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Info", "Completed")
     End Sub
 
-    Private Sub cms_Report_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmsReport.Opening
+    Private Sub cmsReport_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmsReport.Opening
         Try
             Dim tlv As TreeList = CType(cmsReport.SourceControl, TreeList)
             Dim nd As TreeListNode = tlv.FocusedNode
@@ -1581,6 +1582,7 @@ Public Class frmReportEdit
             tsmi_ReportRename.Enabled = False
 
             If Not nd Is Nothing Then
+                RemoveHandler tsmi_UpdateReportObjects.Click, AddressOf tsmi_UpdateReportObjects_Click
                 If nd.Level = 0 Then
                     If nd("ReportLocked").ToString.ToUpper = "TRUE" Then
                         tsmi_ReportLock.Checked = True
@@ -1747,9 +1749,39 @@ Public Class frmReportEdit
                         tsmi_ObjectChartMoveDown.Enabled = False
                     End If
                 End If
+                AddHandler tsmi_UpdateReportObjects.Click, AddressOf tsmi_UpdateReportObjects_Click
             End If
             tsmi_txtReportSlideAdd.Text = ""
         Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub tsmi_UpdateReportObjects_Click(sender As Object, e As EventArgs)
+        Try
+            Dim nd As TreeListNode = tlvReports.FocusedNode
+            If nd IsNot Nothing Then
+                Dim objUpdateReportObjects As New dlgUpdateReportObjects()
+                If nd.Level = 0 Then
+                    objUpdateReportObjects.selectedNodeName = nd.GetDisplayText("Report Name")
+                    objUpdateReportObjects.selectedNodeLevel = nd.Level
+                    objUpdateReportObjects.reportID = CInt(nd.Tag)
+                ElseIf nd.Level = 1 Then
+                    objUpdateReportObjects.selectedNodeName = nd.GetDisplayText("Slide Name")
+                    objUpdateReportObjects.selectedNodeLevel = nd.Level
+                    objUpdateReportObjects.reportID = CInt(nd.ParentNode.Tag)
+                    objUpdateReportObjects.slideID = CInt(nd.Tag)
+                ElseIf nd.Level = 2 Then
+                    objUpdateReportObjects.selectedNodeName = nd.GetDisplayText("Object Name")
+                    objUpdateReportObjects.selectedNodeLevel = nd.Level
+                    objUpdateReportObjects.reportID = CInt(nd.ParentNode.ParentNode.Tag)
+                    objUpdateReportObjects.slideID = CInt(nd.ParentNode.Tag)
+                    objUpdateReportObjects.objectID = CInt(nd.Tag)
+                End If
+                objUpdateReportObjects.Show()
+            End If
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
         End Try
     End Sub
 

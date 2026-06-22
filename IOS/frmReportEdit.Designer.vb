@@ -55,11 +55,13 @@ Partial Class frmReportEdit
         Me.tsmi_SlideMoveDown = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmi_SlideObjectAdd = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmitxt_NewTextbox = New System.Windows.Forms.ToolStripTextBox()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmi_ObjectChartMoveUp = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmi_ObjectChartMoveDown = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmi_ObjectRename = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmi_ObjectChartDelete = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmi_UpdateReportObjects = New System.Windows.Forms.ToolStripMenuItem()
         Me.gcReportHistory = New DevExpress.XtraGrid.GridControl()
         Me.gvReportHistory = New DevExpress.XtraGrid.Views.Grid.GridView()
         Me.tlpProperties = New System.Windows.Forms.TableLayoutPanel()
@@ -201,9 +203,9 @@ Partial Class frmReportEdit
         '
         'cmsReport
         '
-        Me.cmsReport.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_ReportSlideAdd, Me.tsmi_ReportRename, Me.tsmi_ReportDelete, Me.ToolStripSeparator5, Me.tsmi_ReportObjects, Me.tsmi_ReportRunCurrent, Me.tsmi_ReportRunConfigured, Me.tsmi_ReportLock, Me.tsmi_ReportCopy, Me.ToolStripSeparator6, Me.tsmt_SlideRename, Me.tsmt_SlideDelete, Me.ToolStripSeparator7, Me.tsmi_SlideMoveUp, Me.tsmi_SlideMoveDown, Me.tsmi_SlideObjectAdd, Me.ToolStripSeparator4, Me.tsmi_ObjectChartMoveUp, Me.tsmi_ObjectChartMoveDown, Me.tsmi_ObjectRename, Me.tsmi_ObjectChartDelete})
+        Me.cmsReport.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_ReportSlideAdd, Me.tsmi_ReportRename, Me.tsmi_ReportDelete, Me.ToolStripSeparator5, Me.tsmi_ReportObjects, Me.tsmi_ReportRunCurrent, Me.tsmi_ReportRunConfigured, Me.tsmi_ReportLock, Me.tsmi_ReportCopy, Me.ToolStripSeparator6, Me.tsmt_SlideRename, Me.tsmt_SlideDelete, Me.ToolStripSeparator7, Me.tsmi_SlideMoveUp, Me.tsmi_SlideMoveDown, Me.tsmi_SlideObjectAdd, Me.ToolStripSeparator1, Me.tsmi_ObjectChartMoveUp, Me.tsmi_ObjectChartMoveDown, Me.tsmi_ObjectRename, Me.tsmi_ObjectChartDelete, Me.ToolStripSeparator4, Me.tsmi_UpdateReportObjects})
         Me.cmsReport.Name = "cm_ReportEditor"
-        Me.cmsReport.Size = New System.Drawing.Size(205, 424)
+        Me.cmsReport.Size = New System.Drawing.Size(205, 430)
         '
         'tsmi_ReportSlideAdd
         '
@@ -214,6 +216,7 @@ Partial Class frmReportEdit
         '
         'tsmi_txtReportSlideAdd
         '
+        Me.tsmi_txtReportSlideAdd.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.tsmi_txtReportSlideAdd.Name = "tsmi_txtReportSlideAdd"
         Me.tsmi_txtReportSlideAdd.Size = New System.Drawing.Size(100, 23)
         '
@@ -274,6 +277,7 @@ Partial Class frmReportEdit
         '
         'ToolStripTextBox1
         '
+        Me.ToolStripTextBox1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.ToolStripTextBox1.Name = "ToolStripTextBox1"
         Me.ToolStripTextBox1.Size = New System.Drawing.Size(100, 23)
         '
@@ -286,6 +290,7 @@ Partial Class frmReportEdit
         '
         'ToolStripTextBox2
         '
+        Me.ToolStripTextBox2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.ToolStripTextBox2.Name = "ToolStripTextBox2"
         Me.ToolStripTextBox2.Size = New System.Drawing.Size(100, 23)
         '
@@ -356,13 +361,14 @@ Partial Class frmReportEdit
         '
         'tsmitxt_NewTextbox
         '
+        Me.tsmitxt_NewTextbox.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.tsmitxt_NewTextbox.Name = "tsmitxt_NewTextbox"
         Me.tsmitxt_NewTextbox.Size = New System.Drawing.Size(100, 23)
         '
-        'ToolStripSeparator4
+        'ToolStripSeparator1
         '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(201, 6)
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(201, 6)
         '
         'tsmi_ObjectChartMoveUp
         '
@@ -387,6 +393,17 @@ Partial Class frmReportEdit
         Me.tsmi_ObjectChartDelete.Name = "tsmi_ObjectChartDelete"
         Me.tsmi_ObjectChartDelete.Size = New System.Drawing.Size(204, 22)
         Me.tsmi_ObjectChartDelete.Text = "Object - Delete"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(201, 6)
+        '
+        'tsmi_UpdateReportObjects
+        '
+        Me.tsmi_UpdateReportObjects.Name = "tsmi_UpdateReportObjects"
+        Me.tsmi_UpdateReportObjects.Size = New System.Drawing.Size(204, 22)
+        Me.tsmi_UpdateReportObjects.Text = "Report - Update Objects"
         '
         'gcReportHistory
         '
@@ -843,4 +860,6 @@ Partial Class frmReportEdit
     Friend WithEvents gcReportHistory As DevExpress.XtraGrid.GridControl
     Friend WithEvents gvReportHistory As DevExpress.XtraGrid.Views.Grid.GridView
     Friend WithEvents sccReportTree As DevExpress.XtraEditors.SplitContainerControl
+    Friend WithEvents tsmi_UpdateReportObjects As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
 End Class

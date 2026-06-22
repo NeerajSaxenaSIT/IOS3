@@ -3221,6 +3221,32 @@ Module mdlCommonModule
         Return dt
     End Function
 
+    Public Sub ConfigureDatePickerTimeEditing(ByRef de As DateEdit)
+        de.Properties.UseMaskAsDisplayFormat = True
+
+        de.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
+        de.Properties.Mask.EditMask = "dd/MM/yyyy HH:mm"
+
+        de.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+        de.Properties.DisplayFormat.FormatString = "dd/MM/yyyy HH:mm"
+
+        de.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+        de.Properties.EditFormat.FormatString = "dd/MM/yyyy HH:mm"
+
+        de.Properties.CalendarTimeEditing = DevExpress.Utils.DefaultBoolean.True
+        de.Properties.CalendarView = DevExpress.XtraEditors.Repository.CalendarView.Vista
+        de.Properties.VistaDisplayMode = DevExpress.Utils.DefaultBoolean.True
+
+        If regionalSettings = False Then
+            de.Properties.Mask.Culture = System.Globalization.CultureInfo.InvariantCulture
+            de.Properties.CalendarTimeProperties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
+            de.Properties.CalendarTimeProperties.Mask.EditMask = "HH:mm"
+        Else
+            de.Properties.CalendarTimeProperties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTime
+            de.Properties.CalendarTimeProperties.Mask.EditMask = CultureInfoDefault.DateTimeFormat.ShortTimePattern
+        End If
+    End Sub
+
 #End Region
 
 #Region "Bind ComboBox Methods"
@@ -5750,13 +5776,16 @@ Module mdlCommonModule
                         objReportEditWebLinkWC.WebRequestFrom = "ReportEditor"
                         frmMDI.OpenFormAsDockPanel("Report Editor WebLink",, objReportEditWebLinkWC, match.Groups(1).Value.ToString)
                     ElseIf columnName.ToLower = "number" Then
-                        Dim ticketURL As String = view.GetRowCellValue(e.RowHandle, columnToHide).ToString()
-                        If objReportEditWebLinkWC Is Nothing Then
-                            objReportEditWebLinkWC = New frmInternetExplorer("Map Ticket URL", ticketURL)
+                        'Dim ticketURL As String = view.GetRowCellValue(e.RowHandle, columnToHide).ToString()
+                        'If objReportEditWebLinkWC Is Nothing Then
+                        '    objReportEditWebLinkWC = New frmInternetExplorer("Map Ticket URL", ticketURL)
+                        'End If
+                        'objReportEditWebLinkWC.NavigationUrl = ticketURL
+                        'objReportEditWebLinkWC.WebRequestFrom = "MapWindow"
+                        'frmMDI.OpenFormAsDockPanel("Map Ticket URL",, objReportEditWebLinkWC, ticketURL)
+                        If Not String.IsNullOrWhiteSpace(match.Groups(1).Value.ToString) Then
+                            Process.Start(New ProcessStartInfo(match.Groups(1).Value.ToString) With {.UseShellExecute = True})
                         End If
-                        objReportEditWebLinkWC.NavigationUrl = ticketURL
-                        objReportEditWebLinkWC.WebRequestFrom = "MapWindow"
-                        frmMDI.OpenFormAsDockPanel("Map Ticket URL",, objReportEditWebLinkWC, ticketURL)
                     End If
                 End If
             End Sub
