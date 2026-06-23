@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("IOS.TABGenerator")>
 <Assembly: AssemblyDescription("Generates network files on a daily basis")>
 <Assembly: AssemblyCompany("CellSens")> 
-<Assembly: AssemblyProduct("IOS.TABGenerator")> 
-<Assembly: AssemblyCopyright("Copyright ©  2017")> 
+<Assembly: AssemblyProduct("IOS.TABGenerator")>
+<Assembly: AssemblyCopyright("Copyright © 2026")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("3.2025.0.0")>
-<Assembly: AssemblyFileVersion("3.2025.0.0")>
+<Assembly: AssemblyVersion("3.2026.0.0")>
+<Assembly: AssemblyFileVersion("3.2026.0.0")>

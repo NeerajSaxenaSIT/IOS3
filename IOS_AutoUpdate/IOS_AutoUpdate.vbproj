@@ -183,7 +183,7 @@
   -->
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_StartDate="2009/12/19" BuildVersion_BuildVersioningStyle="None.YearStamp.None.Increment" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.None.Increment" BuildVersion_StartDate="2009/12/19" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

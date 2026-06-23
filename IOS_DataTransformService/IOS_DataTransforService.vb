@@ -3686,19 +3686,42 @@ Module IOS_DataTransforService
             Dim objCMdataMEServ As New CMDataMEServ.ManagedElementRetrieval_RPCClient()
             'objCMdataMEServ.getAllManagedElements()
 
+            Dim binding = CType(objCMdataMEServ.Endpoint.Binding, System.ServiceModel.BasicHttpBinding)
+            binding.MaxReceivedMessageSize = 104857600 '100 MB
+            binding.MaxBufferSize = 104857600
+            binding.ReaderQuotas.MaxDepth = 128
+            binding.ReaderQuotas.MaxStringContentLength = 104857600
+            binding.ReaderQuotas.MaxArrayLength = 104857600
+            binding.ReaderQuotas.MaxBytesPerRead = 4096
+            binding.ReaderQuotas.MaxNameTableCharCount = 104857600
+
+            Dim mdRef As New CMDataMEServ.RelativeDistinguishNameType()
+            mdRef.type = "MD"
+            mdRef.value = "Huawei/U2000"
+
             Dim soapHeader As New CMDataMEServ.header()
-            soapHeader.security = "mw_npm:Nbi_mw_1"
-            soapHeader.communicationPattern = "MultipleBatchResponse"
+            soapHeader.security = "cmexportuser:Ad1lab@d"
+            soapHeader.communicationPattern = "SimpleResponse"
             soapHeader.communicationStyle = "RPC"
-            soapHeader.requestedBatchSize = 2000
-            soapHeader.batchSequenceNumber = 1
+            soapHeader.requestedBatchSize = 1000
+            soapHeader.requestedBatchSizeSpecified = True
+            'soapHeader.batchSequenceNumber = 1
+            'soapHeader.batchSequenceNumberSpecified = True
 
             Dim request As New CMDataMEServ.getAllManagedElementsRequest()
+            request.mdOrMlsnRef = New CMDataMEServ.RelativeDistinguishNameType() {mdRef}
 
             Dim response As CMDataMEServ.MultipleMeObjectsResponseType = objCMdataMEServ.getAllManagedElements(soapHeader, request)
 
+            Dim objMeList = response.meList
+
             Dim x As String = response.ToString
 
+        Catch ex As System.ServiceModel.FaultException
+            Console.WriteLine(ex.Message)
+            If ex.InnerException IsNot Nothing Then
+                Console.WriteLine(ex.InnerException.ToString())
+            End If
         Catch ex As Exception
             Console.WriteLine(Now() & "    " & " Failed using CM SOAP Data Service: " & ex.Message.ToString & vbCrLf & ex.StackTrace.ToString)
             WriteString_Log(Now() & "    " & " Failed using CM SOAP Data Service: " & ex.Message.ToString & vbCrLf & ex.StackTrace.ToString)

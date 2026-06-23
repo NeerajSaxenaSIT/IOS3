@@ -9,6 +9,7 @@ Public Class dlgUpdateReportObjects
 
     Public selectedNodeName As String = Nothing
     Public selectedNodeLevel As Integer = Nothing
+    Public Interval As String = Nothing
     Public reportID As Integer = Nothing
     Public slideID As Integer = Nothing
     Public objectID As Integer = Nothing
@@ -22,6 +23,9 @@ Public Class dlgUpdateReportObjects
             LoadResolutionCombo()
             LoadReportObjects()
             PresetDatetimeEditors()
+            'Set the interval/resolution combo value based on the report node selection
+            Dim index As Integer = cmbResolution.Properties.Items.IndexOf(Interval)
+            cmbResolution.SelectedIndex = If(index >= 0, index, 0)
             AddHandler cmbResolution.SelectedIndexChanged, AddressOf cmbResolution_SelectedIndexChanged
             AddHandler cmbPredefTimeStats.SelectedIndexChanged, AddressOf cmbPredefTimeStats_SelectedIndexChanged
         Catch ex As Exception
@@ -62,27 +66,38 @@ Public Class dlgUpdateReportObjects
     End Sub
 
     Private Sub cmbPredefTimeStats_SelectedIndexChanged(sender As Object, e As EventArgs)
-        Dim cmb As ComboBoxEdit = CType(sender, ComboBoxEdit)
-        If cmb.SelectedIndex > 0 Then
-            dtEditStartTime.Enabled = False
-            dtEditEndTime.Enabled = False
-            Dim dr() As DataRow = dtPredefinePeriod.AsEnumerable().Where(Function(x) x.Field(Of Integer)("PredefinedPeriodID") = TryCast(cmb.SelectedItem, clsComboBoxItem).Value AndAlso x.Field(Of String)("Control") = cmb.Name).ToArray()
-            If Not dr Is Nothing Then
-                If dr.Count > 0 Then
-                    Dim SQL As String = dr(0)("SQL").ToString
-                    Dim dtPeriod As DataTable = DataAccessorODBC.GetDataTable(connStrIOSServer, SQL)
-                    If dtPeriod IsNot Nothing AndAlso dtPeriod.Rows.Count > 0 Then
-                        If cmb.Name.Contains("Stats") Then
-                            dtEditStartTime.EditValue = dtPeriod.Rows(0)(0)
-                            dtEditEndTime.EditValue = dtPeriod.Rows(0)(1)
+        Try
+            Me.Cursor = Cursors.WaitCursor
+            Application.DoEvents()
+
+            Dim cmb As ComboBoxEdit = CType(sender, ComboBoxEdit)
+            If cmb.SelectedIndex > 0 Then
+                dtEditStartTime.Enabled = False
+                dtEditEndTime.Enabled = False
+                Dim dr() As DataRow = dtPredefinePeriod.AsEnumerable().Where(Function(x) x.Field(Of Integer)("PredefinedPeriodID") = TryCast(cmb.SelectedItem, clsComboBoxItem).Value AndAlso x.Field(Of String)("Control") = cmb.Name).ToArray()
+                If Not dr Is Nothing Then
+                    If dr.Count > 0 Then
+                        Dim SQL As String = dr(0)("SQL").ToString
+                        Dim dtPeriod As DataTable = DataAccessorODBC.GetDataTable(connStrIOSServer, SQL)
+                        If dtPeriod IsNot Nothing AndAlso dtPeriod.Rows.Count > 0 Then
+                            If cmb.Name.Contains("Stats") Then
+                                dtEditStartTime.EditValue = dtPeriod.Rows(0)(0)
+                                dtEditEndTime.EditValue = dtPeriod.Rows(0)(1)
+                            End If
                         End If
                     End If
                 End If
+            Else
+                dtEditStartTime.Enabled = True
+                dtEditEndTime.Enabled = True
             End If
-        Else
-            dtEditStartTime.Enabled = True
-            dtEditEndTime.Enabled = True
-        End If
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+        Finally
+            Me.Cursor = Cursors.Default
+            Application.DoEvents()
+        End Try
     End Sub
 
     Private Sub Timer1_Tick(ByVal sender As Object, ByVal e As System.EventArgs)
@@ -98,18 +113,35 @@ Public Class dlgUpdateReportObjects
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         Try
             If gvReportObjects.RowCount > 0 Then
+                Dim network As String = Nothing
                 Dim tech As String = gvReportObjects.GetFocusedRowCellValue("Technology").ToString
-                If tech.Contains("TopX_") Then tech = tech.Replace("TopX_", "")
+                If tech.Contains("TopX_") Then network = tech.Replace("TopX_", "")
                 Dim targeType As String = gvReportObjects.GetFocusedRowCellValue("TargetType").ToString
                 If dicFrmTechInstances.Count = 0 Then
-                    SetMessage("Please open PM " & ChrW(&H2192) & " " & tech)
+                    SetMessage("Please open PM " & ChrW(&H2192) & " " & network)
                     Exit Sub
-                ElseIf dicFrmTechInstances.Values.OfType(Of frmTechnology).Count(Function(n) n.InstanceKey.Split(";")(1) = tech.Replace(" ", "")) = 0 Then
-                    SetMessage("Please open PM -> " & ChrW(&H2192) & " " & tech)
+                ElseIf dicFrmTechInstances.Values.OfType(Of frmTechnology).Count(Function(n) n.Network = network.Trim) = 0 Then
+                    SetMessage("Please open PM -> " & ChrW(&H2192) & " " & network)
                     Exit Sub
                 End If
-                'Update Report Setting From PM Tech Instance
-
+                'Refresh report setting from PM Tech instance
+                Dim objFrmTech = dicFrmTechInstances.Values.OfType(Of frmTechnology).Where(Function(n) n.Network = network.Trim).LastOrDefault()
+                If tech.Contains("TopX_") Then
+                    Dim TargetType As String = objFrmTech.cmbObjectTreeTopX.SelectedItem.ToString.Trim
+                    Dim Count_Checked As Integer = objFrmTech.tvObjectsTreeTopX.GetEndCheckedNodes().Count
+                    Dim SelectedObjects As String = objFrmTech.tvObjectsTreeTopX.GetChecked2String(objFrmTech._strNetwork, objFrmTech.cmbObjectTreeTopX.Text, "ObjectName", objFrmTech.strTreeFilter).Substring(4).TrimEnd(")")
+                    gvReportObjects.SetFocusedRowCellValue("TargetType", TargetType)
+                    gvReportObjects.SetFocusedRowCellValue("ObjectsSelected", SelectedObjects)
+                    gvReportObjects.SetFocusedRowCellValue("ObjectCount", Count_Checked)
+                Else
+                    Dim TargetType As String = objFrmTech.cmbObjectTreeStats.SelectedItem.ToString.Trim
+                    Dim Count_Checked As Integer = objFrmTech.tvObjectsTreeStats.GetEndCheckedNodes().Count
+                    Dim SelectedObjects As String = objFrmTech.tvObjectsTreeStats.GetChecked2String(objFrmTech._strNetwork, objFrmTech.cmbObjectTreeStats.Text, "ObjectName", objFrmTech.strTreeFilter).Substring(4).TrimEnd(")")
+                    gvReportObjects.SetFocusedRowCellValue("TargetType", TargetType)
+                    gvReportObjects.SetFocusedRowCellValue("ObjectsSelected", SelectedObjects)
+                    gvReportObjects.SetFocusedRowCellValue("ObjectCount", Count_Checked)
+                End If
+                gvReportObjects.RefreshData()
             End If
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
@@ -138,27 +170,31 @@ Public Class dlgUpdateReportObjects
                 DataAccessorODBC.ExecuteNonQuery(connstring, sql)
             End If
 
-            sql = Nothing
-            connstring = Nothing
-
-            'update report target type and objects
             If chkObjects.Checked Then
-                If gvReportObjects.RowCount > 0 Then
-                    For iCntr = 0 To gvReportObjects.RowCount - 1
-                        Dim selectedObjects = gvReportObjects.GetRowCellValue(iCntr, "ObjectsSelected").Replace("','", "'',''")
+                Dim iSelectedRows() As Integer = gvReportObjects.GetSelectedRows()
+                For i = 0 To iSelectedRows.Count - 1
+                    sql = Nothing
+                    connstring = Nothing
+                    'update report target type and objects
+                    If gvReportObjects.RowCount > 0 Then
+                        Dim selectedObjects = gvReportObjects.GetRowCellValue(iSelectedRows(i), "ObjectsSelected").Replace("','", "'',''")
                         Dim parray()() As String = {
                             New String() {"@ReportID", reportID},
                             New String() {"@SlideID", IIf(slideID = Nothing, "NULL", slideID)},
                             New String() {"@ObjectID", IIf(objectID = Nothing, "NULL", objectID)},
-                            New String() {"@TargetType", Chr(39) & gvReportObjects.GetRowCellValue(iCntr, "TargetType") & Chr(39)},
+                            New String() {"@TargetType", Chr(39) & gvReportObjects.GetRowCellValue(iSelectedRows(i), "TargetType") & Chr(39)},
                             New String() {"@ObjectSelected", Chr(39) & selectedObjects & Chr(39)}
                         }
                         sql = GetSQL(8553, parray)(1)
                         connstring = GetSQL(8553, parray)(0)
                         DataAccessorODBC.ExecuteNonQuery(connstring, sql)
-                    Next
-                End If
+                    End If
+                Next
             End If
+
+            'close the dialog after update
+            Me.Close()
+
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)

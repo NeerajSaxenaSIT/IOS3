@@ -33,7 +33,7 @@
     <AssemblyName>IOS_DataTransformService</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <OptionExplicit>On</OptionExplicit>
     <OptionCompare>Binary</OptionCompare>
     <OptionStrict>Off</OptionStrict>
@@ -168,7 +168,9 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.1\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Text.Encodings.Web, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.9.0.3\lib\net462\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
@@ -207,6 +209,16 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connected Services\CMDataMEServ\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\CMDataService\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="IOS_DataTransforService.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -238,6 +250,257 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="ClassDiagram1.cd" />
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllCCCapacityResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllCCCapacityResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllDCNManagementResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllDCNManagementResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllManagedElementInfosByIPsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllManagedElementInfosByIPsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllManagedElementNamesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllManagedElementsPassingFilterResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllManagedElementsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getAllManagedElementsWrtOsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getDCNDataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getDCNDataResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getManagedElementByAliasNameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getManagedElementByPhysicalIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getManagedElementNamesIteratorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getManagedElementResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getManagedElementsIteratorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getMEClockSynchronizationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getNECrossConnectCapacityResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getNECrossConnectCapacityResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getObjectTimeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.getSubtendingManagedElementsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.header.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.MEClockSynchronizationListType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.MultipleMeObjectsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.RelativeDistinguishNameType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\IOS_DataTransformService.CMDataMEServ.SingleMeObjectResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataMEServ\ManagedElementRetrievalHttp.wsdl" />
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllAssignableConnectionlessPortTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllAssignableConnectionlessPortTerminationPointsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllAssignedConnectionlessPortTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllAssignedConnectionlessPortTerminationPointsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllConnectionlessPortTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllConnectionlessPortTerminationPointsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllEdgePointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllFloatingTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllGroupTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllPhysicalTerminationPointNamesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllPhysicalTerminationPointNamesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllPhysicalTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllPhysicalTerminationPointsWithoutFtpsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllSupportedPhysicalTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAllTerminationPointPoolsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAssociatedGroupTerminationPointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAssociatedGroupTerminationPointResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAssociatedTerminationPointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAssociatedTerminationPointsWrtTmdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAvailableTimeSlotResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getAvailableTimeSlotResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getContainedCurrentConnectionTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getContainedInUseConnectionTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getContainedPotentialConnectionTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getContainingGroupTerminationPointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getContainingTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getFTPBindingTPResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getFTPBindingTPResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getGroupTerminationPointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getGroupTerminationPointsIteratorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getLaserSpectrumResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getLaserSpectrumResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getLLDPDetailInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getLLDPDetailInfoResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getLLDPInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getLLDPInfoResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getMemberTerminationPointNamesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getMemberTerminationPointNamesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getMemberTerminationPointsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getMemberTerminationPointsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getTerminationPointGroupingRelationshipsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getTerminationPointPoolResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getTerminationPointPoolsIteratorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getTerminationPointResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getTerminationPointsIteratorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.getTrafficConditioningProfileAssociatedTpsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.header.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.MultipleGroupTerminationPointObjectsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.MultipleObjectNamesResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.MultipleTerminationPointObjectsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.MultipleTerminationPointPoolObjectsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.retrieveResourceMaintenanceInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.retrieveResourceMaintenanceInfoResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.SingleGroupTerminationPointObjectResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.SingleTerminationPointObjectResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\IOS_DataTransformService.CMDataService.SingleTerminationPointPoolObjectResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CMDataService\TerminationPointRetrievalHttp.wsdl" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
@@ -286,6 +549,37 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\CMDataMEServ\" />
+    <WCFMetadataStorage Include="Connected Services\CMDataService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CMDataService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CMDataService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CMDataService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CMDataMEServ\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CMDataMEServ\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CMDataMEServ\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>

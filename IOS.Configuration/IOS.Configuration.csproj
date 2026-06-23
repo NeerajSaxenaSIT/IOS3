@@ -36,20 +36,25 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.XtraBars.v24.2">
-      <HintPath>..\References\DevExpress.XtraBars.v24.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraBars.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
     </Reference>
-    <Reference Include="DevExpress.XtraEditors.v24.2">
-      <HintPath>..\References\DevExpress.XtraEditors.v24.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraEditors.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
     </Reference>
-    <Reference Include="DevExpress.XtraGrid.v24.2">
-      <HintPath>..\References\DevExpress.XtraGrid.v24.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraGrid.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
     </Reference>
-    <Reference Include="DevExpress.XtraLayout.v24.2">
-      <HintPath>..\References\DevExpress.XtraLayout.v24.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraLayout.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
     </Reference>
-    <Reference Include="DevExpress.XtraTreeList.v24.2">
-      <HintPath>..\References\DevExpress.XtraTreeList.v24.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraTreeList.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>

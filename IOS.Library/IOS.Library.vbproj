@@ -48,56 +48,65 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.BonusSkins.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.BonusSkins.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\DevExpress.BonusSkins.v24.2.dll</HintPath>
+      
     </Reference>
-    <Reference Include="DevExpress.Data.Desktop.v24.2">
-      <HintPath>..\References\DevExpress.Data.Desktop.v24.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Data.v24.2">
-      <HintPath>..\References\DevExpress.Data.v24.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Drawing.v24.2">
-      <HintPath>..\References\DevExpress.Drawing.v24.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Office.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Data.Desktop.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\DevExpress.Office.v24.2.Core.dll</HintPath>
+      
     </Reference>
-    <Reference Include="DevExpress.Printing.v24.2.Core">
-      <HintPath>..\References\DevExpress.Printing.v24.2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.RichEdit.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Data.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\DevExpress.RichEdit.v24.2.Core.dll</HintPath>
+      
     </Reference>
-    <Reference Include="DevExpress.Utils.v24.2">
-      <HintPath>..\References\DevExpress.Utils.v24.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Utils.v24.2.UI, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Drawing.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\DevExpress.Utils.v24.2.UI.dll</HintPath>
+      
     </Reference>
-    <Reference Include="DevExpress.Xpf.DocumentViewer.v24.2.Core, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Office.v25.2.Core, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\DevExpress.Xpf.DocumentViewer.v24.2.Core.dll</HintPath>
+      
     </Reference>
-    <Reference Include="DevExpress.XtraBars.v24.2, Version=24.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Printing.v25.2.Core, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\DevExpress.XtraBars.v24.2.dll</HintPath>
+      
     </Reference>
-    <Reference Include="DevExpress.XtraEditors.v24.2">
-      <HintPath>..\References\DevExpress.XtraEditors.v24.2.dll</HintPath>
+    <Reference Include="DevExpress.RichEdit.v25.2.Core, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
     </Reference>
-    <Reference Include="DevExpress.XtraGrid.v24.2">
-      <HintPath>..\References\DevExpress.XtraGrid.v24.2.dll</HintPath>
+    <Reference Include="DevExpress.Utils.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
     </Reference>
-    <Reference Include="DevExpress.XtraLayout.v24.2">
-      <HintPath>..\References\DevExpress.XtraLayout.v24.2.dll</HintPath>
+    <Reference Include="DevExpress.Utils.v25.2.UI, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
     </Reference>
-    <Reference Include="DevExpress.XtraTreeList.v24.2">
-      <HintPath>..\References\DevExpress.XtraTreeList.v24.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.DocumentViewer.v25.2.Core, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v25.2, Version=25.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      
     </Reference>
     <Reference Include="dotnetCharting.WinForms, Version=10.2.0.0, Culture=neutral, PublicKeyToken=c3f34d622663b9f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -432,4 +441,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+
+  <ItemGroup>
+    <Analyzer Include="C:\Program Files\DevExpress 25.2\Components\Offline Packages\devexpress.data\25.2.7\analyzers\dotnet\DevExpress.Generator.dll" Visible="false" Condition="Exists('C:\Program Files\DevExpress 25.2\Components\Offline Packages\devexpress.data\25.2.7\analyzers\dotnet\DevExpress.Generator.dll')" />
+  </ItemGroup>
 </Project>

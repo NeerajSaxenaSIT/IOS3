@@ -1,4 +1,5 @@
-﻿Imports System.DirectoryServices
+﻿Imports System.ComponentModel
+Imports System.DirectoryServices
 Imports System.Drawing.Drawing2D
 Imports System.IO
 Imports DevExpress.DashboardCommon
@@ -7,6 +8,7 @@ Imports DevExpress.DataAccess.Native.Sql
 Imports DevExpress.DataAccess.Sql
 Imports DevExpress.Pdf
 Imports DevExpress.Spreadsheet
+Imports DevExpress.Utils.Frames
 Imports DevExpress.XtraEditors
 Imports DevExpress.XtraRichEdit.Import.Doc
 Imports DevExpress.XtraTreeList
@@ -1762,6 +1764,8 @@ Public Class frmReportEdit
             If nd IsNot Nothing Then
                 Dim objUpdateReportObjects As New dlgUpdateReportObjects()
                 If nd.Level = 0 Then
+                    Dim reportProps As ReportProperties = CType(propertyGridreport.SelectedObject, ReportProperties)
+                    objUpdateReportObjects.Interval = reportProps.Interval
                     objUpdateReportObjects.selectedNodeName = nd.GetDisplayText("Report Name")
                     objUpdateReportObjects.selectedNodeLevel = nd.Level
                     objUpdateReportObjects.reportID = CInt(nd.Tag)

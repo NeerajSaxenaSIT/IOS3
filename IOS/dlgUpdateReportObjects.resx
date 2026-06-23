@@ -120,6 +120,14 @@
   <metadata name="Timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="LabelControl6.Text" xml:space="preserve">
+    <value>Steps:
+1. Select a row in the datagrid; Open the PM -&gt; Technology instance with the technology same as in the selected row
+2. Click "Refresh" button to load the settings from the Technology instance; The selected row in the datagrid gets refreshed with new settings
+3. Select rows in the datagrid and check "Update Period + Interval" checkbox if you want to update period and interval only 
+4. Select rows in the datagrid and check "Update Objects" checkbox if you want to update target type and objects only
+5. Click "Update" button to save the changes for the report</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>55</value>
   </metadata>

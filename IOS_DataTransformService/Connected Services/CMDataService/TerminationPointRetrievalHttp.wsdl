@@ -1,0 +1,2668 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:ns2="http://www.tmforum.org/mtop/mri/xsd/tpr/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.tmforum.org/mtop/mri/wsdl/tpr/v1-0" xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/hdr/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns3="http://schemas.xmlsoap.org/soap/http" name="TerminationPointRetrievalHttp" targetNamespace="http://www.tmforum.org/mtop/mri/wsdl/tpr/v1-0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" xmlns="http://www.tmforum.org/mtop/rp/xsd/comc/v1" xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/comm/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/rp/xsd/comc/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/comm/v1" />
+      <xs:element name="setDCCManagementDataException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns1:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="setDCCManagementDataRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meRef" type="ns2:NamingAttributeType" />
+            <xs:element minOccurs="0" name="dccDataList" type="ns3:DccDataListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="setDCCManagementDataResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="failedDccDataList" type="ns3:FailedDccDataListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/tppool/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/tppool/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="tpPool" type="tns:TerminationPointPoolType" />
+      <xs:complexType name="TerminationPointPoolType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns2:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="numberOfMembers" type="xs:long" />
+              <xs:element minOccurs="0" name="numberOfIdleMembers" type="xs:long" />
+              <xs:element minOccurs="0" name="descriptionOfUse" type="xs:string" />
+              <xs:element minOccurs="0" ref="ns1:transmissionParametersList" />
+              <xs:element minOccurs="0" name="containedMemberList">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="containedMember" nillable="true" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="memberContainingMeList">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="memberContainingMe" nillable="true" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="memberContainingTpList">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="memberContainingTp" nillable="true" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="TerminationPointPoolListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="tpPool" nillable="true" type="tns:TerminationPointPoolType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:element name="IPAddressList" type="tns:IPAddressListType" />
+      <xs:element name="affinityMappingAttrList" type="tns:AffinityMappingAttrListType" />
+      <xs:complexType name="IPAddressListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="IPAddress" type="tns:IPAddressType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="IPAddressType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="address" type="xs:string" />
+          <xs:element minOccurs="0" name="mask" type="xs:string" />
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+          <xs:element minOccurs="0" name="stateType" type="xs:string" />
+          <xs:element minOccurs="0" name="anycastFlag" type="xs:string" />
+          <xs:element minOccurs="0" name="status" type="xs:string" />
+          <xs:element minOccurs="0" name="action" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TerminationPointDataType">
+        <xs:sequence>
+          <xs:element name="tpRef" type="ns1:NamingAttributeType" />
+          <xs:element xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="aliasNameList" type="ns3:AliasNameListType" />
+          <xs:element xmlns:ns4="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpMappingMode" type="ns4:TerminationModeType" />
+          <xs:element minOccurs="0" ref="ns2:transmissionParametersList" />
+          <xs:element minOccurs="0" name="ingressTmdRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="egressTmdRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="ipAddressList" type="tns:IPAddressListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AffinityMappingAttrListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="affinityMappingAttr" nillable="true" type="tns:AffinityMappingAttrType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AffinityMappingAttrType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="value" type="xs:int" />
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+          <xs:element minOccurs="0" name="affType" type="xs:string" />
+          <xs:element minOccurs="0" name="operationType" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="VlanIDSectionType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="vlan" type="xs:string" />
+          <xs:element minOccurs="0" name="lowVlan" type="xs:string" />
+          <xs:element minOccurs="0" name="highVlan" type="xs:string" />
+          <xs:element minOccurs="0" name="vlanGroup" type="xs:string" />
+          <xs:element minOccurs="0" name="isisStatistic" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="VlanIDSectionListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="vlanIDSection" nillable="true" type="tns:VlanIDSectionType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TerminationPointDataListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="tpData" nillable="true" type="tns:TerminationPointDataType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns4="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/tp/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" xmlns:ns1="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/tp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:complexType name="TerminationPointListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="tp" nillable="true" type="tns:TerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TerminationPointType">
+        <xs:sequence>
+          <xs:element minOccurs="0" ref="ns1:ptp" />
+          <xs:element minOccurs="0" ref="ns2:ftp" />
+          <xs:element minOccurs="0" ref="ns3:ctp" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/rs/v1" xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/rs/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="ResourceSite" type="tns:ResourceSiteType" />
+      <xs:complexType name="ResourceSiteType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns1:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="type" type="xs:string" />
+              <xs:element minOccurs="0" name="memo" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ResourceSiteListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResourceSite" type="tns:ResourceSiteType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="ptp" type="tns:PhysicalTerminationPointType" />
+      <xs:complexType name="PhysicalTerminationPointType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns2:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="direction" type="ns3:DirectionalityType" />
+              <xs:element xmlns:ns4="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpProtectionAssociation" type="ns4:TerminationPointProtectionAssociationType" />
+              <xs:element minOccurs="0" name="isEdgePoint" type="xs:boolean" />
+              <xs:element minOccurs="0" name="isEquipmentProtected" type="xs:boolean" />
+              <xs:element xmlns:ns5="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="egressTmdState" type="ns5:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns6="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="ingressTmdState" type="ns6:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns7="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="ingressTmdRef" type="ns7:NamingAttributeType" />
+              <xs:element xmlns:ns8="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="egressTmdRef" type="ns8:NamingAttributeType" />
+              <xs:element minOccurs="0" ref="ns1:transmissionParametersList" />
+              <xs:element xmlns:ns9="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" minOccurs="0" name="ipAddressList" type="ns9:IPAddressListType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="PhysicalTerminationPointListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ptp" nillable="true" type="tns:PhysicalTerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/lldp/v1" xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/lldp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:element name="LLDPInfo" type="tns:LLDPDataType" />
+      <xs:complexType name="LLDPDataListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="LLDPInfo" type="tns:LLDPDataType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LLDPDataType">
+        <xs:sequence>
+          <xs:element xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="tpName" type="ns2:NamingAttributeType" />
+          <xs:element minOccurs="0" name="lldpParams" type="ns1:NameAndValueStringListType" />
+          <xs:element minOccurs="0" name="NeighboringInfoList" type="tns:NeighboringInfoListType" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns1:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NeighboringInfoListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="NeighboringInfo" type="ns1:NameAndValueStringListType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/gtp/v1" xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/gtp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="gtp" type="tns:GroupTerminationPointType" />
+      <xs:complexType name="GroupTerminationPointListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="gtp" nillable="true" type="tns:GroupTerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GroupTerminationPointType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns1:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="isReportingAlarms" type="xs:boolean" />
+              <xs:element xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="containedTpRefList" type="ns2:NamingAttributeListType" />
+              <xs:element xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="connectionState" type="ns3:TerminationPointConnectionStateType" />
+              <xs:element xmlns:ns4="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="asapRef" type="ns4:NamingAttributeType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="ftp" type="tns:FloatingTerminationPointType" />
+      <xs:complexType name="FloatingTerminationPointType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns2:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="direction" type="ns3:DirectionalityType" />
+              <xs:element xmlns:ns4="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpProtectionAssociation" type="ns4:TerminationPointProtectionAssociationType" />
+              <xs:element minOccurs="0" name="isEdgePoint" type="xs:boolean" />
+              <xs:element minOccurs="0" name="isEquipmentProtected" type="xs:boolean" />
+              <xs:element xmlns:ns5="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="egressTmdState" type="ns5:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns6="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="ingressTmdState" type="ns6:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns7="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="connectionState" type="ns7:TerminationPointConnectionStateType" />
+              <xs:element xmlns:ns8="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpMappingMode" type="ns8:TerminationModeType" />
+              <xs:element xmlns:ns9="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="ingressTmdRef" type="ns9:NamingAttributeType" />
+              <xs:element xmlns:ns10="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="egressTmdRef" type="ns10:NamingAttributeType" />
+              <xs:element xmlns:ns11="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" minOccurs="0" name="ipAddressList" type="ns11:IPAddressListType" />
+              <xs:element minOccurs="0" ref="ns1:transmissionParametersList" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="FloatingTerminationPointListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ftp" nillable="true" type="tns:FloatingTerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/fd/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/fd/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="fd" type="tns:FlowDomainType" />
+      <xs:complexType name="FlowDomainListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="fd" nillable="true" type="tns:FlowDomainType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="FlowDomainType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns2:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="ns1:transmissionParametersList" />
+              <xs:element minOccurs="0" name="connectivityState" type="tns:ConnectivityStateType" />
+              <xs:element minOccurs="0" name="type" type="tns:FdTypeType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:simpleType name="ConnectivityStateType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CS_UNKNOWN" />
+          <xs:enumeration value="CS_FULLY_CONNECTED" />
+          <xs:enumeration value="CS_NOT_FULLY_CONNECTED" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="FdTypeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="FDT_SINGLETON" />
+          <xs:enumeration value="FDT_NETWORK" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="ctp" type="tns:ConnectionTerminationPointType" />
+      <xs:complexType name="ConnectionTerminationPointType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns2:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="direction" type="ns3:DirectionalityType" />
+              <xs:element xmlns:ns4="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpProtectionAssociation" type="ns4:TerminationPointProtectionAssociationType" />
+              <xs:element minOccurs="0" name="isEdgePoint" type="xs:boolean" />
+              <xs:element minOccurs="0" name="isEquipmentProtected" type="xs:boolean" />
+              <xs:element xmlns:ns5="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="egressTmdState" type="ns5:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns6="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="ingressTmdState" type="ns6:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns7="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="connectionState" type="ns7:TerminationPointConnectionStateType" />
+              <xs:element xmlns:ns8="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpMappingMode" type="ns8:TerminationModeType" />
+              <xs:element xmlns:ns9="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="ingressTmdRef" type="ns9:NamingAttributeType" />
+              <xs:element xmlns:ns10="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="egressTmdRef" type="ns10:NamingAttributeType" />
+              <xs:element xmlns:ns11="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" minOccurs="0" name="ipAddressList" type="ns11:IPAddressListType" />
+              <xs:element minOccurs="0" ref="ns1:transmissionParametersList" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ConnectionTerminationPointListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ctp" nillable="true" type="tns:ConnectionTerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/comm/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/comm/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="dccData" type="tns:DccDataType" />
+      <xs:element name="dccDataList" type="tns:DccDataListType" />
+      <xs:element name="eccLink" type="tns:EccLinkType" />
+      <xs:element name="eccLinkList" type="tns:EccLinkListType" />
+      <xs:element name="failedDccData" type="tns:FailedDccDataType" />
+      <xs:element name="failedDccDataList" type="tns:FailedDccDataListType" />
+      <xs:complexType name="DccDataListType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="dccData" type="tns:DccDataType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DccDataType">
+        <xs:sequence>
+          <xs:element xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="tpRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="status" type="xs:string" />
+          <xs:element minOccurs="0" name="protocolType" type="xs:string" />
+          <xs:element minOccurs="0" name="channel" type="xs:string" />
+          <xs:element minOccurs="0" name="dccResources" type="xs:string" />
+          <xs:element minOccurs="0" name="communicationStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="bandwidthNegotiationSwitch" type="xs:string" />
+          <xs:element minOccurs="0" name="lapdRole" type="xs:string" />
+          <xs:element minOccurs="0" name="lapdMtu" type="xs:string" />
+          <xs:element minOccurs="0" name="boundFlag" type="xs:string" />
+          <xs:element minOccurs="0" name="domainFlag" type="xs:string" />
+          <xs:element xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="FailedDccDataListType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="failedDccData" type="tns:FailedDccDataType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="FailedDccDataType">
+        <xs:sequence>
+          <xs:element xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="tpRef" type="ns3:NamingAttributeType" />
+          <xs:element minOccurs="0" name="channel" type="xs:string" />
+          <xs:element minOccurs="0" name="errorReason" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="EccLinkListType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="eccLink" type="tns:EccLinkType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="EccLinkType">
+        <xs:sequence>
+          <xs:element xmlns:ns4="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="targetNe" type="ns4:NamingAttributeType" />
+          <xs:element xmlns:ns5="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="forwardingNe" type="ns5:NamingAttributeType" />
+          <xs:element minOccurs="0" name="distance" type="xs:string" />
+          <xs:element minOccurs="0" name="level" type="xs:string" />
+          <xs:element minOccurs="0" name="mode" type="xs:string" />
+          <xs:element xmlns:ns6="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="port" type="ns6:NamingAttributeType" />
+          <xs:element minOccurs="0" name="sccNumber" type="xs:string" />
+          <xs:element xmlns:ns7="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="vendorExtensions" type="ns7:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/com/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/com/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="ResourceFulfillmentStateType">
+        <xs:simpleContent>
+          <xs:extension base="tns:ResourceFulfillmentStateEnumType">
+            <xs:attribute name="qualifier" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="EquipmentHolderTypeType">
+        <xs:simpleContent>
+          <xs:extension base="tns:EquipmentHolderEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="ProtectionRoleType">
+        <xs:simpleContent>
+          <xs:extension base="tns:ProtectionRoleEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="StaticProtectionLevelType">
+        <xs:simpleContent>
+          <xs:extension base="tns:StaticProtectionLevelEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="TopologyType">
+        <xs:simpleContent>
+          <xs:extension base="tns:TopologyEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="EndPointRoleListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="role" nillable="true" type="tns:EndPointRoleType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="EndPointRoleType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="role" type="xs:string" />
+          <xs:element minOccurs="0" name="tpIndex" type="xs:unsignedInt" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="DirectionalityType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="D_NA" />
+          <xs:enumeration value="D_BIDIRECTIONAL" />
+          <xs:enumeration value="D_SOURCE" />
+          <xs:enumeration value="D_SINK" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TerminationPointProtectionAssociationType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="TPPA_NA" />
+          <xs:enumeration value="TPPA_PSR_RELATED" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TransmissionDescriptorStateType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="TMD_MISSING" />
+          <xs:enumeration value="NOT_APPLICABLE" />
+          <xs:enumeration value="PENDING" />
+          <xs:enumeration value="APPLIED" />
+          <xs:enumeration value="MISMATCH" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ResourceFulfillmentStateEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="IN_SERVICE" />
+          <xs:enumeration value="OUT_OF_SERVICE" />
+          <xs:enumeration value="OUT_OF_SERVICE_BY_MAINTENANCE" />
+          <xs:enumeration value="SERV_NA" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="EquipmentHolderEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="rack" />
+          <xs:enumeration value="shelf" />
+          <xs:enumeration value="sub_shelf" />
+          <xs:enumeration value="slot" />
+          <xs:enumeration value="sub_slot" />
+          <xs:enumeration value="remote_unit" />
+          <xs:enumeration value="remote_slots" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ProtectionRoleEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="NA" />
+          <xs:enumeration value="PRIMARY" />
+          <xs:enumeration value="BACKUP" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="StaticProtectionLevelEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="PREEMPTIBLE" />
+          <xs:enumeration value="UNPROTECTED" />
+          <xs:enumeration value="PARTIALLY_PROTECTED" />
+          <xs:enumeration value="FULLY_PROTECTED" />
+          <xs:enumeration value="HIGHLY_PROTECTED" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TopologyEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="TOPO_SINGLETON" />
+          <xs:enumeration value="TOPO_CHAIN" />
+          <xs:enumeration value="TOPO_PSR" />
+          <xs:enumeration value="TOPO_OPEN_PSR" />
+          <xs:enumeration value="TOPO_SPRING" />
+          <xs:enumeration value="TOPO_OPEN_SPRING" />
+          <xs:enumeration value="TOPO_MESH" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TerminationPointRole">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CM_END_POINT" />
+          <xs:enumeration value="LC_END_POINT" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TerminationModeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="TM_NA" />
+          <xs:enumeration value="TM_NEITHER_TERMINATED_NOR_AVAILABLE_FOR_MAPPING" />
+          <xs:enumeration value="TM_TERMINATED_AND_AVAILABLE_FOR_MAPPING" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TerminationPointConnectionStateType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="TPCS_NA" />
+          <xs:enumeration value="TPCS_SOURCE_CONNECTED" />
+          <xs:enumeration value="TPCS_SINK_CONNECTED" />
+          <xs:enumeration value="TPCS_BI_CONNECTED" />
+          <xs:enumeration value="TPCS_NOT_CONNECTED" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ConnectionlessPortTerminationPointRoleType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CPTPR_FD_EDGE" />
+          <xs:enumeration value="CPTPR_FD_INTERNAL" />
+          <xs:enumeration value="CPTPR_ALL" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" xmlns:tns="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:element name="transmissionParameters" type="tns:LayeredParametersType" />
+      <xs:element name="transmissionParametersList" type="tns:LayeredParametersListType" />
+      <xs:complexType name="LayeredParametersListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="transmissionParameters" nillable="true" type="tns:LayeredParametersType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LayeredParametersType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="layerRate" type="ns1:LayerRateType" />
+          <xs:element minOccurs="0" name="parameterList" type="ns2:NameAndValueStringListType" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="layerRateListType" type="tns:LayerRateListType" />
+      <xs:complexType name="LayerRateListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="layerRate" nillable="true" type="tns:LayerRateType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LayerRateType">
+        <xs:simpleContent>
+          <xs:extension base="xs:string">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/coi/v1" xmlns:tns="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/coi/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:element name="commonResourceInfo" type="tns:CommonResourceInfoType" />
+      <xs:complexType name="CommonResourceInfoType" abstract="true">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns1:CommonObjectInfoType">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="source" type="tns:SourceType" />
+              <xs:element minOccurs="0" name="networkAccessDomain" type="xs:string" />
+              <xs:element xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="meiAttributes" type="ns3:MultiEventInventoryAttributesType" />
+              <xs:element minOccurs="0" name="resourceState" type="tns:ResourceStateType" />
+              <xs:any namespace="##other" processContents="lax" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ResourceStateType">
+        <xs:simpleContent>
+          <xs:extension base="tns:ResourceStateEnumType">
+            <xs:attribute name="overlap" type="xs:string" />
+            <xs:attribute name="qualifier" type="xs:string" />
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="ResultInfoListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="resultInfo" nillable="true" type="tns:ResultInfoType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ResultInfoType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="objectRef" type="ns2:NamingAttributeType" />
+          <xs:element minOccurs="0" name="result" type="xs:string" />
+          <xs:element minOccurs="0" name="reason" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SourceType">
+        <xs:simpleContent>
+          <xs:extension base="tns:SourceEnumType">
+            <xs:attribute name="qualifier" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:simpleType name="ResourceStateEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="VENDOR_EXT" />
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="INSTALLING" />
+          <xs:enumeration value="INSTALLING_ACCEPTED" />
+          <xs:enumeration value="INSTALLING_COMMISSIONED" />
+          <xs:enumeration value="INSTALLING_DELIVERED" />
+          <xs:enumeration value="INSTALLING_INSTALLED" />
+          <xs:enumeration value="INSTALLING_INTEGRATED" />
+          <xs:enumeration value="INSTALLING_REJECTED" />
+          <xs:enumeration value="NON_WORKING" />
+          <xs:enumeration value="PLANNING" />
+          <xs:enumeration value="PLANNING_INITIAL_PLAN" />
+          <xs:enumeration value="PLANNING_ORDERED" />
+          <xs:enumeration value="PLANNING_PLANNED" />
+          <xs:enumeration value="RETIRING" />
+          <xs:enumeration value="RETIRING_DECOMMISSIONED" />
+          <xs:enumeration value="RETIRING_DEINSTALLED" />
+          <xs:enumeration value="RETIRING_DEINTEGRATED" />
+          <xs:enumeration value="RETIRING_RECOVERED" />
+          <xs:enumeration value="RETIRING_STORED" />
+          <xs:enumeration value="RETIRING_WITHDRAWN_ACTIVE" />
+          <xs:enumeration value="RETIRING_WITHDRAWN_UNAVAILABLE" />
+          <xs:enumeration value="UNKNOWN" />
+          <xs:enumeration value="WORKING" />
+          <xs:enumeration value="WORKING_ACTIVATED" />
+          <xs:enumeration value="WORKING_DEACTIVATED" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="SourceEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NETWORK_ME" />
+          <xs:enumeration value="OS" />
+          <xs:enumeration value="NETWORK_EMS" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:ns10="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" xmlns:tns="http://www.tmforum.org/mtop/mri/xsd/tpr/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" xmlns:ns8="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" xmlns:ns5="http://www.tmforum.org/mtop/nrf/xsd/tppool/v1" xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/tp/v1" xmlns:ns12="http://www.tmforum.org/mtop/nrf/xsd/lldp/v1" xmlns:ns9="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" xmlns:ns11="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" xmlns:ns7="http://www.tmforum.org/mtop/nrf/xsd/com/v1" xmlns:ns13="http://www.tmforum.org/mtop/nrf/xsd/gtp/v1" xmlns:ns4="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" xmlns:ns6="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/mri/xsd/tpr/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/tp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/tppool/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/com/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/lldp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/gtp/v1" />
+      <xs:element name="getAllAssignableConnectionlessPortTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllAssignableConnectionlessPortTerminationPointsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="mfdRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllAssignableConnectionlessPortTerminationPointsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="cptpList" type="ns3:TerminationPointListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllAssignedConnectionlessPortTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllAssignedConnectionlessPortTerminationPointsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="mfdRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllAssignedConnectionlessPortTerminationPointsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="cptpList" type="ns3:TerminationPointListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllConnectionlessPortTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllConnectionlessPortTerminationPointsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="fdRef" type="ns1:NamingAttributeType" />
+            <xs:element minOccurs="0" name="cptpRole" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllConnectionlessPortTerminationPointsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="cptpList" type="ns3:TerminationPointListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllEdgePointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllEdgePointsRequest" type="tns:GetAllEdgePointsType" />
+      <xs:element name="getAllEdgePointsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getAllFloatingTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllFloatingTerminationPointsRequest" type="tns:GetAllTerminationPointsType" />
+      <xs:element name="getAllFloatingTerminationPointsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getAllGroupTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllGroupTerminationPointsRequest" type="tns:GetAllGroupTerminationPointsType" />
+      <xs:element name="getAllGroupTerminationPointsResponse" type="tns:MultipleGroupTerminationPointObjectsResponseType" />
+      <xs:element name="getAllPhysicalTerminationPointNamesException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllPhysicalTerminationPointNamesRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meName" type="ns1:NamingAttributeType" />
+            <xs:element minOccurs="0" name="layerRateList" type="ns2:LayerRateListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllPhysicalTerminationPointNamesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpNameList" type="ns1:NamingAttributeListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllPhysicalTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllPhysicalTerminationPointsRequest" type="tns:GetAllTerminationPointsType" />
+      <xs:element name="getAllPhysicalTerminationPointsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getAllPhysicalTerminationPointsWithoutFtpsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllPhysicalTerminationPointsWithoutFtpsRequest" type="tns:GetAllTerminationPointsType" />
+      <xs:element name="getAllPhysicalTerminationPointsWithoutFtpsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getAllSupportedPhysicalTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllSupportedPhysicalTerminationPointsRequest" type="tns:RequestProfile3Type" />
+      <xs:element name="getAllSupportedPhysicalTerminationPointsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getAllTerminationPointPoolsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllTerminationPointPoolsRequest" type="tns:RequestProfile1Type" />
+      <xs:element name="getAllTerminationPointPoolsResponse" type="tns:MultipleTerminationPointPoolObjectsResponseType" />
+      <xs:element name="getAssociatedGroupTerminationPointException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAssociatedGroupTerminationPointRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="ctpRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAssociatedGroupTerminationPointResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="gtp" type="ns13:GroupTerminationPointType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAssociatedTerminationPointException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAssociatedTerminationPointRequest" type="tns:RequestProfile2Type" />
+      <xs:element name="getAssociatedTerminationPointResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getAssociatedTerminationPointsWrtTmdException" type="tns:RequestProfile1Type" />
+      <xs:element name="getAssociatedTerminationPointsWrtTmdRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tmdRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAssociatedTerminationPointsWrtTmdResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getAvailableTimeSlotException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAvailableTimeSlotRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpName" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAvailableTimeSlotResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="timeSlot" type="xs:string" />
+            <xs:element minOccurs="0" name="VC3TimeSlot" type="xs:string" />
+            <xs:element minOccurs="0" name="VC12TimeSlot" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getContainedCurrentConnectionTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getContainedCurrentConnectionTerminationPointsRequest" type="tns:GetAllConnectionTerminationPointsType" />
+      <xs:element name="getContainedCurrentConnectionTerminationPointsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getContainedInUseConnectionTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getContainedInUseConnectionTerminationPointsRequest" type="tns:GetAllConnectionTerminationPointsType" />
+      <xs:element name="getContainedInUseConnectionTerminationPointsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getContainedPotentialConnectionTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getContainedPotentialConnectionTerminationPointsRequest" type="tns:GetAllConnectionTerminationPointsType" />
+      <xs:element name="getContainedPotentialConnectionTerminationPointsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getContainingGroupTerminationPointException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getContainingGroupTerminationPointRequest" type="tns:RequestProfile4Type" />
+      <xs:element name="getContainingGroupTerminationPointResponse" type="tns:SingleGroupTerminationPointObjectResponseType" />
+      <xs:element name="getContainingTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getContainingTerminationPointsRequest" type="tns:RequestProfile4Type" />
+      <xs:element name="getContainingTerminationPointsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getFTPBindingTPException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getFTPBindingTPRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ftpRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getFTPBindingTPResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ftpRef" type="ns1:NamingAttributeType" />
+            <xs:element minOccurs="0" name="bindingTpRefList" type="ns1:NamingAttributeListType" />
+            <xs:element xmlns:ns14="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="vendorExtensions" type="ns14:AnyListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getGroupTerminationPointException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getGroupTerminationPointRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="gtpRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getGroupTerminationPointResponse" type="tns:SingleGroupTerminationPointObjectResponseType" />
+      <xs:element name="getGroupTerminationPointsIteratorException" type="ns4:GetAllDataIteratorExceptionType" />
+      <xs:element name="getGroupTerminationPointsIteratorRequest" type="ns4:GetAllDataIteratorRequestType" />
+      <xs:element name="getGroupTerminationPointsIteratorResponse" type="tns:MultipleGroupTerminationPointObjectsResponseType" />
+      <xs:element name="getLLDPDetailInfoException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLLDPDetailInfoRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meOrTpRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLLDPDetailInfoResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpDataList" type="ns8:TerminationPointDataListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLLDPInfoException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLLDPInfoRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="name" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLLDPInfoResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="LLDPInfos" type="ns12:LLDPDataListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLaserSpectrumException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLaserSpectrumRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpRef" type="ns1:NamingAttributeType" />
+            <xs:element minOccurs="0" name="compensationPower" type="xs:string" />
+            <xs:element xmlns:ns15="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="vendorExtensions" type="ns15:AnyListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLaserSpectrumResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="spectrumDataList" type="tns:spectrumDataListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getMemberTerminationPointNamesException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getMemberTerminationPointNamesRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpName" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getMemberTerminationPointNamesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpName" type="ns1:NamingAttributeType" />
+            <xs:element minOccurs="0" name="tpRefList" type="ns1:NamingAttributeListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getMemberTerminationPointsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getMemberTerminationPointsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpName" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getMemberTerminationPointsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpDataList" type="ns8:TerminationPointDataListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTerminationPointException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTerminationPointGroupingRelationshipsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTerminationPointGroupingRelationshipsRequest" type="tns:RequestProfile2Type" />
+      <xs:element name="getTerminationPointGroupingRelationshipsResponse" type="tns:MultipleObjectNamesResponseType" />
+      <xs:element name="getTerminationPointPoolException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTerminationPointPoolRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpPoolRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTerminationPointPoolResponse" type="tns:SingleTerminationPointPoolObjectResponseType" />
+      <xs:element name="getTerminationPointPoolsIteratorException" type="ns4:GetAllDataIteratorExceptionType" />
+      <xs:element name="getTerminationPointPoolsIteratorRequest" type="ns4:GetAllDataIteratorRequestType" />
+      <xs:element name="getTerminationPointPoolsIteratorResponse" type="tns:MultipleTerminationPointPoolObjectsResponseType" />
+      <xs:element name="getTerminationPointRequest" type="tns:RequestProfile2Type" />
+      <xs:element name="getTerminationPointResponse" type="tns:SingleTerminationPointObjectResponseType" />
+      <xs:element name="getTerminationPointsIteratorException" type="ns4:GetAllDataIteratorExceptionType" />
+      <xs:element name="getTerminationPointsIteratorRequest" type="ns4:GetAllDataIteratorRequestType" />
+      <xs:element name="getTerminationPointsIteratorResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="getTrafficConditioningProfileAssociatedTpsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTrafficConditioningProfileAssociatedTpsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tcProfileRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTrafficConditioningProfileAssociatedTpsResponse" type="tns:MultipleTerminationPointObjectsResponseType" />
+      <xs:element name="retrieveResourceMaintenanceInfoException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns4:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="retrieveResourceMaintenanceInfoRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="tpRef" type="ns1:NamingAttributeType" />
+            <xs:element minOccurs="0" name="type" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="retrieveResourceMaintenanceInfoResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="ptp" type="ns9:PhysicalTerminationPointType" />
+            <xs:element minOccurs="0" name="ftp" type="ns10:FloatingTerminationPointType" />
+            <xs:element minOccurs="0" name="ctp" type="ns11:ConnectionTerminationPointType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="GetAllEdgePointsType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="mlsnRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="tpLayerRateList" type="ns2:LayerRateListType" />
+          <xs:element minOccurs="0" name="connectionLayerRateList" type="ns2:LayerRateListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="MultipleTerminationPointObjectsResponseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="tpList" type="ns3:TerminationPointListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SingleTerminationPointPoolObjectResponseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="tpPool" type="ns5:TerminationPointPoolType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="spectrumDataListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="spectrumData" nillable="true" type="tns:spectrumDataType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="spectrumDataType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="index" type="xs:string" />
+          <xs:element minOccurs="0" name="wavelengthNumber" type="xs:string" />
+          <xs:element minOccurs="0" name="standardFrequency" type="xs:string" />
+          <xs:element minOccurs="0" name="centerFrequency" type="xs:string" />
+          <xs:element minOccurs="0" name="wavelengthDeviation" type="xs:string" />
+          <xs:element minOccurs="0" name="frequencyDeviation" type="xs:string" />
+          <xs:element minOccurs="0" name="opticalPower" type="xs:string" />
+          <xs:element minOccurs="0" name="osnr" type="xs:string" />
+          <xs:element xmlns:ns16="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="vendorExtensions" type="ns16:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetAllTerminationPointsType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="meRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="tpLayerRateList" type="ns2:LayerRateListType" />
+          <xs:element minOccurs="0" name="connectionLayerRateList" type="ns2:LayerRateListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetAllGroupTerminationPointsType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="meRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="tpLayerRateList" type="ns2:LayerRateListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="MultipleGroupTerminationPointObjectsResponseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="gtpList" type="ns13:GroupTerminationPointListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="RequestProfile3Type">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="equipmentRef" type="ns1:NamingAttributeType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="RequestProfile1Type">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="mlsnRef" type="ns1:NamingAttributeType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="MultipleTerminationPointPoolObjectsResponseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="tpPoolList" type="ns5:TerminationPointPoolListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="RequestProfile2Type">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="tpRef" type="ns1:NamingAttributeType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetAllConnectionTerminationPointsType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="tpRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="layerRateList" type="ns2:LayerRateListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="RequestProfile4Type">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ctpRef" type="ns1:NamingAttributeType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SingleGroupTerminationPointObjectResponseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="gtp" type="ns13:GroupTerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SingleTerminationPointObjectResponseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="tp" type="ns3:TerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="MultipleObjectNamesResponseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="nameList" type="ns1:NamingAttributeListType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="NamingAttributeType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="rdn" type="tns:RelativeDistinguishNameType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="RelativeDistinguishNameType">
+        <xs:sequence>
+          <xs:element name="type" type="xs:string" />
+          <xs:element name="value" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NamingAttributeListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="name" nillable="true" type="tns:NamingAttributeType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/hdr/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:element name="accessDenied" type="tns:BaseExceptionMessageType" />
+      <xs:element name="capacityExceeded" type="tns:BaseExceptionMessageType" />
+      <xs:element name="commLoss" type="tns:BaseExceptionMessageType" />
+      <xs:element name="entityNotFound" type="tns:BaseExceptionMessageType" />
+      <xs:element name="internalError" type="tns:BaseExceptionMessageType" />
+      <xs:element name="invalidFilterDefinition" type="tns:BaseExceptionMessageType" />
+      <xs:element name="invalidInput" type="tns:BaseExceptionMessageType" />
+      <xs:element name="invalidTopic" type="tns:BaseExceptionMessageType" />
+      <xs:element name="notImplemented" type="tns:BaseExceptionMessageType" />
+      <xs:element name="notInValidState" type="tns:BaseExceptionMessageType" />
+      <xs:element name="notificationServiceProblem" type="tns:BaseExceptionMessageType" />
+      <xs:element name="objectInUse" type="tns:BaseExceptionMessageType" />
+      <xs:element name="protectionEffortNotMet" type="tns:BaseExceptionMessageType" />
+      <xs:element name="timeslotInUse" type="tns:BaseExceptionMessageType" />
+      <xs:element name="tooManyOpenIterators" type="tns:BaseExceptionMessageType" />
+      <xs:element name="tpInvalidEndPoint" type="tns:BaseExceptionMessageType" />
+      <xs:element name="unableToComply" type="tns:BaseExceptionMessageType" />
+      <xs:element name="unsupportedCompressionFormat" type="tns:BaseExceptionMessageType" />
+      <xs:element name="unsupportedPackingFormat" type="tns:BaseExceptionMessageType" />
+      <xs:element name="unsupportedRoutingConstraints" type="tns:BaseExceptionMessageType" />
+      <xs:element name="userlabelInUse" type="tns:BaseExceptionMessageType" />
+      <xs:complexType name="AllExceptionsType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="accessDenied" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="capacityExceeded" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="commLoss" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="entityNotFound" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="internalError" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="invalidFilterDefinition" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="invalidInput" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="invalidTopic" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="notificationServiceProblem" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="notImplemented" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="notInValidState" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="objectInUse" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="protectionEffortNotMet" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="timeslotInUse" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="tooManyOpenIterators" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="tpInvalidEndPoint" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="unableToComply" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="unsupportedCompressionFormat" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="unsupportedPackingFormat" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="unsupportedRoutingConstraints" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="userlabelInUse" type="tns:BaseExceptionMessageType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="BaseExceptionMessageType">
+        <xs:sequence>
+          <xs:element minOccurs="0" ref="ns1:header" />
+          <xs:element minOccurs="0" name="reason" type="xs:string" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetAllDataIteratorExceptionType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:AllExceptionsType">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="GetAllDataIteratorRequestType">
+        <xs:sequence />
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/hdr/v1" xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/hdr/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:element name="header">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="activityName" type="xs:string" />
+            <xs:element minOccurs="0" name="msgName" type="xs:string" />
+            <xs:element minOccurs="0" name="msgType" type="xs:string" />
+            <xs:element minOccurs="0" name="senderURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="destinationURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="replyToURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="originatorURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="failureReplytoURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="activityStatus" type="tns:ActivityStatusType" />
+            <xs:element minOccurs="0" name="correlationId" type="xs:string" />
+            <xs:element minOccurs="0" name="security" type="xs:string" />
+            <xs:element minOccurs="0" name="securityType" type="xs:string" />
+            <xs:element minOccurs="0" name="priority" type="xs:string" />
+            <xs:element minOccurs="0" name="msgSpecificProperties">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="property" nillable="true">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="propName" type="xs:string" />
+                        <xs:element name="propValue" type="xs:string" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="communicationPattern" type="xs:string" />
+            <xs:element minOccurs="0" name="communicationStyle" type="xs:string" />
+            <xs:element minOccurs="0" name="requestedBatchSize" type="xs:unsignedInt" />
+            <xs:element minOccurs="0" name="batchSequenceNumber" type="xs:unsignedInt" />
+            <xs:element minOccurs="0" name="batchSequenceEndOfReply" type="xs:boolean" />
+            <xs:element minOccurs="0" name="iteratorReferenceURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="fileLocationURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="compressionType" type="tns:CompressionTypeType" />
+            <xs:element minOccurs="0" name="packingType" type="tns:PackingTypeType" />
+            <xs:element minOccurs="0" name="timestamp" type="xs:dateTime" />
+            <xs:element minOccurs="0" name="vendorExtensions" type="ns1:AnyListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ActivityStatusType">
+        <xs:simpleContent>
+          <xs:extension base="tns:ActivityStatusEnumType">
+            <xs:attribute name="qualifier" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="CompressionTypeType">
+        <xs:simpleContent>
+          <xs:extension base="tns:CompressionEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="PackingTypeType">
+        <xs:simpleContent>
+          <xs:extension base="tns:PackingEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:simpleType name="MessageTypeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="REQUEST" />
+          <xs:enumeration value="RESPONSE" />
+          <xs:enumeration value="NOTIFICATION" />
+          <xs:enumeration value="ERROR" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ActivityStatusEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SUCCESS" />
+          <xs:enumeration value="FAILURE" />
+          <xs:enumeration value="WARNING" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="CommunicationPatternType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SimpleResponse" />
+          <xs:enumeration value="MultipleBatchResponse" />
+          <xs:enumeration value="BulkResponse" />
+          <xs:enumeration value="Notification" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="CommunicationStyleType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MSG" />
+          <xs:enumeration value="RPC" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="CompressionEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NO_COMPRESSION" />
+          <xs:enumeration value="GZIP" />
+          <xs:enumeration value="VENDOR_EXT" />
+          <xs:enumeration value="MINOR_EXT" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="PackingEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NO_PACKING" />
+          <xs:enumeration value="ZIP" />
+          <xs:enumeration value="TAR" />
+          <xs:enumeration value="VENDOR_EXT" />
+          <xs:enumeration value="MINOR_EXT" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="additionalInfo">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="nvs" nillable="true" type="tns:NameAndStringValueType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="aliasNameList" type="tns:AliasNameListType" />
+      <xs:element name="nameAndStringValueType" type="tns:NameAndStringValueType" />
+      <xs:element name="nvList" type="tns:NameAndAnyValueListType" />
+      <xs:element name="nvsList" type="tns:NameAndValueStringListType" />
+      <xs:complexType name="AnyListType">
+        <xs:sequence>
+          <xs:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AliasNameListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="alias" nillable="true">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="aliasName" type="xs:string" />
+                <xs:element name="aliasValue" nillable="true" type="xs:string" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NameAndValueStringListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="nvs" nillable="true" type="tns:NameAndStringValueType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NameAndStringValueType">
+        <xs:sequence>
+          <xs:element name="name" type="xs:string" />
+          <xs:element name="value" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NameAndAnyValueListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="nv" nillable="true" type="tns:NameAndAnyValueType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NameAndAnyValueType">
+        <xs:sequence>
+          <xs:element name="name" type="xs:string" />
+          <xs:any namespace="##other" processContents="lax" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="MultiEventInventoryAttributesType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="neTime" type="xs:anySimpleType" />
+          <xs:element name="eventIndication" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NotificationIdentifierListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="notificationId" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryExpressionType" mixed="true">
+        <xs:sequence>
+          <xs:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
+        </xs:sequence>
+        <xs:attribute name="Dialect" type="xs:string" use="required" />
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/coi/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/coi/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="commonObjectInfo" type="tns:CommonObjectInfoType" />
+      <xs:complexType name="CommonObjectInfoType" abstract="true">
+        <xs:sequence>
+          <xs:element xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="name" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="userLabel" type="xs:string" />
+          <xs:element minOccurs="0" name="discoveredName" type="xs:string" />
+          <xs:element minOccurs="0" name="namingOs" type="xs:string" />
+          <xs:element minOccurs="0" name="owner" type="xs:string" />
+          <xs:element xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="aliasNameList" type="ns2:AliasNameListType" />
+          <xs:element xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="vendorExtensions" type="ns3:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getAllConnectionlessPortTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllConnectionlessPortTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getFTPBindingTP">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getFTPBindingTPRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAllAssignableConnectionlessPortTerminationPointsException">
+    <wsdl:part name="GetAllAssignableConnectionlessPortTerminationPointsException" element="ns2:getAllAssignableConnectionlessPortTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getAvailableTimeSlotResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAvailableTimeSlotResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getTrafficConditioningProfileAssociatedTps">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getTrafficConditioningProfileAssociatedTpsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllPhysicalTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllPhysicalTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getContainingTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getContainingTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetAllPhysicalTerminationPointsException">
+    <wsdl:part name="GetAllPhysicalTerminationPointsException" element="ns2:getAllPhysicalTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getAllEdgePointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllEdgePointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupTerminationPointException">
+    <wsdl:part name="GetGroupTerminationPointException" element="ns2:getGroupTerminationPointException" />
+  </wsdl:message>
+  <wsdl:message name="getContainingGroupTerminationPoint">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getContainingGroupTerminationPointRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAllPhysicalTerminationPointNamesException">
+    <wsdl:part name="GetAllPhysicalTerminationPointNamesException" element="ns2:getAllPhysicalTerminationPointNamesException" />
+  </wsdl:message>
+  <wsdl:message name="getContainedCurrentConnectionTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getContainedCurrentConnectionTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllSupportedPhysicalTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllSupportedPhysicalTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAssociatedGroupTerminationPointResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAssociatedGroupTerminationPointResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetAvailableTimeSlotException">
+    <wsdl:part name="GetAvailableTimeSlotException" element="ns2:getAvailableTimeSlotException" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSupportedPhysicalTerminationPointsException">
+    <wsdl:part name="GetAllSupportedPhysicalTerminationPointsException" element="ns2:getAllSupportedPhysicalTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getMemberTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getMemberTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAvailableTimeSlot">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAvailableTimeSlotRequest" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPointGroupingRelationshipsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointGroupingRelationshipsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllGroupTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllGroupTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetMemberTerminationPointsException">
+    <wsdl:part name="GetMemberTerminationPointsException" element="ns2:getMemberTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getContainedInUseConnectionTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getContainedInUseConnectionTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllFloatingTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllFloatingTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetContainedCurrentConnectionTerminationPointsException">
+    <wsdl:part name="GetContainedCurrentConnectionTerminationPointsException" element="ns2:getContainedCurrentConnectionTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="GetAllEdgePointsException">
+    <wsdl:part name="GetAllEdgePointsException" element="ns2:getAllEdgePointsException" />
+  </wsdl:message>
+  <wsdl:message name="getMemberTerminationPointNamesResponse">
+    <wsdl:part name="mtopBody" element="ns2:getMemberTerminationPointNamesResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetLaserSpectrumException">
+    <wsdl:part name="GetLaserSpectrumException" element="ns2:getLaserSpectrumException" />
+  </wsdl:message>
+  <wsdl:message name="GetContainedPotentialConnectionTerminationPointsException">
+    <wsdl:part name="GetContainedPotentialConnectionTerminationPointsException" element="ns2:getContainedPotentialConnectionTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getLLDPDetailInfoResponse">
+    <wsdl:part name="mtopBody" element="ns2:getLLDPDetailInfoResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetAssociatedTerminationPointsWrtTmdException">
+    <wsdl:part name="GetAssociatedTerminationPointsWrtTmdException" element="ns2:getAssociatedTerminationPointsWrtTmdException" />
+  </wsdl:message>
+  <wsdl:message name="getAllEdgePoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllEdgePointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPointPool">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointPoolRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAllPhysicalTerminationPointsWithoutFtpsException">
+    <wsdl:part name="GetAllPhysicalTerminationPointsWithoutFtpsException" element="ns2:getAllPhysicalTerminationPointsWithoutFtpsException" />
+  </wsdl:message>
+  <wsdl:message name="getLLDPInfo">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getLLDPInfoRequest" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPointPoolsIterator">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointPoolsIteratorRequest" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPointsIteratorResponse">
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointsIteratorResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAssociatedTerminationPointsWrtTmdResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAssociatedTerminationPointsWrtTmdResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getContainedPotentialConnectionTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getContainedPotentialConnectionTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetTerminationPointGroupingRelationshipsException">
+    <wsdl:part name="GetTerminationPointGroupingRelationshipsException" element="ns2:getTerminationPointGroupingRelationshipsException" />
+  </wsdl:message>
+  <wsdl:message name="getAssociatedGroupTerminationPoint">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAssociatedGroupTerminationPointRequest" />
+  </wsdl:message>
+  <wsdl:message name="getContainedInUseConnectionTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getContainedInUseConnectionTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllPhysicalTerminationPointNames">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllPhysicalTerminationPointNamesRequest" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPoint">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointRequest" />
+  </wsdl:message>
+  <wsdl:message name="getLaserSpectrum">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getLaserSpectrumRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllAssignedConnectionlessPortTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllAssignedConnectionlessPortTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="RetrieveResourceMaintenanceInfoException">
+    <wsdl:part name="RetrieveResourceMaintenanceInfoException" element="ns2:retrieveResourceMaintenanceInfoException" />
+  </wsdl:message>
+  <wsdl:message name="GetLLDPInfoException">
+    <wsdl:part name="GetLLDPInfoException" element="ns2:getLLDPInfoException" />
+  </wsdl:message>
+  <wsdl:message name="GetAssociatedGroupTerminationPointException">
+    <wsdl:part name="GetAssociatedGroupTerminationPointException" element="ns2:getAssociatedGroupTerminationPointException" />
+  </wsdl:message>
+  <wsdl:message name="getContainingGroupTerminationPointResponse">
+    <wsdl:part name="mtopBody" element="ns2:getContainingGroupTerminationPointResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetTerminationPointsIteratorException">
+    <wsdl:part name="GetTerminationPointsIteratorException" element="ns2:getTerminationPointsIteratorException" />
+  </wsdl:message>
+  <wsdl:message name="GetAllAssignedConnectionlessPortTerminationPointsException">
+    <wsdl:part name="GetAllAssignedConnectionlessPortTerminationPointsException" element="ns2:getAllAssignedConnectionlessPortTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getAllTerminationPointPools">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllTerminationPointPoolsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllPhysicalTerminationPointsWithoutFtps">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllPhysicalTerminationPointsWithoutFtpsRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAssociatedTerminationPointException">
+    <wsdl:part name="GetAssociatedTerminationPointException" element="ns2:getAssociatedTerminationPointException" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPointResponse">
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllSupportedPhysicalTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllSupportedPhysicalTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getContainingTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getContainingTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAssociatedTerminationPoint">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAssociatedTerminationPointRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetContainedInUseConnectionTerminationPointsException">
+    <wsdl:part name="GetContainedInUseConnectionTerminationPointsException" element="ns2:getContainedInUseConnectionTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getAllGroupTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllGroupTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllAssignableConnectionlessPortTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllAssignableConnectionlessPortTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getLaserSpectrumResponse">
+    <wsdl:part name="mtopBody" element="ns2:getLaserSpectrumResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getGroupTerminationPointsIteratorResponse">
+    <wsdl:part name="mtopBody" element="ns2:getGroupTerminationPointsIteratorResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllPhysicalTerminationPointsWithoutFtpsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllPhysicalTerminationPointsWithoutFtpsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetAllConnectionlessPortTerminationPointsException">
+    <wsdl:part name="GetAllConnectionlessPortTerminationPointsException" element="ns2:getAllConnectionlessPortTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getAllPhysicalTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllPhysicalTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getFTPBindingTPResponse">
+    <wsdl:part name="mtopBody" element="ns2:getFTPBindingTPResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetAllFloatingTerminationPointsException">
+    <wsdl:part name="GetAllFloatingTerminationPointsException" element="ns2:getAllFloatingTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getContainedPotentialConnectionTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getContainedPotentialConnectionTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getGroupTerminationPointResponse">
+    <wsdl:part name="mtopBody" element="ns2:getGroupTerminationPointResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetContainingTerminationPointsException">
+    <wsdl:part name="GetContainingTerminationPointsException" element="ns2:getContainingTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="GetFTPBindingTPException">
+    <wsdl:part name="GetFTPBindingTPException" element="ns2:getFTPBindingTPException" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPointsIterator">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointsIteratorRequest" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPointPoolsIteratorResponse">
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointPoolsIteratorResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="retrieveResourceMaintenanceInfo">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:retrieveResourceMaintenanceInfoRequest" />
+  </wsdl:message>
+  <wsdl:message name="getTrafficConditioningProfileAssociatedTpsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getTrafficConditioningProfileAssociatedTpsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllAssignedConnectionlessPortTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllAssignedConnectionlessPortTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getLLDPDetailInfo">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getLLDPDetailInfoRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllPhysicalTerminationPointNamesResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllPhysicalTerminationPointNamesResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPointGroupingRelationships">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointGroupingRelationshipsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllFloatingTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllFloatingTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAllGroupTerminationPointsException">
+    <wsdl:part name="GetAllGroupTerminationPointsException" element="ns2:getAllGroupTerminationPointsException" />
+  </wsdl:message>
+  <wsdl:message name="getGroupTerminationPointsIterator">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getGroupTerminationPointsIteratorRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetTerminationPointPoolException">
+    <wsdl:part name="GetTerminationPointPoolException" element="ns2:getTerminationPointPoolException" />
+  </wsdl:message>
+  <wsdl:message name="getMemberTerminationPointNames">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getMemberTerminationPointNamesRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllAssignableConnectionlessPortTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllAssignableConnectionlessPortTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetContainingGroupTerminationPointException">
+    <wsdl:part name="GetContainingGroupTerminationPointException" element="ns2:getContainingGroupTerminationPointException" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTerminationPointPoolsException">
+    <wsdl:part name="GetAllTerminationPointPoolsException" element="ns2:getAllTerminationPointPoolsException" />
+  </wsdl:message>
+  <wsdl:message name="getAssociatedTerminationPointResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAssociatedTerminationPointResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetTerminationPointException">
+    <wsdl:part name="GetTerminationPointException" element="ns2:getTerminationPointException" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupTerminationPointsIteratorException">
+    <wsdl:part name="GetGroupTerminationPointsIteratorException" element="ns2:getGroupTerminationPointsIteratorException" />
+  </wsdl:message>
+  <wsdl:message name="retrieveResourceMaintenanceInfoResponse">
+    <wsdl:part name="mtopBody" element="ns2:retrieveResourceMaintenanceInfoResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetLLDPDetailInfoException">
+    <wsdl:part name="GetLLDPDetailInfoException" element="ns2:getLLDPDetailInfoException" />
+  </wsdl:message>
+  <wsdl:message name="getAllTerminationPointPoolsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllTerminationPointPoolsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getMemberTerminationPoints">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getMemberTerminationPointsRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetTrafficConditioningProfileAssociatedTpsException">
+    <wsdl:part name="GetTrafficConditioningProfileAssociatedTpsException" element="ns2:getTrafficConditioningProfileAssociatedTpsException" />
+  </wsdl:message>
+  <wsdl:message name="getLLDPInfoResponse">
+    <wsdl:part name="mtopBody" element="ns2:getLLDPInfoResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllConnectionlessPortTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllConnectionlessPortTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAssociatedTerminationPointsWrtTmd">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAssociatedTerminationPointsWrtTmdRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetTerminationPointPoolsIteratorException">
+    <wsdl:part name="GetTerminationPointPoolsIteratorException" element="ns2:getTerminationPointPoolsIteratorException" />
+  </wsdl:message>
+  <wsdl:message name="getTerminationPointPoolResponse">
+    <wsdl:part name="mtopBody" element="ns2:getTerminationPointPoolResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getContainedCurrentConnectionTerminationPointsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getContainedCurrentConnectionTerminationPointsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetMemberTerminationPointNamesException">
+    <wsdl:part name="GetMemberTerminationPointNamesException" element="ns2:getMemberTerminationPointNamesException" />
+  </wsdl:message>
+  <wsdl:message name="getGroupTerminationPoint">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getGroupTerminationPointRequest" />
+  </wsdl:message>
+  <wsdl:portType name="TerminationPointRetrieval_RPC">
+    <wsdl:operation name="getAllEdgePoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllEdgePoints" message="tns:getAllEdgePoints" />
+      <wsdl:output name="getAllEdgePointsResponse" message="tns:getAllEdgePointsResponse" />
+      <wsdl:fault name="GetAllEdgePointsException" message="tns:GetAllEdgePointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPointPool" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getTerminationPointPool" message="tns:getTerminationPointPool" />
+      <wsdl:output name="getTerminationPointPoolResponse" message="tns:getTerminationPointPoolResponse" />
+      <wsdl:fault name="GetTerminationPointPoolException" message="tns:GetTerminationPointPoolException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllConnectionlessPortTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllConnectionlessPortTerminationPoints" message="tns:getAllConnectionlessPortTerminationPoints" />
+      <wsdl:output name="getAllConnectionlessPortTerminationPointsResponse" message="tns:getAllConnectionlessPortTerminationPointsResponse" />
+      <wsdl:fault name="GetAllConnectionlessPortTerminationPointsException" message="tns:GetAllConnectionlessPortTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getFTPBindingTP" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getFTPBindingTP" message="tns:getFTPBindingTP" />
+      <wsdl:output name="getFTPBindingTPResponse" message="tns:getFTPBindingTPResponse" />
+      <wsdl:fault name="GetFTPBindingTPException" message="tns:GetFTPBindingTPException" />
+    </wsdl:operation>
+    <wsdl:operation name="getMemberTerminationPointNames" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getMemberTerminationPointNames" message="tns:getMemberTerminationPointNames" />
+      <wsdl:output name="getMemberTerminationPointNamesResponse" message="tns:getMemberTerminationPointNamesResponse" />
+      <wsdl:fault name="GetMemberTerminationPointNamesException" message="tns:GetMemberTerminationPointNamesException" />
+    </wsdl:operation>
+    <wsdl:operation name="getLLDPInfo" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getLLDPInfo" message="tns:getLLDPInfo" />
+      <wsdl:output name="getLLDPInfoResponse" message="tns:getLLDPInfoResponse" />
+      <wsdl:fault name="GetLLDPInfoException" message="tns:GetLLDPInfoException" />
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPointPoolsIterator" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getTerminationPointPoolsIterator" message="tns:getTerminationPointPoolsIterator" />
+      <wsdl:output name="getTerminationPointPoolsIteratorResponse" message="tns:getTerminationPointPoolsIteratorResponse" />
+      <wsdl:fault name="GetTerminationPointPoolsIteratorException" message="tns:GetTerminationPointPoolsIteratorException" />
+    </wsdl:operation>
+    <wsdl:operation name="getTrafficConditioningProfileAssociatedTps" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getTrafficConditioningProfileAssociatedTps" message="tns:getTrafficConditioningProfileAssociatedTps" />
+      <wsdl:output name="getTrafficConditioningProfileAssociatedTpsResponse" message="tns:getTrafficConditioningProfileAssociatedTpsResponse" />
+      <wsdl:fault name="GetTrafficConditioningProfileAssociatedTpsException" message="tns:GetTrafficConditioningProfileAssociatedTpsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllPhysicalTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllPhysicalTerminationPoints" message="tns:getAllPhysicalTerminationPoints" />
+      <wsdl:output name="getAllPhysicalTerminationPointsResponse" message="tns:getAllPhysicalTerminationPointsResponse" />
+      <wsdl:fault name="GetAllPhysicalTerminationPointsException" message="tns:GetAllPhysicalTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAssociatedGroupTerminationPoint" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAssociatedGroupTerminationPoint" message="tns:getAssociatedGroupTerminationPoint" />
+      <wsdl:output name="getAssociatedGroupTerminationPointResponse" message="tns:getAssociatedGroupTerminationPointResponse" />
+      <wsdl:fault name="GetAssociatedGroupTerminationPointException" message="tns:GetAssociatedGroupTerminationPointException" />
+    </wsdl:operation>
+    <wsdl:operation name="getContainedInUseConnectionTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getContainedInUseConnectionTerminationPoints" message="tns:getContainedInUseConnectionTerminationPoints" />
+      <wsdl:output name="getContainedInUseConnectionTerminationPointsResponse" message="tns:getContainedInUseConnectionTerminationPointsResponse" />
+      <wsdl:fault name="GetContainedInUseConnectionTerminationPointsException" message="tns:GetContainedInUseConnectionTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllPhysicalTerminationPointNames" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllPhysicalTerminationPointNames" message="tns:getAllPhysicalTerminationPointNames" />
+      <wsdl:output name="getAllPhysicalTerminationPointNamesResponse" message="tns:getAllPhysicalTerminationPointNamesResponse" />
+      <wsdl:fault name="GetAllPhysicalTerminationPointNamesException" message="tns:GetAllPhysicalTerminationPointNamesException" />
+    </wsdl:operation>
+    <wsdl:operation name="getContainingGroupTerminationPoint" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getContainingGroupTerminationPoint" message="tns:getContainingGroupTerminationPoint" />
+      <wsdl:output name="getContainingGroupTerminationPointResponse" message="tns:getContainingGroupTerminationPointResponse" />
+      <wsdl:fault name="GetContainingGroupTerminationPointException" message="tns:GetContainingGroupTerminationPointException" />
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPoint" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getTerminationPoint" message="tns:getTerminationPoint" />
+      <wsdl:output name="getTerminationPointResponse" message="tns:getTerminationPointResponse" />
+      <wsdl:fault name="GetTerminationPointException" message="tns:GetTerminationPointException" />
+    </wsdl:operation>
+    <wsdl:operation name="getContainedCurrentConnectionTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getContainedCurrentConnectionTerminationPoints" message="tns:getContainedCurrentConnectionTerminationPoints" />
+      <wsdl:output name="getContainedCurrentConnectionTerminationPointsResponse" message="tns:getContainedCurrentConnectionTerminationPointsResponse" />
+      <wsdl:fault name="GetContainedCurrentConnectionTerminationPointsException" message="tns:GetContainedCurrentConnectionTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getLaserSpectrum" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getLaserSpectrum" message="tns:getLaserSpectrum" />
+      <wsdl:output name="getLaserSpectrumResponse" message="tns:getLaserSpectrumResponse" />
+      <wsdl:fault name="GetLaserSpectrumException" message="tns:GetLaserSpectrumException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllAssignedConnectionlessPortTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllAssignedConnectionlessPortTerminationPoints" message="tns:getAllAssignedConnectionlessPortTerminationPoints" />
+      <wsdl:output name="getAllAssignedConnectionlessPortTerminationPointsResponse" message="tns:getAllAssignedConnectionlessPortTerminationPointsResponse" />
+      <wsdl:fault name="GetAllAssignedConnectionlessPortTerminationPointsException" message="tns:GetAllAssignedConnectionlessPortTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllSupportedPhysicalTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllSupportedPhysicalTerminationPoints" message="tns:getAllSupportedPhysicalTerminationPoints" />
+      <wsdl:output name="getAllSupportedPhysicalTerminationPointsResponse" message="tns:getAllSupportedPhysicalTerminationPointsResponse" />
+      <wsdl:fault name="GetAllSupportedPhysicalTerminationPointsException" message="tns:GetAllSupportedPhysicalTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getContainedPotentialConnectionTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getContainedPotentialConnectionTerminationPoints" message="tns:getContainedPotentialConnectionTerminationPoints" />
+      <wsdl:output name="getContainedPotentialConnectionTerminationPointsResponse" message="tns:getContainedPotentialConnectionTerminationPointsResponse" />
+      <wsdl:fault name="GetContainedPotentialConnectionTerminationPointsException" message="tns:GetContainedPotentialConnectionTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getMemberTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getMemberTerminationPoints" message="tns:getMemberTerminationPoints" />
+      <wsdl:output name="getMemberTerminationPointsResponse" message="tns:getMemberTerminationPointsResponse" />
+      <wsdl:fault name="GetMemberTerminationPointsException" message="tns:GetMemberTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAvailableTimeSlot" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAvailableTimeSlot" message="tns:getAvailableTimeSlot" />
+      <wsdl:output name="getAvailableTimeSlotResponse" message="tns:getAvailableTimeSlotResponse" />
+      <wsdl:fault name="GetAvailableTimeSlotException" message="tns:GetAvailableTimeSlotException" />
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPointsIterator" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getTerminationPointsIterator" message="tns:getTerminationPointsIterator" />
+      <wsdl:output name="getTerminationPointsIteratorResponse" message="tns:getTerminationPointsIteratorResponse" />
+      <wsdl:fault name="GetTerminationPointsIteratorException" message="tns:GetTerminationPointsIteratorException" />
+    </wsdl:operation>
+    <wsdl:operation name="retrieveResourceMaintenanceInfo" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="retrieveResourceMaintenanceInfo" message="tns:retrieveResourceMaintenanceInfo" />
+      <wsdl:output name="retrieveResourceMaintenanceInfoResponse" message="tns:retrieveResourceMaintenanceInfoResponse" />
+      <wsdl:fault name="RetrieveResourceMaintenanceInfoException" message="tns:RetrieveResourceMaintenanceInfoException" />
+    </wsdl:operation>
+    <wsdl:operation name="getLLDPDetailInfo" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getLLDPDetailInfo" message="tns:getLLDPDetailInfo" />
+      <wsdl:output name="getLLDPDetailInfoResponse" message="tns:getLLDPDetailInfoResponse" />
+      <wsdl:fault name="GetLLDPDetailInfoException" message="tns:GetLLDPDetailInfoException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllTerminationPointPools" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllTerminationPointPools" message="tns:getAllTerminationPointPools" />
+      <wsdl:output name="getAllTerminationPointPoolsResponse" message="tns:getAllTerminationPointPoolsResponse" />
+      <wsdl:fault name="GetAllTerminationPointPoolsException" message="tns:GetAllTerminationPointPoolsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllPhysicalTerminationPointsWithoutFtps" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllPhysicalTerminationPointsWithoutFtps" message="tns:getAllPhysicalTerminationPointsWithoutFtps" />
+      <wsdl:output name="getAllPhysicalTerminationPointsWithoutFtpsResponse" message="tns:getAllPhysicalTerminationPointsWithoutFtpsResponse" />
+      <wsdl:fault name="GetAllPhysicalTerminationPointsWithoutFtpsException" message="tns:GetAllPhysicalTerminationPointsWithoutFtpsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAssociatedTerminationPointsWrtTmd" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAssociatedTerminationPointsWrtTmd" message="tns:getAssociatedTerminationPointsWrtTmd" />
+      <wsdl:output name="getAssociatedTerminationPointsWrtTmdResponse" message="tns:getAssociatedTerminationPointsWrtTmdResponse" />
+      <wsdl:fault name="GetAssociatedTerminationPointsWrtTmdException" message="tns:GetAssociatedTerminationPointsWrtTmdException" />
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPointGroupingRelationships" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getTerminationPointGroupingRelationships" message="tns:getTerminationPointGroupingRelationships" />
+      <wsdl:output name="getTerminationPointGroupingRelationshipsResponse" message="tns:getTerminationPointGroupingRelationshipsResponse" />
+      <wsdl:fault name="GetTerminationPointGroupingRelationshipsException" message="tns:GetTerminationPointGroupingRelationshipsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllFloatingTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllFloatingTerminationPoints" message="tns:getAllFloatingTerminationPoints" />
+      <wsdl:output name="getAllFloatingTerminationPointsResponse" message="tns:getAllFloatingTerminationPointsResponse" />
+      <wsdl:fault name="GetAllFloatingTerminationPointsException" message="tns:GetAllFloatingTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getContainingTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getContainingTerminationPoints" message="tns:getContainingTerminationPoints" />
+      <wsdl:output name="getContainingTerminationPointsResponse" message="tns:getContainingTerminationPointsResponse" />
+      <wsdl:fault name="GetContainingTerminationPointsException" message="tns:GetContainingTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAssociatedTerminationPoint" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAssociatedTerminationPoint" message="tns:getAssociatedTerminationPoint" />
+      <wsdl:output name="getAssociatedTerminationPointResponse" message="tns:getAssociatedTerminationPointResponse" />
+      <wsdl:fault name="GetAssociatedTerminationPointException" message="tns:GetAssociatedTerminationPointException" />
+    </wsdl:operation>
+    <wsdl:operation name="getGroupTerminationPointsIterator" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getGroupTerminationPointsIterator" message="tns:getGroupTerminationPointsIterator" />
+      <wsdl:output name="getGroupTerminationPointsIteratorResponse" message="tns:getGroupTerminationPointsIteratorResponse" />
+      <wsdl:fault name="GetGroupTerminationPointsIteratorException" message="tns:GetGroupTerminationPointsIteratorException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllGroupTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllGroupTerminationPoints" message="tns:getAllGroupTerminationPoints" />
+      <wsdl:output name="getAllGroupTerminationPointsResponse" message="tns:getAllGroupTerminationPointsResponse" />
+      <wsdl:fault name="GetAllGroupTerminationPointsException" message="tns:GetAllGroupTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllAssignableConnectionlessPortTerminationPoints" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllAssignableConnectionlessPortTerminationPoints" message="tns:getAllAssignableConnectionlessPortTerminationPoints" />
+      <wsdl:output name="getAllAssignableConnectionlessPortTerminationPointsResponse" message="tns:getAllAssignableConnectionlessPortTerminationPointsResponse" />
+      <wsdl:fault name="GetAllAssignableConnectionlessPortTerminationPointsException" message="tns:GetAllAssignableConnectionlessPortTerminationPointsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getGroupTerminationPoint" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getGroupTerminationPoint" message="tns:getGroupTerminationPoint" />
+      <wsdl:output name="getGroupTerminationPointResponse" message="tns:getGroupTerminationPointResponse" />
+      <wsdl:fault name="GetGroupTerminationPointException" message="tns:GetGroupTerminationPointException" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TerminationPointRetrievalHttpSoapBinding" type="tns:TerminationPointRetrieval_RPC">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getAllEdgePoints">
+      <soap:operation soapAction="getAllEdgePoints" style="document" />
+      <wsdl:input name="getAllEdgePoints">
+        <soap:header message="tns:getAllEdgePoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllEdgePointsResponse">
+        <soap:header message="tns:getAllEdgePointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllEdgePointsException">
+        <soap:fault use="literal" name="GetAllEdgePointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPointPool">
+      <soap:operation soapAction="getTerminationPointPool" style="document" />
+      <wsdl:input name="getTerminationPointPool">
+        <soap:header message="tns:getTerminationPointPool" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getTerminationPointPoolResponse">
+        <soap:header message="tns:getTerminationPointPoolResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetTerminationPointPoolException">
+        <soap:fault use="literal" name="GetTerminationPointPoolException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMemberTerminationPointNames">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getMemberTerminationPointNames">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getMemberTerminationPointNamesResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GetMemberTerminationPointNamesException">
+        <soap:fault use="literal" name="GetMemberTerminationPointNamesException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getFTPBindingTP">
+      <soap:operation soapAction="getFTPBindingTP" style="document" />
+      <wsdl:input name="getFTPBindingTP">
+        <soap:header message="tns:getFTPBindingTP" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getFTPBindingTPResponse">
+        <soap:header message="tns:getFTPBindingTPResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetFTPBindingTPException">
+        <soap:fault use="literal" name="GetFTPBindingTPException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllConnectionlessPortTerminationPoints">
+      <soap:operation soapAction="getAllConnectionlessPortTerminationPoints" style="document" />
+      <wsdl:input name="getAllConnectionlessPortTerminationPoints">
+        <soap:header message="tns:getAllConnectionlessPortTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllConnectionlessPortTerminationPointsResponse">
+        <soap:header message="tns:getAllConnectionlessPortTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllConnectionlessPortTerminationPointsException">
+        <soap:fault use="literal" name="GetAllConnectionlessPortTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getLLDPInfo">
+      <soap:operation soapAction="getLLDPInfo" style="document" />
+      <wsdl:input name="getLLDPInfo">
+        <soap:header message="tns:getLLDPInfo" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getLLDPInfoResponse">
+        <soap:header message="tns:getLLDPInfoResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetLLDPInfoException">
+        <soap:fault use="literal" name="GetLLDPInfoException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPointPoolsIterator">
+      <soap:operation soapAction="getTerminationPointPoolsIterator" style="document" />
+      <wsdl:input name="getTerminationPointPoolsIterator">
+        <soap:header message="tns:getTerminationPointPoolsIterator" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getTerminationPointPoolsIteratorResponse">
+        <soap:header message="tns:getTerminationPointPoolsIteratorResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetTerminationPointPoolsIteratorException">
+        <soap:fault use="literal" name="GetTerminationPointPoolsIteratorException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTrafficConditioningProfileAssociatedTps">
+      <soap:operation soapAction="getTrafficConditioningProfileAssociatedTps" style="document" />
+      <wsdl:input name="getTrafficConditioningProfileAssociatedTps">
+        <soap:header message="tns:getTrafficConditioningProfileAssociatedTps" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getTrafficConditioningProfileAssociatedTpsResponse">
+        <soap:header message="tns:getTrafficConditioningProfileAssociatedTpsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetTrafficConditioningProfileAssociatedTpsException">
+        <soap:fault use="literal" name="GetTrafficConditioningProfileAssociatedTpsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllPhysicalTerminationPoints">
+      <soap:operation soapAction="getAllPhysicalTerminationPoints" style="document" />
+      <wsdl:input name="getAllPhysicalTerminationPoints">
+        <soap:header message="tns:getAllPhysicalTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllPhysicalTerminationPointsResponse">
+        <soap:header message="tns:getAllPhysicalTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllPhysicalTerminationPointsException">
+        <soap:fault use="literal" name="GetAllPhysicalTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAssociatedGroupTerminationPoint">
+      <soap:operation soapAction="getAssociatedGroupTerminationPoint" style="document" />
+      <wsdl:input name="getAssociatedGroupTerminationPoint">
+        <soap:header message="tns:getAssociatedGroupTerminationPoint" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAssociatedGroupTerminationPointResponse">
+        <soap:header message="tns:getAssociatedGroupTerminationPointResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAssociatedGroupTerminationPointException">
+        <soap:fault use="literal" name="GetAssociatedGroupTerminationPointException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getContainedInUseConnectionTerminationPoints">
+      <soap:operation soapAction="getContainedInUseConnectionTerminationPoints" style="document" />
+      <wsdl:input name="getContainedInUseConnectionTerminationPoints">
+        <soap:header message="tns:getContainedInUseConnectionTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getContainedInUseConnectionTerminationPointsResponse">
+        <soap:header message="tns:getContainedInUseConnectionTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetContainedInUseConnectionTerminationPointsException">
+        <soap:fault use="literal" name="GetContainedInUseConnectionTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllPhysicalTerminationPointNames">
+      <soap:operation soapAction="getAllPhysicalTerminationPointNames" style="document" />
+      <wsdl:input name="getAllPhysicalTerminationPointNames">
+        <soap:header message="tns:getAllPhysicalTerminationPointNames" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllPhysicalTerminationPointNamesResponse">
+        <soap:header message="tns:getAllPhysicalTerminationPointNamesResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllPhysicalTerminationPointNamesException">
+        <soap:fault use="literal" name="GetAllPhysicalTerminationPointNamesException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getContainingGroupTerminationPoint">
+      <soap:operation soapAction="getContainingGroupTerminationPoint" style="document" />
+      <wsdl:input name="getContainingGroupTerminationPoint">
+        <soap:header message="tns:getContainingGroupTerminationPoint" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getContainingGroupTerminationPointResponse">
+        <soap:header message="tns:getContainingGroupTerminationPointResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetContainingGroupTerminationPointException">
+        <soap:fault use="literal" name="GetContainingGroupTerminationPointException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPoint">
+      <soap:operation soapAction="getTerminationPoint" style="document" />
+      <wsdl:input name="getTerminationPoint">
+        <soap:header message="tns:getTerminationPoint" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getTerminationPointResponse">
+        <soap:header message="tns:getTerminationPointResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetTerminationPointException">
+        <soap:fault use="literal" name="GetTerminationPointException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getContainedCurrentConnectionTerminationPoints">
+      <soap:operation soapAction="getContainedCurrentConnectionTerminationPoints" style="document" />
+      <wsdl:input name="getContainedCurrentConnectionTerminationPoints">
+        <soap:header message="tns:getContainedCurrentConnectionTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getContainedCurrentConnectionTerminationPointsResponse">
+        <soap:header message="tns:getContainedCurrentConnectionTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetContainedCurrentConnectionTerminationPointsException">
+        <soap:fault use="literal" name="GetContainedCurrentConnectionTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getLaserSpectrum">
+      <soap:operation soapAction="getLaserSpectrum" style="document" />
+      <wsdl:input name="getLaserSpectrum">
+        <soap:header message="tns:getLaserSpectrum" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getLaserSpectrumResponse">
+        <soap:header message="tns:getLaserSpectrumResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetLaserSpectrumException">
+        <soap:fault use="literal" name="GetLaserSpectrumException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllAssignedConnectionlessPortTerminationPoints">
+      <soap:operation soapAction="getAllAssignedConnectionlessPortTerminationPoints" style="document" />
+      <wsdl:input name="getAllAssignedConnectionlessPortTerminationPoints">
+        <soap:header message="tns:getAllAssignedConnectionlessPortTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllAssignedConnectionlessPortTerminationPointsResponse">
+        <soap:header message="tns:getAllAssignedConnectionlessPortTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllAssignedConnectionlessPortTerminationPointsException">
+        <soap:fault use="literal" name="GetAllAssignedConnectionlessPortTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllSupportedPhysicalTerminationPoints">
+      <soap:operation soapAction="getAllSupportedPhysicalTerminationPoints" style="document" />
+      <wsdl:input name="getAllSupportedPhysicalTerminationPoints">
+        <soap:header message="tns:getAllSupportedPhysicalTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllSupportedPhysicalTerminationPointsResponse">
+        <soap:header message="tns:getAllSupportedPhysicalTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllSupportedPhysicalTerminationPointsException">
+        <soap:fault use="literal" name="GetAllSupportedPhysicalTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getContainedPotentialConnectionTerminationPoints">
+      <soap:operation soapAction="getContainedPotentialConnectionTerminationPoints" style="document" />
+      <wsdl:input name="getContainedPotentialConnectionTerminationPoints">
+        <soap:header message="tns:getContainedPotentialConnectionTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getContainedPotentialConnectionTerminationPointsResponse">
+        <soap:header message="tns:getContainedPotentialConnectionTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetContainedPotentialConnectionTerminationPointsException">
+        <soap:fault use="literal" name="GetContainedPotentialConnectionTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMemberTerminationPoints">
+      <soap:operation soapAction="getMemberTerminationPoints" style="document" />
+      <wsdl:input name="getMemberTerminationPoints">
+        <soap:header message="tns:getMemberTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getMemberTerminationPointsResponse">
+        <soap:header message="tns:getMemberTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetMemberTerminationPointsException">
+        <soap:fault use="literal" name="GetMemberTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAvailableTimeSlot">
+      <soap:operation soapAction="getAvailableTimeSlot" style="document" />
+      <wsdl:input name="getAvailableTimeSlot">
+        <soap:header message="tns:getAvailableTimeSlot" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAvailableTimeSlotResponse">
+        <soap:header message="tns:getAvailableTimeSlotResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAvailableTimeSlotException">
+        <soap:fault use="literal" name="GetAvailableTimeSlotException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPointsIterator">
+      <soap:operation soapAction="getTerminationPointsIterator" style="document" />
+      <wsdl:input name="getTerminationPointsIterator">
+        <soap:header message="tns:getTerminationPointsIterator" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getTerminationPointsIteratorResponse">
+        <soap:header message="tns:getTerminationPointsIteratorResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetTerminationPointsIteratorException">
+        <soap:fault use="literal" name="GetTerminationPointsIteratorException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveResourceMaintenanceInfo">
+      <soap:operation soapAction="retrieveResourceMaintenanceInfo" style="document" />
+      <wsdl:input name="retrieveResourceMaintenanceInfo">
+        <soap:header message="tns:retrieveResourceMaintenanceInfo" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="retrieveResourceMaintenanceInfoResponse">
+        <soap:header message="tns:retrieveResourceMaintenanceInfoResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="RetrieveResourceMaintenanceInfoException">
+        <soap:fault use="literal" name="RetrieveResourceMaintenanceInfoException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getLLDPDetailInfo">
+      <soap:operation soapAction="getLLDPDetailInfo" style="document" />
+      <wsdl:input name="getLLDPDetailInfo">
+        <soap:header message="tns:getLLDPDetailInfo" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getLLDPDetailInfoResponse">
+        <soap:header message="tns:getLLDPDetailInfoResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetLLDPDetailInfoException">
+        <soap:fault use="literal" name="GetLLDPDetailInfoException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllTerminationPointPools">
+      <soap:operation soapAction="getAllTerminationPointPools" style="document" />
+      <wsdl:input name="getAllTerminationPointPools">
+        <soap:header message="tns:getAllTerminationPointPools" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllTerminationPointPoolsResponse">
+        <soap:header message="tns:getAllTerminationPointPoolsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllTerminationPointPoolsException">
+        <soap:fault use="literal" name="GetAllTerminationPointPoolsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllPhysicalTerminationPointsWithoutFtps">
+      <soap:operation soapAction="getAllPhysicalTerminationPointsWithoutFtps" style="document" />
+      <wsdl:input name="getAllPhysicalTerminationPointsWithoutFtps">
+        <soap:header message="tns:getAllPhysicalTerminationPointsWithoutFtps" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllPhysicalTerminationPointsWithoutFtpsResponse">
+        <soap:header message="tns:getAllPhysicalTerminationPointsWithoutFtpsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllPhysicalTerminationPointsWithoutFtpsException">
+        <soap:fault use="literal" name="GetAllPhysicalTerminationPointsWithoutFtpsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAssociatedTerminationPointsWrtTmd">
+      <soap:operation soapAction="getAssociatedTerminationPointsWrtTmd" style="document" />
+      <wsdl:input name="getAssociatedTerminationPointsWrtTmd">
+        <soap:header message="tns:getAssociatedTerminationPointsWrtTmd" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAssociatedTerminationPointsWrtTmdResponse">
+        <soap:header message="tns:getAssociatedTerminationPointsWrtTmdResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAssociatedTerminationPointsWrtTmdException">
+        <soap:fault use="literal" name="GetAssociatedTerminationPointsWrtTmdException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTerminationPointGroupingRelationships">
+      <soap:operation soapAction="getTerminationPointGroupingRelationships" style="document" />
+      <wsdl:input name="getTerminationPointGroupingRelationships">
+        <soap:header message="tns:getTerminationPointGroupingRelationships" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getTerminationPointGroupingRelationshipsResponse">
+        <soap:header message="tns:getTerminationPointGroupingRelationshipsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetTerminationPointGroupingRelationshipsException">
+        <soap:fault use="literal" name="GetTerminationPointGroupingRelationshipsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllFloatingTerminationPoints">
+      <soap:operation soapAction="getAllFloatingTerminationPoints" style="document" />
+      <wsdl:input name="getAllFloatingTerminationPoints">
+        <soap:header message="tns:getAllFloatingTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllFloatingTerminationPointsResponse">
+        <soap:header message="tns:getAllFloatingTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllFloatingTerminationPointsException">
+        <soap:fault use="literal" name="GetAllFloatingTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getContainingTerminationPoints">
+      <soap:operation soapAction="getContainingTerminationPoints" style="document" />
+      <wsdl:input name="getContainingTerminationPoints">
+        <soap:header message="tns:getContainingTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getContainingTerminationPointsResponse">
+        <soap:header message="tns:getContainingTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetContainingTerminationPointsException">
+        <soap:fault use="literal" name="GetContainingTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAssociatedTerminationPoint">
+      <soap:operation soapAction="getAssociatedTerminationPoint" style="document" />
+      <wsdl:input name="getAssociatedTerminationPoint">
+        <soap:header message="tns:getAssociatedTerminationPoint" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAssociatedTerminationPointResponse">
+        <soap:header message="tns:getAssociatedTerminationPointResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAssociatedTerminationPointException">
+        <soap:fault use="literal" name="GetAssociatedTerminationPointException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGroupTerminationPointsIterator">
+      <soap:operation soapAction="getGroupTerminationPointsIterator" style="document" />
+      <wsdl:input name="getGroupTerminationPointsIterator">
+        <soap:header message="tns:getGroupTerminationPointsIterator" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getGroupTerminationPointsIteratorResponse">
+        <soap:header message="tns:getGroupTerminationPointsIteratorResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetGroupTerminationPointsIteratorException">
+        <soap:fault use="literal" name="GetGroupTerminationPointsIteratorException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllGroupTerminationPoints">
+      <soap:operation soapAction="getAllGroupTerminationPoints" style="document" />
+      <wsdl:input name="getAllGroupTerminationPoints">
+        <soap:header message="tns:getAllGroupTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllGroupTerminationPointsResponse">
+        <soap:header message="tns:getAllGroupTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllGroupTerminationPointsException">
+        <soap:fault use="literal" name="GetAllGroupTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllAssignableConnectionlessPortTerminationPoints">
+      <soap:operation soapAction="getAllAssignableConnectionlessPortTerminationPoints" style="document" />
+      <wsdl:input name="getAllAssignableConnectionlessPortTerminationPoints">
+        <soap:header message="tns:getAllAssignableConnectionlessPortTerminationPoints" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllAssignableConnectionlessPortTerminationPointsResponse">
+        <soap:header message="tns:getAllAssignableConnectionlessPortTerminationPointsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllAssignableConnectionlessPortTerminationPointsException">
+        <soap:fault use="literal" name="GetAllAssignableConnectionlessPortTerminationPointsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGroupTerminationPoint">
+      <soap:operation soapAction="getGroupTerminationPoint" style="document" />
+      <wsdl:input name="getGroupTerminationPoint">
+        <soap:header message="tns:getGroupTerminationPoint" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getGroupTerminationPointResponse">
+        <soap:header message="tns:getGroupTerminationPointResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetGroupTerminationPointException">
+        <soap:fault use="literal" name="GetGroupTerminationPointException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TerminationPointRetrievalHttp">
+    <wsdl:port name="TerminationPointRetrieval_RPC" binding="tns:TerminationPointRetrievalHttpSoapBinding">
+      <soap:address location="http://10.149.2.44:9997/TerminationPointRetrieval" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

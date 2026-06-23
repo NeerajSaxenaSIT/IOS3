@@ -1668,11 +1668,11 @@ Public Class clsSQLCommands
 
     Public Shared Function GetReportObjects(connStr As String, reportID As Integer) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("Select Distinct o.Technology, o.TargetType, o.Resolution, o.ObjectsSelected")
+        sqlQuery.AppendLine("Select Distinct o.Technology, o.TargetType, o.Resolution, o.ObjectsSelected, LEN(o.ObjectsSelected) - LEN(REPLACE(o.ObjectsSelected,',','')) + 1 As ObjectCount")
         sqlQuery.AppendLine("From [IOS_Server].[dbo].[IOS_Reports_Objects] o")
         sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports_Slides] s on o.SlideID = s.SlideID")
         sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports] r on s.ReportID = r.ReportID")
-        sqlQuery.AppendLine("Where r.ReportID = '" & reportID & "';")
+        sqlQuery.AppendLine("Where r.ReportID = " & reportID & ";")
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 

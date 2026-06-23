@@ -5,7 +5,7 @@
 
 	<!--MODIFY VERSION IN PRODUCT ID AND UPGRADEID -  DO NOT CHANGE UPGRADECODE !-->
 	
-	<Product Id="*" Name="CIOS" Language="1033" Version="3.26.2000" Manufacturer="CellSens" UpgradeCode="{6f5d6210-b9fa-4f19-942d-c827601d0869}" Codepage="1252">
+	<Product Id="*" Name="CIOS" Language="1033" Version="3.26.3001" Manufacturer="CellSens" UpgradeCode="{6f5d6210-b9fa-4f19-942d-c827601d0869}" Codepage="1252">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" AdminImage="no" Description="CellSens - Integrated Optimization Suite" Languages="1033" Manufacturer="CellSens" Platform="x64" ReadOnly="no" ShortNames="no"  />
 		<!--<Package InstallerVersion="200" Compressed="yes" InstallScope="perUser"  AdminImage="no" Description="CellSens - Integrated Optimization Suite" Languages="1033" Manufacturer="CellSens" Platform="x64" ReadOnly="no" ShortNames="no"  />-->
 
@@ -149,35 +149,54 @@
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
 
 			<!-- DEFINE ALL ODBC DATASOURCES -->
-
-			<Component Id="cmp_IOS_Server" Guid="{B7D13BCD-A34C-4575-AE1E-4BA7D6A27D6C}" Win64="yes">
-				<ODBCDataSource Id="OdbcDataSource_IOS_Server" DriverName="SQL Server" Registration="machine" KeyPath="yes" Name="IOS_Server_TDC">
-					<Property Id="Server"       Value="CELLSENSDB.ip.tdk.dk" />
-					<Property Id="Database"     Value="IOS_Server" />
-					<Property Id="Description"  Value="IOS_Server" />
+	
+			<Component Id="cmp_IOS_Server" Guid="{B7D13BCD-A34C-4575-AE1E-4BA7D6A27D6C}" Win64="yes"> 
+				<ODBCDataSource Id="OdbcDataSource_IOS_Server"  DriverName="SQL Server"  Registration="machine" KeyPath="yes" Name="IOS_Server_RCSH"> 
+					<Property Id="Server"       Value="10.92.18.172" /> 
+					<Property Id="Database"     Value="IOS_Server" /> 
+					<Property Id="Description"  Value="IOS_Server" /> 
+				</ODBCDataSource>
+			</Component>
+		  
+			<Component Id="cmp_IOS_DT" Guid="{6B77297F-1C0C-46AC-BC89-02916D2A3BD2}" Win64="yes"> 
+				<ODBCDataSource Id="OdbcDataSource_IOS_DT" DriverName="SQL Server"  Registration="machine" KeyPath="yes" Name="IOS_DT"> 
+					<Property Id="Server"       Value="10.92.18.172" /> 
+					<Property Id="Database"     Value="IOS_DT" /> 
+					<Property Id="Description"  Value="IOS_DT" /> 
+				</ODBCDataSource>
+			</Component>
+	
+			<Component Id="cmp_data_Huawei" Guid="{053163E3-7305-4073-9EE4-B26DC4CF61D3}" Win64="yes"> 
+				<ODBCDataSource Id="OdbcDataSource_data_Huawei" DriverName="SQL Server"  Registration="machine" KeyPath="yes"  Name="RCSH_data_Huawei"> 
+					<Property Id="Server"       Value="10.92.18.172" /> 
+					<Property Id="Database"     Value="data_Huawei" /> 
+					<Property Id="Description"  Value="data_Huawei" /> 
+				</ODBCDataSource>
+			</Component>
+		  
+			<Component Id="cmp_data_Ericsson" Guid="{3af23525-199e-48c9-9332-46a01100085d}" Win64="yes"> 
+				<ODBCDataSource Id="OdbcDataSource_data_Ericsson" DriverName="SQL Server"  Registration="machine" KeyPath="yes"  Name="RCSH_data_Ericsson"> 
+					<Property Id="Server"       Value="10.92.18.172" /> 
+					<Property Id="Database"     Value="data_Ericsson" /> 
+					<Property Id="Description"  Value="data_Ericsson" /> 
 				</ODBCDataSource>
 			</Component>
 
-			<Component Id="cmp_data_Ericsson" Guid="{0f2ac4bc-7e53-4d35-93aa-b73d0c3555eb}" Win64="yes">
-				<ODBCDataSource Id="OdbcDataSource_data_Ericsson" DriverName="SQL Server" Registration="machine" KeyPath="yes" Name="TDC_data_Ericsson">
-					<Property Id="Server"       Value="CELLSENSDB.ip.tdk.dk" />
+			<Component Id="ReadOnly_data_Ericsson" Guid="{266fe350-a1d3-44a2-9703-8b69920f4e56}" Win64="yes">
+				<ODBCDataSource Id="ReadOnlyOdbcDataSource_data_Ericsson" DriverName="SQL Server"  Registration="machine" KeyPath="yes"  Name="ReadOnly_data_Ericsson">
+					<Property Id="Server"       Value="10.92.18.172" />
 					<Property Id="Database"     Value="data_Ericsson" />
 					<Property Id="Description"  Value="data_Ericsson" />
 				</ODBCDataSource>
 			</Component>
-
-			<Component Id="cmp_data_DataMart" Guid="{3af23525-199e-48c9-9332-46a01100085d}" Win64="yes">
-				<ODBCDataSource Id="OdbcDataSource_IOS_DataMart" DriverName="SQL Server" Registration="machine" KeyPath="yes" Name="IOS_DataMart_TDC">
-					<Property Id="Server"       Value="CELLSENSDB.ip.tdk.dk" />
-					<Property Id="Database"     Value="IOS_DataMart" />
-					<Property Id="Description"  Value="IOS_DataMart" />
-				</ODBCDataSource>
-			</Component>
-
+		  
 			<!-- END DATASOURCES -->
 
 			<Component Id="Template.potx" Guid="D7CFCB6C-2063-40D7-BD8F-35711FE0466B" Win64="yes">
 				<File Id="Template.potx" Name="Template.potx" Source="$(var.IOS_TargetDir)Template.potx" KeyPath="yes" />
+			</Component>
+			<Component Id="ReportTemplate.pptx" Guid="f47ac10b-58cc-0372-8567-0e02b2c3d479" Win64="yes">
+				<File Id="ReportTemplate.pptx" Name="ReportTemplate.pptx" Source="$(var.IOS_TargetDir)ReportTemplate.pptx" KeyPath="yes" />
 			</Component>
 			<Component Id="CIOS_UserManual.chm" Guid="695df548-3ac9-410a-ad61-7b57ba6069e2" Win64="yes">
 				<File Id="CIOS_UserManual.chm" Name="CIOS_UserManual.chm" Source="$(var.IOS_TargetDir)CIOS_UserManual.chm" KeyPath="yes" />
@@ -600,200 +619,200 @@
 			<Component Id="DBLayer.dll" Guid="11508312-dd94-4e1e-be6d-4c2f4aab0236" Win64="yes">
 				<File Id="DBLayer.dll" Name="DBLayer.dll" Source="$(var.IOS_TargetDir)DBLayer.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.BonusSkins.v24.2.dll" Guid="7847c4e0-f861-4ed1-9b93-51f90b4fae57" Win64="yes">
-				<File Id="DevExpress.BonusSkins.v24.2.dll" Name="DevExpress.BonusSkins.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.BonusSkins.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.BonusSkins.v25.2.dll" Guid="7847c4e0-f861-4ed1-9b93-51f90b4fae57" Win64="yes">
+				<File Id="DevExpress.BonusSkins.v25.2.dll" Name="DevExpress.BonusSkins.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.BonusSkins.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Charts.v24.2.Core.dll" Guid="21d38544-48cf-48c1-8f10-ccb7f7e035f1" Win64="yes">
-				<File Id="DevExpress.Charts.v24.2.Core.dll" Name="DevExpress.Charts.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Charts.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Charts.v25.2.Core.dll" Guid="21d38544-48cf-48c1-8f10-ccb7f7e035f1" Win64="yes">
+				<File Id="DevExpress.Charts.v25.2.Core.dll" Name="DevExpress.Charts.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Charts.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.CodeParser.v24.2.dll" Guid="180101ec-6de7-4c91-a4b9-170e2e35b5e9" Win64="yes">
-				<File Id="DevExpress.CodeParser.v24.2.dll" Name="DevExpress.CodeParser.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.CodeParser.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.CodeParser.v25.2.dll" Guid="180101ec-6de7-4c91-a4b9-170e2e35b5e9" Win64="yes">
+				<File Id="DevExpress.CodeParser.v25.2.dll" Name="DevExpress.CodeParser.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.CodeParser.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Dashboard.v24.2.Core.dll" Guid="262813fe-87e7-4206-a1af-fee7892568d8" Win64="yes">
-				<File Id="DevExpress.Dashboard.v24.2.Core.dll" Name="DevExpress.Dashboard.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Dashboard.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Dashboard.v25.2.Core.dll" Guid="262813fe-87e7-4206-a1af-fee7892568d8" Win64="yes">
+				<File Id="DevExpress.Dashboard.v25.2.Core.dll" Name="DevExpress.Dashboard.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Dashboard.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Dashboard.v24.2.Win.dll" Guid="58d506d3-4f30-43f9-9b7d-67add9ef6add" Win64="yes">
-				<File Id="DevExpress.Dashboard.v24.2.Win.dll" Name="DevExpress.Dashboard.v24.2.Win.dll" Source="$(var.IOS_TargetDir)DevExpress.Dashboard.v24.2.Win.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Dashboard.v25.2.Win.dll" Guid="58d506d3-4f30-43f9-9b7d-67add9ef6add" Win64="yes">
+				<File Id="DevExpress.Dashboard.v25.2.Win.dll" Name="DevExpress.Dashboard.v25.2.Win.dll" Source="$(var.IOS_TargetDir)DevExpress.Dashboard.v25.2.Win.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Data.Desktop.v24.2.dll" Guid="27e33060-8ab1-4bc5-b9cb-19cdd8b584a7" Win64="yes">
-				<File Id="DevExpress.Data.Desktop.v24.2.dll" Name="DevExpress.Data.Desktop.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Data.Desktop.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Data.Desktop.v25.2.dll" Guid="27e33060-8ab1-4bc5-b9cb-19cdd8b584a7" Win64="yes">
+				<File Id="DevExpress.Data.Desktop.v25.2.dll" Name="DevExpress.Data.Desktop.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Data.Desktop.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Data.v24.2.dll" Guid="843802a8-4e0e-4505-bc0a-68a0f2a6d375" Win64="yes">
-				<File Id="DevExpress.Data.v24.2.dll" Name="DevExpress.Data.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Data.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Data.v25.2.dll" Guid="843802a8-4e0e-4505-bc0a-68a0f2a6d375" Win64="yes">
+				<File Id="DevExpress.Data.v25.2.dll" Name="DevExpress.Data.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Data.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.DataAccess.v24.2.dll" Guid="16205559-3fb9-4dc7-adde-504754b13ade" Win64="yes">
-				<File Id="DevExpress.DataAccess.v24.2.dll" Name="DevExpress.DataAccess.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.DataAccess.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.DataAccess.v25.2.dll" Guid="16205559-3fb9-4dc7-adde-504754b13ade" Win64="yes">
+				<File Id="DevExpress.DataAccess.v25.2.dll" Name="DevExpress.DataAccess.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.DataAccess.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.DataAccess.v24.2.UI.dll" Guid="0e9685bb-a1e0-4884-b04d-6c7cf6f4852e" Win64="yes">
-				<File Id="DevExpress.DataAccess.v24.2.UI.dll" Name="DevExpress.DataAccess.v24.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.DataAccess.v24.2.UI.dll" KeyPath="yes" />
+			<Component Id="DevExpress.DataAccess.v25.2.UI.dll" Guid="0e9685bb-a1e0-4884-b04d-6c7cf6f4852e" Win64="yes">
+				<File Id="DevExpress.DataAccess.v25.2.UI.dll" Name="DevExpress.DataAccess.v25.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.DataAccess.v25.2.UI.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.DataVisualization.v24.2.Core.dll" Guid="ace33f82-153f-45c8-9e37-3fa8b706a573" Win64="yes">
-				<File Id="DevExpress.DataVisualization.v24.2.Core.dll" Name="DevExpress.DataVisualization.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.DataVisualization.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.DataVisualization.v25.2.Core.dll" Guid="ace33f82-153f-45c8-9e37-3fa8b706a573" Win64="yes">
+				<File Id="DevExpress.DataVisualization.v25.2.Core.dll" Name="DevExpress.DataVisualization.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.DataVisualization.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Diagram.v24.2.Core.dll" Guid="9a50eae1-c65d-4dc5-b65e-52dc78e76e8d" Win64="yes">
-				<File Id="DevExpress.Diagram.v24.2.Core.dll" Name="DevExpress.Diagram.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Diagram.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Diagram.v25.2.Core.dll" Guid="9a50eae1-c65d-4dc5-b65e-52dc78e76e8d" Win64="yes">
+				<File Id="DevExpress.Diagram.v25.2.Core.dll" Name="DevExpress.Diagram.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Diagram.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Dialogs.v24.2.Core.dll" Guid="67d0999e-386e-47d2-8b7c-ff5dc5329e6d" Win64="yes">
-				<File Id="DevExpress.Dialogs.v24.2.Core.dll" Name="DevExpress.Dialogs.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Dialogs.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Dialogs.v25.2.Core.dll" Guid="67d0999e-386e-47d2-8b7c-ff5dc5329e6d" Win64="yes">
+				<File Id="DevExpress.Dialogs.v25.2.Core.dll" Name="DevExpress.Dialogs.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Dialogs.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Docs.v24.2.dll" Guid="b7f85e66-53c7-4baa-8e73-aefe8f827bc7" Win64="yes">
-				<File Id="DevExpress.Docs.v24.2.dll" Name="DevExpress.Docs.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Docs.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Docs.v25.2.dll" Guid="b7f85e66-53c7-4baa-8e73-aefe8f827bc7" Win64="yes">
+				<File Id="DevExpress.Docs.v25.2.dll" Name="DevExpress.Docs.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Docs.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Drawing.v24.2.dll" Guid="2310441e-64c7-4e52-bec5-21b1b8b6c2fe" Win64="yes">
-				<File Id="DevExpress.Drawing.v24.2.dll" Name="DevExpress.Drawing.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Drawing.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Drawing.v25.2.dll" Guid="2310441e-64c7-4e52-bec5-21b1b8b6c2fe" Win64="yes">
+				<File Id="DevExpress.Drawing.v25.2.dll" Name="DevExpress.Drawing.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Drawing.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Images.v24.2.dll" Guid="697cdd23-0345-45d3-9c8d-6fe077a04111" Win64="yes">
-				<File Id="DevExpress.Images.v24.2.dll" Name="DevExpress.Images.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Images.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Images.v25.2.dll" Guid="697cdd23-0345-45d3-9c8d-6fe077a04111" Win64="yes">
+				<File Id="DevExpress.Images.v25.2.dll" Name="DevExpress.Images.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Images.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Map.v24.2.Core.dll" Guid="b123c7a5-6f21-47ec-9317-d49090fc00de" Win64="yes">
-				<File Id="DevExpress.Map.v24.2.Core.dll" Name="DevExpress.Map.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Map.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Map.v25.2.Core.dll" Guid="b123c7a5-6f21-47ec-9317-d49090fc00de" Win64="yes">
+				<File Id="DevExpress.Map.v25.2.Core.dll" Name="DevExpress.Map.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Map.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Mvvm.v24.2.dll" Guid="9e1c5526-5688-4a2f-ae76-197b464715a8" Win64="yes">
-				<File Id="DevExpress.Mvvm.v24.2.dll" Name="DevExpress.Mvvm.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Mvvm.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Mvvm.v25.2.dll" Guid="9e1c5526-5688-4a2f-ae76-197b464715a8" Win64="yes">
+				<File Id="DevExpress.Mvvm.v25.2.dll" Name="DevExpress.Mvvm.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Mvvm.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Office.v24.2.Core.dll" Guid="474601bd-2bf3-4c2e-b67f-26288d4890e4" Win64="yes">
-				<File Id="DevExpress.Office.v24.2.Core.dll" Name="DevExpress.Office.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Office.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Office.v25.2.Core.dll" Guid="474601bd-2bf3-4c2e-b67f-26288d4890e4" Win64="yes">
+				<File Id="DevExpress.Office.v25.2.Core.dll" Name="DevExpress.Office.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Office.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Pdf.v24.2.Core.dll" Guid="e8d25d15-11cf-4d45-8a10-a044e464a010" Win64="yes">
-				<File Id="DevExpress.Pdf.v24.2.Core.dll" Name="DevExpress.Pdf.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Pdf.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Pdf.v25.2.Core.dll" Guid="e8d25d15-11cf-4d45-8a10-a044e464a010" Win64="yes">
+				<File Id="DevExpress.Pdf.v25.2.Core.dll" Name="DevExpress.Pdf.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Pdf.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Pdf.v24.2.Drawing.dll" Guid="770deeb6-9cf8-46b7-b53c-d98444177bd0" Win64="yes">
-				<File Id="DevExpress.Pdf.v24.2.Drawing.dll" Name="DevExpress.Pdf.v24.2.Drawing.dll" Source="$(var.IOS_TargetDir)DevExpress.Pdf.v24.2.Drawing.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Pdf.v25.2.Drawing.dll" Guid="770deeb6-9cf8-46b7-b53c-d98444177bd0" Win64="yes">
+				<File Id="DevExpress.Pdf.v25.2.Drawing.dll" Name="DevExpress.Pdf.v25.2.Drawing.dll" Source="$(var.IOS_TargetDir)DevExpress.Pdf.v25.2.Drawing.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.PivotGrid.v24.2.Core.dll" Guid="cc9eaeaf-3779-4403-9209-e552d5e5e00a" Win64="yes">
-				<File Id="DevExpress.PivotGrid.v24.2.Core.dll" Name="DevExpress.PivotGrid.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.PivotGrid.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.PivotGrid.v25.2.Core.dll" Guid="cc9eaeaf-3779-4403-9209-e552d5e5e00a" Win64="yes">
+				<File Id="DevExpress.PivotGrid.v25.2.Core.dll" Name="DevExpress.PivotGrid.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.PivotGrid.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Printing.v24.2.Core.dll" Guid="fd0d8638-9d17-4907-9a68-47569b748b1a" Win64="yes">
-				<File Id="DevExpress.Printing.v24.2.Core.dll" Name="DevExpress.Printing.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Printing.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Printing.v25.2.Core.dll" Guid="fd0d8638-9d17-4907-9a68-47569b748b1a" Win64="yes">
+				<File Id="DevExpress.Printing.v25.2.Core.dll" Name="DevExpress.Printing.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Printing.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.RichEdit.v24.2.Core.dll" Guid="2c8e7c3a-4a57-4e21-93da-47cb77658894" Win64="yes">
-				<File Id="DevExpress.RichEdit.v24.2.Core.dll" Name="DevExpress.RichEdit.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.RichEdit.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.RichEdit.v25.2.Core.dll" Guid="2c8e7c3a-4a57-4e21-93da-47cb77658894" Win64="yes">
+				<File Id="DevExpress.RichEdit.v25.2.Core.dll" Name="DevExpress.RichEdit.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.RichEdit.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Snap.v24.2.Core.dll" Guid="256bd003-1f65-40e4-9131-46ed6de81878" Win64="yes">
-				<File Id="DevExpress.Snap.v24.2.Core.dll" Name="DevExpress.Snap.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Snap.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Snap.v25.2.Core.dll" Guid="256bd003-1f65-40e4-9131-46ed6de81878" Win64="yes">
+				<File Id="DevExpress.Snap.v25.2.Core.dll" Name="DevExpress.Snap.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Snap.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Sparkline.v24.2.Core.dll" Guid="c01fe589-3edd-46aa-834e-26e1fd202455" Win64="yes">
-				<File Id="DevExpress.Sparkline.v24.2.Core.dll" Name="DevExpress.Sparkline.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Sparkline.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Sparkline.v25.2.Core.dll" Guid="c01fe589-3edd-46aa-834e-26e1fd202455" Win64="yes">
+				<File Id="DevExpress.Sparkline.v25.2.Core.dll" Name="DevExpress.Sparkline.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Sparkline.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Spreadsheet.v24.2.Core.dll" Guid="e58e1a58-7c35-4dda-bdc1-d2e8b9e311ff" Win64="yes">
-				<File Id="DevExpress.Spreadsheet.v24.2.Core.dll" Name="DevExpress.Spreadsheet.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Spreadsheet.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Spreadsheet.v25.2.Core.dll" Guid="e58e1a58-7c35-4dda-bdc1-d2e8b9e311ff" Win64="yes">
+				<File Id="DevExpress.Spreadsheet.v25.2.Core.dll" Name="DevExpress.Spreadsheet.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Spreadsheet.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.TreeMap.v24.2.Core.dll" Guid="4d562e2c-6017-45ad-bd34-d07ae3770244" Win64="yes">
-				<File Id="DevExpress.TreeMap.v24.2.Core.dll" Name="DevExpress.TreeMap.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.TreeMap.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.TreeMap.v25.2.Core.dll" Guid="4d562e2c-6017-45ad-bd34-d07ae3770244" Win64="yes">
+				<File Id="DevExpress.TreeMap.v25.2.Core.dll" Name="DevExpress.TreeMap.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.TreeMap.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Utils.v24.2.dll" Guid="7bf37b07-104a-4b03-9cfc-14862a19a2d2" Win64="yes">
-				<File Id="DevExpress.Utils.v24.2.dll" Name="DevExpress.Utils.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Utils.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Utils.v25.2.dll" Guid="7bf37b07-104a-4b03-9cfc-14862a19a2d2" Win64="yes">
+				<File Id="DevExpress.Utils.v25.2.dll" Name="DevExpress.Utils.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Utils.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Utils.v24.2.UI.dll" Guid="1932c34d-fbfe-4fe1-a424-dcc8130c317a" Win64="yes">
-				<File Id="DevExpress.Utils.v24.2.UI.dll" Name="DevExpress.Utils.v24.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.Utils.v24.2.UI.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Utils.v25.2.UI.dll" Guid="1932c34d-fbfe-4fe1-a424-dcc8130c317a" Win64="yes">
+				<File Id="DevExpress.Utils.v25.2.UI.dll" Name="DevExpress.Utils.v25.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.Utils.v25.2.UI.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Xpf.Core.v24.2.dll" Guid="3e7e2f8f-5e12-412c-a4da-92448c110dac" Win64="yes">
-				<File Id="DevExpress.Xpf.Core.v24.2.dll" Name="DevExpress.Xpf.Core.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Core.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Xpf.Core.v25.2.dll" Guid="3e7e2f8f-5e12-412c-a4da-92448c110dac" Win64="yes">
+				<File Id="DevExpress.Xpf.Core.v25.2.dll" Name="DevExpress.Xpf.Core.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Core.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Xpf.Docking.v24.2.dll" Guid="831819da-1b2b-40ea-a402-e7efbcd8cf39" Win64="yes">
-				<File Id="DevExpress.Xpf.Docking.v24.2.dll" Name="DevExpress.Xpf.Docking.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Docking.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Xpf.Docking.v25.2.dll" Guid="831819da-1b2b-40ea-a402-e7efbcd8cf39" Win64="yes">
+				<File Id="DevExpress.Xpf.Docking.v25.2.dll" Name="DevExpress.Xpf.Docking.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Docking.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Xpf.DocumentViewer.v24.2.Core.dll" Guid="9de03d82-54b7-4f00-9c24-6fb400864ef8" Win64="yes">
-				<File Id="DevExpress.Xpf.DocumentViewer.v24.2.Core.dll" Name="DevExpress.Xpf.DocumentViewer.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.DocumentViewer.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Xpf.DocumentViewer.v25.2.Core.dll" Guid="9de03d82-54b7-4f00-9c24-6fb400864ef8" Win64="yes">
+				<File Id="DevExpress.Xpf.DocumentViewer.v25.2.Core.dll" Name="DevExpress.Xpf.DocumentViewer.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.DocumentViewer.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Xpf.Grid.v24.2.Core.dll" Guid="f167e4a6-340a-4527-af5f-5731d0eb7ed9" Win64="yes">
-				<File Id="DevExpress.Xpf.Grid.v24.2.Core.dll" Name="DevExpress.Xpf.Grid.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Grid.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Xpf.Grid.v25.2.Core.dll" Guid="f167e4a6-340a-4527-af5f-5731d0eb7ed9" Win64="yes">
+				<File Id="DevExpress.Xpf.Grid.v25.2.Core.dll" Name="DevExpress.Xpf.Grid.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Grid.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Xpf.Grid.v24.2.dll" Guid="eff34d76-6352-48ca-b93b-5df183f9f182" Win64="yes">
-				<File Id="DevExpress.Xpf.Grid.v24.2.dll" Name="DevExpress.Xpf.Grid.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Grid.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Xpf.Grid.v25.2.dll" Guid="eff34d76-6352-48ca-b93b-5df183f9f182" Win64="yes">
+				<File Id="DevExpress.Xpf.Grid.v25.2.dll" Name="DevExpress.Xpf.Grid.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Grid.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Xpf.Layout.v24.2.Core.dll" Guid="3e9b3707-3898-4f66-8432-eeb658798232" Win64="yes">
-				<File Id="DevExpress.Xpf.Layout.v24.2.Core.dll" Name="DevExpress.Xpf.Layout.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Layout.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Xpf.Layout.v25.2.Core.dll" Guid="3e9b3707-3898-4f66-8432-eeb658798232" Win64="yes">
+				<File Id="DevExpress.Xpf.Layout.v25.2.Core.dll" Name="DevExpress.Xpf.Layout.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Layout.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Xpf.Ribbon.v24.2.dll" Guid="b0c3e537-611b-42bb-a635-ae72745f8e73" Win64="yes">
-				<File Id="DevExpress.Xpf.Ribbon.v24.2.dll" Name="DevExpress.Xpf.Ribbon.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Ribbon.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Xpf.Ribbon.v25.2.dll" Guid="b0c3e537-611b-42bb-a635-ae72745f8e73" Win64="yes">
+				<File Id="DevExpress.Xpf.Ribbon.v25.2.dll" Name="DevExpress.Xpf.Ribbon.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpf.Ribbon.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.Xpo.v24.2.dll" Guid="f4552eea-fdba-423b-83dc-292feed4c873" Win64="yes">
-				<File Id="DevExpress.Xpo.v24.2.dll" Name="DevExpress.Xpo.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpo.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.Xpo.v25.2.dll" Guid="f4552eea-fdba-423b-83dc-292feed4c873" Win64="yes">
+				<File Id="DevExpress.Xpo.v25.2.dll" Name="DevExpress.Xpo.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.Xpo.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraBars.v24.2.dll" Guid="1e5f2f4d-6f4f-4da9-afd9-3012317775d6" Win64="yes">
-				<File Id="DevExpress.XtraBars.v24.2.dll" Name="DevExpress.XtraBars.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraBars.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraBars.v25.2.dll" Guid="1e5f2f4d-6f4f-4da9-afd9-3012317775d6" Win64="yes">
+				<File Id="DevExpress.XtraBars.v25.2.dll" Name="DevExpress.XtraBars.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraBars.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraCharts.v24.2.dll" Guid="18d0d3d4-8fca-47ae-a96e-5e61c15adb2f" Win64="yes">
-				<File Id="DevExpress.XtraCharts.v24.2.dll" Name="DevExpress.XtraCharts.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraCharts.v25.2.dll" Guid="18d0d3d4-8fca-47ae-a96e-5e61c15adb2f" Win64="yes">
+				<File Id="DevExpress.XtraCharts.v25.2.dll" Name="DevExpress.XtraCharts.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraCharts.v24.2.Extensions.dll" Guid="0eeda9bc-56d6-4fa0-a149-0caf2cbeb630" Win64="yes">
-				<File Id="DevExpress.XtraCharts.v24.2.Extensions.dll" Name="DevExpress.XtraCharts.v24.2.Extensions.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v24.2.Extensions.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraCharts.v25.2.Extensions.dll" Guid="0eeda9bc-56d6-4fa0-a149-0caf2cbeb630" Win64="yes">
+				<File Id="DevExpress.XtraCharts.v25.2.Extensions.dll" Name="DevExpress.XtraCharts.v25.2.Extensions.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v25.2.Extensions.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraCharts.v24.2.UI.dll" Guid="c40c0f1d-d930-4970-ba0e-6b01d835d5b4" Win64="yes">
-				<File Id="DevExpress.XtraCharts.v24.2.UI.dll" Name="DevExpress.XtraCharts.v24.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v24.2.UI.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraCharts.v25.2.UI.dll" Guid="c40c0f1d-d930-4970-ba0e-6b01d835d5b4" Win64="yes">
+				<File Id="DevExpress.XtraCharts.v25.2.UI.dll" Name="DevExpress.XtraCharts.v25.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v25.2.UI.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraCharts.v24.2.Wizard.dll" Guid="064fd149-287f-4737-8b58-c747eee01b92" Win64="yes">
-				<File Id="DevExpress.XtraCharts.v24.2.Wizard.dll" Name="DevExpress.XtraCharts.v24.2.Wizard.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v24.2.Wizard.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraCharts.v25.2.Wizard.dll" Guid="064fd149-287f-4737-8b58-c747eee01b92" Win64="yes">
+				<File Id="DevExpress.XtraCharts.v25.2.Wizard.dll" Name="DevExpress.XtraCharts.v25.2.Wizard.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraCharts.v25.2.Wizard.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraDiagram.v24.2.dll" Guid="7fb6ac17-47ec-45bf-8d98-3f056ec1965f" Win64="yes">
-				<File Id="DevExpress.XtraDiagram.v24.2.dll" Name="DevExpress.XtraDiagram.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraDiagram.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraDiagram.v25.2.dll" Guid="7fb6ac17-47ec-45bf-8d98-3f056ec1965f" Win64="yes">
+				<File Id="DevExpress.XtraDiagram.v25.2.dll" Name="DevExpress.XtraDiagram.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraDiagram.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraDialogs.v24.2.dll" Guid="934e9cb1-30df-4c53-b0c5-706e3703b47e" Win64="yes">
-				<File Id="DevExpress.XtraDialogs.v24.2.dll" Name="DevExpress.XtraDialogs.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraDialogs.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraDialogs.v25.2.dll" Guid="934e9cb1-30df-4c53-b0c5-706e3703b47e" Win64="yes">
+				<File Id="DevExpress.XtraDialogs.v25.2.dll" Name="DevExpress.XtraDialogs.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraDialogs.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraEditors.v24.2.dll" Guid="41cde46b-58bb-4e3c-b66e-7626717968db" Win64="yes">
-				<File Id="DevExpress.XtraEditors.v24.2.dll" Name="DevExpress.XtraEditors.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraEditors.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraEditors.v25.2.dll" Guid="41cde46b-58bb-4e3c-b66e-7626717968db" Win64="yes">
+				<File Id="DevExpress.XtraEditors.v25.2.dll" Name="DevExpress.XtraEditors.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraEditors.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraGauges.v24.2.Core.dll" Guid="708e4a0f-aaa6-4426-85bc-dc5d8925caf4" Win64="yes">
-				<File Id="DevExpress.XtraGauges.v24.2.Core.dll" Name="DevExpress.XtraGauges.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGauges.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraGauges.v25.2.Core.dll" Guid="708e4a0f-aaa6-4426-85bc-dc5d8925caf4" Win64="yes">
+				<File Id="DevExpress.XtraGauges.v25.2.Core.dll" Name="DevExpress.XtraGauges.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGauges.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraGauges.v24.2.Presets.dll" Guid="e57f2046-f3d8-4b0c-af4a-bc9ac058f14d" Win64="yes">
-				<File Id="DevExpress.XtraGauges.v24.2.Presets.dll" Name="DevExpress.XtraGauges.v24.2.Presets.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGauges.v24.2.Presets.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraGauges.v25.2.Presets.dll" Guid="e57f2046-f3d8-4b0c-af4a-bc9ac058f14d" Win64="yes">
+				<File Id="DevExpress.XtraGauges.v25.2.Presets.dll" Name="DevExpress.XtraGauges.v25.2.Presets.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGauges.v25.2.Presets.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraGauges.v24.2.Win.dll" Guid="cb5b7cfe-8347-4b44-9ab5-b532a4fbcb8e" Win64="yes">
-				<File Id="DevExpress.XtraGauges.v24.2.Win.dll" Name="DevExpress.XtraGauges.v24.2.Win.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGauges.v24.2.Win.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraGauges.v25.2.Win.dll" Guid="cb5b7cfe-8347-4b44-9ab5-b532a4fbcb8e" Win64="yes">
+				<File Id="DevExpress.XtraGauges.v25.2.Win.dll" Name="DevExpress.XtraGauges.v25.2.Win.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGauges.v25.2.Win.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraGrid.v24.2.dll" Guid="21d3e14d-10d2-480c-818e-6c4cb9ade239" Win64="yes">
-				<File Id="DevExpress.XtraGrid.v24.2.dll" Name="DevExpress.XtraGrid.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGrid.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraGrid.v25.2.dll" Guid="21d3e14d-10d2-480c-818e-6c4cb9ade239" Win64="yes">
+				<File Id="DevExpress.XtraGrid.v25.2.dll" Name="DevExpress.XtraGrid.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraGrid.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraLayout.v24.2.dll" Guid="c2f003b5-4534-4575-869b-c1baee919032" Win64="yes">
-				<File Id="DevExpress.XtraLayout.v24.2.dll" Name="DevExpress.XtraLayout.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraLayout.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraLayout.v25.2.dll" Guid="c2f003b5-4534-4575-869b-c1baee919032" Win64="yes">
+				<File Id="DevExpress.XtraLayout.v25.2.dll" Name="DevExpress.XtraLayout.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraLayout.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraMap.v24.2.dll" Guid="c2e489e0-7e21-4545-af42-26a2e8bdf46d" Win64="yes">
-				<File Id="DevExpress.XtraMap.v24.2.dll" Name="DevExpress.XtraMap.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraMap.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraMap.v25.2.dll" Guid="c2e489e0-7e21-4545-af42-26a2e8bdf46d" Win64="yes">
+				<File Id="DevExpress.XtraMap.v25.2.dll" Name="DevExpress.XtraMap.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraMap.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraNavBar.v24.2.dll" Guid="97d4b4db-3675-4b28-902b-3c82908f8ff7" Win64="yes">
-				<File Id="DevExpress.XtraNavBar.v24.2.dll" Name="DevExpress.XtraNavBar.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraNavBar.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraNavBar.v25.2.dll" Guid="97d4b4db-3675-4b28-902b-3c82908f8ff7" Win64="yes">
+				<File Id="DevExpress.XtraNavBar.v25.2.dll" Name="DevExpress.XtraNavBar.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraNavBar.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraPivotGrid.v24.2.dll" Guid="995e4622-3914-41d6-a8fb-fedc5f3a760b" Win64="yes">
-				<File Id="DevExpress.XtraPivotGrid.v24.2.dll" Name="DevExpress.XtraPivotGrid.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraPivotGrid.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraPivotGrid.v25.2.dll" Guid="995e4622-3914-41d6-a8fb-fedc5f3a760b" Win64="yes">
+				<File Id="DevExpress.XtraPivotGrid.v25.2.dll" Name="DevExpress.XtraPivotGrid.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraPivotGrid.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraPrinting.v24.2.dll" Guid="f6f972bc-f78b-4703-afd6-090e81c67db7" Win64="yes">
-				<File Id="DevExpress.XtraPrinting.v24.2.dll" Name="DevExpress.XtraPrinting.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraPrinting.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraPrinting.v25.2.dll" Guid="f6f972bc-f78b-4703-afd6-090e81c67db7" Win64="yes">
+				<File Id="DevExpress.XtraPrinting.v25.2.dll" Name="DevExpress.XtraPrinting.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraPrinting.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraReports.v24.2.dll" Guid="62f6bd2d-0768-4ab5-8a90-fcdd0a3a6d98" Win64="yes">
-				<File Id="DevExpress.XtraReports.v24.2.dll" Name="DevExpress.XtraReports.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraReports.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraReports.v25.2.dll" Guid="62f6bd2d-0768-4ab5-8a90-fcdd0a3a6d98" Win64="yes">
+				<File Id="DevExpress.XtraReports.v25.2.dll" Name="DevExpress.XtraReports.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraReports.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraReports.v24.2.Extensions.dll" Guid="43e7b03e-1a22-4e5f-97ea-ee51611277bb" Win64="yes">
-				<File Id="DevExpress.XtraReports.v24.2.Extensions.dll" Name="DevExpress.XtraReports.v24.2.Extensions.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraReports.v24.2.Extensions.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraReports.v25.2.Extensions.dll" Guid="43e7b03e-1a22-4e5f-97ea-ee51611277bb" Win64="yes">
+				<File Id="DevExpress.XtraReports.v25.2.Extensions.dll" Name="DevExpress.XtraReports.v25.2.Extensions.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraReports.v25.2.Extensions.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraReports.v24.2.Service.dll" Guid="026f2e66-e8db-44da-bc10-d7f29d58b6e2" Win64="yes">
-				<File Id="DevExpress.XtraReports.v24.2.Service.dll" Name="DevExpress.XtraReports.v24.2.Service.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraReports.v24.2.Service.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraReports.v25.2.Service.dll" Guid="026f2e66-e8db-44da-bc10-d7f29d58b6e2" Win64="yes">
+				<File Id="DevExpress.XtraReports.v25.2.Service.dll" Name="DevExpress.XtraReports.v25.2.Service.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraReports.v25.2.Service.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraRichEdit.v24.2.dll" Guid="8b301c77-44e3-48f2-81ee-083cc87b6ca3" Win64="yes">
-				<File Id="DevExpress.XtraRichEdit.v24.2.dll" Name="DevExpress.XtraRichEdit.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraRichEdit.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraRichEdit.v25.2.dll" Guid="8b301c77-44e3-48f2-81ee-083cc87b6ca3" Win64="yes">
+				<File Id="DevExpress.XtraRichEdit.v25.2.dll" Name="DevExpress.XtraRichEdit.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraRichEdit.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraScheduler.v24.2.Core.Desktop.dll" Guid="43a4b593-f877-4c87-8a2f-e2adfe628178" Win64="yes">
-				<File Id="DevExpress.XtraScheduler.v24.2.Core.Desktop.dll" Name="DevExpress.XtraScheduler.v24.2.Core.Desktop.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraScheduler.v24.2.Core.Desktop.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraScheduler.v25.2.Core.Desktop.dll" Guid="43a4b593-f877-4c87-8a2f-e2adfe628178" Win64="yes">
+				<File Id="DevExpress.XtraScheduler.v25.2.Core.Desktop.dll" Name="DevExpress.XtraScheduler.v25.2.Core.Desktop.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraScheduler.v25.2.Core.Desktop.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraScheduler.v24.2.Core.dll" Guid="05361ca3-7ca1-4958-accc-586dffb68db6" Win64="yes">
-				<File Id="DevExpress.XtraScheduler.v24.2.Core.dll" Name="DevExpress.XtraScheduler.v24.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraScheduler.v24.2.Core.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraScheduler.v25.2.Core.dll" Guid="05361ca3-7ca1-4958-accc-586dffb68db6" Win64="yes">
+				<File Id="DevExpress.XtraScheduler.v25.2.Core.dll" Name="DevExpress.XtraScheduler.v25.2.Core.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraScheduler.v25.2.Core.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraScheduler.v24.2.dll" Guid="190cd726-48a8-4c70-a842-bc59afc46699" Win64="yes">
-				<File Id="DevExpress.XtraScheduler.v24.2.dll" Name="DevExpress.XtraScheduler.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraScheduler.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraScheduler.v25.2.dll" Guid="190cd726-48a8-4c70-a842-bc59afc46699" Win64="yes">
+				<File Id="DevExpress.XtraScheduler.v25.2.dll" Name="DevExpress.XtraScheduler.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraScheduler.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraTreeList.v24.2.dll" Guid="066093ff-bf12-45e1-bf38-ad8df847c55d" Win64="yes">
-				<File Id="DevExpress.XtraTreeList.v24.2.dll" Name="DevExpress.XtraTreeList.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraTreeList.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraTreeList.v25.2.dll" Guid="066093ff-bf12-45e1-bf38-ad8df847c55d" Win64="yes">
+				<File Id="DevExpress.XtraTreeList.v25.2.dll" Name="DevExpress.XtraTreeList.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraTreeList.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraTreeMap.v24.2.dll" Guid="5275faf0-1e46-45d8-be9f-c8e976217557" Win64="yes">
-				<File Id="DevExpress.XtraTreeMap.v24.2.dll" Name="DevExpress.XtraTreeMap.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraTreeMap.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraTreeMap.v25.2.dll" Guid="5275faf0-1e46-45d8-be9f-c8e976217557" Win64="yes">
+				<File Id="DevExpress.XtraTreeMap.v25.2.dll" Name="DevExpress.XtraTreeMap.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraTreeMap.v25.2.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraTreeMap.v24.2.UI.dll" Guid="695e07e1-aed5-46ea-82f2-0ce56297fc4d" Win64="yes">
-				<File Id="DevExpress.XtraTreeMap.v24.2.UI.dll" Name="DevExpress.XtraTreeMap.v24.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraTreeMap.v24.2.UI.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraTreeMap.v25.2.UI.dll" Guid="695e07e1-aed5-46ea-82f2-0ce56297fc4d" Win64="yes">
+				<File Id="DevExpress.XtraTreeMap.v25.2.UI.dll" Name="DevExpress.XtraTreeMap.v25.2.UI.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraTreeMap.v25.2.UI.dll" KeyPath="yes" />
 			</Component>
-			<Component Id="DevExpress.XtraVerticalGrid.v24.2.dll" Guid="c3f1fa14-8fe6-4bc4-a465-480d3b5633dc" Win64="yes">
-				<File Id="DevExpress.XtraVerticalGrid.v24.2.dll" Name="DevExpress.XtraVerticalGrid.v24.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraVerticalGrid.v24.2.dll" KeyPath="yes" />
+			<Component Id="DevExpress.XtraVerticalGrid.v25.2.dll" Guid="c3f1fa14-8fe6-4bc4-a465-480d3b5633dc" Win64="yes">
+				<File Id="DevExpress.XtraVerticalGrid.v25.2.dll" Name="DevExpress.XtraVerticalGrid.v25.2.dll" Source="$(var.IOS_TargetDir)DevExpress.XtraVerticalGrid.v25.2.dll" KeyPath="yes" />
 			</Component>
 		</ComponentGroup>
 	</Fragment>

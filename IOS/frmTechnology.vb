@@ -16589,11 +16589,7 @@ Public Class frmTechnology
         Dim startdate As Date = Nothing
         Dim enddate As Date = Nothing
         startdate = dtEditStartTimeStats.EditValue
-        If tglBtnMonitorModeStats.ToggleState = CheckState.Checked Then
-            enddate = Now().AddDays(1)
-        Else
-            enddate = dtEditEndTimeStats.EditValue
-        End If
+        enddate = dtEditEndTimeStats.EditValue
 
         Dim startdate_string As String = Chr(39) & startdate.ToString("yyyy-MM-dd HH:mm") & Chr(39)
         Dim enddate_string As String = Chr(39) & enddate.ToString("yyyy-MM-dd HH:mm") & Chr(39)
@@ -22334,11 +22330,14 @@ Public Class frmTechnology
         Try
             tglBtnMonitorModeStats.ChangeToggleState()
             If tglBtnMonitorModeStats.ToggleState = CheckState.Checked Then
+                dtEditEndTimeStats.Enabled = False
+                dtEditEndTimeStats.EditValue = Now().AddDays(1)
                 timerCountdown.Enabled = True
                 tglBtnMonitorModeStats.Text = "Stop"
                 timeMonitor = TimeSerial(0, CInt(SpinEditMonModeStats.Value), 0)
                 timerCountdown.Start()
             Else
+                dtEditEndTimeStats.Enabled = True
                 timeMonitor = TimeSerial(0, 0, 0)
                 tglBtnMonitorModeStats.Text = "Start"
                 timerCountdown.Stop()

@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("IOS_DataTransformService")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("Microsoft")> 
-<Assembly: AssemblyProduct("IOS_DataTransformService")> 
-<Assembly: AssemblyCopyright("Copyright © Microsoft 2011")> 
+<Assembly: AssemblyProduct("IOS_DataTransformService")>
+<Assembly: AssemblyCopyright("Copyright © Microsoft 2026")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("3.2025.0.0")>
-<Assembly: AssemblyFileVersion("3.2025.0.0")>
+<Assembly: AssemblyVersion("3.2026.0.0")>
+<Assembly: AssemblyFileVersion("3.2026.0.0")>

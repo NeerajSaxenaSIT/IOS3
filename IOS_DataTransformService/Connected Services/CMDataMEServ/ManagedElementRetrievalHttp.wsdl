@@ -1,0 +1,1979 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:ns4="http://schemas.xmlsoap.org/soap/http" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.tmforum.org/mtop/mri/wsdl/mer/v1-0" xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/hdr/v1" xmlns:ns2="http://www.tmforum.org/mtop/mri/xsd/mer/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns3="http://www.tmforum.org/mtop/mri/xsd/dusr/v1" name="ManagedElementRetrievalHttp" targetNamespace="http://www.tmforum.org/mtop/mri/wsdl/mer/v1-0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" xmlns="http://www.tmforum.org/mtop/rp/xsd/comc/v1" xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/comm/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/rp/xsd/comc/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/comm/v1" />
+      <xs:element name="setDCCManagementDataException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns1:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="setDCCManagementDataRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meRef" type="ns2:NamingAttributeType" />
+            <xs:element minOccurs="0" name="dccDataList" type="ns3:DccDataListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="setDCCManagementDataResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="failedDccDataList" type="ns3:FailedDccDataListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:element name="IPAddressList" type="tns:IPAddressListType" />
+      <xs:element name="affinityMappingAttrList" type="tns:AffinityMappingAttrListType" />
+      <xs:complexType name="TerminationPointDataType">
+        <xs:sequence>
+          <xs:element name="tpRef" type="ns1:NamingAttributeType" />
+          <xs:element xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="aliasNameList" type="ns3:AliasNameListType" />
+          <xs:element xmlns:ns4="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpMappingMode" type="ns4:TerminationModeType" />
+          <xs:element minOccurs="0" ref="ns2:transmissionParametersList" />
+          <xs:element minOccurs="0" name="ingressTmdRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="egressTmdRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="ipAddressList" type="tns:IPAddressListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AffinityMappingAttrListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="affinityMappingAttr" nillable="true" type="tns:AffinityMappingAttrType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AffinityMappingAttrType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="value" type="xs:int" />
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+          <xs:element minOccurs="0" name="affType" type="xs:string" />
+          <xs:element minOccurs="0" name="operationType" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="IPAddressType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="address" type="xs:string" />
+          <xs:element minOccurs="0" name="mask" type="xs:string" />
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+          <xs:element minOccurs="0" name="stateType" type="xs:string" />
+          <xs:element minOccurs="0" name="anycastFlag" type="xs:string" />
+          <xs:element minOccurs="0" name="status" type="xs:string" />
+          <xs:element minOccurs="0" name="action" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="IPAddressListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="IPAddress" type="tns:IPAddressType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="VlanIDSectionType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="vlan" type="xs:string" />
+          <xs:element minOccurs="0" name="lowVlan" type="xs:string" />
+          <xs:element minOccurs="0" name="highVlan" type="xs:string" />
+          <xs:element minOccurs="0" name="vlanGroup" type="xs:string" />
+          <xs:element minOccurs="0" name="isisStatistic" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="VlanIDSectionListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="vlanIDSection" nillable="true" type="tns:VlanIDSectionType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TerminationPointDataListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="tpData" nillable="true" type="tns:TerminationPointDataType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns4="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/tp/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" xmlns:ns1="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/tp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:complexType name="TerminationPointListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="tp" nillable="true" type="tns:TerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TerminationPointType">
+        <xs:sequence>
+          <xs:element minOccurs="0" ref="ns1:ptp" />
+          <xs:element minOccurs="0" ref="ns2:ftp" />
+          <xs:element minOccurs="0" ref="ns3:ctp" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/rs/v1" xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/rs/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="ResourceSite" type="tns:ResourceSiteType" />
+      <xs:complexType name="ResourceSiteType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns1:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="type" type="xs:string" />
+              <xs:element minOccurs="0" name="memo" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ResourceSiteListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResourceSite" type="tns:ResourceSiteType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/ptp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="ptp" type="tns:PhysicalTerminationPointType" />
+      <xs:complexType name="PhysicalTerminationPointType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns2:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="direction" type="ns3:DirectionalityType" />
+              <xs:element xmlns:ns4="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpProtectionAssociation" type="ns4:TerminationPointProtectionAssociationType" />
+              <xs:element minOccurs="0" name="isEdgePoint" type="xs:boolean" />
+              <xs:element minOccurs="0" name="isEquipmentProtected" type="xs:boolean" />
+              <xs:element xmlns:ns5="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="egressTmdState" type="ns5:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns6="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="ingressTmdState" type="ns6:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns7="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="ingressTmdRef" type="ns7:NamingAttributeType" />
+              <xs:element xmlns:ns8="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="egressTmdRef" type="ns8:NamingAttributeType" />
+              <xs:element minOccurs="0" ref="ns1:transmissionParametersList" />
+              <xs:element xmlns:ns9="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" minOccurs="0" name="ipAddressList" type="ns9:IPAddressListType" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="PhysicalTerminationPointListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ptp" nillable="true" type="tns:PhysicalTerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/me/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/me/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:element name="me" type="tns:ManagedElementType" />
+      <xs:complexType name="ManagedElementListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="me" nillable="true" type="tns:ManagedElementType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ManagedElementType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns1:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="location" type="xs:string" />
+              <xs:element minOccurs="0" name="manufacturer" type="xs:string" />
+              <xs:element minOccurs="0" name="manufactureDate" type="xs:anySimpleType" />
+              <xs:element minOccurs="0" name="productName" type="xs:string" />
+              <xs:element minOccurs="0" name="softwareVersion" type="xs:string" />
+              <xs:element minOccurs="0" name="isInSyncState" type="xs:boolean" />
+              <xs:element xmlns:ns4="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" minOccurs="0" name="supportedConnectionLayerRateList" type="ns4:LayerRateListType" />
+              <xs:element minOccurs="0" name="communicationState" type="tns:CommunicationStateType" />
+              <xs:element minOccurs="0" name="asapRef" type="ns3:NamingAttributeType" />
+              <xs:element minOccurs="0" name="ipaddress" type="xs:string" />
+              <xs:element minOccurs="0" name="addtionalCreateInfo" type="ns2:NameAndValueStringListType" />
+              <xs:element minOccurs="0" name="networkStatus" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="AccessType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="portName" type="xs:string" />
+          <xs:element minOccurs="0" name="enabledStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="ipAddress" type="xs:string" />
+          <xs:element minOccurs="0" name="subnetMask" type="xs:string" />
+          <xs:element minOccurs="0" name="ospeEnabledStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ManagedElementParamInfoType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="meRef" type="ns3:NamingAttributeType" />
+          <xs:element minOccurs="0" name="protocolParam" type="tns:ManagedElementProtocolParamType" />
+          <xs:element minOccurs="0" name="commonParam" type="ns2:NameAndValueStringListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SetManagedElementResultType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="meRef" type="ns3:NamingAttributeType" />
+          <xs:element minOccurs="0" name="result" type="xs:string" />
+          <xs:element minOccurs="0" name="reason" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DCNInfoType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="meRef" type="ns3:NamingAttributeType" />
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+          <xs:element minOccurs="0" name="subnet" type="xs:string" />
+          <xs:element minOccurs="0" name="activeGne" type="ns3:NamingAttributeType" />
+          <xs:element minOccurs="0" name="primaryGne1" type="tns:GNEObjectType" />
+          <xs:element minOccurs="0" name="backupGne2" type="tns:GNEObjectType" />
+          <xs:element minOccurs="0" name="backupGne3" type="tns:GNEObjectType" />
+          <xs:element minOccurs="0" name="backupGne4" type="tns:GNEObjectType" />
+          <xs:element minOccurs="0" name="lockStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="revertiveMode" type="xs:string" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ManagedElementProtocolParamType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="protocolParams" type="ns2:NameAndValueStringListType" />
+          <xs:element minOccurs="0" name="protocolName" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GNEObjectType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="objectRef" type="ns3:NamingAttributeType" />
+          <xs:element minOccurs="0" name="clearGne" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DCNManagementInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="meRef" type="ns3:NamingAttributeType" />
+          <xs:element minOccurs="0" name="bandWidthInfo" type="tns:BandWidthType" />
+          <xs:element minOccurs="0" name="portSettingList" type="tns:PortSettingListType" />
+          <xs:element minOccurs="0" name="accessControl" type="tns:AccessControlType" />
+          <xs:element minOccurs="0" name="protocolSettingList" type="tns:ProtocolSettingListType" />
+          <xs:element minOccurs="0" name="packetControlList" type="tns:PacketControlListType" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="BandWidthType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="nmsPortVlanID" type="xs:string" />
+          <xs:element minOccurs="0" name="ethVlanId" type="xs:string" />
+          <xs:element minOccurs="0" name="bandWidth" type="xs:string" />
+          <xs:element minOccurs="0" name="e1PortBandWidth" type="xs:string" />
+          <xs:element minOccurs="0" name="tunnelBandWidth" type="xs:string" />
+          <xs:element minOccurs="0" name="ifPortBandWidth" type="xs:string" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="PortSettingListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="portSetting" nillable="true" type="tns:PortSettingType" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="PortSettingType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="portName" type="xs:string" />
+          <xs:element minOccurs="0" name="tpRef" type="ns3:NamingAttributeType" />
+          <xs:element minOccurs="0" name="enabledStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="protocolType" type="xs:string" />
+          <xs:element minOccurs="0" name="ipAddress" type="xs:string" />
+          <xs:element minOccurs="0" name="portType" type="xs:string" />
+          <xs:element minOccurs="0" name="subnetMask" type="xs:string" />
+          <xs:element minOccurs="0" name="atnCompatibilityMode" type="xs:string" />
+          <xs:element minOccurs="0" name="vlan" type="xs:string" />
+          <xs:element minOccurs="0" name="ospfSubnet" type="xs:string" />
+          <xs:element minOccurs="0" name="ospfEnabledStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AccessControlType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+          <xs:element minOccurs="0" name="accessList" type="tns:AccessListType" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AccessListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="access" nillable="true" type="tns:AccessType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ProtocolSettingListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="protocolSetting" nillable="true" type="tns:ProtocolSettingType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ProtocolSettingType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="portName" type="xs:string" />
+          <xs:element minOccurs="0" name="protocolType" type="xs:string" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="PacketControlListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="packetControl" nillable="true" type="tns:PacketControlType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="PacketControlType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="packetType" type="xs:string" />
+          <xs:element minOccurs="0" name="supportedApplication" type="xs:string" />
+          <xs:element minOccurs="0" name="packetPriority" type="xs:string" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="CommunicationStateType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CS_AVAILABLE" />
+          <xs:enumeration value="CS_UNAVAILABLE" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/ftp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="ftp" type="tns:FloatingTerminationPointType" />
+      <xs:complexType name="FloatingTerminationPointType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns2:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="direction" type="ns3:DirectionalityType" />
+              <xs:element xmlns:ns4="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpProtectionAssociation" type="ns4:TerminationPointProtectionAssociationType" />
+              <xs:element minOccurs="0" name="isEdgePoint" type="xs:boolean" />
+              <xs:element minOccurs="0" name="isEquipmentProtected" type="xs:boolean" />
+              <xs:element xmlns:ns5="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="egressTmdState" type="ns5:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns6="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="ingressTmdState" type="ns6:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns7="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="connectionState" type="ns7:TerminationPointConnectionStateType" />
+              <xs:element xmlns:ns8="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpMappingMode" type="ns8:TerminationModeType" />
+              <xs:element xmlns:ns9="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="ingressTmdRef" type="ns9:NamingAttributeType" />
+              <xs:element xmlns:ns10="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="egressTmdRef" type="ns10:NamingAttributeType" />
+              <xs:element xmlns:ns11="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" minOccurs="0" name="ipAddressList" type="ns11:IPAddressListType" />
+              <xs:element minOccurs="0" ref="ns1:transmissionParametersList" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="FloatingTerminationPointListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ftp" nillable="true" type="tns:FloatingTerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" xmlns:ns2="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/ctp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:element name="ctp" type="tns:ConnectionTerminationPointType" />
+      <xs:complexType name="ConnectionTerminationPointType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns2:CommonResourceInfoType">
+            <xs:sequence>
+              <xs:element xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="direction" type="ns3:DirectionalityType" />
+              <xs:element xmlns:ns4="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpProtectionAssociation" type="ns4:TerminationPointProtectionAssociationType" />
+              <xs:element minOccurs="0" name="isEdgePoint" type="xs:boolean" />
+              <xs:element minOccurs="0" name="isEquipmentProtected" type="xs:boolean" />
+              <xs:element xmlns:ns5="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="egressTmdState" type="ns5:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns6="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="ingressTmdState" type="ns6:TransmissionDescriptorStateType" />
+              <xs:element xmlns:ns7="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="connectionState" type="ns7:TerminationPointConnectionStateType" />
+              <xs:element xmlns:ns8="http://www.tmforum.org/mtop/nrf/xsd/com/v1" minOccurs="0" name="tpMappingMode" type="ns8:TerminationModeType" />
+              <xs:element xmlns:ns9="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="ingressTmdRef" type="ns9:NamingAttributeType" />
+              <xs:element xmlns:ns10="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="egressTmdRef" type="ns10:NamingAttributeType" />
+              <xs:element xmlns:ns11="http://www.tmforum.org/mtop/nrf/xsd/tpdata/v1" minOccurs="0" name="ipAddressList" type="ns11:IPAddressListType" />
+              <xs:element minOccurs="0" ref="ns1:transmissionParametersList" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ConnectionTerminationPointListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ctp" nillable="true" type="tns:ConnectionTerminationPointType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/cs/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/cs/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:complexType name="MEClockSynchronizationListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="clockSynchronizationList" type="tns:MEClockSynchronizationType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="MEClockSynchronizationType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="clockSynchronizationRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="clockSourceType" type="xs:string" />
+          <xs:element minOccurs="0" name="workingStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="ports" type="tns:ClockSynchronizationPortListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ClockSynchronizationPortListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="portList" type="tns:ClockSynchronizationPortType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ClockSynchronizationPortType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="portRef" type="ns1:NamingAttributeListType" />
+          <xs:element minOccurs="0" name="direction" type="xs:string" />
+          <xs:element minOccurs="0" name="clockSourceType" type="xs:string" />
+          <xs:element minOccurs="0" name="priority" type="xs:int" />
+          <xs:element minOccurs="0" name="venderExtension" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ClockType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CT_MASTER" />
+          <xs:enumeration value="CT_SLAVE" />
+          <xs:enumeration value="CT_INDEPENDENT" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ClockWorkingStatusType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CWS_FREE_RUNNING" />
+          <xs:enumeration value="CWS_LOCKED" />
+          <xs:enumeration value="CWS_HOLD_OVER" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ClockSourceType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CST_LINE" />
+          <xs:enumeration value="CST_BITS" />
+          <xs:enumeration value="CST_ETHERNET" />
+          <xs:enumeration value="CST_INTERNAL" />
+          <xs:enumeration value="CST_EXTERNAL" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/comm/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/comm/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="dccData" type="tns:DccDataType" />
+      <xs:element name="dccDataList" type="tns:DccDataListType" />
+      <xs:element name="eccLink" type="tns:EccLinkType" />
+      <xs:element name="eccLinkList" type="tns:EccLinkListType" />
+      <xs:element name="failedDccData" type="tns:FailedDccDataType" />
+      <xs:element name="failedDccDataList" type="tns:FailedDccDataListType" />
+      <xs:complexType name="DccDataListType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="dccData" type="tns:DccDataType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DccDataType">
+        <xs:sequence>
+          <xs:element xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="tpRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="status" type="xs:string" />
+          <xs:element minOccurs="0" name="protocolType" type="xs:string" />
+          <xs:element minOccurs="0" name="channel" type="xs:string" />
+          <xs:element minOccurs="0" name="dccResources" type="xs:string" />
+          <xs:element minOccurs="0" name="communicationStatus" type="xs:string" />
+          <xs:element minOccurs="0" name="bandwidthNegotiationSwitch" type="xs:string" />
+          <xs:element minOccurs="0" name="lapdRole" type="xs:string" />
+          <xs:element minOccurs="0" name="lapdMtu" type="xs:string" />
+          <xs:element minOccurs="0" name="boundFlag" type="xs:string" />
+          <xs:element minOccurs="0" name="domainFlag" type="xs:string" />
+          <xs:element xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="FailedDccDataListType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="failedDccData" type="tns:FailedDccDataType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="FailedDccDataType">
+        <xs:sequence>
+          <xs:element xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="tpRef" type="ns3:NamingAttributeType" />
+          <xs:element minOccurs="0" name="channel" type="xs:string" />
+          <xs:element minOccurs="0" name="errorReason" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="EccLinkListType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="eccLink" type="tns:EccLinkType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="EccLinkType">
+        <xs:sequence>
+          <xs:element xmlns:ns4="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="targetNe" type="ns4:NamingAttributeType" />
+          <xs:element xmlns:ns5="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="forwardingNe" type="ns5:NamingAttributeType" />
+          <xs:element minOccurs="0" name="distance" type="xs:string" />
+          <xs:element minOccurs="0" name="level" type="xs:string" />
+          <xs:element minOccurs="0" name="mode" type="xs:string" />
+          <xs:element xmlns:ns6="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="port" type="ns6:NamingAttributeType" />
+          <xs:element minOccurs="0" name="sccNumber" type="xs:string" />
+          <xs:element xmlns:ns7="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="vendorExtensions" type="ns7:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrf/xsd/com/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrf/xsd/com/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="ResourceFulfillmentStateType">
+        <xs:simpleContent>
+          <xs:extension base="tns:ResourceFulfillmentStateEnumType">
+            <xs:attribute name="qualifier" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="EquipmentHolderTypeType">
+        <xs:simpleContent>
+          <xs:extension base="tns:EquipmentHolderEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="ProtectionRoleType">
+        <xs:simpleContent>
+          <xs:extension base="tns:ProtectionRoleEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="StaticProtectionLevelType">
+        <xs:simpleContent>
+          <xs:extension base="tns:StaticProtectionLevelEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="TopologyType">
+        <xs:simpleContent>
+          <xs:extension base="tns:TopologyEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="EndPointRoleListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="role" nillable="true" type="tns:EndPointRoleType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="EndPointRoleType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="role" type="xs:string" />
+          <xs:element minOccurs="0" name="tpIndex" type="xs:unsignedInt" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ResourceFulfillmentStateEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="IN_SERVICE" />
+          <xs:enumeration value="OUT_OF_SERVICE" />
+          <xs:enumeration value="OUT_OF_SERVICE_BY_MAINTENANCE" />
+          <xs:enumeration value="SERV_NA" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="EquipmentHolderEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="rack" />
+          <xs:enumeration value="shelf" />
+          <xs:enumeration value="sub_shelf" />
+          <xs:enumeration value="slot" />
+          <xs:enumeration value="sub_slot" />
+          <xs:enumeration value="remote_unit" />
+          <xs:enumeration value="remote_slots" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ProtectionRoleEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="NA" />
+          <xs:enumeration value="PRIMARY" />
+          <xs:enumeration value="BACKUP" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="StaticProtectionLevelEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="PREEMPTIBLE" />
+          <xs:enumeration value="UNPROTECTED" />
+          <xs:enumeration value="PARTIALLY_PROTECTED" />
+          <xs:enumeration value="FULLY_PROTECTED" />
+          <xs:enumeration value="HIGHLY_PROTECTED" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TopologyEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="TOPO_SINGLETON" />
+          <xs:enumeration value="TOPO_CHAIN" />
+          <xs:enumeration value="TOPO_PSR" />
+          <xs:enumeration value="TOPO_OPEN_PSR" />
+          <xs:enumeration value="TOPO_SPRING" />
+          <xs:enumeration value="TOPO_OPEN_SPRING" />
+          <xs:enumeration value="TOPO_MESH" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TerminationPointRole">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CM_END_POINT" />
+          <xs:enumeration value="LC_END_POINT" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TerminationModeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="TM_NA" />
+          <xs:enumeration value="TM_NEITHER_TERMINATED_NOR_AVAILABLE_FOR_MAPPING" />
+          <xs:enumeration value="TM_TERMINATED_AND_AVAILABLE_FOR_MAPPING" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="DirectionalityType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="D_NA" />
+          <xs:enumeration value="D_BIDIRECTIONAL" />
+          <xs:enumeration value="D_SOURCE" />
+          <xs:enumeration value="D_SINK" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TerminationPointProtectionAssociationType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="TPPA_NA" />
+          <xs:enumeration value="TPPA_PSR_RELATED" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TransmissionDescriptorStateType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="TMD_MISSING" />
+          <xs:enumeration value="NOT_APPLICABLE" />
+          <xs:enumeration value="PENDING" />
+          <xs:enumeration value="APPLIED" />
+          <xs:enumeration value="MISMATCH" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TerminationPointConnectionStateType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="TPCS_NA" />
+          <xs:enumeration value="TPCS_SOURCE_CONNECTED" />
+          <xs:enumeration value="TPCS_SINK_CONNECTED" />
+          <xs:enumeration value="TPCS_BI_CONNECTED" />
+          <xs:enumeration value="TPCS_NOT_CONNECTED" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" xmlns:tns="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrb/xsd/lp/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:element name="transmissionParameters" type="tns:LayeredParametersType" />
+      <xs:element name="transmissionParametersList" type="tns:LayeredParametersListType" />
+      <xs:complexType name="LayeredParametersListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="transmissionParameters" nillable="true" type="tns:LayeredParametersType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LayeredParametersType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="layerRate" type="ns1:LayerRateType" />
+          <xs:element minOccurs="0" name="parameterList" type="ns2:NameAndValueStringListType" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="layerRateListType" type="tns:LayerRateListType" />
+      <xs:complexType name="LayerRateListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="layerRate" nillable="true" type="tns:LayerRateType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LayerRateType">
+        <xs:simpleContent>
+          <xs:extension base="xs:string">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/coi/v1" xmlns:tns="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/coi/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:element name="commonResourceInfo" type="tns:CommonResourceInfoType" />
+      <xs:complexType name="CommonResourceInfoType" abstract="true">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ns1:CommonObjectInfoType">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="source" type="tns:SourceType" />
+              <xs:element minOccurs="0" name="networkAccessDomain" type="xs:string" />
+              <xs:element xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="meiAttributes" type="ns3:MultiEventInventoryAttributesType" />
+              <xs:element minOccurs="0" name="resourceState" type="tns:ResourceStateType" />
+              <xs:any namespace="##other" processContents="lax" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ResourceStateType">
+        <xs:simpleContent>
+          <xs:extension base="tns:ResourceStateEnumType">
+            <xs:attribute name="overlap" type="xs:string" />
+            <xs:attribute name="qualifier" type="xs:string" />
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="ResultInfoListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="resultInfo" nillable="true" type="tns:ResultInfoType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ResultInfoType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="objectRef" type="ns2:NamingAttributeType" />
+          <xs:element minOccurs="0" name="result" type="xs:string" />
+          <xs:element minOccurs="0" name="reason" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SourceType">
+        <xs:simpleContent>
+          <xs:extension base="tns:SourceEnumType">
+            <xs:attribute name="qualifier" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:simpleType name="ResourceStateEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="VENDOR_EXT" />
+          <xs:enumeration value="MINOR_EXT" />
+          <xs:enumeration value="INSTALLING" />
+          <xs:enumeration value="INSTALLING_ACCEPTED" />
+          <xs:enumeration value="INSTALLING_COMMISSIONED" />
+          <xs:enumeration value="INSTALLING_DELIVERED" />
+          <xs:enumeration value="INSTALLING_INSTALLED" />
+          <xs:enumeration value="INSTALLING_INTEGRATED" />
+          <xs:enumeration value="INSTALLING_REJECTED" />
+          <xs:enumeration value="NON_WORKING" />
+          <xs:enumeration value="PLANNING" />
+          <xs:enumeration value="PLANNING_INITIAL_PLAN" />
+          <xs:enumeration value="PLANNING_ORDERED" />
+          <xs:enumeration value="PLANNING_PLANNED" />
+          <xs:enumeration value="RETIRING" />
+          <xs:enumeration value="RETIRING_DECOMMISSIONED" />
+          <xs:enumeration value="RETIRING_DEINSTALLED" />
+          <xs:enumeration value="RETIRING_DEINTEGRATED" />
+          <xs:enumeration value="RETIRING_RECOVERED" />
+          <xs:enumeration value="RETIRING_STORED" />
+          <xs:enumeration value="RETIRING_WITHDRAWN_ACTIVE" />
+          <xs:enumeration value="RETIRING_WITHDRAWN_UNAVAILABLE" />
+          <xs:enumeration value="UNKNOWN" />
+          <xs:enumeration value="WORKING" />
+          <xs:enumeration value="WORKING_ACTIVATED" />
+          <xs:enumeration value="WORKING_DEACTIVATED" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="SourceEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NETWORK_ME" />
+          <xs:enumeration value="OS" />
+          <xs:enumeration value="NETWORK_EMS" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/mri/xsd/mer/v1" xmlns:ns5="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" xmlns:ns7="http://www.tmforum.org/mtop/nrf/xsd/cs/v1" xmlns:ns4="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" xmlns:ns6="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" xmlns:ns3="http://www.tmforum.org/mtop/nrf/xsd/me/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/mri/xsd/mer/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/me/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/cri/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrb/xsd/lay/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/nrf/xsd/cs/v1" />
+      <xs:element name="getAllCCCapacityException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllCCCapacityRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllCCCapacityResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="ccCapacity" type="tns:CCCapacityType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllDCNManagementException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllDCNManagementRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllDCNManagementResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="dcnManagementInfo" type="ns3:DCNManagementInfo" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementNamesException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementNamesRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="mdName" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementNamesResponse" type="ns1:NamingAttributeListType" />
+      <xs:element name="getAllManagedElementsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementsPassingFilterException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementsPassingFilterRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="mdRef" type="ns1:NamingAttributeType" />
+            <xs:element minOccurs="0" name="filter" type="tns:FilterType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementsPassingFilterResponse" type="tns:MultipleMeObjectsResponseType" />
+      <xs:element name="getAllManagedElementsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="mdOrMlsnRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementsResponse" type="tns:MultipleMeObjectsResponseType" />
+      <xs:element name="getAllManagedElementsWrtOsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementsWrtOsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="osRef" type="ns1:NamingAttributeType" />
+            <xs:element minOccurs="0" name="mdRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementsWrtOsResponse" type="tns:MultipleMeObjectsResponseType" />
+      <xs:element name="getDCNDataException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDCNDataRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDCNDataResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="dcnData" type="ns3:DCNInfoType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getMEClockSynchronizationException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getMEClockSynchronizationRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getMEClockSynchronizationResponse" type="ns7:MEClockSynchronizationListType" />
+      <xs:element name="getManagedElementByAliasNameException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getManagedElementByAliasNameRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="aliasNameList" type="ns6:AliasNameListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getManagedElementByAliasNameResponse" type="tns:SingleMeObjectResponseType" />
+      <xs:element name="getManagedElementByPhysicalIDException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getManagedElementByPhysicalIDRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getManagedElementByPhysicalIDResponse" type="tns:SingleMeObjectResponseType" />
+      <xs:element name="getManagedElementException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getManagedElementNamesIteratorException" type="ns2:GetAllDataIteratorExceptionType" />
+      <xs:element name="getManagedElementNamesIteratorRequest" type="ns2:GetAllDataIteratorRequestType" />
+      <xs:element name="getManagedElementNamesIteratorResponse" type="ns1:NamingAttributeListType" />
+      <xs:element name="getManagedElementRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getManagedElementResponse" type="tns:SingleMeObjectResponseType" />
+      <xs:element name="getManagedElementsIteratorException" type="ns2:GetAllDataIteratorExceptionType" />
+      <xs:element name="getManagedElementsIteratorRequest" type="ns2:GetAllDataIteratorRequestType" />
+      <xs:element name="getManagedElementsIteratorResponse" type="tns:MultipleMeObjectsResponseType" />
+      <xs:element name="getNECrossConnectCapacityException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getNECrossConnectCapacityRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getNECrossConnectCapacityResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="ccSupportAbility" type="tns:CrossConnectSupportAbilityType" />
+            <xs:element minOccurs="0" name="ccCapacity" type="tns:CrossConnectCapacityType" />
+            <xs:element minOccurs="0" name="ccCapacityLisence" type="tns:CrossConnectCapacityType" />
+            <xs:element minOccurs="0" name="ccCapacitySharingRules" type="tns:CrossConnectCapacitySharingRuleType" />
+            <xs:element minOccurs="0" name="ccAvailableCapacity" type="tns:CrossConnectAvailableCapacityType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getObjectTimeException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getObjectTimeRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meOrMDRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getObjectTimeResponse" type="xs:anySimpleType" />
+      <xs:element name="getSubtendingManagedElementsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns2:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getSubtendingManagedElementsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="meOrTpRef" type="ns1:NamingAttributeType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getSubtendingManagedElementsResponse" type="tns:MultipleMeObjectsResponseType" />
+      <xs:complexType name="MultipleMeObjectsResponseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="meList" type="ns3:ManagedElementListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="FilterType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="location" type="xs:string" />
+          <xs:element minOccurs="0" name="manufacturer" type="xs:string" />
+          <xs:element minOccurs="0" name="productName" type="xs:string" />
+          <xs:element minOccurs="0" name="resourceState" type="ns4:ResourceStateType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CrossConnectSupportAbilityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="isSupportExcOdu" type="xs:boolean" />
+          <xs:element minOccurs="0" name="isSupportExcPacket" type="xs:boolean" />
+          <xs:element minOccurs="0" name="isSupportExcVcLow" type="xs:boolean" />
+          <xs:element minOccurs="0" name="isSupportExcVcHigh" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CrossConnectCapacityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="excOduCapacity" type="xs:string" />
+          <xs:element minOccurs="0" name="excPacketCapacity" type="xs:string" />
+          <xs:element minOccurs="0" name="excVcLowCapacity" type="xs:string" />
+          <xs:element minOccurs="0" name="excVcHighCapacity" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CrossConnectCapacitySharingRuleType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="rule" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CrossConnectAvailableCapacityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="excOduAvailableCapacity" type="xs:string" />
+          <xs:element minOccurs="0" name="excPacketAvailableCapacity" type="xs:string" />
+          <xs:element minOccurs="0" name="excVcLowAvailableCapacity" type="xs:string" />
+          <xs:element minOccurs="0" name="excVcHighAvailableCapacity" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CCCapacityType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="maxCapacity" type="xs:string" />
+          <xs:element minOccurs="0" name="ccCapacityList" type="tns:CCCapacityLayerListType" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns6:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CCCapacityLayerListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ccCapacityLayer" nillable="true" type="tns:CCCapacityLayerType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CCCapacityLayerType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="layerRate" type="ns5:LayerRateType" />
+          <xs:element minOccurs="0" name="totalCCCapacity" type="xs:string" />
+          <xs:element minOccurs="0" name="currentCCCapacity" type="xs:string" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns6:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SingleMeObjectResponseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="me" type="ns3:ManagedElementType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" xmlns:tns="http://www.tmforum.org/mtop/mri/xsd/dusr/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/mri/xsd/dusr/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" />
+      <xs:element name="getAllManagedElementInfosByIPsException">
+        <xs:complexType>
+          <xs:complexContent mixed="false">
+            <xs:extension base="ns3:AllExceptionsType">
+              <xs:sequence />
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementInfosByIPsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ipAddressList" type="tns:IPAddressListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAllManagedElementInfosByIPsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ipAssociatedMEInfosList" type="tns:IPAssociatedMEInfosListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ipAddressList" type="tns:IPAddressListType" />
+      <xs:element name="ipAssociatedMEInfosType" type="tns:IPAssociatedMEInfosType" />
+      <xs:element name="meInfoListRef" type="tns:SimpleMEInfoListType" />
+      <xs:element name="meInfoRef" type="tns:SimpleMEInfoType" />
+      <xs:complexType name="IPAddressListType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="ipAddress" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="IPAssociatedMEInfosListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ipAssociatedMEInfosType" nillable="true" type="tns:IPAssociatedMEInfosType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="IPAssociatedMEInfosType">
+        <xs:sequence>
+          <xs:element name="ipAddress" type="xs:string" />
+          <xs:element name="meInfoListRef" type="tns:SimpleMEInfoListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SimpleMEInfoListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="meInfoRef" nillable="true" type="tns:SimpleMEInfoType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SimpleMEInfoType">
+        <xs:sequence>
+          <xs:element name="meRef" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="productName" type="xs:string" />
+          <xs:element minOccurs="0" name="aliasNameList" type="ns2:AliasNameListType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="NamingAttributeType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="rdn" type="tns:RelativeDistinguishNameType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="RelativeDistinguishNameType">
+        <xs:sequence>
+          <xs:element name="type" type="xs:string" />
+          <xs:element name="value" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NamingAttributeListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="name" nillable="true" type="tns:NamingAttributeType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/msg/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/hdr/v1" />
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:element name="accessDenied" type="tns:BaseExceptionMessageType" />
+      <xs:element name="capacityExceeded" type="tns:BaseExceptionMessageType" />
+      <xs:element name="commLoss" type="tns:BaseExceptionMessageType" />
+      <xs:element name="entityNotFound" type="tns:BaseExceptionMessageType" />
+      <xs:element name="internalError" type="tns:BaseExceptionMessageType" />
+      <xs:element name="invalidFilterDefinition" type="tns:BaseExceptionMessageType" />
+      <xs:element name="invalidInput" type="tns:BaseExceptionMessageType" />
+      <xs:element name="invalidTopic" type="tns:BaseExceptionMessageType" />
+      <xs:element name="notImplemented" type="tns:BaseExceptionMessageType" />
+      <xs:element name="notInValidState" type="tns:BaseExceptionMessageType" />
+      <xs:element name="notificationServiceProblem" type="tns:BaseExceptionMessageType" />
+      <xs:element name="objectInUse" type="tns:BaseExceptionMessageType" />
+      <xs:element name="protectionEffortNotMet" type="tns:BaseExceptionMessageType" />
+      <xs:element name="timeslotInUse" type="tns:BaseExceptionMessageType" />
+      <xs:element name="tooManyOpenIterators" type="tns:BaseExceptionMessageType" />
+      <xs:element name="tpInvalidEndPoint" type="tns:BaseExceptionMessageType" />
+      <xs:element name="unableToComply" type="tns:BaseExceptionMessageType" />
+      <xs:element name="unsupportedCompressionFormat" type="tns:BaseExceptionMessageType" />
+      <xs:element name="unsupportedPackingFormat" type="tns:BaseExceptionMessageType" />
+      <xs:element name="unsupportedRoutingConstraints" type="tns:BaseExceptionMessageType" />
+      <xs:element name="userlabelInUse" type="tns:BaseExceptionMessageType" />
+      <xs:complexType name="AllExceptionsType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="accessDenied" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="capacityExceeded" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="commLoss" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="entityNotFound" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="internalError" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="invalidFilterDefinition" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="invalidInput" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="invalidTopic" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="notificationServiceProblem" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="notImplemented" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="notInValidState" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="objectInUse" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="protectionEffortNotMet" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="timeslotInUse" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="tooManyOpenIterators" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="tpInvalidEndPoint" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="unableToComply" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="unsupportedCompressionFormat" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="unsupportedPackingFormat" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="unsupportedRoutingConstraints" type="tns:BaseExceptionMessageType" />
+          <xs:element minOccurs="0" name="userlabelInUse" type="tns:BaseExceptionMessageType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="BaseExceptionMessageType">
+        <xs:sequence>
+          <xs:element minOccurs="0" ref="ns1:header" />
+          <xs:element minOccurs="0" name="reason" type="xs:string" />
+          <xs:element minOccurs="0" name="vendorExtensions" type="ns2:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetAllDataIteratorExceptionType">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:AllExceptionsType">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="GetAllDataIteratorRequestType">
+        <xs:sequence />
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/hdr/v1" xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/hdr/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" />
+      <xs:element name="header">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="activityName" type="xs:string" />
+            <xs:element minOccurs="0" name="msgName" type="xs:string" />
+            <xs:element minOccurs="0" name="msgType" type="xs:string" />
+            <xs:element minOccurs="0" name="senderURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="destinationURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="replyToURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="originatorURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="failureReplytoURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="activityStatus" type="tns:ActivityStatusType" />
+            <xs:element minOccurs="0" name="correlationId" type="xs:string" />
+            <xs:element minOccurs="0" name="security" type="xs:string" />
+            <xs:element minOccurs="0" name="securityType" type="xs:string" />
+            <xs:element minOccurs="0" name="priority" type="xs:string" />
+            <xs:element minOccurs="0" name="msgSpecificProperties">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="property" nillable="true">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="propName" type="xs:string" />
+                        <xs:element name="propValue" type="xs:string" />
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="communicationPattern" type="xs:string" />
+            <xs:element minOccurs="0" name="communicationStyle" type="xs:string" />
+            <xs:element minOccurs="0" name="requestedBatchSize" type="xs:unsignedInt" />
+            <xs:element minOccurs="0" name="batchSequenceNumber" type="xs:unsignedInt" />
+            <xs:element minOccurs="0" name="batchSequenceEndOfReply" type="xs:boolean" />
+            <xs:element minOccurs="0" name="iteratorReferenceURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="fileLocationURI" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="compressionType" type="tns:CompressionTypeType" />
+            <xs:element minOccurs="0" name="packingType" type="tns:PackingTypeType" />
+            <xs:element minOccurs="0" name="timestamp" type="xs:dateTime" />
+            <xs:element minOccurs="0" name="vendorExtensions" type="ns1:AnyListType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="ActivityStatusType">
+        <xs:simpleContent>
+          <xs:extension base="tns:ActivityStatusEnumType">
+            <xs:attribute name="qualifier" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="CompressionTypeType">
+        <xs:simpleContent>
+          <xs:extension base="tns:CompressionEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:complexType name="PackingTypeType">
+        <xs:simpleContent>
+          <xs:extension base="tns:PackingEnumType">
+            <xs:attribute name="extension" type="xs:string" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+      <xs:simpleType name="MessageTypeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="REQUEST" />
+          <xs:enumeration value="RESPONSE" />
+          <xs:enumeration value="NOTIFICATION" />
+          <xs:enumeration value="ERROR" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ActivityStatusEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SUCCESS" />
+          <xs:enumeration value="FAILURE" />
+          <xs:enumeration value="WARNING" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="CommunicationPatternType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SimpleResponse" />
+          <xs:enumeration value="MultipleBatchResponse" />
+          <xs:enumeration value="BulkResponse" />
+          <xs:enumeration value="Notification" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="CommunicationStyleType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MSG" />
+          <xs:enumeration value="RPC" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="CompressionEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NO_COMPRESSION" />
+          <xs:enumeration value="GZIP" />
+          <xs:enumeration value="VENDOR_EXT" />
+          <xs:enumeration value="MINOR_EXT" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="PackingEnumType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NO_PACKING" />
+          <xs:enumeration value="ZIP" />
+          <xs:enumeration value="TAR" />
+          <xs:enumeration value="VENDOR_EXT" />
+          <xs:enumeration value="MINOR_EXT" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="additionalInfo">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="nvs" nillable="true" type="tns:NameAndStringValueType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="aliasNameList" type="tns:AliasNameListType" />
+      <xs:element name="nameAndStringValueType" type="tns:NameAndStringValueType" />
+      <xs:element name="nvList" type="tns:NameAndAnyValueListType" />
+      <xs:element name="nvsList" type="tns:NameAndValueStringListType" />
+      <xs:complexType name="AnyListType">
+        <xs:sequence>
+          <xs:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="AliasNameListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="alias" nillable="true">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="aliasName" type="xs:string" />
+                <xs:element name="aliasValue" nillable="true" type="xs:string" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NameAndValueStringListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="nvs" nillable="true" type="tns:NameAndStringValueType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NameAndStringValueType">
+        <xs:sequence>
+          <xs:element name="name" type="xs:string" />
+          <xs:element name="value" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NameAndAnyValueListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="nv" nillable="true" type="tns:NameAndAnyValueType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NameAndAnyValueType">
+        <xs:sequence>
+          <xs:element name="name" type="xs:string" />
+          <xs:any namespace="##other" processContents="lax" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="MultiEventInventoryAttributesType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="neTime" type="xs:anySimpleType" />
+          <xs:element name="eventIndication" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NotificationIdentifierListType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="notificationId" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryExpressionType" mixed="true">
+        <xs:sequence>
+          <xs:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
+        </xs:sequence>
+        <xs:attribute name="Dialect" type="xs:string" use="required" />
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:tns="http://www.tmforum.org/mtop/fmw/xsd/coi/v1" elementFormDefault="qualified" targetNamespace="http://www.tmforum.org/mtop/fmw/xsd/coi/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="commonObjectInfo" type="tns:CommonObjectInfoType" />
+      <xs:complexType name="CommonObjectInfoType" abstract="true">
+        <xs:sequence>
+          <xs:element xmlns:ns1="http://www.tmforum.org/mtop/fmw/xsd/nam/v1" minOccurs="0" name="name" type="ns1:NamingAttributeType" />
+          <xs:element minOccurs="0" name="userLabel" type="xs:string" />
+          <xs:element minOccurs="0" name="discoveredName" type="xs:string" />
+          <xs:element minOccurs="0" name="namingOs" type="xs:string" />
+          <xs:element minOccurs="0" name="owner" type="xs:string" />
+          <xs:element xmlns:ns2="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="aliasNameList" type="ns2:AliasNameListType" />
+          <xs:element xmlns:ns3="http://www.tmforum.org/mtop/fmw/xsd/gen/v1" minOccurs="0" name="vendorExtensions" type="ns3:AnyListType" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getMEClockSynchronization">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getMEClockSynchronizationRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElementNamesResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllManagedElementNamesResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElementsWrtOs">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllManagedElementsWrtOsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElements">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllManagedElementsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElementByAliasName">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementByAliasNameRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAllManagedElementsWrtOsException">
+    <wsdl:part name="GetAllManagedElementsWrtOsException" element="ns2:getAllManagedElementsWrtOsException" />
+  </wsdl:message>
+  <wsdl:message name="getAllCCCapacityResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllCCCapacityResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElementNamesIterator">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementNamesIteratorRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetNECrossConnectCapacityException">
+    <wsdl:part name="GetNECrossConnectCapacityException" element="ns2:getNECrossConnectCapacityException" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElementResponse">
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetDCNDataException">
+    <wsdl:part name="GetDCNDataException" element="ns2:getDCNDataException" />
+  </wsdl:message>
+  <wsdl:message name="GetAllManagedElementsPassingFilterException">
+    <wsdl:part name="GetAllManagedElementsPassingFilterException" element="ns2:getAllManagedElementsPassingFilterException" />
+  </wsdl:message>
+  <wsdl:message name="getSubtendingManagedElementsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getSubtendingManagedElementsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElementInfosByIPs">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns3:getAllManagedElementInfosByIPsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElementsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllManagedElementsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getDCNDataResponse">
+    <wsdl:part name="mtopBody" element="ns2:getDCNDataResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetManagedElementException">
+    <wsdl:part name="GetManagedElementException" element="ns2:getManagedElementException" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElementsPassingFilter">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllManagedElementsPassingFilterRequest" />
+  </wsdl:message>
+  <wsdl:message name="getNECrossConnectCapacity">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getNECrossConnectCapacityRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElementsWrtOsResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllManagedElementsWrtOsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetSubtendingManagedElementsException">
+    <wsdl:part name="GetSubtendingManagedElementsException" element="ns2:getSubtendingManagedElementsException" />
+  </wsdl:message>
+  <wsdl:message name="getAllDCNManagementResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllDCNManagementResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getObjectTime">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getObjectTimeRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAllDCNManagementException">
+    <wsdl:part name="GetAllDCNManagementException" element="ns2:getAllDCNManagementException" />
+  </wsdl:message>
+  <wsdl:message name="GetObjectTimeException">
+    <wsdl:part name="GetObjectTimeException" element="ns2:getObjectTimeException" />
+  </wsdl:message>
+  <wsdl:message name="GetManagedElementByAliasNameException">
+    <wsdl:part name="GetManagedElementByAliasNameException" element="ns2:getManagedElementByAliasNameException" />
+  </wsdl:message>
+  <wsdl:message name="getAllCCCapacity">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllCCCapacityRequest" />
+  </wsdl:message>
+  <wsdl:message name="getAllDCNManagement">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllDCNManagementRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAllManagedElementsException">
+    <wsdl:part name="GetAllManagedElementsException" element="ns2:getAllManagedElementsException" />
+  </wsdl:message>
+  <wsdl:message name="getNECrossConnectCapacityResponse">
+    <wsdl:part name="mtopBody" element="ns2:getNECrossConnectCapacityResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetManagedElementByPhysicalIDException">
+    <wsdl:part name="GetManagedElementByPhysicalIDException" element="ns2:getManagedElementByPhysicalIDException" />
+  </wsdl:message>
+  <wsdl:message name="getDCNData">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getDCNDataRequest" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElementByPhysicalIDResponse">
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementByPhysicalIDResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getSubtendingManagedElements">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getSubtendingManagedElementsRequest" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElementNamesIteratorResponse">
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementNamesIteratorResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElement">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementRequest" />
+  </wsdl:message>
+  <wsdl:message name="getObjectTimeResponse">
+    <wsdl:part name="mtopBody" element="ns2:getObjectTimeResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetMEClockSynchronizationException">
+    <wsdl:part name="GetMEClockSynchronizationException" element="ns2:getMEClockSynchronizationException" />
+  </wsdl:message>
+  <wsdl:message name="GetAllCCCapacityException">
+    <wsdl:part name="GetAllCCCapacityException" element="ns2:getAllCCCapacityException" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElementsIterator">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementsIteratorRequest" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElementByPhysicalID">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementByPhysicalIDRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAllManagedElementInfosByIPsException">
+    <wsdl:part name="GetAllManagedElementInfosByIPsException" element="ns3:getAllManagedElementInfosByIPsException" />
+  </wsdl:message>
+  <wsdl:message name="GetManagedElementsIteratorException">
+    <wsdl:part name="GetManagedElementsIteratorException" element="ns2:getManagedElementsIteratorException" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElementByAliasNameResponse">
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementByAliasNameResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="GetManagedElementNamesIteratorException">
+    <wsdl:part name="GetManagedElementNamesIteratorException" element="ns2:getManagedElementNamesIteratorException" />
+  </wsdl:message>
+  <wsdl:message name="GetAllManagedElementNamesException">
+    <wsdl:part name="GetAllManagedElementNamesException" element="ns2:getAllManagedElementNamesException" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElementNames">
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+    <wsdl:part name="mtopBody" element="ns2:getAllManagedElementNamesRequest" />
+  </wsdl:message>
+  <wsdl:message name="getMEClockSynchronizationResponse">
+    <wsdl:part name="mtopBody" element="ns2:getMEClockSynchronizationResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElementsPassingFilterResponse">
+    <wsdl:part name="mtopBody" element="ns2:getAllManagedElementsPassingFilterResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getAllManagedElementInfosByIPsResponse">
+    <wsdl:part name="mtopBody" element="ns3:getAllManagedElementInfosByIPsResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:message name="getManagedElementsIteratorResponse">
+    <wsdl:part name="mtopBody" element="ns2:getManagedElementsIteratorResponse" />
+    <wsdl:part name="mtopHeader" element="ns1:header" />
+  </wsdl:message>
+  <wsdl:portType name="ManagedElementRetrieval_RPC">
+    <wsdl:operation name="getMEClockSynchronization" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getMEClockSynchronization" message="tns:getMEClockSynchronization" />
+      <wsdl:output name="getMEClockSynchronizationResponse" message="tns:getMEClockSynchronizationResponse" />
+      <wsdl:fault name="GetMEClockSynchronizationException" message="tns:GetMEClockSynchronizationException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElementInfosByIPs" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllManagedElementInfosByIPs" message="tns:getAllManagedElementInfosByIPs" />
+      <wsdl:output name="getAllManagedElementInfosByIPsResponse" message="tns:getAllManagedElementInfosByIPsResponse" />
+      <wsdl:fault name="GetAllManagedElementInfosByIPsException" message="tns:GetAllManagedElementInfosByIPsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElementsWrtOs" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllManagedElementsWrtOs" message="tns:getAllManagedElementsWrtOs" />
+      <wsdl:output name="getAllManagedElementsWrtOsResponse" message="tns:getAllManagedElementsWrtOsResponse" />
+      <wsdl:fault name="GetAllManagedElementsWrtOsException" message="tns:GetAllManagedElementsWrtOsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElementsPassingFilter" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllManagedElementsPassingFilter" message="tns:getAllManagedElementsPassingFilter" />
+      <wsdl:output name="getAllManagedElementsPassingFilterResponse" message="tns:getAllManagedElementsPassingFilterResponse" />
+      <wsdl:fault name="GetAllManagedElementsPassingFilterException" message="tns:GetAllManagedElementsPassingFilterException" />
+    </wsdl:operation>
+    <wsdl:operation name="getNECrossConnectCapacity" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getNECrossConnectCapacity" message="tns:getNECrossConnectCapacity" />
+      <wsdl:output name="getNECrossConnectCapacityResponse" message="tns:getNECrossConnectCapacityResponse" />
+      <wsdl:fault name="GetNECrossConnectCapacityException" message="tns:GetNECrossConnectCapacityException" />
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElementsIterator" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getManagedElementsIterator" message="tns:getManagedElementsIterator" />
+      <wsdl:output name="getManagedElementsIteratorResponse" message="tns:getManagedElementsIteratorResponse" />
+      <wsdl:fault name="GetManagedElementsIteratorException" message="tns:GetManagedElementsIteratorException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllCCCapacity" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllCCCapacity" message="tns:getAllCCCapacity" />
+      <wsdl:output name="getAllCCCapacityResponse" message="tns:getAllCCCapacityResponse" />
+      <wsdl:fault name="GetAllCCCapacityException" message="tns:GetAllCCCapacityException" />
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElementByPhysicalID" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getManagedElementByPhysicalID" message="tns:getManagedElementByPhysicalID" />
+      <wsdl:output name="getManagedElementByPhysicalIDResponse" message="tns:getManagedElementByPhysicalIDResponse" />
+      <wsdl:fault name="GetManagedElementByPhysicalIDException" message="tns:GetManagedElementByPhysicalIDException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElements" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllManagedElements" message="tns:getAllManagedElements" />
+      <wsdl:output name="getAllManagedElementsResponse" message="tns:getAllManagedElementsResponse" />
+      <wsdl:fault name="GetAllManagedElementsException" message="tns:GetAllManagedElementsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElementByAliasName" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getManagedElementByAliasName" message="tns:getManagedElementByAliasName" />
+      <wsdl:output name="getManagedElementByAliasNameResponse" message="tns:getManagedElementByAliasNameResponse" />
+      <wsdl:fault name="GetManagedElementByAliasNameException" message="tns:GetManagedElementByAliasNameException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllDCNManagement" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllDCNManagement" message="tns:getAllDCNManagement" />
+      <wsdl:output name="getAllDCNManagementResponse" message="tns:getAllDCNManagementResponse" />
+      <wsdl:fault name="GetAllDCNManagementException" message="tns:GetAllDCNManagementException" />
+    </wsdl:operation>
+    <wsdl:operation name="getDCNData" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getDCNData" message="tns:getDCNData" />
+      <wsdl:output name="getDCNDataResponse" message="tns:getDCNDataResponse" />
+      <wsdl:fault name="GetDCNDataException" message="tns:GetDCNDataException" />
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElementNamesIterator" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getManagedElementNamesIterator" message="tns:getManagedElementNamesIterator" />
+      <wsdl:output name="getManagedElementNamesIteratorResponse" message="tns:getManagedElementNamesIteratorResponse" />
+      <wsdl:fault name="GetManagedElementNamesIteratorException" message="tns:GetManagedElementNamesIteratorException" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElementNames" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getAllManagedElementNames" message="tns:getAllManagedElementNames" />
+      <wsdl:output name="getAllManagedElementNamesResponse" message="tns:getAllManagedElementNamesResponse" />
+      <wsdl:fault name="GetAllManagedElementNamesException" message="tns:GetAllManagedElementNamesException" />
+    </wsdl:operation>
+    <wsdl:operation name="getSubtendingManagedElements" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getSubtendingManagedElements" message="tns:getSubtendingManagedElements" />
+      <wsdl:output name="getSubtendingManagedElementsResponse" message="tns:getSubtendingManagedElementsResponse" />
+      <wsdl:fault name="GetSubtendingManagedElementsException" message="tns:GetSubtendingManagedElementsException" />
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElement" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getManagedElement" message="tns:getManagedElement" />
+      <wsdl:output name="getManagedElementResponse" message="tns:getManagedElementResponse" />
+      <wsdl:fault name="GetManagedElementException" message="tns:GetManagedElementException" />
+    </wsdl:operation>
+    <wsdl:operation name="getObjectTime" parameterOrder="mtopHeader mtopBody">
+      <wsdl:input name="getObjectTime" message="tns:getObjectTime" />
+      <wsdl:output name="getObjectTimeResponse" message="tns:getObjectTimeResponse" />
+      <wsdl:fault name="GetObjectTimeException" message="tns:GetObjectTimeException" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ManagedElementRetrievalHttpSoapBinding" type="tns:ManagedElementRetrieval_RPC">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getMEClockSynchronization">
+      <soap:operation soapAction="getMEClockSynchronization" style="document" />
+      <wsdl:input name="getMEClockSynchronization">
+        <soap:header message="tns:getMEClockSynchronization" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getMEClockSynchronizationResponse">
+        <soap:header message="tns:getMEClockSynchronizationResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetMEClockSynchronizationException">
+        <soap:fault use="literal" name="GetMEClockSynchronizationException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElementInfosByIPs">
+      <soap:operation soapAction="getAllManagedElementInfosByIPs" style="document" />
+      <wsdl:input name="getAllManagedElementInfosByIPs">
+        <soap:header message="tns:getAllManagedElementInfosByIPs" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllManagedElementInfosByIPsResponse">
+        <soap:header message="tns:getAllManagedElementInfosByIPsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllManagedElementInfosByIPsException">
+        <soap:fault use="literal" name="GetAllManagedElementInfosByIPsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElementsWrtOs">
+      <soap:operation soapAction="getAllManagedElementsWrtOs" style="document" />
+      <wsdl:input name="getAllManagedElementsWrtOs">
+        <soap:header message="tns:getAllManagedElementsWrtOs" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllManagedElementsWrtOsResponse">
+        <soap:header message="tns:getAllManagedElementsWrtOsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllManagedElementsWrtOsException">
+        <soap:fault use="literal" name="GetAllManagedElementsWrtOsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElementsPassingFilter">
+      <soap:operation soapAction="getAllManagedElementsPassingFilter" style="document" />
+      <wsdl:input name="getAllManagedElementsPassingFilter">
+        <soap:header message="tns:getAllManagedElementsPassingFilter" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllManagedElementsPassingFilterResponse">
+        <soap:header message="tns:getAllManagedElementsPassingFilterResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllManagedElementsPassingFilterException">
+        <soap:fault use="literal" name="GetAllManagedElementsPassingFilterException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getNECrossConnectCapacity">
+      <soap:operation soapAction="getNECrossConnectCapacity" style="document" />
+      <wsdl:input name="getNECrossConnectCapacity">
+        <soap:header message="tns:getNECrossConnectCapacity" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getNECrossConnectCapacityResponse">
+        <soap:header message="tns:getNECrossConnectCapacityResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetNECrossConnectCapacityException">
+        <soap:fault use="literal" name="GetNECrossConnectCapacityException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElementsIterator">
+      <soap:operation soapAction="getManagedElementsIterator" style="document" />
+      <wsdl:input name="getManagedElementsIterator">
+        <soap:header message="tns:getManagedElementsIterator" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getManagedElementsIteratorResponse">
+        <soap:header message="tns:getManagedElementsIteratorResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetManagedElementsIteratorException">
+        <soap:fault use="literal" name="GetManagedElementsIteratorException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllCCCapacity">
+      <soap:operation soapAction="getAllCCCapacity" style="document" />
+      <wsdl:input name="getAllCCCapacity">
+        <soap:header message="tns:getAllCCCapacity" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllCCCapacityResponse">
+        <soap:header message="tns:getAllCCCapacityResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllCCCapacityException">
+        <soap:fault use="literal" name="GetAllCCCapacityException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElementByPhysicalID">
+      <soap:operation soapAction="getManagedElementByPhysicalID" style="document" />
+      <wsdl:input name="getManagedElementByPhysicalID">
+        <soap:header message="tns:getManagedElementByPhysicalID" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getManagedElementByPhysicalIDResponse">
+        <soap:header message="tns:getManagedElementByPhysicalIDResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetManagedElementByPhysicalIDException">
+        <soap:fault use="literal" name="GetManagedElementByPhysicalIDException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElements">
+      <soap:operation soapAction="getAllManagedElements" style="document" />
+      <wsdl:input name="getAllManagedElements">
+        <soap:header message="tns:getAllManagedElements" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllManagedElementsResponse">
+        <soap:header message="tns:getAllManagedElementsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllManagedElementsException">
+        <soap:fault use="literal" name="GetAllManagedElementsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElementByAliasName">
+      <soap:operation soapAction="getManagedElementByAliasName" style="document" />
+      <wsdl:input name="getManagedElementByAliasName">
+        <soap:header message="tns:getManagedElementByAliasName" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getManagedElementByAliasNameResponse">
+        <soap:header message="tns:getManagedElementByAliasNameResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetManagedElementByAliasNameException">
+        <soap:fault use="literal" name="GetManagedElementByAliasNameException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllDCNManagement">
+      <soap:operation soapAction="getAllDCNManagement" style="document" />
+      <wsdl:input name="getAllDCNManagement">
+        <soap:header message="tns:getAllDCNManagement" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllDCNManagementResponse">
+        <soap:header message="tns:getAllDCNManagementResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllDCNManagementException">
+        <soap:fault use="literal" name="GetAllDCNManagementException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDCNData">
+      <soap:operation soapAction="getDCNData" style="document" />
+      <wsdl:input name="getDCNData">
+        <soap:header message="tns:getDCNData" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getDCNDataResponse">
+        <soap:header message="tns:getDCNDataResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetDCNDataException">
+        <soap:fault use="literal" name="GetDCNDataException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElementNamesIterator">
+      <soap:operation soapAction="getManagedElementNamesIterator" style="document" />
+      <wsdl:input name="getManagedElementNamesIterator">
+        <soap:header message="tns:getManagedElementNamesIterator" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getManagedElementNamesIteratorResponse">
+        <soap:header message="tns:getManagedElementNamesIteratorResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetManagedElementNamesIteratorException">
+        <soap:fault use="literal" name="GetManagedElementNamesIteratorException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllManagedElementNames">
+      <soap:operation soapAction="getAllManagedElementNames" style="document" />
+      <wsdl:input name="getAllManagedElementNames">
+        <soap:header message="tns:getAllManagedElementNames" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getAllManagedElementNamesResponse">
+        <soap:header message="tns:getAllManagedElementNamesResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetAllManagedElementNamesException">
+        <soap:fault use="literal" name="GetAllManagedElementNamesException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getSubtendingManagedElements">
+      <soap:operation soapAction="getSubtendingManagedElements" style="document" />
+      <wsdl:input name="getSubtendingManagedElements">
+        <soap:header message="tns:getSubtendingManagedElements" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getSubtendingManagedElementsResponse">
+        <soap:header message="tns:getSubtendingManagedElementsResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetSubtendingManagedElementsException">
+        <soap:fault use="literal" name="GetSubtendingManagedElementsException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getManagedElement">
+      <soap:operation soapAction="getManagedElement" style="document" />
+      <wsdl:input name="getManagedElement">
+        <soap:header message="tns:getManagedElement" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getManagedElementResponse">
+        <soap:header message="tns:getManagedElementResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetManagedElementException">
+        <soap:fault use="literal" name="GetManagedElementException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getObjectTime">
+      <soap:operation soapAction="getObjectTime" style="document" />
+      <wsdl:input name="getObjectTime">
+        <soap:header message="tns:getObjectTime" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:input>
+      <wsdl:output name="getObjectTimeResponse">
+        <soap:header message="tns:getObjectTimeResponse" part="mtopHeader" use="literal" />
+        <soap:body use="literal" parts="mtopBody" />
+      </wsdl:output>
+      <wsdl:fault name="GetObjectTimeException">
+        <soap:fault use="literal" name="GetObjectTimeException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ManagedElementRetrievalHttp">
+    <wsdl:port name="ManagedElementRetrieval_RPC" binding="tns:ManagedElementRetrievalHttpSoapBinding">
+      <soap:address location="http://10.149.2.44:9997/ManagedElementRetrieval" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
