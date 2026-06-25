@@ -8186,400 +8186,401 @@ Public Class frmTechnology
         Dim dt As DataTable = ds.Tables("Delta")
         Dim x As Integer = 0
         Dim obj_columns() As String = Nothing
-        For Each dc As DataColumn In dt.PrimaryKey
-            ReDim Preserve obj_columns(x)
-            obj_columns(x) = dc.ColumnName
-            x = x + 1
-        Next
-
-        Dim KeysToRemove As New List(Of String)
-        If chartname_original Is Nothing Then
-            For Each key As String In dict_TopXDelta_SeriesCollection.Keys
-                If key.Split("|")(0).ToUpper = tech.ToUpper Then
-                    KeysToRemove.Add(key)
-                End If
+        If dt IsNot Nothing Then
+            For Each dc As DataColumn In dt.PrimaryKey
+                ReDim Preserve obj_columns(x)
+                obj_columns(x) = dc.ColumnName
+                x = x + 1
             Next
-        End If
-        For Each keytoRemove In KeysToRemove
-            dict_TopXDelta_SeriesCollection.Remove(keytoRemove)
-        Next
 
-        For rownum = 0 To dt_chart.Rows.Count - 1
-            Try
-                'collecting elements from chart configuration
-                Dim drow As DataRow = dt_chart.Rows(rownum)
+            Dim KeysToRemove As New List(Of String)
+            If chartname_original Is Nothing Then
+                For Each key As String In dict_TopXDelta_SeriesCollection.Keys
+                    If key.Split("|")(0).ToUpper = tech.ToUpper Then
+                        KeysToRemove.Add(key)
+                    End If
+                Next
+            End If
+            For Each keytoRemove In KeysToRemove
+                dict_TopXDelta_SeriesCollection.Remove(keytoRemove)
+            Next
 
-                'TESTING
-                Dim tabindex_new As Integer = CInt(drow(2).ToString)
-                chartindex = CInt(drow(4).ToString)
-                If tabindex_old <> tabindex_new Then
-                    tabindex_old = tabindex_new
-                End If
+            For rownum = 0 To dt_chart.Rows.Count - 1
+                Try
+                    'collecting elements from chart configuration
+                    Dim drow As DataRow = dt_chart.Rows(rownum)
 
-                'configures individual chart when new chart line is detected
-                If lastchart = "" Or lastchart <> drow(5).ToString Then
-                    lastchart = drow(5).ToString.Trim
-                    sp.Clear()
-
-                    Y1axisAbsorPerc = drow(13).trim
-                    Y2axisAbsOrPerc = nZ(drow(14), "Abs")
-
-                    If Y1axisPrecision = Nothing Then
-                        Y1axisPrecision = CInt(nZ(drow(15), 0))
-                    Else
-                        Y1axisPrecision = Math.Max(CInt(nZ(drow(15), 0)), Y1axisPrecision)
+                    'TESTING
+                    Dim tabindex_new As Integer = CInt(drow(2).ToString)
+                    chartindex = CInt(drow(4).ToString)
+                    If tabindex_old <> tabindex_new Then
+                        tabindex_old = tabindex_new
                     End If
 
-                    If Y2axisPrecision = Nothing Then
-                        Y2axisPrecision = CInt(nZ(drow(16), 0))
-                    Else
-                        Y2axisPrecision = Math.Max(CInt(nZ(drow(16), 0)), Y2axisPrecision)
-                    End If
+                    'configures individual chart when new chart line is detected
+                    If lastchart = "" Or lastchart <> drow(5).ToString Then
+                        lastchart = drow(5).ToString.Trim
+                        sp.Clear()
 
-                    '       Y1axisPrecision = CInt(drow(15))
-                    '      Y2axisPrecision = CInt(nZ(drow(16), "0"))
+                        Y1axisAbsorPerc = drow(13).trim
+                        Y2axisAbsOrPerc = nZ(drow(14), "Abs")
 
-                    Y1axislabel = nZ(drow(11), " ")
-                    Y2axislabel = nZ(drow(12), " ")
-
-                    If CInt(drow(2).ToString) = 99 And tech.ToUpper = "TOPX_" & _strNetwork.ToUpper Then
-                        tabindex_new = customTabIndexTopX
-                    End If
-
-                    Select Case tech.ToLower
-                        Case "topx_" & _strNetwork.ToLower
-                            tblayout = tcTabControlHighTopX.TabPages(tabindex_new).Controls(0) 'drow(2)
-                            ch = tblayout.GetControlFromPosition(0, chartindex) 'drow(4)
-                            xval = flpSourceBtn_GetChecked("topx_" & _strNetwork.ToLower, flpCounterTypeTopX)(0).SourceButtonText
-                        Case Else
-                            MsgBox("AssignData2Charts: problem in tech selection")
-                            Exit Sub
-                    End Select
-
-                    If chartname_original Is Nothing Then
-                        ch.Annotations.Clear()
-                        ch.Annotations.Add(New Annotation(tech))
-                        ch.Annotations(0).Position = New System.Drawing.Point(ch.Width - 70, 2)
-                        ch.Annotations(0).DefaultCorner = BoxCorner.Square
-                        ch.Annotations(0).Size = New Size(60, 25)
-                        Dim fnt As Font = New Font("Arial", 6, FontStyle.Regular)
-                        ch.Annotations(0).Label.Font = fnt
-                    End If
-
-                    ch.Name = drow("ChartName").ToString
-                    ch.TitleBox.Label.Text = drow(6).Trim
-                    ch.DefaultElement.Hotspot.ToolTip = "%SeriesName = %Value" & " "
-
-                    'Y-Axis Settings   
-                    yaxis1 = New Axis
-                    yaxis1.Orientation = Orientation.Left
-                    yaxis1.Label.Text = Y1axislabel
-
-                    yaxis2 = New Axis
-                    yaxis2.Orientation = Orientation.Right
-
-                    '++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    'element based
-                    Do
-                        If ColumnInDataTable(drow(7).trim, dt) Then
-                            ReDim Preserve chart_elements(j)
-                            ReDim Preserve chart_elementsYAxis(j)
-                            ReDim Preserve chart_Eltype(j)
-                            ReDim Preserve chart_ElColor(j)
-                            ReDim Preserve chart_elvis(j)
-                            ReDim Preserve chart_elLineSize(j)
-                            ReDim Preserve chart_elShowdatapoints(j)
-                            ReDim Preserve chart_elSeriesVisible(j)
-                            ReDim Preserve chart_elAutoScale(j)
-
-                            chart_elements(j) = drow(7).trim
-                            chart_elementsYAxis(j) = drow(9).trim
-                            chart_Eltype(j) = drow(8).trim
-                            chart_ElColor(j) = CInt(drow(17))
-                            If UCase(chart_elementsYAxis(j)) = "LEFT" Then
-                                chart_YaxisScale(0) = drow(10).trim
-                                yaxis1.NumberPrecision = CInt(nZ(drow(15), 0))
-                                If nZ(drow(11), "").Length > 0 Then
-                                    yaxis1.Label.Text = drow(11).ToString.Trim
-                                End If
-                                If nZ(drow(13), " ").Length > 1 Then
-                                    If drow(13).ToString.ToUpper = "PERC" Then
-                                        yaxis1.Percent = True
-                                    End If
-                                End If
-                                If yaxis1.NumberPrecision < 2 And Not yaxis1.Percent = True Then
-                                    yaxis1.MinimumInterval = 1
-
-                                End If
-                            ElseIf UCase(chart_elementsYAxis(j)) = "RIGHT" Then
-                                chart_YaxisScale(1) = drow(10).trim
-                                yaxis2.NumberPrecision = CInt(nZ(drow(16), 0))
-
-                                If nZ(drow(12), "").Length > 0 Then
-                                    yaxis2.Label.Text = drow(12).ToString.Trim
-                                End If
-                                If nZ(drow(14), " ").Length > 1 Then
-                                    If drow(14).ToString.ToUpper = "PERC" Then
-                                        yaxis2.Percent = True
-                                    End If
-                                End If
-                                If yaxis2.NumberPrecision < 2 And Not yaxis2.Percent = True Then
-                                    yaxis2.MinimumInterval = 1
-                                End If
-                            End If
-                            If drow(19).ToString.Trim <> "" Then
-                                chart_elsort(0) = drow(7).trim
-                                chart_elsort(1) = drow(19).ToString.ToUpper()
-                            End If
-                            chart_elvis(j) = drow(20).ToString.Trim
-                            chart_elLineSize(j) = nZ(drow("LineSize").ToString.Trim, 3)
-                            chart_elShowdatapoints(j) = nZ(drow("ShowDatapoints").ToString.Trim, False)
-                            chart_elSeriesVisible(j) = nZ(drow("IsVisible").ToString.Trim, True)
-                            chart_elAutoScale(j) = nZ(drow("AutoScale").ToString.Trim, True)
-
-                            j = j + 1
-                        End If
-                        rownum = rownum + 1
-                        If rownum > dt_chart.Rows.Count - 1 Then
-                            Exit Do
+                        If Y1axisPrecision = Nothing Then
+                            Y1axisPrecision = CInt(nZ(drow(15), 0))
                         Else
-                            drow = dt_chart.Rows(rownum)
+                            Y1axisPrecision = Math.Max(CInt(nZ(drow(15), 0)), Y1axisPrecision)
                         End If
-                    Loop Until drow(5) <> lastchart
-                    rownum = rownum - 1
-                    drow = dt_chart.Rows(rownum)
 
-                    'datagrid filling
-                    'comment: need to skip element if not available in datatable!!
-
-                    If chart_elsort(0) <> "0" And ChartElementSortOrder Is Nothing Then
-                        dt.DefaultView.Sort = chart_elsort(0) + " " + chart_elsort(1)
-                    ElseIf Not ChartElementSortOrder Is Nothing Then
-                        dt.DefaultView.Sort = ChartElementSortOrder(0) + " " + ChartElementSortOrder(1)
-                    End If
-
-                    'construct filter
-                    Dim kpifilter As String = Nothing
-
-                    For Each el As String In chart_elements
-                        For Each nd As TreeListViewNode In tlvFiltersTopX.Nodes
-                            If el.ToString = nd.SubItems(0).Text.ToString Then
-                                If kpifilter = Nothing Then
-                                    kpifilter = el.ToString + "  " + nd.SubItems(1).Text.ToString + "  " + nd.SubItems(2).Text.ToString
-                                Else
-                                    kpifilter = kpifilter + " AND " + el.ToString + "  " + nd.SubItems(1).Text.ToString + "  " + nd.SubItems(2).Text.ToString
-                                End If
-                            End If
-                        Next
-                    Next
-                    dt.DefaultView.RowFilter = kpifilter
-                    Dim chart_elements_count As Integer = chart_elements.Count
-                    For k = 0 To chart_elements_count - 1
-                        ReDim Preserve chart_elements(chart_elements.Count + 1)
-                        ReDim Preserve chart_Eltype(chart_Eltype.Count + 1)
-                        ReDim Preserve chart_elementsYAxis(chart_elementsYAxis.Count + 1)
-                        ReDim Preserve chart_ElColor(chart_ElColor.Count + 1)
-                        ReDim Preserve chart_elShowdatapoints(chart_elShowdatapoints.Count + 1)
-                        ReDim Preserve chart_elLineSize(chart_elLineSize.Count + 1)
-                        ReDim Preserve chart_elSeriesVisible(chart_elSeriesVisible.Count + 1)
-                        ReDim Preserve chart_elAutoScale(chart_elAutoScale.Count + 1)
-
-                        chart_elements(chart_elements.Count - 2) = chart_elements(k) + "_Before"
-                        chart_elements(chart_elements.Count - 1) = chart_elements(k) + "_After"
-                        chart_Eltype(chart_Eltype.Count - 2) = chart_Eltype(k)
-                        chart_Eltype(chart_Eltype.Count - 1) = chart_Eltype(k)
-                        chart_elementsYAxis(chart_elementsYAxis.Count - 2) = chart_elementsYAxis(k)
-                        chart_elementsYAxis(chart_elementsYAxis.Count - 1) = chart_elementsYAxis(k)
-                        chart_ElColor(chart_ElColor.Count - 2) = chart_ElColor(k)
-                        chart_ElColor(chart_ElColor.Count - 1) = chart_ElColor(k)
-                        chart_elShowdatapoints(chart_elShowdatapoints.Count - 2) = chart_elShowdatapoints(k)
-                        chart_elShowdatapoints(chart_elShowdatapoints.Count - 1) = chart_elShowdatapoints(k)
-                        chart_elLineSize(chart_elLineSize.Count - 2) = chart_elLineSize(k)
-                        chart_elLineSize(chart_elLineSize.Count - 1) = chart_elLineSize(k)
-                        chart_elSeriesVisible(chart_elSeriesVisible.Count - 2) = chart_elSeriesVisible(k)
-                        chart_elSeriesVisible(chart_elSeriesVisible.Count - 1) = chart_elSeriesVisible(k)
-                        chart_elAutoScale(chart_elAutoScale.Count - 2) = chart_elAutoScale(k)
-                        chart_elAutoScale(chart_elAutoScale.Count - 1) = chart_elAutoScale(k)
-                    Next
-
-                    Dim columnsfortopx(obj_columns.Length + chart_elements.Length - 1) As String
-                    obj_columns.CopyTo(columnsfortopx, 0)
-                    chart_elements.CopyTo(columnsfortopx, obj_columns.Count)
-
-                    Dim dt_topx As DataTable = Nothing
-                    Dim cellcolumn As String = ""
-
-                    Dim dt_subset As DataTable = dt.DefaultView.ToTable(False, columnsfortopx.Distinct().ToArray())
-                    If CInt(txtSelectXTopX.Text.Trim) > 1000 Then
-                        dt_topx = dt_subset.Rows.Cast(Of DataRow)().Take(1000).CopyToDataTable
-                    Else
-                        dt_topx = dt_subset.Rows.Cast(Of DataRow)().Take(txtSelectXTopX.Text).CopyToDataTable
-                    End If
-                    cellcolumn = xval
-
-                    Dim dgCtrl As GridControl = tblayout.GetControlFromPosition(1, chartindex)
-                    dgCtrl.DataSource = Nothing
-                    dgCtrl.DataSource = dt_topx
-                    dgCtrl.Tag = tech
-                    Dim dg As GridView = dgCtrl.MainView
-                    AddHandler dg.KeyDown, AddressOf dgTopXGridView_KeyDown
-
-                    For Each col As Columns.GridColumn In dg.Columns
-                        If col.UnboundType = DevExpress.Data.UnboundColumnType.String Then
-                            For Each srcbtn As IOS.Library.IOSToggleButton In flpCounterTypeTopX.Controls
-                                If srcbtn.Text.ToLower <> col.Caption.ToLower Then
-                                    col.Visible = True
-                                Else
-                                    col.Visible = False
-                                    Exit For
-                                End If
-                            Next
+                        If Y2axisPrecision = Nothing Then
+                            Y2axisPrecision = CInt(nZ(drow(16), 0))
                         Else
-                            col.Visible = False
+                            Y2axisPrecision = Math.Max(CInt(nZ(drow(16), 0)), Y2axisPrecision)
                         End If
-                    Next
 
-                    For i = 0 To UBound(chart_elements)
-                        For Each col As Columns.GridColumn In dg.Columns
-                            If col.FieldName.ToUpper = chart_elements(i).ToUpper Then
-                                col.Visible = True
-                            End If
-                        Next
-                    Next
+                        '       Y1axisPrecision = CInt(drow(15))
+                        '      Y2axisPrecision = CInt(nZ(drow(16), "0"))
 
+                        Y1axislabel = nZ(drow(11), " ")
+                        Y2axislabel = nZ(drow(12), " ")
 
-                    dg.Columns(cellcolumn).Visible = True
-                    If Not ChartElementSortOrder Is Nothing Then
-                        dg.Columns(ChartElementSortOrder(0)).SortOrder = IIf(ChartElementSortOrder(1) = "ASC", DevExpress.Data.ColumnSortOrder.Ascending, DevExpress.Data.ColumnSortOrder.Descending)
-                    End If
-                    dg.OptionsView.ColumnAutoWidth = False
-                    dg.BestFitColumns(True)
-                    dgCtrl.Refresh()
+                        If CInt(drow(2).ToString) = 99 And tech.ToUpper = "TOPX_" & _strNetwork.ToUpper Then
+                            tabindex_new = customTabIndexTopX
+                        End If
 
-                    If UCase(chart_YaxisScale(0)) = "STACKED" Then
-                        yaxis1.Scale = dotnetCHARTING.WinForms.Scale.Stacked
-                    ElseIf UCase(chart_YaxisScale(0)) = "FULLSTACKED" Then
-                        yaxis1.Scale = dotnetCHARTING.WinForms.Scale.FullStacked
-                    Else
-                        yaxis1.Scale = dotnetCHARTING.WinForms.Scale.Range
-                    End If
-                    If UCase(chart_YaxisScale(1)) = "STACKED" Then
-                        yaxis2.Scale = dotnetCHARTING.WinForms.Scale.Stacked
-                    ElseIf UCase(chart_YaxisScale(1)) = "FULLSTACKED" Then
-                        yaxis2.Scale = dotnetCHARTING.WinForms.Scale.FullStacked
-                    Else
-                        yaxis2.Scale = dotnetCHARTING.WinForms.Scale.Range
-                    End If
-
-                    'chart filling
-                    Dim de As DataEngine = New DataEngine(dg.DataSource)
-                    de.DataFields = String2DataFields_TopX(chart_elements, xval, chart_elvis)
-                    sc = de.GetSeries()
-
-                    For i = 0 To sc.Count() - 1
-
-                        Select Case UCase(chart_Eltype(i).Trim)
-                            Case "LINE"
-                                sc(i).Type = SeriesType.Line
-                                sc(i).Line.Width = CInt(chart_elLineSize(i))
-                            Case "BAR"
-                                sc(i).Type = SeriesType.Bar
-                            Case "AREALINE"
-                                sc(i).Type = SeriesType.AreaLine
+                        Select Case tech.ToLower
+                            Case "topx_" & _strNetwork.ToLower
+                                tblayout = tcTabControlHighTopX.TabPages(tabindex_new).Controls(0) 'drow(2)
+                                ch = tblayout.GetControlFromPosition(0, chartindex) 'drow(4)
+                                xval = flpSourceBtn_GetChecked("topx_" & _strNetwork.ToLower, flpCounterTypeTopX)(0).SourceButtonText
+                            Case Else
+                                MsgBox("AssignData2Charts: problem in tech selection")
+                                Exit Sub
                         End Select
-
-                        Select Case UCase(chart_elementsYAxis(i).Trim)
-                            Case "LEFT"
-                                sc(i).YAxis = yaxis1
-                                If chart_elAutoScale(i) = False Then
-                                    yaxis1.Minimum = 0
-                                End If
-                            Case "RIGHT"
-                                sc(i).YAxis = yaxis2
-                                If chart_elAutoScale(i) = False Then
-                                    yaxis2.Minimum = 0
-                                End If
-                        End Select
-
-                        color_R = CLng(chart_ElColor(i)) Mod 256
-                        color_G = (CLng(chart_ElColor(i)) \ 256) Mod 256
-                        color_B = ((CLng(chart_ElColor(i)) \ 256) \ 256) Mod 256
-
-                        If sc(i).Name.EndsWith("_Before") Then
-                            sc(i).DefaultElement.Color = Color.FromArgb(200, 0, 255, 0)
-                        ElseIf sc(i).Name.EndsWith("_After") Then
-                            sc(i).DefaultElement.Color = Color.FromArgb(200, 255, 255, 0)
-                        Else
-                            sc(i).DefaultElement.Color = Color.FromArgb(255, color_R, color_G, color_B)
-                        End If
-
-                        If CBool(chart_elShowdatapoints(i)) = True Then
-                            sc(i).DefaultElement.Marker.Type = ElementMarkerType.Circle
-                            sc(i).DefaultElement.Marker.Size = 5
-                            sc(i).EmptyElement.Mode = EmptyElementMode.None
-                            sc(i).DefaultElement.Marker.Visible = True
-                        Else
-                            sc(i).DefaultElement.Marker.Type = ElementMarkerType.None
-                            sc(i).DefaultElement.Marker.Visible = False
-                        End If
-
-                        If chart_elSeriesVisible(i) = True Then
-                            sc(i).Visible = True
-                        Else
-                            sc(i).Visible = False
-                            'HiddenSeriesCollectionTopX.Add(ch.Name, sc(i).Name)
-                        End If
 
                         If chartname_original Is Nothing Then
-                            If chart_elements(i).EndsWith("_Before") Or chart_elements(i).EndsWith("_After") Then
-                                sc(i).Visible = False
+                            ch.Annotations.Clear()
+                            ch.Annotations.Add(New Annotation(tech))
+                            ch.Annotations(0).Position = New System.Drawing.Point(ch.Width - 70, 2)
+                            ch.Annotations(0).DefaultCorner = BoxCorner.Square
+                            ch.Annotations(0).Size = New Size(60, 25)
+                            Dim fnt As Font = New Font("Arial", 6, FontStyle.Regular)
+                            ch.Annotations(0).Label.Font = fnt
+                        End If
+
+                        ch.Name = drow("ChartName").ToString
+                        ch.TitleBox.Label.Text = drow(6).Trim
+                        ch.DefaultElement.Hotspot.ToolTip = "%SeriesName = %Value" & " "
+
+                        'Y-Axis Settings   
+                        yaxis1 = New Axis
+                        yaxis1.Orientation = Orientation.Left
+                        yaxis1.Label.Text = Y1axislabel
+
+                        yaxis2 = New Axis
+                        yaxis2.Orientation = Orientation.Right
+
+                        '++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                        'element based
+                        Do
+                            If ColumnInDataTable(drow(7).trim, dt) Then
+                                ReDim Preserve chart_elements(j)
+                                ReDim Preserve chart_elementsYAxis(j)
+                                ReDim Preserve chart_Eltype(j)
+                                ReDim Preserve chart_ElColor(j)
+                                ReDim Preserve chart_elvis(j)
+                                ReDim Preserve chart_elLineSize(j)
+                                ReDim Preserve chart_elShowdatapoints(j)
+                                ReDim Preserve chart_elSeriesVisible(j)
+                                ReDim Preserve chart_elAutoScale(j)
+
+                                chart_elements(j) = drow(7).trim
+                                chart_elementsYAxis(j) = drow(9).trim
+                                chart_Eltype(j) = drow(8).trim
+                                chart_ElColor(j) = CInt(drow(17))
+                                If UCase(chart_elementsYAxis(j)) = "LEFT" Then
+                                    chart_YaxisScale(0) = drow(10).trim
+                                    yaxis1.NumberPrecision = CInt(nZ(drow(15), 0))
+                                    If nZ(drow(11), "").Length > 0 Then
+                                        yaxis1.Label.Text = drow(11).ToString.Trim
+                                    End If
+                                    If nZ(drow(13), " ").Length > 1 Then
+                                        If drow(13).ToString.ToUpper = "PERC" Then
+                                            yaxis1.Percent = True
+                                        End If
+                                    End If
+                                    If yaxis1.NumberPrecision < 2 And Not yaxis1.Percent = True Then
+                                        yaxis1.MinimumInterval = 1
+
+                                    End If
+                                ElseIf UCase(chart_elementsYAxis(j)) = "RIGHT" Then
+                                    chart_YaxisScale(1) = drow(10).trim
+                                    yaxis2.NumberPrecision = CInt(nZ(drow(16), 0))
+
+                                    If nZ(drow(12), "").Length > 0 Then
+                                        yaxis2.Label.Text = drow(12).ToString.Trim
+                                    End If
+                                    If nZ(drow(14), " ").Length > 1 Then
+                                        If drow(14).ToString.ToUpper = "PERC" Then
+                                            yaxis2.Percent = True
+                                        End If
+                                    End If
+                                    If yaxis2.NumberPrecision < 2 And Not yaxis2.Percent = True Then
+                                        yaxis2.MinimumInterval = 1
+                                    End If
+                                End If
+                                If drow(19).ToString.Trim <> "" Then
+                                    chart_elsort(0) = drow(7).trim
+                                    chart_elsort(1) = drow(19).ToString.ToUpper()
+                                End If
+                                chart_elvis(j) = drow(20).ToString.Trim
+                                chart_elLineSize(j) = nZ(drow("LineSize").ToString.Trim, 3)
+                                chart_elShowdatapoints(j) = nZ(drow("ShowDatapoints").ToString.Trim, False)
+                                chart_elSeriesVisible(j) = nZ(drow("IsVisible").ToString.Trim, True)
+                                chart_elAutoScale(j) = nZ(drow("AutoScale").ToString.Trim, True)
+
+                                j = j + 1
                             End If
-                        Else
-                            For Each seriesname As String In SeriesInVisible
-                                If sc(i).Name = seriesname Then
-                                    sc(i).Visible = False
+                            rownum = rownum + 1
+                            If rownum > dt_chart.Rows.Count - 1 Then
+                                Exit Do
+                            Else
+                                drow = dt_chart.Rows(rownum)
+                            End If
+                        Loop Until drow(5) <> lastchart
+                        rownum = rownum - 1
+                        drow = dt_chart.Rows(rownum)
+
+                        'datagrid filling
+                        'comment: need to skip element if not available in datatable!!
+
+                        If chart_elsort(0) <> "0" And ChartElementSortOrder Is Nothing Then
+                            dt.DefaultView.Sort = chart_elsort(0) + " " + chart_elsort(1)
+                        ElseIf Not ChartElementSortOrder Is Nothing Then
+                            dt.DefaultView.Sort = ChartElementSortOrder(0) + " " + ChartElementSortOrder(1)
+                        End If
+
+                        'construct filter
+                        Dim kpifilter As String = Nothing
+
+                        For Each el As String In chart_elements
+                            For Each nd As TreeListViewNode In tlvFiltersTopX.Nodes
+                                If el.ToString = nd.SubItems(0).Text.ToString Then
+                                    If kpifilter = Nothing Then
+                                        kpifilter = el.ToString + "  " + nd.SubItems(1).Text.ToString + "  " + nd.SubItems(2).Text.ToString
+                                    Else
+                                        kpifilter = kpifilter + " AND " + el.ToString + "  " + nd.SubItems(1).Text.ToString + "  " + nd.SubItems(2).Text.ToString
+                                    End If
                                 End If
                             Next
+                        Next
+                        dt.DefaultView.RowFilter = kpifilter
+                        Dim chart_elements_count As Integer = chart_elements.Count
+                        For k = 0 To chart_elements_count - 1
+                            ReDim Preserve chart_elements(chart_elements.Count + 1)
+                            ReDim Preserve chart_Eltype(chart_Eltype.Count + 1)
+                            ReDim Preserve chart_elementsYAxis(chart_elementsYAxis.Count + 1)
+                            ReDim Preserve chart_ElColor(chart_ElColor.Count + 1)
+                            ReDim Preserve chart_elShowdatapoints(chart_elShowdatapoints.Count + 1)
+                            ReDim Preserve chart_elLineSize(chart_elLineSize.Count + 1)
+                            ReDim Preserve chart_elSeriesVisible(chart_elSeriesVisible.Count + 1)
+                            ReDim Preserve chart_elAutoScale(chart_elAutoScale.Count + 1)
+
+                            chart_elements(chart_elements.Count - 2) = chart_elements(k) + "_Before"
+                            chart_elements(chart_elements.Count - 1) = chart_elements(k) + "_After"
+                            chart_Eltype(chart_Eltype.Count - 2) = chart_Eltype(k)
+                            chart_Eltype(chart_Eltype.Count - 1) = chart_Eltype(k)
+                            chart_elementsYAxis(chart_elementsYAxis.Count - 2) = chart_elementsYAxis(k)
+                            chart_elementsYAxis(chart_elementsYAxis.Count - 1) = chart_elementsYAxis(k)
+                            chart_ElColor(chart_ElColor.Count - 2) = chart_ElColor(k)
+                            chart_ElColor(chart_ElColor.Count - 1) = chart_ElColor(k)
+                            chart_elShowdatapoints(chart_elShowdatapoints.Count - 2) = chart_elShowdatapoints(k)
+                            chart_elShowdatapoints(chart_elShowdatapoints.Count - 1) = chart_elShowdatapoints(k)
+                            chart_elLineSize(chart_elLineSize.Count - 2) = chart_elLineSize(k)
+                            chart_elLineSize(chart_elLineSize.Count - 1) = chart_elLineSize(k)
+                            chart_elSeriesVisible(chart_elSeriesVisible.Count - 2) = chart_elSeriesVisible(k)
+                            chart_elSeriesVisible(chart_elSeriesVisible.Count - 1) = chart_elSeriesVisible(k)
+                            chart_elAutoScale(chart_elAutoScale.Count - 2) = chart_elAutoScale(k)
+                            chart_elAutoScale(chart_elAutoScale.Count - 1) = chart_elAutoScale(k)
+                        Next
+
+                        Dim columnsfortopx(obj_columns.Length + chart_elements.Length - 1) As String
+                        obj_columns.CopyTo(columnsfortopx, 0)
+                        chart_elements.CopyTo(columnsfortopx, obj_columns.Count)
+
+                        Dim dt_topx As DataTable = Nothing
+                        Dim cellcolumn As String = ""
+
+                        Dim dt_subset As DataTable = dt.DefaultView.ToTable(False, columnsfortopx.Distinct().ToArray())
+                        If CInt(txtSelectXTopX.Text.Trim) > 1000 Then
+                            dt_topx = dt_subset.Rows.Cast(Of DataRow)().Take(1000).CopyToDataTable
+                        Else
+                            dt_topx = dt_subset.Rows.Cast(Of DataRow)().Take(txtSelectXTopX.Text).CopyToDataTable
                         End If
-                    Next
-                    If chartname_original Is Nothing And Not dict_TopXDelta_SeriesCollection.ContainsKey(tech.ToUpper + "|" + ch.Name) Then
-                        dict_TopXDelta_SeriesCollection.Add(tech.ToUpper + "|" + ch.Name, sc)
+                        cellcolumn = xval
+
+                        Dim dgCtrl As GridControl = tblayout.GetControlFromPosition(1, chartindex)
+                        dgCtrl.DataSource = Nothing
+                        dgCtrl.DataSource = dt_topx
+                        dgCtrl.Tag = tech
+                        Dim dg As GridView = dgCtrl.MainView
+                        AddHandler dg.KeyDown, AddressOf dgTopXGridView_KeyDown
+
+                        For Each col As Columns.GridColumn In dg.Columns
+                            If col.UnboundType = DevExpress.Data.UnboundColumnType.String Then
+                                For Each srcbtn As IOS.Library.IOSToggleButton In flpCounterTypeTopX.Controls
+                                    If srcbtn.Text.ToLower <> col.Caption.ToLower Then
+                                        col.Visible = True
+                                    Else
+                                        col.Visible = False
+                                        Exit For
+                                    End If
+                                Next
+                            Else
+                                col.Visible = False
+                            End If
+                        Next
+
+                        For i = 0 To UBound(chart_elements)
+                            For Each col As Columns.GridColumn In dg.Columns
+                                If col.FieldName.ToUpper = chart_elements(i).ToUpper Then
+                                    col.Visible = True
+                                End If
+                            Next
+                        Next
+
+
+                        dg.Columns(cellcolumn).Visible = True
+                        If Not ChartElementSortOrder Is Nothing Then
+                            dg.Columns(ChartElementSortOrder(0)).SortOrder = IIf(ChartElementSortOrder(1) = "ASC", DevExpress.Data.ColumnSortOrder.Ascending, DevExpress.Data.ColumnSortOrder.Descending)
+                        End If
+                        dg.OptionsView.ColumnAutoWidth = False
+                        dg.BestFitColumns(True)
+                        dgCtrl.Refresh()
+
+                        If UCase(chart_YaxisScale(0)) = "STACKED" Then
+                            yaxis1.Scale = dotnetCHARTING.WinForms.Scale.Stacked
+                        ElseIf UCase(chart_YaxisScale(0)) = "FULLSTACKED" Then
+                            yaxis1.Scale = dotnetCHARTING.WinForms.Scale.FullStacked
+                        Else
+                            yaxis1.Scale = dotnetCHARTING.WinForms.Scale.Range
+                        End If
+                        If UCase(chart_YaxisScale(1)) = "STACKED" Then
+                            yaxis2.Scale = dotnetCHARTING.WinForms.Scale.Stacked
+                        ElseIf UCase(chart_YaxisScale(1)) = "FULLSTACKED" Then
+                            yaxis2.Scale = dotnetCHARTING.WinForms.Scale.FullStacked
+                        Else
+                            yaxis2.Scale = dotnetCHARTING.WinForms.Scale.Range
+                        End If
+
+                        'chart filling
+                        Dim de As DataEngine = New DataEngine(dg.DataSource)
+                        de.DataFields = String2DataFields_TopX(chart_elements, xval, chart_elvis)
+                        sc = de.GetSeries()
+
+                        For i = 0 To sc.Count() - 1
+
+                            Select Case UCase(chart_Eltype(i).Trim)
+                                Case "LINE"
+                                    sc(i).Type = SeriesType.Line
+                                    sc(i).Line.Width = CInt(chart_elLineSize(i))
+                                Case "BAR"
+                                    sc(i).Type = SeriesType.Bar
+                                Case "AREALINE"
+                                    sc(i).Type = SeriesType.AreaLine
+                            End Select
+
+                            Select Case UCase(chart_elementsYAxis(i).Trim)
+                                Case "LEFT"
+                                    sc(i).YAxis = yaxis1
+                                    If chart_elAutoScale(i) = False Then
+                                        yaxis1.Minimum = 0
+                                    End If
+                                Case "RIGHT"
+                                    sc(i).YAxis = yaxis2
+                                    If chart_elAutoScale(i) = False Then
+                                        yaxis2.Minimum = 0
+                                    End If
+                            End Select
+
+                            color_R = CLng(chart_ElColor(i)) Mod 256
+                            color_G = (CLng(chart_ElColor(i)) \ 256) Mod 256
+                            color_B = ((CLng(chart_ElColor(i)) \ 256) \ 256) Mod 256
+
+                            If sc(i).Name.EndsWith("_Before") Then
+                                sc(i).DefaultElement.Color = Color.FromArgb(200, 0, 255, 0)
+                            ElseIf sc(i).Name.EndsWith("_After") Then
+                                sc(i).DefaultElement.Color = Color.FromArgb(200, 255, 255, 0)
+                            Else
+                                sc(i).DefaultElement.Color = Color.FromArgb(255, color_R, color_G, color_B)
+                            End If
+
+                            If CBool(chart_elShowdatapoints(i)) = True Then
+                                sc(i).DefaultElement.Marker.Type = ElementMarkerType.Circle
+                                sc(i).DefaultElement.Marker.Size = 5
+                                sc(i).EmptyElement.Mode = EmptyElementMode.None
+                                sc(i).DefaultElement.Marker.Visible = True
+                            Else
+                                sc(i).DefaultElement.Marker.Type = ElementMarkerType.None
+                                sc(i).DefaultElement.Marker.Visible = False
+                            End If
+
+                            If chart_elSeriesVisible(i) = True Then
+                                sc(i).Visible = True
+                            Else
+                                sc(i).Visible = False
+                                'HiddenSeriesCollectionTopX.Add(ch.Name, sc(i).Name)
+                            End If
+
+                            If chartname_original Is Nothing Then
+                                If chart_elements(i).EndsWith("_Before") Or chart_elements(i).EndsWith("_After") Then
+                                    sc(i).Visible = False
+                                End If
+                            Else
+                                For Each seriesname As String In SeriesInVisible
+                                    If sc(i).Name = seriesname Then
+                                        sc(i).Visible = False
+                                    End If
+                                Next
+                            End If
+                        Next
+                        If chartname_original Is Nothing And Not dict_TopXDelta_SeriesCollection.ContainsKey(tech.ToUpper + "|" + ch.Name) Then
+                            dict_TopXDelta_SeriesCollection.Add(tech.ToUpper + "|" + ch.Name, sc)
+                        End If
+
+                        ch.SeriesCollection.Clear()
+                        ch.SeriesCollection.Add(sc)
+
+                        dt_topx.Dispose()
+                        dt_topx = Nothing
+                        sc = Nothing
+                        de = Nothing
+
+                        'check if TopXChart DeltaButtons are present
+                        If chartname_original Is Nothing Then
+                            TopXCharts_AddDeltaButtons(ch)
+                        End If
+
+                        ch.RefreshChart()
+                        ReDim chart_elements(0)
+                        ReDim chart_elementsYAxis(0)
+                        ReDim chart_Eltype(0)
+                        ReDim chart_ElColor(0)
+                        ReDim chart_YaxisScale(1)
+                        ReDim Preserve chart_elvis(0)
+                        ReDim Preserve chart_elLineSize(0)
+                        ReDim Preserve chart_elShowdatapoints(False)
+                        ReDim Preserve chart_elSeriesVisible(True)
+                        ReDim Preserve chart_elAutoScale(True)
+
+                        j = 0
                     End If
-
-                    ch.SeriesCollection.Clear()
-                    ch.SeriesCollection.Add(sc)
-
-                    dt_topx.Dispose()
-                    dt_topx = Nothing
-                    sc = Nothing
-                    de = Nothing
-
-                    'check if TopXChart DeltaButtons are present
-                    If chartname_original Is Nothing Then
-                        TopXCharts_AddDeltaButtons(ch)
-                    End If
-
-                    ch.RefreshChart()
-                    ReDim chart_elements(0)
-                    ReDim chart_elementsYAxis(0)
-                    ReDim chart_Eltype(0)
-                    ReDim chart_ElColor(0)
-                    ReDim chart_YaxisScale(1)
-                    ReDim Preserve chart_elvis(0)
-                    ReDim Preserve chart_elLineSize(0)
-                    ReDim Preserve chart_elShowdatapoints(False)
-                    ReDim Preserve chart_elSeriesVisible(True)
-                    ReDim Preserve chart_elAutoScale(True)
-
-                    j = 0
-                End If
-            Catch ex As Exception
-                UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
-                _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
-                Console.WriteLine(ex.Message.ToString)
-            End Try
-        Next
-
+                Catch ex As Exception
+                    UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message)
+                    _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message)
+                    Console.WriteLine(ex.Message.ToString)
+                End Try
+            Next
+        End If
         dt_chart.Dispose()
         ds_chart.Dispose()
         dt_chart = Nothing

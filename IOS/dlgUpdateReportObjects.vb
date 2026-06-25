@@ -1,5 +1,6 @@
 ﻿Imports DevExpress.CodeParser
 Imports DevExpress.XtraEditors
+Imports DevExpress.XtraGrid.Views.Base
 Imports IOS.DataLibrary
 Imports IOS.Library
 
@@ -7,6 +8,7 @@ Public Class dlgUpdateReportObjects
 
     Private dtPredefinePeriod As DataTable = Nothing
 
+    Public reportName As String = Nothing
     Public selectedNodeName As String = Nothing
     Public selectedNodeLevel As Integer = Nothing
     Public Interval As String = Nothing
@@ -18,6 +20,8 @@ Public Class dlgUpdateReportObjects
 
     Private Sub dlgUpdateReportObjects_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
+            AddHandler cmbResolution.SelectedIndexChanged, AddressOf cmbResolution_SelectedIndexChanged
+            AddHandler cmbPredefTimeStats.SelectedIndexChanged, AddressOf cmbPredefTimeStats_SelectedIndexChanged
             LoadFormObjects()
             BindComboWithPredefinedPeriod(cmbPredefTimeStats)
             LoadResolutionCombo()
@@ -26,8 +30,6 @@ Public Class dlgUpdateReportObjects
             'Set the interval/resolution combo value based on the report node selection
             Dim index As Integer = cmbResolution.Properties.Items.IndexOf(Interval)
             cmbResolution.SelectedIndex = If(index >= 0, index, 0)
-            AddHandler cmbResolution.SelectedIndexChanged, AddressOf cmbResolution_SelectedIndexChanged
-            AddHandler cmbPredefTimeStats.SelectedIndexChanged, AddressOf cmbPredefTimeStats_SelectedIndexChanged
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
@@ -115,7 +117,7 @@ Public Class dlgUpdateReportObjects
             If gvReportObjects.RowCount > 0 Then
                 Dim network As String = Nothing
                 Dim tech As String = gvReportObjects.GetFocusedRowCellValue("Technology").ToString
-                If tech.Contains("TopX_") Then network = tech.Replace("TopX_", "")
+                If tech.Contains("TopX_") Then network = tech.Replace("TopX_", "") Else network = tech
                 Dim targeType As String = gvReportObjects.GetFocusedRowCellValue("TargetType").ToString
                 If dicFrmTechInstances.Count = 0 Then
                     SetMessage("Please open PM " & ChrW(&H2192) & " " & network)
@@ -151,15 +153,23 @@ Public Class dlgUpdateReportObjects
 
     Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
         Try
+            Dim optionSelected As Boolean = False
             Dim sql As String = Nothing
             Dim connstring As String = Nothing
 
+            If (Not chkPeriodResolution.Checked) AndAlso (Not chkObjects.Checked) Then
+                SetMessage("Please select at least one check box to update the report configuration")
+                Exit Sub
+            End If
+
             'update report period and interval
             If chkPeriodResolution.Checked Then
+                optionSelected = True
                 Dim parray()() As String = {
                     New String() {"@ReportID", reportID},
                     New String() {"@SlideID", IIf(slideID = Nothing, "NULL", slideID)},
                     New String() {"@ObjectID", IIf(objectID = Nothing, "NULL", objectID)},
+                    New String() {"@Level", selectedNodeLevel},
                     New String() {"@Interval", Chr(39) & cmbResolution.SelectedItem.ToString.Trim & Chr(39)},
                     New String() {"@PredefinedTime", Chr(39) & cmbPredefTimeStats.SelectedItem.ToString.Trim & Chr(39)},
                     New String() {"@ManualStartTime", Chr(39) & dtEditStartTime.EditValue & Chr(39)},
@@ -167,34 +177,54 @@ Public Class dlgUpdateReportObjects
                 }
                 sql = GetSQL(8552, parray)(1)
                 connstring = GetSQL(8552, parray)(0)
-                DataAccessorODBC.ExecuteNonQuery(connstring, sql)
+                DataAccessorODBC.ExecuteNonQuery(connstring, sql, iQryTimeOut)
             End If
 
             If chkObjects.Checked Then
+                optionSelected = True
                 Dim iSelectedRows() As Integer = gvReportObjects.GetSelectedRows()
                 For i = 0 To iSelectedRows.Count - 1
                     sql = Nothing
                     connstring = Nothing
                     'update report target type and objects
                     If gvReportObjects.RowCount > 0 Then
-                        Dim selectedObjects = gvReportObjects.GetRowCellValue(iSelectedRows(i), "ObjectsSelected").Replace("','", "'',''")
+                        Dim selectedObjects = "''" & gvReportObjects.GetRowCellValue(iSelectedRows(i), "ObjectsSelected").Replace("','", "'',''") & "''"
                         Dim parray()() As String = {
                             New String() {"@ReportID", reportID},
                             New String() {"@SlideID", IIf(slideID = Nothing, "NULL", slideID)},
                             New String() {"@ObjectID", IIf(objectID = Nothing, "NULL", objectID)},
+                            New String() {"@Level", selectedNodeLevel},
+                            New String() {"@Technology", Chr(39) & gvReportObjects.GetRowCellValue(iSelectedRows(i), "Technology") & Chr(39)},
                             New String() {"@TargetType", Chr(39) & gvReportObjects.GetRowCellValue(iSelectedRows(i), "TargetType") & Chr(39)},
-                            New String() {"@ObjectSelected", Chr(39) & selectedObjects & Chr(39)}
+                            New String() {"@SelectedObjects", selectedObjects}
                         }
                         sql = GetSQL(8553, parray)(1)
                         connstring = GetSQL(8553, parray)(0)
-                        DataAccessorODBC.ExecuteNonQuery(connstring, sql)
+                        DataAccessorODBC.ExecuteNonQuery(connstring, sql, iQryTimeOut)
                     End If
                 Next
             End If
 
             'close the dialog after update
-            Me.Close()
+            If optionSelected Then
+                Me.Close()
+                frmReportEdit.RefreshReportDetails(reportName)
+            End If
 
+        Catch ex As Exception
+            _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
+            UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
+        End Try
+    End Sub
+
+    Private Sub gvReportObjects_FocusedRowChanged(sender As Object, e As FocusedRowChangedEventArgs)
+        Try
+            If gvReportObjects.RowCount > 0 Then
+                Dim dt As DataTable = clsSQLCommands.GetReportIntervalPeriod(connStrIOSServer, reportID, gvReportObjects.GetFocusedRowCellValue("Technology"))
+                If dt IsNot Nothing AndAlso dt.Rows.Count > 0 Then
+                    SetComboBox(cmbPredefTimeStats, ComboSelectBased.TextBased, dt.Rows(0)("PredefinedTime").ToString)
+                End If
+            End If
         Catch ex As Exception
             _logger.SetError(System.Reflection.MethodBase.GetCurrentMethod().Name & " - " & ex.Message & " - " & ex.StackTrace)
             UserActionTracking(System.Reflection.MethodBase.GetCurrentMethod().Name, "Error", ex.Message & " - " & ex.StackTrace)
@@ -216,8 +246,11 @@ Public Class dlgUpdateReportObjects
     End Sub
 
     Private Sub LoadReportObjects()
-        Dim dt As DataTable = clsSQLCommands.GetReportObjects(connStrIOSServer, reportID)
+        RemoveHandler gvReportObjects.FocusedRowChanged, AddressOf gvReportObjects_FocusedRowChanged
+        Dim dt As DataTable = clsSQLCommands.GetReportObjects(connStrIOSServer, reportID, slideID, objectID, selectedNodeLevel)
         IOSDevExpressGrid.PopulateDataInGrid(gcReportObjects, gvReportObjects, dt, "ALL", {"Resolution"}, "ObjectsSelected")
+        AddHandler gvReportObjects.FocusedRowChanged, AddressOf gvReportObjects_FocusedRowChanged
+        gvReportObjects_FocusedRowChanged(gvReportObjects, Nothing)
     End Sub
 
     Public Sub BindComboWithPredefinedPeriod(ByRef cmb As ComboBoxEdit)

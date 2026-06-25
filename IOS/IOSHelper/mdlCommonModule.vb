@@ -5707,6 +5707,17 @@ Module mdlCommonModule
 
             If Not table.Columns.Contains(columnName) Then Exit Sub
 
+            ' Format datetime columns to dd-MM-yyyy
+            For Each col As DevExpress.XtraGrid.Columns.GridColumn In view.Columns
+                If table.Columns.Contains(col.FieldName) Then
+                    Dim columnType = table.Columns(col.FieldName).DataType
+                    If columnType = GetType(DateTime) Then
+                        col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+                        col.DisplayFormat.FormatString = "yyyy-MM-dd"
+                    End If
+                End If
+            Next
+
             ' Hyperlink editor
             Dim hyperlinkEdit As New RepositoryItemHyperLinkEdit()
             hyperlinkEdit.SingleClick = True

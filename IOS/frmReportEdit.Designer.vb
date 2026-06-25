@@ -205,7 +205,6 @@ Partial Class frmReportEdit
         '
         Me.cmsReport.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_ReportSlideAdd, Me.tsmi_ReportRename, Me.tsmi_ReportDelete, Me.ToolStripSeparator5, Me.tsmi_ReportObjects, Me.tsmi_ReportRunCurrent, Me.tsmi_ReportRunConfigured, Me.tsmi_ReportLock, Me.tsmi_ReportCopy, Me.ToolStripSeparator6, Me.tsmt_SlideRename, Me.tsmt_SlideDelete, Me.ToolStripSeparator7, Me.tsmi_SlideMoveUp, Me.tsmi_SlideMoveDown, Me.tsmi_SlideObjectAdd, Me.ToolStripSeparator1, Me.tsmi_ObjectChartMoveUp, Me.tsmi_ObjectChartMoveDown, Me.tsmi_ObjectRename, Me.tsmi_ObjectChartDelete, Me.ToolStripSeparator4, Me.tsmi_UpdateReportObjects})
         Me.cmsReport.Name = "cm_ReportEditor"
-        Me.cmsReport.Size = New System.Drawing.Size(205, 452)
         Me.cmsReport.Size = New System.Drawing.Size(205, 430)
         '
         'tsmi_ReportSlideAdd

@@ -1666,13 +1666,37 @@ Public Class clsSQLCommands
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 
-    Public Shared Function GetReportObjects(connStr As String, reportID As Integer) As DataTable
+    Public Shared Function GetReportObjects(connStr As String, reportID As Integer, slideID As Integer, objectID As Integer, level As Integer) As DataTable
         sqlQuery = New StringBuilder()
-        sqlQuery.AppendLine("Select Distinct o.Technology, o.TargetType, o.Resolution, o.ObjectsSelected, LEN(o.ObjectsSelected) - LEN(REPLACE(o.ObjectsSelected,',','')) + 1 As ObjectCount")
+        If level = 0 Then
+            sqlQuery.AppendLine("Select Distinct o.Technology, o.TargetType, o.Resolution, o.ObjectsSelected, LEN(o.ObjectsSelected) - LEN(REPLACE(o.ObjectsSelected,',','')) + 1 As ObjectCount")
+            sqlQuery.AppendLine("From [IOS_Server].[dbo].[IOS_Reports_Objects] o")
+            sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports_Slides] s on o.SlideID = s.SlideID")
+            sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports] r on s.ReportID = r.ReportID")
+            sqlQuery.AppendLine("Where r.ReportID = " & reportID & ";")
+        ElseIf level = 1 Then
+            sqlQuery.AppendLine("Select Distinct o.Technology, o.TargetType, o.Resolution, o.ObjectsSelected, LEN(o.ObjectsSelected) - LEN(REPLACE(o.ObjectsSelected,',','')) + 1 As ObjectCount")
+            sqlQuery.AppendLine("From [IOS_Server].[dbo].[IOS_Reports_Objects] o")
+            sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports_Slides] s on o.SlideID = s.SlideID")
+            sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports] r on s.ReportID = r.ReportID")
+            sqlQuery.AppendLine("Where r.ReportID = " & reportID & " And s.SlideID = " & slideID & ";")
+        ElseIf level = 2 Then
+            sqlQuery.AppendLine("Select Distinct o.Technology, o.TargetType, o.Resolution, o.ObjectsSelected, LEN(o.ObjectsSelected) - LEN(REPLACE(o.ObjectsSelected,',','')) + 1 As ObjectCount")
+            sqlQuery.AppendLine("From [IOS_Server].[dbo].[IOS_Reports_Objects] o")
+            sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports_Slides] s on o.SlideID = s.SlideID")
+            sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports] r on s.ReportID = r.ReportID")
+            sqlQuery.AppendLine("Where r.ReportID = " & reportID & " And s.SlideID = " & slideID & " And o.ObjectID = " & objectID & ";")
+        End If
+        Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
+    End Function
+
+    Public Shared Function GetReportIntervalPeriod(connStr As String, reportID As Integer, technology As String) As DataTable
+        sqlQuery = New StringBuilder()
+        sqlQuery.AppendLine("Select Distinct o.PredefinedTime, o.ManualStartTime, o.ManualEndTime")
         sqlQuery.AppendLine("From [IOS_Server].[dbo].[IOS_Reports_Objects] o")
-        sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports_Slides] s on o.SlideID = s.SlideID")
-        sqlQuery.AppendLine("inner join [IOS_Server].[dbo].[IOS_Reports] r on s.ReportID = r.ReportID")
-        sqlQuery.AppendLine("Where r.ReportID = " & reportID & ";")
+        sqlQuery.AppendLine("INNER JOIN [IOS_Server].[dbo].[IOS_Reports_Slides] s ON o.SlideID = s.SlideID")
+        sqlQuery.AppendLine("INNER Join [IOS_Server].[dbo].[IOS_Reports] r ON s.ReportID = r.ReportID")
+        sqlQuery.AppendLine("WHERE r.ReportID = " & reportID & " And o.Technology = '" & technology & "';")
         Return DataAccessorODBC.GetDataTable(connStr, sqlQuery.ToString)
     End Function
 
